@@ -71,14 +71,30 @@
   <!-- ===================== MAIN ===================== -->
   <div class="main">
     <header class="topbar">
+      <button class="icon-btn menu-btn" title="Menu" data-action="menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
         <input type="text" placeholder="Search lenders, vendors, resources, events…">
       </div>
       <div class="topbar-right">
-        <button class="icon-btn" title="Notifications"><span class="dot"></span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
-        </button>
+        <div class="notif-wrap">
+          <button class="icon-btn" title="Notifications" data-action="notifications"><span class="dot"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
+          </button>
+          <div class="notif-panel" id="notif-panel">
+            <div class="notif-head"><span>Notifications</span><button class="notif-readall" data-toast="All notifications marked as read.">Mark all read</button></div>
+            <div class="notif-list">
+              <button class="notif-item unread" data-nav="lenders"><span class="ni-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span><div class="ni-main"><div class="ni-t">New Gold partner — Newrez Wholesale</div><div class="ni-s">A new lender just joined the portal · 2h ago</div></div></button>
+              <button class="notif-item unread" data-modal="escalate"><span class="ni-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h0M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/></svg></span><div class="ni-main"><div class="ni-t">Your loan escalation was submitted to UWM</div><div class="ni-s">Report delivered to the lender · 5h ago</div></div></button>
+              <button class="notif-item" data-nav="fuse"><span class="ni-ico i-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><div class="ni-main"><div class="ni-t">FUSE 2026 — early-bird pricing ends Friday</div><div class="ni-s">Manage your registration · 1d ago</div></div></button>
+              <button class="notif-item" data-nav="resources"><span class="ni-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2z"/></svg></span><div class="ni-main"><div class="ni-t">New resource: Broker Power-Up Ep. 65</div><div class="ni-s">Just published · 2d ago</div></div></button>
+              <button class="notif-item" data-nav="events"><span class="ni-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span><div class="ni-main"><div class="ni-t">Reminder: AIME Accelerate starts Monday</div><div class="ni-s">1:00 PM ET · 3d ago</div></div></button>
+            </div>
+            <div class="notif-foot"><button data-toast="Opening all notifications…">View all notifications</button></div>
+          </div>
+        </div>
         <button class="btn-ghost-line" title="Log out" data-action="logout">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
           Log Out
@@ -334,25 +350,11 @@
         </div>
       </section>
 
-      <!-- ============ LENDER DETAIL ============ -->
-      <section class="view" id="view-lender-detail">
-        <a class="back-link" data-nav="lenders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to lenders</a>
-        <div class="card card-pad">
-          <div class="detail-head">
-            <div class="detail-logo" id="ld-logo">UWM</div>
-            <div style="flex:1">
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 id="ld-name" style="font-size:24px">United Wholesale Mortgage</h1><span class="badge badge-gold" id="ld-tier">Gold partner</span></div>
-              <p style="color:var(--ink-soft);margin:10px 0 0;max-width:680px;line-height:1.6" id="ld-desc">Headquartered in Pontiac, Michigan, UWM is the #1 wholesale lender in the nation, providing state-of-the-art technology and unrivaled client service to independent mortgage brokers nationwide.</p>
-              <div class="tag-row" style="margin-top:16px" id="ld-tags"></div>
-              <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
-                <button class="btn btn-primary" data-modal="escalate">Escalate a loan</button>
-                <button class="btn btn-cyan" data-modal="connect">Connect</button>
-                <button class="btn btn-outline" data-modal="changeae">Change AE</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- ============ DETAIL PAGES (rendered by app.js) ============ -->
+      <section class="view" id="view-lender-detail"><div id="lender-detail-body"></div></section>
+      <section class="view" id="view-market-detail"><div id="market-detail-body"></div></section>
+      <section class="view" id="view-resource-detail"><div id="resource-detail-body"></div></section>
+      <section class="view" id="view-event-detail"><div id="event-detail-body"></div></section>
 
       <!-- ============ FUSE 2026 REGISTRATION ============ -->
       <section class="view" id="view-fuse">
@@ -533,16 +535,36 @@
     </div>
 
     <!-- Sign up -->
-    <div class="auth-card auth-panel" id="auth-signup">
-      <h2>Become a member</h2>
-      <p class="auth-sub">Join AIME to unlock lenders, market deals, resources, and events.</p>
+    <div class="auth-card auth-panel signup-card" id="auth-signup">
+      <h2>Become a broker member</h2>
+      <p class="auth-sub">Sign up, choose a plan, and pay — all in one quick step.</p>
+
+      <div class="form-section-label">Your details</div>
       <div class="field-row">
-        <div class="field"><label>First name</label><input class="input" placeholder="Kyle"></div>
-        <div class="field"><label>Last name</label><input class="input" placeholder="Lord"></div>
+        <div class="field"><label>Full name <span class="req">*</span></label><input class="input" id="su-name" placeholder="Kyle Lord"></div>
+        <div class="field"><label>Email <span class="req">*</span></label><input class="input" id="su-email" type="email" placeholder="you@company.com"></div>
       </div>
-      <div class="field"><label>Work email</label><input class="input" type="email" placeholder="you@company.com"></div>
-      <div class="field"><label>Create password</label><input class="input" type="password" placeholder="••••••••"></div>
-      <button class="btn btn-primary btn-block" style="margin-top:10px" data-action="signup">Create account</button>
+      <div class="field-row">
+        <div class="field"><label>Phone <span class="req">*</span></label><input class="input" id="su-phone" placeholder="(555) 000-0000"></div>
+        <div class="field"><label>Create password <span class="req">*</span></label><input class="input" type="password" placeholder="••••••••"></div>
+      </div>
+      <div class="capture-hint" id="su-capture-hint" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Saved — we'll hold your spot. Finish below to activate your membership.
+      </div>
+
+      <div class="form-section-label plan-head">
+        Choose your plan
+        <span class="billing-toggle">
+          <button class="bt-opt active" data-cycle="annual">Annual <span class="save">Save 20%</span></button>
+          <button class="bt-opt" data-cycle="monthly">Monthly</button>
+        </span>
+      </div>
+      <div class="plan-grid" id="plan-grid"></div>
+
+      <label class="terms-check"><input type="checkbox" id="su-terms" checked> I agree to the <a class="link-pink">membership agreement</a> and authorize recurring billing.</label>
+
+      <button class="btn btn-primary btn-block btn-lg" style="margin-top:18px" data-action="signup-pay">Sign Up &amp; Pay <span id="su-amount">$199.00</span></button>
       <div class="auth-divider"><span>Already a member?</span></div>
       <button class="btn btn-outline btn-block" data-auth="login">Log in instead</button>
     </div>
@@ -550,6 +572,44 @@
     <p class="auth-legal">© 2026 AIME · Association of Independent Mortgage Experts</p>
   </div>
 </div>
+
+<!-- ===================== FAKE STRIPE CHECKOUT ===================== -->
+<div class="modal-overlay over-auth" id="modal-stripe">
+  <div class="modal stripe-modal">
+    <div class="stripe-head">
+      <div class="stripe-brand">Pay AIME <span class="stripe-via">via</span> <span class="stripe-logo">stripe</span></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="stripe-body">
+      <div class="stripe-amount" id="stripe-amount">$199.00</div>
+      <div class="stripe-plan" id="stripe-plan">Premium membership · billed annually</div>
+
+      <div class="field"><label>Email</label><input class="input" id="stripe-email" type="email" placeholder="you@company.com"></div>
+      <div class="field"><label>Card information</label>
+        <div class="stripe-card">
+          <div class="sc-row"><input class="input sc-num" placeholder="1234 1234 1234 1234"><svg class="sc-cards" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div class="sc-row2"><input class="input" placeholder="MM / YY"><input class="input" placeholder="CVC"></div>
+        </div>
+      </div>
+      <div class="field"><label>Name on card</label><input class="input" placeholder="Kyle Lord"></div>
+      <div class="field-row">
+        <div class="field"><label>Country</label><select class="select"><option>United States</option><option>Canada</option></select></div>
+        <div class="field"><label>ZIP</label><input class="input" placeholder="21811"></div>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg" data-action="stripe-pay">Pay <span id="stripe-btn-amount">$199.00</span></button>
+      <div class="stripe-secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Secured by Stripe · this is a demo, no real charge</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MOBILE BOTTOM NAV ===================== -->
+<nav class="bottom-nav">
+  <button class="bottom-nav-item active" data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg><span>Home</span></button>
+  <button class="bottom-nav-item" data-nav="lenders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg><span>Lenders</span></button>
+  <button class="bottom-nav-item" data-nav="market"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg><span>Market</span></button>
+  <button class="bottom-nav-item" data-nav="resources"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2z"/></svg><span>Resources</span></button>
+  <button class="bottom-nav-item" data-nav="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>Events</span></button>
+</nav>
 
 <!-- Toast -->
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>

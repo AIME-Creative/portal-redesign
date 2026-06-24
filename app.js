@@ -1,12 +1,12 @@
 /* ============================================================
    AMP Member Portal — Redesign Prototype
-   Navigation, data rendering, modals & interactions
+   Navigation, data rendering, detail pages, modals & interactions
    ============================================================ */
 
 /* ---------- Sample data (illustrative only) ---------- */
 const lenders = [
-  { name: "United Wholesale Mortgage", short: "UWM", tier: "Gold",   color: "#0b1f5b", desc: "The #1 wholesale lender in the nation, delivering state-of-the-art technology and unrivaled client service.", tags:["Conventional","FHA","VA","Jumbo","Non-QM"] },
-  { name: "EPM",                       short: "EPM", tier: "Gold",   color: "#1b7a4a", desc: "Equity Prime Mortgage — fast, broker-first wholesale lending with a full product menu.", tags:["Conventional","FHA","VA","USDA"] },
+  { name: "United Wholesale Mortgage", short: "UWM", tier: "Gold",   color: "#0b1f5b", desc: "The #1 wholesale lender in the nation, delivering state-of-the-art technology and unrivaled client service to independent mortgage brokers.", tags:["Conventional","FHA","VA","Jumbo","Non-QM"] },
+  { name: "EPM",                       short: "EPM", tier: "Gold",   color: "#1b7a4a", desc: "Equity Prime Mortgage — fast, broker-first wholesale lending with a full product menu and dedicated support.", tags:["Conventional","FHA","VA","USDA"] },
   { name: "Windsor Mortgage",          short: "WM",  tier: "Gold",   color: "#3a3a3a", desc: "Boutique wholesale lender specializing in non-QM and jumbo products for independent brokers.", tags:["Non-QM","Jumbo","DSCR"] },
   { name: "Newrez Wholesale",          short: "NRZ", tier: "Gold",   color: "#e0463c", desc: "A leading national lender offering a broad product suite and dedicated broker support.", tags:["Conventional","FHA","VA","Renovation"] },
   { name: "Newfi Wholesale",           short: "NF",  tier: "Silver", color: "#163a85", desc: "Tech-forward lender focused on non-QM, bank-statement, and investor loans.", tags:["Non-QM","Bank Stmt","DSCR"] },
@@ -17,25 +17,25 @@ const lenders = [
 const tierBadge = { Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze" };
 
 const vendors = [
-  { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", color:"#1b7a4a", desc:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit","Verifications"] },
-  { name:"Ask Mindy",                    short:"AM",  cat:"Origination", color:"#dd1969", desc:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios","Guidelines"] },
-  { name:"Waive Inspection Fee",         short:"WIF", cat:"Origination", color:"#20adce", desc:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal","Savings"] },
-  { name:"Arive",                        short:"AR",  cat:"Origination", color:"#163a85", desc:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS","LOS"] },
-  { name:"BrokerVA",                     short:"BVA", cat:"Coaching",    color:"#7a3fb0", desc:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing","Ops"] },
-  { name:"Cotality",                     short:"CO",  cat:"Origination", color:"#0b2a5b", desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"] },
-  { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   color:"#e0463c", desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"] },
-  { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   color:"#1b9d6b", desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"] },
+  { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", color:"#1b7a4a", desc:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit","Verifications"], offer:"Up to 20% off credit reports + waived setup" },
+  { name:"Ask Mindy",                    short:"AM",  cat:"Origination", color:"#dd1969", desc:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios","Guidelines"], offer:"Free for AIME members" },
+  { name:"Waive Inspection Fee",         short:"WIF", cat:"Origination", color:"#20adce", desc:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal","Savings"], offer:"$0 inspection fee on qualifying loans" },
+  { name:"Arive",                        short:"AR",  cat:"Origination", color:"#163a85", desc:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS","LOS"], offer:"Exclusive member pricing on Pro plans" },
+  { name:"BrokerVA",                     short:"BVA", cat:"Coaching",    color:"#7a3fb0", desc:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing","Ops"], offer:"Waived placement fee for members" },
+  { name:"Cotality",                     short:"CO",  cat:"Origination", color:"#0b2a5b", desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"], offer:"Member-only data bundles" },
+  { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   color:"#e0463c", desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"], offer:"First month free for members" },
+  { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   color:"#1b9d6b", desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"], offer:"Discounted setup for members" },
 ];
 
 const resources = [
-  { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast",  cta:"Listen now", g:["#5b2a86","#dd1969"] },
-  { title:"Broker to Broker — Episode 251",     type:"Podcast",  cta:"Listen now", g:["#0b1f5b","#20adce"] },
-  { title:"Broker Power-Up: Episode 65",        type:"Webinar",  cta:"Watch now",  g:["#1b1b3a","#7a3fb0"] },
-  { title:"Mortgage Mornings — June 17, 2026",  type:"Webinar",  cta:"Watch now",  g:["#0b2a5b","#e0463c"] },
-  { title:"Women's Mortgage Network Podcast",   type:"Podcast",  cta:"Listen now", g:["#86145a","#dd1969"] },
-  { title:"Broker to Broker — Episode 250",     type:"Podcast",  cta:"Listen now", g:["#0b1f5b","#163a85"] },
-  { title:"AIME Accelerate — Identity Reset",   type:"Training", cta:"Watch now",  g:["#1b1b3a","#20adce"] },
-  { title:"Scaling Past $1M in Volume",         type:"Training", cta:"Watch now",  g:["#021649","#1893b1"] },
+  { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast",  cta:"Listen now", dur:"28 min", g:["#5b2a86","#dd1969"] },
+  { title:"Broker to Broker — Episode 251",     type:"Podcast",  cta:"Listen now", dur:"41 min", g:["#0b1f5b","#20adce"] },
+  { title:"Broker Power-Up: Episode 65",        type:"Webinar",  cta:"Watch now",  dur:"52 min", g:["#1b1b3a","#7a3fb0"] },
+  { title:"Mortgage Mornings — June 17, 2026",  type:"Webinar",  cta:"Watch now",  dur:"35 min", g:["#0b2a5b","#e0463c"] },
+  { title:"Women's Mortgage Network Podcast",   type:"Podcast",  cta:"Listen now", dur:"33 min", g:["#86145a","#dd1969"] },
+  { title:"Broker to Broker — Episode 250",     type:"Podcast",  cta:"Listen now", dur:"39 min", g:["#0b1f5b","#163a85"] },
+  { title:"AIME Accelerate — Identity Reset",   type:"Training", cta:"Watch now",  dur:"24 min", g:["#1b1b3a","#20adce"] },
+  { title:"Scaling Past $1M in Volume",         type:"Training", cta:"Watch now",  dur:"47 min", g:["#021649","#1893b1"] },
 ];
 
 const events = [
@@ -47,75 +47,83 @@ const events = [
   { title:"FUSE 2026 — National Conference",  date:"SEP 14", when:"Las Vegas, NV",    type:"In person", g:["#021649","#dd1969"] },
 ];
 
-/* ---------- Render helpers ---------- */
-const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; };
+const backArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
+const firstWord = (t) => t.split('—')[0].trim().split(' ')[0].toUpperCase();
 
-function lenderCard(l){
-  return `<div class="partner-card" data-lender="${l.short}">
-    <div class="partner-top">
-      <div class="partner-logo" style="color:${l.color}">${l.short}</div>
-      <span class="badge ${tierBadge[l.tier]}">${l.tier}</span>
-    </div>
-    <div class="partner-body">
-      <h3>${l.name}</h3>
-      <p class="pdesc">${l.desc}</p>
-      <div class="tag-row">${l.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    </div>
+/* ---------- Card templates (clickable region + separate action footer) ---------- */
+function lenderCard(l, i){
+  return `<div class="partner-card">
+    <button class="card-open" data-open-lender="${i}">
+      <div class="partner-top">
+        <div class="partner-logo" style="color:${l.color}">${l.short}</div>
+        <span class="badge ${tierBadge[l.tier]}">${l.tier}</span>
+      </div>
+      <div class="partner-body">
+        <h3>${l.name}</h3>
+        <p class="pdesc">${l.desc}</p>
+        <div class="tag-row">${l.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </button>
     <div class="partner-foot">
       <button class="btn btn-primary btn-sm" data-modal="escalate">Escalate</button>
-      <button class="btn btn-outline btn-sm" data-lender-open="${l.short}">View</button>
+      <button class="btn btn-outline btn-sm" data-open-lender="${i}">View</button>
     </div>
   </div>`;
 }
 
-function vendorCard(v){
+function vendorCard(v, i){
   return `<div class="partner-card">
-    <div class="partner-top">
-      <div class="partner-logo" style="color:${v.color}">${v.short}</div>
-      <span class="badge badge-navy">${v.cat}</span>
-    </div>
-    <div class="partner-body">
-      <h3>${v.name}</h3>
-      <p class="pdesc">${v.desc}</p>
-      <div class="tag-row">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    </div>
+    <button class="card-open" data-open-market="${i}">
+      <div class="partner-top">
+        <div class="partner-logo" style="color:${v.color}">${v.short}</div>
+        <span class="badge badge-navy">${v.cat}</span>
+      </div>
+      <div class="partner-body">
+        <h3>${v.name}</h3>
+        <p class="pdesc">${v.desc}</p>
+        <div class="tag-row">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </button>
     <div class="partner-foot">
       <button class="btn btn-cyan btn-sm btn-block" data-toast="Connection request sent to ${v.name}.">Connect</button>
     </div>
   </div>`;
 }
 
-function resCard(r){
-  const playIcon = r.type==="Podcast"
-    ? `<path d="M5 3l14 9-14 9V3z"/>`
-    : `<path d="M5 3l14 9-14 9V3z"/>`;
+function resCard(r, i){
   return `<div class="res-card">
-    <div class="res-thumb" style="background:linear-gradient(135deg,${r.g[0]},${r.g[1]})">
-      <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${r.type}</span></span>
-      ${r.title.split('—')[0].trim().split(' ')[0].toUpperCase()}
-      <span class="play"><svg viewBox="0 0 24 24" fill="currentColor">${playIcon}</svg></span>
-    </div>
-    <div class="res-body">
-      <h3>${r.title}</h3>
-      <div class="res-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 32 min</div>
-      <button class="btn btn-outline btn-sm btn-block" style="margin-top:12px" data-toast="Opening: ${r.title}">${r.cta}</button>
+    <button class="card-open" data-open-resource="${i}">
+      <div class="res-thumb" style="background:linear-gradient(135deg,${r.g[0]},${r.g[1]})">
+        <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${r.type}</span></span>
+        ${firstWord(r.title)}
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg></span>
+      </div>
+      <div class="res-body">
+        <h3>${r.title}</h3>
+        <div class="res-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> ${r.dur}</div>
+      </div>
+    </button>
+    <div style="padding:0 17px 17px">
+      <button class="btn btn-outline btn-sm btn-block" data-open-resource="${i}">${r.cta}</button>
     </div>
   </div>`;
 }
 
-function eventCard(e){
+function eventCard(e, i){
   return `<div class="event-card">
-    <div class="event-banner" style="background:linear-gradient(135deg,${e.g[0]},${e.g[1]})">
-      <span style="position:absolute;left:12px;top:12px"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${e.type}</span></span>
-      ${e.title.split('—')[0].trim().split(' ')[0].toUpperCase()}
-    </div>
-    <div class="event-body">
-      <h3>${e.title}</h3>
-      <div class="when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg> ${e.when}</div>
-      <div class="event-foot">
-        <button class="btn btn-navy btn-sm" data-toast="Registered for ${e.title}.">Register</button>
-        <button class="btn btn-outline btn-sm" data-toast="Added to calendar.">Add to calendar</button>
+    <button class="card-open" data-open-event="${i}">
+      <div class="event-banner" style="background:linear-gradient(135deg,${e.g[0]},${e.g[1]})">
+        <span style="position:absolute;left:12px;top:12px"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${e.type}</span></span>
+        ${firstWord(e.title)}
       </div>
+      <div class="event-body">
+        <h3>${e.title}</h3>
+        <div class="when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg> ${e.when}</div>
+      </div>
+    </button>
+    <div class="event-foot">
+      <button class="btn btn-navy btn-sm" data-open-event="${i}">View &amp; register</button>
+      <button class="btn btn-outline btn-sm" data-toast="Added to calendar.">Add to calendar</button>
     </div>
   </div>`;
 }
@@ -126,7 +134,7 @@ document.getElementById('market-grid').innerHTML  = vendors.map(vendorCard).join
 document.getElementById('resource-grid').innerHTML= resources.map(resCard).join('');
 document.getElementById('event-grid').innerHTML   = events.map(eventCard).join('');
 
-// Featured on dashboard — can highlight anything new/notable (lenders, resources, market, events)
+// Featured on dashboard — can highlight anything new/notable
 const featured = [
   { kind:"Lender",   title:"Newrez Wholesale",                sub:"Just joined as a Gold partner", cta:"View lender", g:["#0b1f5b","#e0463c"], nav:"lenders" },
   { kind:"Resource", title:"AIME Accelerate — Identity Reset", sub:"New training added",            cta:"Watch now",   g:["#1b1b3a","#20adce"], nav:"resources" },
@@ -136,54 +144,157 @@ const featured = [
 const kindBadge = { Lender:"badge-navy", Resource:"badge-pink", Market:"badge-cyan", Event:"badge-amber" };
 document.getElementById('featured-grid').innerHTML = featured.map(f=>`
   <div class="res-card">
-    <div class="res-thumb" style="background:linear-gradient(135deg,${f.g[0]},${f.g[1]});height:120px;font-size:17px">
-      <span class="res-type"><span class="badge ${kindBadge[f.kind]}" style="background:rgba(255,255,255,.92)">${f.kind}</span></span>
-      ${f.title.split('—')[0].trim().split(' ')[0].toUpperCase()}
-    </div>
-    <div class="res-body">
-      <h3 style="min-height:0">${f.title}</h3>
-      <div class="res-meta" style="margin-top:5px">${f.sub}</div>
-      <button class="btn btn-outline btn-sm btn-block" style="margin-top:12px" data-nav="${f.nav}">${f.cta}</button>
-    </div>
+    <button class="card-open" data-nav="${f.nav}">
+      <div class="res-thumb" style="background:linear-gradient(135deg,${f.g[0]},${f.g[1]});height:120px;font-size:17px">
+        <span class="res-type"><span class="badge ${kindBadge[f.kind]}" style="background:rgba(255,255,255,.92)">${f.kind}</span></span>
+        ${firstWord(f.title)}
+      </div>
+      <div class="res-body">
+        <h3 style="min-height:0">${f.title}</h3>
+        <div class="res-meta" style="margin-top:5px">${f.sub}</div>
+      </div>
+    </button>
+    <div style="padding:0 17px 17px"><button class="btn btn-outline btn-sm btn-block" data-nav="${f.nav}">${f.cta}</button></div>
   </div>`).join('');
 
-// This-week events on dashboard
-document.getElementById('dash-events').innerHTML = events.slice(0,3).map(e=>{
+// This-week events on dashboard (clickable to event detail)
+document.getElementById('dash-events').innerHTML = events.slice(0,3).map((e,i)=>{
   const [m,d] = e.date.split(' ');
-  return `<div class="ev-mini">
+  return `<button class="ev-mini" data-open-event="${i}">
     <div class="ev-date"><span class="d">${d}</span><span class="m">${m}</span></div>
-    <div style="flex:1;align-self:center"><div class="em-t">${e.title}</div><div class="em-s">${e.when}</div></div>
-  </div>`;
+    <div style="flex:1;align-self:center;text-align:left"><div class="em-t">${e.title}</div><div class="em-s">${e.when}</div></div>
+  </button>`;
 }).join('');
 
 /* ---------- Navigation ---------- */
 function navigate(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const target = document.getElementById('view-'+view);
-  if(target) target.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===view));
-  document.getElementById('content').scrollTo?.(0,0);
+  document.getElementById('view-'+view)?.classList.add('active');
+  const navMatch = (n)=> n.dataset.nav===view ||
+    (view==='lender-detail'&&n.dataset.nav==='lenders') ||
+    (view==='market-detail'&&n.dataset.nav==='market') ||
+    (view==='resource-detail'&&n.dataset.nav==='resources') ||
+    (view==='event-detail'&&n.dataset.nav==='events');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
+  document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
+  closeNotif();
+  document.getElementById('sidebar')?.classList.remove('open');
   window.scrollTo(0,0);
 }
 
-/* ---------- Lender detail ---------- */
-function openLender(short){
-  const l = lenders.find(x=>x.short===short);
-  if(!l) return;
-  document.getElementById('ld-logo').textContent = l.short;
-  document.getElementById('ld-logo').style.color = l.color;
-  document.getElementById('ld-name').textContent = l.name;
-  const tier = document.getElementById('ld-tier');
-  tier.textContent = l.tier + " partner";
-  tier.className = "badge " + tierBadge[l.tier];
-  document.getElementById('ld-desc').textContent = l.desc;
-  document.getElementById('ld-tags').innerHTML = l.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+/* ---------- Detail pages ---------- */
+function openLender(i){
+  const l = lenders[i]; if(!l) return;
+  document.getElementById('lender-detail-body').innerHTML = `
+    <a class="back-link" data-nav="lenders">${backArrow} Back to lenders</a>
+    <div class="card card-pad">
+      <div class="detail-head">
+        <div class="detail-logo" style="color:${l.color}">${l.short}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="font-size:24px">${l.name}</h1><span class="badge ${tierBadge[l.tier]}">${l.tier} partner</span></div>
+          <p style="color:var(--ink-soft);margin:10px 0 0;max-width:700px;line-height:1.6">${l.desc}</p>
+          <div class="tag-row" style="margin-top:16px">${l.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
+            <button class="btn btn-primary" data-modal="escalate">Escalate a loan</button>
+            <button class="btn btn-cyan" data-modal="connect">Connect</button>
+            <button class="btn btn-outline" data-modal="changeae">Change AE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;margin-top:20px">
+      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">Product offerings</h3><div class="tag-row">${l.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:10px">Need help with a file?</h3><p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 14px">Escalate a loan in your pipeline to send a report straight to ${l.name}'s escalation team.</p><button class="btn btn-primary btn-sm" data-modal="escalate">Escalate a loan</button></div>
+    </div>`;
   navigate('lender-detail');
+}
+
+function openVendor(i){
+  const v = vendors[i]; if(!v) return;
+  document.getElementById('market-detail-body').innerHTML = `
+    <a class="back-link" data-nav="market">${backArrow} Back to market</a>
+    <div class="card card-pad">
+      <div class="detail-head">
+        <div class="detail-logo" style="color:${v.color}">${v.short}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="font-size:24px">${v.name}</h1><span class="badge badge-navy">${v.cat}</span></div>
+          <p style="color:var(--ink-soft);margin:10px 0 0;max-width:700px;line-height:1.6">${v.desc} As an AIME member, you unlock exclusive pricing and priority onboarding with ${v.name}.</p>
+          <div class="tag-row" style="margin-top:16px">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
+            <button class="btn btn-cyan" data-toast="Connection request sent to ${v.name}.">Connect with ${v.name}</button>
+            <button class="btn btn-outline" data-toast="Opening website…">Visit website</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;margin-top:20px">
+      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">Your member benefit</h3><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 010-4h12v4M4 6v12a2 2 0 002 2h14v-4M18 12a2 2 0 000 4h4v-4z"/></svg><p>${v.offer}</p></div></div>
+      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">How it works</h3><ol class="how-list how-num"><li>Click Connect to request an intro.</li><li>${v.name} reaches out within 1 business day.</li><li>Mention AIME to claim your member pricing.</li></ol></div>
+    </div>`;
+  navigate('market-detail');
+}
+
+function openResource(i){
+  const r = resources[i]; if(!r) return;
+  document.getElementById('resource-detail-body').innerHTML = `
+    <a class="back-link" data-nav="resources">${backArrow} Back to resources</a>
+    <div class="card" style="overflow:hidden">
+      <div class="detail-banner" style="background:linear-gradient(135deg,${r.g[0]},${r.g[1]})">
+        <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${r.type}</span></span>
+        <div style="font-size:30px;font-weight:800;letter-spacing:.04em">${firstWord(r.title)}</div>
+      </div>
+      <div class="card-pad">
+        <h1 style="font-size:24px">${r.title}</h1>
+        <div class="res-meta" style="margin-top:10px;font-size:13.5px">⏱ ${r.dur} · Hosted by AIME · Published Jun 2026</div>
+        <p style="color:var(--ink-soft);margin:16px 0;line-height:1.7;max-width:720px">In this ${r.type.toLowerCase()}, we break down actionable strategies you can apply to your business this week — learn from top originators and AIME experts on growing volume, sharpening your process, and winning more borrowers.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" data-toast="Now playing: ${r.title}">▶ ${r.cta}</button>
+          <button class="btn btn-outline" data-toast="Saved to your library.">Save for later</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px"><div class="section-title"><h2>Up next</h2></div><div class="card-grid" id="res-related"></div></div>`;
+  document.getElementById('res-related').innerHTML = resources
+    .map((rr,j)=>({rr,j})).filter(o=>o.j!==i).slice(0,4)
+    .map(o=>resCard(o.rr,o.j)).join('');
+  navigate('resource-detail');
+}
+
+function openEvent(i){
+  const ev = events[i]; if(!ev) return;
+  document.getElementById('event-detail-body').innerHTML = `
+    <a class="back-link" data-nav="events">${backArrow} Back to events</a>
+    <div class="card" style="overflow:hidden;margin-bottom:20px">
+      <div class="detail-banner" style="background:linear-gradient(135deg,${ev.g[0]},${ev.g[1]})">
+        <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${ev.type}</span></span>
+        <div style="font-size:30px;font-weight:800">${firstWord(ev.title)}</div>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:1.6fr 1fr;align-items:start">
+      <div class="card card-pad">
+        <h1 style="font-size:24px">${ev.title}</h1>
+        <p style="color:var(--ink-soft);margin:14px 0;line-height:1.7">Join us for ${ev.title}. Connect with fellow independent mortgage brokers, learn from industry leaders, and pick up tactics you can put to work immediately.</p>
+        <h3 style="font-size:15px;margin:18px 0 8px">What you'll get</h3>
+        <ul class="how-list"><li>Live training &amp; Q&amp;A with AIME experts</li><li>Networking with brokers in your market</li><li>On-demand replay access afterward</li></ul>
+      </div>
+      <div class="card card-pad summary-card">
+        <h3 style="font-size:16px;margin-bottom:14px">Event details</h3>
+        <div class="detail-meta-row"><span>📅</span> ${ev.date}, 2026</div>
+        <div class="detail-meta-row"><span>⏰</span> ${ev.when}</div>
+        <div class="detail-meta-row"><span>📍</span> ${ev.type==='In person'?'JW Marriott, Las Vegas, NV':'Online — link sent after registering'}</div>
+        <button class="btn btn-primary btn-block" style="margin-top:16px" data-toast="Registered for ${ev.title}!">Register now</button>
+        <button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-toast="Added to your calendar.">Add to calendar</button>
+      </div>
+    </div>`;
+  navigate('event-detail');
 }
 
 /* ---------- Modals ---------- */
 function openModal(id){ document.getElementById('modal-'+id)?.classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModals(){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open')); document.body.style.overflow=''; }
+function closeModals(){
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));
+  document.body.style.overflow = isAuthOpen() ? 'hidden' : '';
+}
 
 /* ---------- Toast ---------- */
 let toastTimer;
@@ -194,6 +305,14 @@ function showToast(msg){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
 }
+
+/* ---------- Notifications ---------- */
+function toggleNotif(){
+  const p = document.getElementById('notif-panel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) document.querySelector('.icon-btn .dot')?.classList.add('hidden');
+}
+function closeNotif(){ document.getElementById('notif-panel')?.classList.remove('open'); }
 
 /* ---------- Settings tabs ---------- */
 function setTab(tab){
@@ -219,8 +338,11 @@ function recalcFuse(){
 document.querySelectorAll('#view-fuse [data-addon]').forEach(cb=> cb.addEventListener('change', recalcFuse));
 
 /* ---------- Auth / login screen ---------- */
+function isAuthOpen(){ return document.getElementById('auth-screen')?.classList.contains('open'); }
 function switchAuthPanel(name){
   document.querySelectorAll('.auth-panel').forEach(p=>p.classList.toggle('active', p.id==='auth-'+name));
+  document.getElementById('auth-screen').classList.toggle('wide', name==='signup');
+  document.querySelector('#auth-screen .auth-wrap')?.scrollTo?.(0,0);
 }
 function openAuth(panel){
   switchAuthPanel(panel || 'login');
@@ -233,6 +355,87 @@ function closeAuth(){
   document.body.style.overflow = '';
 }
 
+/* ---------- Sign up: membership tiers, lead capture, fake Stripe ---------- */
+const tiers = [
+  { key:'premium', name:'Premium', monthly:19, annual:199, popular:true, blurb:'For growing brokers ready to scale.',
+    features:['Direct access to 30+ wholesale lenders','Full Market vendor discounts','All resources, webinars & trainings','3 loan escalations / month','FUSE 2026 ticket included'] },
+  { key:'elite', name:'Elite', monthly:69, annual:699, blurb:'For established teams that want more.',
+    features:['Everything in Premium','Priority lender connections','10 loan escalations / month','Dedicated success manager','VIP FUSE seating'] },
+  { key:'vip', name:'VIP', monthly:169, annual:1699, blurb:'For top-producing brokerages.',
+    features:['Everything in Elite','Unlimited loan escalations','1:1 quarterly business strategy','Speaking & feature opportunities','Concierge support'] },
+];
+let selectedTier = 'premium';
+let billingCycle = 'annual';
+let leadCaptured = false;
+
+const money = (n) => '$' + Number(n).toFixed(2);
+const currentTier = () => tiers.find(t=>t.key===selectedTier);
+const tierPrice = (t) => billingCycle==='annual' ? t.annual : t.monthly;
+
+function renderPlans(){
+  const grid = document.getElementById('plan-grid');
+  if(!grid) return;
+  grid.innerHTML = tiers.map(t=>`
+    <button class="plan-card ${t.key===selectedTier?'selected':''} ${t.popular?'popular':''}" data-plan="${t.key}">
+      ${t.popular?'<span class="plan-pop">Most popular</span>':''}
+      <div class="plan-name">${t.name}</div>
+      <div class="plan-price">${money(tierPrice(t)).replace('.00','')}<span class="plan-cycle">/${billingCycle==='annual'?'yr':'mo'}</span></div>
+      <div class="plan-blurb">${t.blurb}</div>
+      <ul class="plan-feats">${t.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <span class="plan-select-ind">${t.key===selectedTier?'✓ Selected':'Select '+t.name}</span>
+    </button>`).join('');
+  updateAmount();
+}
+function selectPlan(key){ selectedTier = key; renderPlans(); }
+function setCycle(c){
+  billingCycle = c;
+  document.querySelectorAll('.bt-opt').forEach(b=>b.classList.toggle('active', b.dataset.cycle===c));
+  renderPlans();
+}
+function updateAmount(){
+  const amt = money(tierPrice(currentTier()));
+  const el = document.getElementById('su-amount'); if(el) el.textContent = amt;
+}
+
+/* Lead / abandoned-cart capture — fires BEFORE payment so contact info is saved
+   even if the member never completes checkout. In production this would POST
+   {name, email, phone, selectedTier} to the CRM. */
+function captureLead(showMsg){
+  const name  = document.getElementById('su-name')?.value.trim();
+  const email = document.getElementById('su-email')?.value.trim();
+  if((email || name) && !leadCaptured){
+    leadCaptured = true;
+    const hint = document.getElementById('su-capture-hint');
+    if(hint) hint.style.display = 'flex';
+  }
+  if(showMsg && (email||name)) showToast('Got it — we saved your details so you can finish anytime.');
+}
+
+function openStripe(){
+  const t = currentTier();
+  const amt = money(tierPrice(t));
+  document.getElementById('stripe-amount').textContent = amt;
+  document.getElementById('stripe-btn-amount').textContent = amt;
+  document.getElementById('stripe-plan').textContent = `${t.name} membership · billed ${billingCycle==='annual'?'annually':'monthly'}`;
+  const email = document.getElementById('su-email')?.value.trim();
+  const se = document.getElementById('stripe-email'); if(se) se.value = email || '';
+  openModal('stripe');
+}
+
+/* ---------- Action handler ---------- */
+function handleAction(a){
+  switch(a){
+    case 'logout':      closeNotif(); closeModals(); openAuth('login'); break;
+    case 'login':       closeAuth(); navigate('dashboard'); break;
+    case 'reset':       switchAuthPanel('login'); showToast('Password reset link sent — check your email.'); break;
+    case 'capture-lead':captureLead(true); break;
+    case 'signup-pay':  captureLead(false); openStripe(); break;
+    case 'stripe-pay':  closeModals(); closeAuth(); leadCaptured=false; navigate('dashboard'); showToast('Payment successful — welcome to AIME! 🎉'); break;
+    case 'notifications': toggleNotif(); break;
+    case 'menu':        document.getElementById('sidebar')?.classList.toggle('open'); break;
+  }
+}
+
 /* ---------- Filter chips (cosmetic) ---------- */
 document.querySelectorAll('.filters').forEach(group=>{
   group.addEventListener('click', e=>{
@@ -243,44 +446,50 @@ document.querySelectorAll('.filters').forEach(group=>{
   });
 });
 
-/* ---------- Global click delegation ---------- */
+/* ---------- Global click delegation (ordered by priority) ---------- */
 document.addEventListener('click', e=>{
-  const nav   = e.target.closest('[data-nav]');
-  const modal = e.target.closest('[data-modal]');
-  const open  = e.target.closest('[data-lender-open]');
-  const close = e.target.closest('[data-close]');
-  const toast = e.target.closest('[data-toast]');
-  const tab   = e.target.closest('[data-tab]');
-  const auth  = e.target.closest('[data-auth]');
-  const action= e.target.closest('[data-action]');
-
-  if(nav){ e.preventDefault(); navigate(nav.dataset.nav); }
-  if(open){ e.preventDefault(); openLender(open.dataset.lenderOpen); }
-  if(modal){ e.preventDefault(); openModal(modal.dataset.modal); }
-  if(close){ e.preventDefault(); closeModals(); }
-  if(tab){ e.preventDefault(); setTab(tab.dataset.tab); }
-  if(auth){ e.preventDefault(); switchAuthPanel(auth.dataset.auth); }
-  if(action){
-    e.preventDefault();
-    const a = action.dataset.action;
-    if(a==='logout'){ closeModals(); openAuth('login'); }
-    if(a==='login'){ closeAuth(); navigate('dashboard'); }
-    if(a==='signup'){ closeAuth(); navigate('dashboard'); showToast('Welcome to AIME — your account is ready.'); }
-    if(a==='reset'){ switchAuthPanel('login'); showToast('Password reset link sent — check your email.'); }
-  }
-  if(toast){
-    // if a toast button also closes a modal, let close handler run; then toast
-    if(toast.hasAttribute('data-close')) closeModals();
-    showToast(toast.dataset.toast);
-  }
+  const t = e.target;
+  let m;
+  if((m = t.closest('[data-action]')))        { e.preventDefault(); handleAction(m.dataset.action); return; }
+  if((m = t.closest('[data-toast]')))         { e.preventDefault(); if(m.hasAttribute('data-close')) closeModals(); showToast(m.dataset.toast); return; }
+  if((m = t.closest('[data-modal]')))         { e.preventDefault(); openModal(m.dataset.modal); return; }
+  if((m = t.closest('[data-auth]')))          { e.preventDefault(); switchAuthPanel(m.dataset.auth); return; }
+  if((m = t.closest('[data-plan]')))          { e.preventDefault(); selectPlan(m.dataset.plan); return; }
+  if((m = t.closest('[data-cycle]')))         { e.preventDefault(); setCycle(m.dataset.cycle); return; }
+  if((m = t.closest('[data-close]')))         { e.preventDefault(); closeModals(); return; }
+  if((m = t.closest('[data-open-lender]')))   { e.preventDefault(); openLender(+m.dataset.openLender); return; }
+  if((m = t.closest('[data-open-market]')))   { e.preventDefault(); openVendor(+m.dataset.openMarket); return; }
+  if((m = t.closest('[data-open-resource]'))) { e.preventDefault(); openResource(+m.dataset.openResource); return; }
+  if((m = t.closest('[data-open-event]')))    { e.preventDefault(); openEvent(+m.dataset.openEvent); return; }
+  const navBtn = t.closest('[data-nav]');
+  const tabBtn = t.closest('[data-tab]');
+  if(navBtn || tabBtn){ e.preventDefault(); if(navBtn) navigate(navBtn.dataset.nav); if(tabBtn) setTab(tabBtn.dataset.tab); return; }
 });
 
-// Optional deep-linking: #lenders, #market, #modal=escalate, etc.
+// Capture lead on email blur (silent abandoned-cart capture)
+document.getElementById('su-email')?.addEventListener('blur', ()=>captureLead(false));
+
+// Close notifications when clicking outside
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.notif-wrap')) closeNotif();
+});
+
+// Initial plan render
+renderPlans();
+
+// Optional deep-linking: #lenders, #signup, #fuse, #modal=escalate, etc.
 (function initFromHash(){
   const h = (location.hash || '').replace('#','');
   if(!h) return;
   if(h==='login'){ openAuth('login'); return; }
+  if(h==='signup'){ openAuth('signup'); return; }
+  if(h==='notif'){ toggleNotif(); return; }
   if(h.startsWith('modal=')) { openModal(h.split('=')[1]); return; }
+  if(h.startsWith('open=')){
+    const [type, idx] = h.slice(5).split(':');
+    ({lender:openLender, market:openVendor, resource:openResource, event:openEvent}[type] || (()=>{}))(+idx || 0);
+    return;
+  }
   if(document.getElementById('view-'+h)) navigate(h);
 })();
 
@@ -288,4 +497,4 @@ document.addEventListener('click', e=>{
 document.querySelectorAll('.modal-overlay').forEach(o=>{
   o.addEventListener('click', e=>{ if(e.target===o) closeModals(); });
 });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModals(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeModals(); closeNotif(); } });
