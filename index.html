@@ -79,6 +79,11 @@
         <input type="text" placeholder="Search lenders, vendors, resources, events…">
       </div>
       <div class="topbar-right">
+        <button class="esc-pill" data-modal="escalations" title="Escalations remaining — tap to buy more">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          <span class="esc-count">7</span><span class="esc-label">escalations left</span>
+          <span class="esc-plus">+</span>
+        </button>
         <div class="notif-wrap">
           <button class="icon-btn" title="Notifications" data-action="notifications"><span class="dot"></span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
@@ -190,7 +195,7 @@
                 <span class="badge badge-green">Active</span>
               </div>
               <div style="height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:8px"><div style="width:62%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink))"></div></div>
-              <div style="font-size:12.5px;color:var(--ink-soft)">7 of 10 escalations remaining this cycle</div>
+              <div style="font-size:12.5px;color:var(--ink-soft)">7 of 10 escalations remaining this cycle · <button class="link-pink" data-modal="escalations">Buy more</button></div>
               <button class="btn btn-outline btn-sm btn-block" style="margin-top:16px" data-nav="settings" data-tab="billing">Manage membership</button>
             </div>
           </div>
@@ -309,8 +314,19 @@
             <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Mobile phone</label><input class="input" value="(555) 014-2278"></div></div>
             <div class="field"><label>Mailing address</label><input class="input" value="1900 Shore Road Ln"></div>
             <div class="field-row"><div class="field"><label>City</label><input class="input" value="Berlin"></div><div class="field"><label>State</label><input class="input" value="MD"></div></div>
+            <div class="field-row"><div class="field"><label>Zip code</label><input class="input" value="21811"></div><div class="field"><label>Role type</label><input class="input" value="Loan Officer"></div></div>
+            <div class="field-row"><div class="field"><label>Birthday</label><input class="input" type="date" value="1990-01-25"></div><div class="field"><label>Gender</label><input class="input" value="Male"></div></div>
+            <div class="field-row"><div class="field"><label>Languages spoken</label><input class="input" value="English"></div><div class="field"><label>Race</label><input class="input" value="White"></div></div>
+
             <div class="form-section-label">Licensing</div>
             <div class="field-row"><div class="field"><label>Individual NMLS</label><input class="input" value="9158"></div><div class="field"><label>State licenses</label><input class="input" value="MD, VA, DE"></div></div>
+
+            <div class="form-section-label">Company information</div>
+            <div class="field-row"><div class="field"><label>Company name</label><input class="input" value="AIME"></div><div class="field"><label>Company phone</label><input class="input" value="(555) 014-2278"></div></div>
+            <div class="field"><label>Company address</label><input class="input" value="1900 Shore Road Ln, Berlin, MD 21811, USA"></div>
+            <div class="field-row"><div class="field"><label>Company city</label><input class="input" value="Berlin"></div><div class="field"><label>Company state</label><input class="input" value="MD"></div></div>
+            <div class="field-row"><div class="field"><label>Company zip code</label><input class="input" value="21811"></div><div class="field"><label>Company NMLS</label><input class="input" value="2890163"></div></div>
+
             <div style="display:flex;gap:10px;margin-top:8px"><button class="btn btn-primary" data-toast="Profile saved.">Save changes</button><button class="btn btn-outline">Cancel</button></div>
           </div>
         </div>
@@ -341,7 +357,7 @@
               <h3 style="font-size:16px;margin-bottom:14px">Escalations</h3>
               <div style="font-size:30px;font-weight:700">7 <span style="font-size:15px;color:var(--muted);font-weight:500">remaining</span></div>
               <div style="color:var(--muted);font-size:12.5px;margin:4px 0 14px">Resets each billing cycle</div>
-              <button class="btn btn-primary btn-block">Purchase additional</button>
+              <button class="btn btn-primary btn-block" data-modal="escalations">Purchase additional</button>
             </div>
             <div class="card card-pad" style="grid-column:1/-1">
               <h3 style="font-size:16px;margin-bottom:14px">Payment method</h3>
@@ -455,6 +471,10 @@
       <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
+      <div class="esc-remaining-note">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg> <strong>7 of 10</strong> escalations remaining this cycle</span>
+        <button class="link-pink" data-modal="escalations">Buy more</button>
+      </div>
       <div class="stepper">
         <div class="step active"><span class="sn">1</span> Lender &amp; loan</div>
         <div class="step-line"></div>
@@ -538,6 +558,37 @@
       </div>
     </div>
     <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Bug report submitted — thank you! Our team will take a look." data-close>Submit bug report</button></div>
+  </div>
+</div>
+
+<!-- ===================== BUY ESCALATIONS ===================== -->
+<div class="modal-overlay over-auth" id="modal-escalations">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <div><h2>Buy more escalations</h2><p>You have <strong>7 of 10</strong> remaining this cycle. Top up anytime — purchased escalations carry over until used.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="esc-packs">
+        <button class="esc-pack" data-esc-pack data-qty="1" data-price="25.00">
+          <span class="ep-check"></span>
+          <span class="ep-main"><span class="ep-t">1 escalation</span><span class="ep-s">Single top-up</span></span>
+          <span class="ep-price">$25</span>
+        </button>
+        <button class="esc-pack selected" data-esc-pack data-qty="5" data-price="100.00">
+          <span class="ep-check"></span>
+          <span class="ep-main"><span class="ep-t">5 escalations <span class="badge badge-pink" style="margin-left:4px">Most popular</span></span><span class="ep-s">Save 20% vs. single</span></span>
+          <span class="ep-price">$100</span>
+        </button>
+        <button class="esc-pack" data-esc-pack data-qty="10" data-price="175.00">
+          <span class="ep-check"></span>
+          <span class="ep-main"><span class="ep-t">10 escalations <span class="badge badge-green" style="margin-left:4px">Best value</span></span><span class="ep-s">Save 30% vs. single</span></span>
+          <span class="ep-price">$175</span>
+        </button>
+      </div>
+      <div class="esc-summary"><span>Total</span><strong id="esc-total">$100.00</strong></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Escalations added to your account — you're all set." data-close>Purchase <span id="esc-buy-qty">5</span> escalations</button></div>
   </div>
 </div>
 

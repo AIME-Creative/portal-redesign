@@ -422,6 +422,14 @@ function openStripe(){
   openModal('stripe');
 }
 
+/* ---------- Buy escalations: pack selection ---------- */
+function selectEscPack(elem){
+  document.querySelectorAll('.esc-pack').forEach(p=>p.classList.remove('selected'));
+  elem.classList.add('selected');
+  document.getElementById('esc-total').textContent = '$' + Number(elem.dataset.price).toFixed(2);
+  document.getElementById('esc-buy-qty').textContent = elem.dataset.qty;
+}
+
 /* ---------- Action handler ---------- */
 function handleAction(a){
   switch(a){
@@ -455,6 +463,7 @@ document.addEventListener('click', e=>{
   if((m = t.closest('[data-modal]')))         { e.preventDefault(); openModal(m.dataset.modal); return; }
   if((m = t.closest('[data-auth]')))          { e.preventDefault(); switchAuthPanel(m.dataset.auth); return; }
   if((m = t.closest('[data-plan]')))          { e.preventDefault(); selectPlan(m.dataset.plan); return; }
+  if((m = t.closest('[data-esc-pack]')))      { e.preventDefault(); selectEscPack(m); return; }
   if((m = t.closest('[data-cycle]')))         { e.preventDefault(); setCycle(m.dataset.cycle); return; }
   if((m = t.closest('[data-close]')))         { e.preventDefault(); closeModals(); return; }
   if((m = t.closest('[data-open-lender]')))   { e.preventDefault(); openLender(+m.dataset.openLender); return; }
