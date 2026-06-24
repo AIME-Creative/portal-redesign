@@ -280,6 +280,11 @@
               <div class="list-row"><div class="list-logo" style="background:#e2f4f9;color:var(--cyan-600)">✉</div><div class="list-main"><div class="lt">Email</div><div class="ls">support@aimegroup.com</div></div></div>
               <div class="list-row"><div class="list-logo" style="background:#fde4ee;color:var(--pink)">☎</div><div class="list-main"><div class="lt">Member line</div><div class="ls">Mon–Fri, 8am–6pm ET</div></div></div>
             </div>
+            <div class="card card-pad" style="margin-top:20px">
+              <h3 style="font-size:16px;margin-bottom:6px">Found a bug?</h3>
+              <p style="color:var(--muted);font-size:13px;margin:0 0 14px">Spotted something broken or off? Send us a quick report with a screenshot.</p>
+              <button class="btn btn-outline btn-block" data-modal="bug">🐞 Report a bug</button>
+            </div>
           </div>
         </div>
       </section>
@@ -502,6 +507,40 @@
   </div>
 </div>
 
+<!-- ===================== REPORT A BUG ===================== -->
+<div class="modal-overlay" id="modal-bug">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>Report a bug</h2><p>Tell us what went wrong — we've attached a screenshot of this page to help our team.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="bug-shot">
+        <div class="bug-shot-preview">
+          <span class="bug-shot-side"></span>
+          <span class="bug-shot-lines"><i></i><i></i><i></i><i></i></span>
+          <span class="bug-shot-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Screenshot captured</span>
+        </div>
+        <div class="bug-shot-meta">
+          <label class="bug-inc"><input type="checkbox" checked> Include this screenshot</label>
+          <button class="btn btn-outline btn-sm" data-toast="Annotation tools would open here.">✏️ Annotate</button>
+        </div>
+      </div>
+
+      <div class="field"><label>What happened? <span class="req">*</span></label><textarea class="input" placeholder="Describe the issue and what you were doing when it happened…"></textarea></div>
+      <div class="field"><label>Type of issue</label>
+        <select class="select"><option>Something looks broken</option><option>A button or link doesn't work</option><option>Visual / layout glitch</option><option>Data looks wrong</option><option>Other</option></select>
+      </div>
+      <div class="field"><label>Your email</label><input class="input" type="email" value="kyle@aimegroup.com"></div>
+      <div class="bug-auto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg>
+        Automatically included: page URL, browser, screen size, and app version.
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Bug report submitted — thank you! Our team will take a look." data-close>Submit bug report</button></div>
+  </div>
+</div>
+
 <!-- ===================== LOGIN / AUTH SCREEN ===================== -->
 <div class="auth-screen" id="auth-screen">
   <div class="auth-wrap">
@@ -610,6 +649,12 @@
   <button class="bottom-nav-item" data-nav="resources"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2z"/></svg><span>Resources</span></button>
   <button class="bottom-nav-item" data-nav="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>Events</span></button>
 </nav>
+
+<!-- Floating "Report a bug" button -->
+<button class="bug-fab" data-modal="bug" title="Report a bug">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="6" width="8" height="13" rx="4"/><path d="M12 6V3M9.5 4.5L8 3M14.5 4.5L16 3M8 11H3M8 15H4M8 18l-3 2M16 11h5M16 15h4M16 18l3 2"/></svg>
+  <span>Report a bug</span>
+</button>
 
 <!-- Toast -->
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
