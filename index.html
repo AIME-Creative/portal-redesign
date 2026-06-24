@@ -211,11 +211,12 @@
           </div>
         </div>
         <div class="filters" id="lender-filters">
-          <button class="chip active">All partners</button>
-          <button class="chip">Gold</button>
-          <button class="chip">Silver</button>
-          <button class="chip">Bronze</button>
-          <span class="count-note" style="margin-left:auto;align-self:center">Showing 8 of 32 lenders</span>
+          <button class="chip active" data-tier="all">All partners</button>
+          <button class="chip" data-tier="Gold">Gold</button>
+          <button class="chip" data-tier="Silver">Silver</button>
+          <button class="chip" data-tier="Bronze">Bronze</button>
+          <select class="select filter-select" id="lender-product" title="Filter by product type"></select>
+          <span class="count-note" id="lender-count" style="margin-left:auto;align-self:center">Showing all lenders</span>
         </div>
         <div class="card-grid" id="lender-grid"></div>
       </section>
@@ -569,26 +570,18 @@
       <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="esc-packs">
-        <button class="esc-pack" data-esc-pack data-qty="1" data-price="25.00">
-          <span class="ep-check"></span>
-          <span class="ep-main"><span class="ep-t">1 escalation</span><span class="ep-s">Single top-up</span></span>
-          <span class="ep-price">$25</span>
-        </button>
-        <button class="esc-pack selected" data-esc-pack data-qty="5" data-price="100.00">
-          <span class="ep-check"></span>
-          <span class="ep-main"><span class="ep-t">5 escalations <span class="badge badge-pink" style="margin-left:4px">Most popular</span></span><span class="ep-s">Save 20% vs. single</span></span>
-          <span class="ep-price">$100</span>
-        </button>
-        <button class="esc-pack" data-esc-pack data-qty="10" data-price="175.00">
-          <span class="ep-check"></span>
-          <span class="ep-main"><span class="ep-t">10 escalations <span class="badge badge-green" style="margin-left:4px">Best value</span></span><span class="ep-s">Save 30% vs. single</span></span>
-          <span class="ep-price">$175</span>
-        </button>
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Additional escalations are <strong>$199 each</strong> and carry over until used.</p></div>
+      <div class="esc-qty-row">
+        <div><div class="eq-t">Escalations to add</div><div class="eq-s">$199.00 each</div></div>
+        <div class="qty-stepper">
+          <button class="qty-btn" data-esc-step="-1" title="Decrease">−</button>
+          <span class="qty-val" id="esc-qty-val">1</span>
+          <button class="qty-btn" data-esc-step="1" title="Increase">+</button>
+        </div>
       </div>
-      <div class="esc-summary"><span>Total</span><strong id="esc-total">$100.00</strong></div>
+      <div class="esc-summary"><span>Total</span><strong id="esc-total">$199.00</strong></div>
     </div>
-    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Escalations added to your account — you're all set." data-close>Purchase <span id="esc-buy-qty">5</span> escalations</button></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Escalations added to your account — you're all set." data-close>Purchase <span id="esc-buy-label">1 escalation</span></button></div>
   </div>
 </div>
 

@@ -17,14 +17,14 @@ const lenders = [
 const tierBadge = { Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze" };
 
 const vendors = [
-  { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", color:"#1b7a4a", desc:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit","Verifications"], offer:"Up to 20% off credit reports + waived setup" },
-  { name:"Ask Mindy",                    short:"AM",  cat:"Origination", color:"#dd1969", desc:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios","Guidelines"], offer:"Free for AIME members" },
-  { name:"Waive Inspection Fee",         short:"WIF", cat:"Origination", color:"#20adce", desc:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal","Savings"], offer:"$0 inspection fee on qualifying loans" },
-  { name:"Arive",                        short:"AR",  cat:"Origination", color:"#163a85", desc:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS","LOS"], offer:"Exclusive member pricing on Pro plans" },
-  { name:"BrokerVA",                     short:"BVA", cat:"Coaching",    color:"#7a3fb0", desc:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing","Ops"], offer:"Waived placement fee for members" },
-  { name:"Cotality",                     short:"CO",  cat:"Origination", color:"#0b2a5b", desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"], offer:"Member-only data bundles" },
-  { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   color:"#e0463c", desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"], offer:"First month free for members" },
-  { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   color:"#1b9d6b", desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"], offer:"Discounted setup for members" },
+  { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", g:["#1b7a4a","#2bb673"], desc:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit","Verifications"], offer:"Up to 20% off credit reports + waived setup" },
+  { name:"Ask Mindy",                    short:"AM",  cat:"Origination", g:["#86145a","#dd1969"], desc:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios","Guidelines"], offer:"Free for AIME members" },
+  { name:"Waive Inspection Fee",         short:"WIF", cat:"Origination", g:["#0b6b82","#20adce"], desc:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal","Savings"], offer:"$0 inspection fee on qualifying loans" },
+  { name:"Arive",                        short:"AR",  cat:"Origination", g:["#0b1f5b","#163a85"], desc:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS","LOS"], offer:"Exclusive member pricing on Pro plans" },
+  { name:"BrokerVA",                     short:"BVA", cat:"Coaching",    g:["#4a217a","#7a3fb0"], desc:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing","Ops"], offer:"Waived placement fee for members" },
+  { name:"Cotality",                     short:"CO",  cat:"Origination", g:["#0b2a5b","#1893b1"], desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"], offer:"Member-only data bundles" },
+  { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   g:["#7a1f1a","#e0463c"], desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"], offer:"First month free for members" },
+  { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   g:["#0f5e3f","#1b9d6b"], desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"], offer:"Discounted setup for members" },
 ];
 
 const resources = [
@@ -51,17 +51,17 @@ const backArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const firstWord = (t) => t.split('—')[0].trim().split(' ')[0].toUpperCase();
 
 /* ---------- Card templates (clickable region + separate action footer) ---------- */
+// Lenders are logo-centric: a clean logo tile placeholder (real lender logos drop in here)
 function lenderCard(l, i){
-  return `<div class="partner-card">
+  return `<div class="partner-card" data-tier="${l.tier}" data-products="${l.tags.join('|')}">
     <button class="card-open" data-open-lender="${i}">
-      <div class="partner-top">
-        <div class="partner-logo" style="color:${l.color}">${l.short}</div>
-        <span class="badge ${tierBadge[l.tier]}">${l.tier}</span>
+      <div class="lender-logo-box">
+        <span class="badge ${tierBadge[l.tier]}" style="position:absolute;top:12px;right:12px">${l.tier}</span>
+        <div class="lender-logo-ph" style="color:${l.color}">${l.short}</div>
       </div>
       <div class="partner-body">
         <h3>${l.name}</h3>
-        <p class="pdesc">${l.desc}</p>
-        <div class="tag-row">${l.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="tag-row">${l.tags.slice(0,4).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </button>
     <div class="partner-foot">
@@ -71,20 +71,20 @@ function lenderCard(l, i){
   </div>`;
 }
 
+// Market items use the same thumbnail size as Events & Resources
 function vendorCard(v, i){
-  return `<div class="partner-card">
+  return `<div class="res-card">
     <button class="card-open" data-open-market="${i}">
-      <div class="partner-top">
-        <div class="partner-logo" style="color:${v.color}">${v.short}</div>
-        <span class="badge badge-navy">${v.cat}</span>
+      <div class="res-thumb" style="background:linear-gradient(135deg,${v.g[0]},${v.g[1]})">
+        <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${v.cat}</span></span>
+        ${firstWord(v.name)}
       </div>
-      <div class="partner-body">
+      <div class="res-body">
         <h3>${v.name}</h3>
-        <p class="pdesc">${v.desc}</p>
-        <div class="tag-row">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="res-meta">${v.offer}</div>
       </div>
     </button>
-    <div class="partner-foot">
+    <div style="padding:0 17px 17px">
       <button class="btn btn-cyan btn-sm btn-block" data-toast="Connection request sent to ${v.name}.">Connect</button>
     </div>
   </div>`;
@@ -130,6 +130,36 @@ function eventCard(e, i){
 
 /* ---------- Populate grids ---------- */
 document.getElementById('lender-grid').innerHTML  = lenders.map(lenderCard).join('');
+
+/* ---------- Lender filtering (by tier + product type) ---------- */
+const lenderProducts = [...new Set(lenders.flatMap(l=>l.tags))].sort();
+const productSelect = document.getElementById('lender-product');
+if(productSelect){
+  productSelect.innerHTML = '<option value="all">All products</option>' +
+    lenderProducts.map(p=>`<option value="${p}">${p}</option>`).join('');
+}
+function filterLenders(){
+  const group = document.getElementById('lender-filters');
+  const activeChip = group.querySelector('.chip.active');
+  const tier = activeChip ? activeChip.dataset.tier : 'all';
+  const product = productSelect ? productSelect.value : 'all';
+  let shown = 0;
+  document.querySelectorAll('#lender-grid .partner-card').forEach(card=>{
+    const okTier = tier==='all' || card.dataset.tier===tier;
+    const okProd = product==='all' || card.dataset.products.split('|').includes(product);
+    const show = okTier && okProd;
+    card.style.display = show ? '' : 'none';
+    if(show) shown++;
+  });
+  const note = document.getElementById('lender-count');
+  if(note){
+    const filtered = (tier!=='all' || product!=='all');
+    note.textContent = filtered ? `Showing ${shown} of ${lenders.length} lenders` : `Showing all ${lenders.length} lenders`;
+  }
+}
+document.getElementById('lender-filters')?.addEventListener('click', e=>{ if(e.target.closest('.chip')) filterLenders(); });
+productSelect?.addEventListener('change', filterLenders);
+filterLenders();
 document.getElementById('market-grid').innerHTML  = vendors.map(vendorCard).join('');
 document.getElementById('resource-grid').innerHTML= resources.map(resCard).join('');
 document.getElementById('event-grid').innerHTML   = events.map(eventCard).join('');
@@ -213,17 +243,18 @@ function openVendor(i){
   const v = vendors[i]; if(!v) return;
   document.getElementById('market-detail-body').innerHTML = `
     <a class="back-link" data-nav="market">${backArrow} Back to market</a>
-    <div class="card card-pad">
-      <div class="detail-head">
-        <div class="detail-logo" style="color:${v.color}">${v.short}</div>
-        <div style="flex:1">
-          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="font-size:24px">${v.name}</h1><span class="badge badge-navy">${v.cat}</span></div>
-          <p style="color:var(--ink-soft);margin:10px 0 0;max-width:700px;line-height:1.6">${v.desc} As an AIME member, you unlock exclusive pricing and priority onboarding with ${v.name}.</p>
-          <div class="tag-row" style="margin-top:16px">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-          <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
-            <button class="btn btn-cyan" data-toast="Connection request sent to ${v.name}.">Connect with ${v.name}</button>
-            <button class="btn btn-outline" data-toast="Opening website…">Visit website</button>
-          </div>
+    <div class="card" style="overflow:hidden">
+      <div class="detail-banner" style="background:linear-gradient(135deg,${v.g[0]},${v.g[1]})">
+        <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${v.cat}</span></span>
+        <div style="font-size:30px;font-weight:800">${firstWord(v.name)}</div>
+      </div>
+      <div class="card-pad">
+        <h1 style="font-size:24px">${v.name}</h1>
+        <p style="color:var(--ink-soft);margin:14px 0;max-width:720px;line-height:1.7">${v.desc} As an AIME member, you unlock exclusive pricing and priority onboarding with ${v.name}.</p>
+        <div class="tag-row">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+          <button class="btn btn-cyan" data-toast="Connection request sent to ${v.name}.">Connect with ${v.name}</button>
+          <button class="btn btn-outline" data-toast="Opening website…">Visit website</button>
         </div>
       </div>
     </div>
@@ -422,12 +453,14 @@ function openStripe(){
   openModal('stripe');
 }
 
-/* ---------- Buy escalations: pack selection ---------- */
-function selectEscPack(elem){
-  document.querySelectorAll('.esc-pack').forEach(p=>p.classList.remove('selected'));
-  elem.classList.add('selected');
-  document.getElementById('esc-total').textContent = '$' + Number(elem.dataset.price).toFixed(2);
-  document.getElementById('esc-buy-qty').textContent = elem.dataset.qty;
+/* ---------- Buy escalations: quantity stepper ($199 each) ---------- */
+let escQty = 1;
+const ESC_PRICE = 199;
+function stepEsc(delta){
+  escQty = Math.max(1, Math.min(50, escQty + delta));
+  document.getElementById('esc-qty-val').textContent = escQty;
+  document.getElementById('esc-total').textContent = '$' + (escQty * ESC_PRICE).toFixed(2);
+  document.getElementById('esc-buy-label').textContent = escQty + (escQty === 1 ? ' escalation' : ' escalations');
 }
 
 /* ---------- Action handler ---------- */
@@ -463,7 +496,7 @@ document.addEventListener('click', e=>{
   if((m = t.closest('[data-modal]')))         { e.preventDefault(); openModal(m.dataset.modal); return; }
   if((m = t.closest('[data-auth]')))          { e.preventDefault(); switchAuthPanel(m.dataset.auth); return; }
   if((m = t.closest('[data-plan]')))          { e.preventDefault(); selectPlan(m.dataset.plan); return; }
-  if((m = t.closest('[data-esc-pack]')))      { e.preventDefault(); selectEscPack(m); return; }
+  if((m = t.closest('[data-esc-step]')))      { e.preventDefault(); stepEsc(+m.dataset.escStep); return; }
   if((m = t.closest('[data-cycle]')))         { e.preventDefault(); setCycle(m.dataset.cycle); return; }
   if((m = t.closest('[data-close]')))         { e.preventDefault(); closeModals(); return; }
   if((m = t.closest('[data-open-lender]')))   { e.preventDefault(); openLender(+m.dataset.openLender); return; }
