@@ -133,8 +133,7 @@ function eventCard(e, i){
       </div>
     </button>
     <div class="event-foot">
-      <button class="btn btn-navy btn-sm" data-open-event="${i}">View &amp; register</button>
-      <button class="btn btn-outline btn-sm" data-toast="Added to calendar.">Add to calendar</button>
+      <button class="btn btn-cyan btn-sm btn-block" data-open-event="${i}">More info</button>
     </div>
   </div>`;
 }
