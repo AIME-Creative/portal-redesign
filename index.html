@@ -70,6 +70,11 @@
 
   <!-- ===================== MAIN ===================== -->
   <div class="main">
+    <div class="claim-banner" id="claim-banner">
+      <span class="cb-text">🎟️ You haven't claimed your <strong>FUSE 2026</strong> ticket yet — it's included with your Elite membership.</span>
+      <button class="claim-banner-btn" data-action="claim-ticket">Claim your ticket →</button>
+      <button class="claim-banner-close" data-action="dismiss-banner" title="Dismiss">×</button>
+    </div>
     <header class="topbar">
       <button class="icon-btn menu-btn" title="Menu" data-action="menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -339,7 +344,6 @@
           </div>
           <div style="display:flex;gap:10px;margin-top:18px;max-width:1080px"><button class="btn btn-primary" data-toast="Profile saved.">Save changes</button><button class="btn btn-outline">Cancel</button></div>
         </div>
-        </div>
 
         <div class="tab-panel" id="tab-security" style="display:none">
           <div class="card card-pad" style="max-width:560px">
@@ -401,29 +405,34 @@
         <div class="grid" style="grid-template-columns:1.6fr 1fr;align-items:start">
           <!-- LEFT: manage registration -->
           <div>
+            <div class="addon-reminder" id="addon-reminder">
+              <div class="adr-ico">🎟️</div>
+              <div><div class="adr-title">Don't forget your add-ons!</div><div class="adr-sub">Most sessions are included free with your Elite membership — select them below so you don't miss out.</div></div>
+            </div>
+
             <div class="card card-pad" style="margin-bottom:20px">
               <div class="section-title"><h2>Add-ons & sessions</h2></div>
               <p style="color:var(--ink-soft);font-size:13.5px;margin:-6px 0 18px">Customize your FUSE experience. Most sessions are included free with your membership.</p>
 
               <label class="addon-row">
                 <input type="checkbox" data-addon>
-                <div class="ar-main"><div class="ar-t">Hall of AIME — Premium Seating</div><div class="ar-s">Reserved front-section seating for all main-stage sessions</div></div>
+                <div class="ar-main"><div class="ar-t">Hall of AIME</div><div class="ar-s">Early-bird pricing until July 8</div></div>
                 <div class="ar-price">$199</div>
               </label>
               <label class="addon-row">
                 <input type="checkbox" data-addon checked>
-                <div class="ar-main"><div class="ar-t">SHRM at FUSE</div><div class="ar-s">HR & team-building track for growing brokerages</div></div>
+                <div class="ar-main"><div class="ar-t">WMN at FUSE</div><div class="ar-s">Women's Mortgage Network track</div></div>
                 <div class="ar-price free">Free</div>
               </label>
               <label class="addon-row">
                 <input type="checkbox" data-addon checked>
-                <div class="ar-main"><div class="ar-t">Verbal UR Summit</div><div class="ar-s">Live underwriting Q&amp;A with partnered lenders</div></div>
+                <div class="ar-main"><div class="ar-t">Vetted VA</div><div class="ar-s">Meet vetted virtual assistants on-site</div></div>
                 <div class="ar-price free">Free</div>
               </label>
-              <label class="addon-row">
-                <input type="checkbox" data-addon>
-                <div class="ar-main"><div class="ar-t">VIP Luncheon</div><div class="ar-s">Networking lunch with AIME leadership & top originators</div></div>
-                <div class="ar-price free">Free</div>
+              <label class="addon-row locked" title="Available to VIP members only">
+                <input type="checkbox" disabled>
+                <div class="ar-main"><div class="ar-t">VIP Luncheon</div><div class="ar-s">Networking lunch with AIME leadership &amp; top originators</div></div>
+                <span class="badge badge-amber">VIP only</span>
               </label>
             </div>
 
@@ -439,8 +448,8 @@
             <div class="card card-pad">
               <div class="section-title"><h2>Order summary</h2></div>
               <div class="summary-line"><div>General Admission <div class="sl-sub">Included with membership</div></div><span style="font-weight:600">$0.00</span></div>
-              <div class="summary-line"><div>SHRM at FUSE</div><span style="font-weight:600;color:var(--green)">Free</span></div>
-              <div class="summary-line"><div>Verbal UR Summit</div><span style="font-weight:600;color:var(--green)">Free</span></div>
+              <div class="summary-line"><div>WMN at FUSE</div><span style="font-weight:600;color:var(--green)">Free</span></div>
+              <div class="summary-line"><div>Vetted VA</div><span style="font-weight:600;color:var(--green)">Free</span></div>
               <div class="summary-total"><span>Total</span><span id="fuse-total">$0.00</span></div>
               <button class="btn btn-primary btn-block" style="margin-top:18px" data-toast="Registration updated — see you at FUSE 2026!">Update registration</button>
               <button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-toast="Confirmation re-sent to your email.">Email my confirmation</button>

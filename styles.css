@@ -512,6 +512,31 @@ button.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); bord
 .addon-row .ar-s { font-size:12.5px; color:var(--muted); margin-top:1px; }
 .addon-row .ar-price { font-weight:700; font-size:14px; color:var(--navy); }
 .addon-row .ar-price.free { color: var(--green); }
+.addon-row.locked { opacity:.62; cursor:not-allowed; background:var(--surface-alt); }
+.addon-row.locked input { cursor:not-allowed; }
+
+/* "Don't forget your add-ons" reminder */
+.addon-reminder {
+  display:flex; gap:14px; align-items:center; padding:15px 18px; border-radius:14px; margin-bottom:20px;
+  background:linear-gradient(120deg,#fff5d6,#fde4ee); border:1px solid #f3d39a;
+}
+.addon-reminder .adr-ico { font-size:26px; line-height:1; }
+.addon-reminder .adr-title { font-weight:800; font-size:16px; color:var(--navy); }
+.addon-reminder .adr-sub { font-size:13px; color:var(--ink-soft); margin-top:2px; }
+.addon-reminder.flash { animation: adrflash 1.3s ease; }
+@keyframes adrflash { 0%,100%{ box-shadow:0 0 0 0 rgba(221,25,105,0);} 30%{ box-shadow:0 0 0 6px rgba(221,25,105,.32);} }
+
+/* Claim-your-ticket banner */
+.claim-banner {
+  display:flex; align-items:center; justify-content:center; gap:16px;
+  background:linear-gradient(90deg,var(--pink),#a51149); color:#fff;
+  padding:11px 46px; font-size:13.5px; font-weight:600; text-align:center; position:relative;
+}
+.claim-banner-btn { background:#fff; color:var(--pink); font-weight:700; font-size:12.5px; padding:6px 14px; border-radius:20px; white-space:nowrap; transition:.15s; }
+.claim-banner-btn:hover { background:#fff0f6; transform:translateY(-1px); }
+.claim-banner-close { position:absolute; right:12px; top:50%; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; color:rgba(255,255,255,.85); font-size:18px; line-height:1; display:grid; place-items:center; }
+.claim-banner-close:hover { background:rgba(255,255,255,.18); color:#fff; }
+@media (max-width:560px){ .claim-banner{ flex-direction:column; gap:8px; padding:10px 40px; font-size:12.5px; } }
 
 .summary-card { position: sticky; top: 96px; }
 .summary-line { display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--line-soft); font-size:14px; }
@@ -774,6 +799,9 @@ button.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); bord
   .bug-fab span{ display:none; }
   .esc-pill .esc-label{ display:none; }
   .esc-pill{ padding:0 10px; }
+  /* Stack inline two-column grids (FUSE, detail pages, support, billing) so containers don't overlap */
+  .content .grid[style*="grid-template-columns"]{ grid-template-columns:1fr !important; }
+  .summary-card{ position:static; }
 }
 @media (max-width: 560px){
   .stat-row{ grid-template-columns:1fr 1fr; }

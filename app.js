@@ -224,7 +224,20 @@ function navigate(view){
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
   closeNotif();
   document.getElementById('sidebar')?.classList.remove('open');
+  if(view==='fuse'){ ticketClaimed = true; updateClaimBanner(); }  // visiting registration confirms the claim
   window.scrollTo(0,0);
+}
+
+/* ---------- FUSE ticket claim banner ---------- */
+let ticketClaimed = false, bannerDismissed = false;
+function updateClaimBanner(){
+  const b = document.getElementById('claim-banner');
+  if(b) b.style.display = (!ticketClaimed && !bannerDismissed) ? '' : 'none';
+}
+function flashAddons(){
+  const r = document.getElementById('addon-reminder');
+  if(!r) return;
+  r.classList.remove('flash'); void r.offsetWidth; r.classList.add('flash');
 }
 
 /* ---------- Detail pages ---------- */
@@ -489,6 +502,8 @@ function handleAction(a){
     case 'stripe-pay':  closeModals(); closeAuth(); leadCaptured=false; navigate('dashboard'); showToast('Payment successful — welcome to AIME! 🎉'); break;
     case 'notifications': toggleNotif(); break;
     case 'menu':        document.getElementById('sidebar')?.classList.toggle('open'); break;
+    case 'claim-ticket':navigate('fuse'); flashAddons(); showToast("🎟️ Ticket claimed! Don't forget to add your sessions & add-ons below."); break;
+    case 'dismiss-banner': bannerDismissed = true; updateClaimBanner(); break;
   }
 }
 
@@ -551,8 +566,9 @@ document.addEventListener('click', e=>{
   if(!e.target.closest('.notif-wrap')) closeNotif();
 });
 
-// Initial plan render
+// Initial plan render + claim banner
 renderPlans();
+updateClaimBanner();
 
 // Optional deep-linking: #lenders, #signup, #fuse, #modal=escalate, etc.
 (function initFromHash(){
