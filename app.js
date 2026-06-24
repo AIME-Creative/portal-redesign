@@ -405,9 +405,9 @@ function closeAuth(){
 /* ---------- Sign up: membership tiers, lead capture, fake Stripe ---------- */
 const tiers = [
   { key:'premium', name:'Premium', monthly:19, annual:199, popular:true, blurb:'For growing brokers ready to scale.',
-    features:['Direct access to 30+ wholesale lenders','Full Market vendor discounts','All resources, webinars & trainings','3 loan escalations / month','FUSE 2026 ticket included'] },
+    features:['Direct access to 30+ wholesale lenders','Full Market vendor discounts','All resources, webinars & trainings','1 loan escalation / month','FUSE 2026 ticket included'] },
   { key:'elite', name:'Elite', monthly:69, annual:699, blurb:'For established teams that want more.',
-    features:['Everything in Premium','Priority lender connections','10 loan escalations / month','Dedicated success manager','VIP FUSE seating'] },
+    features:['Everything in Premium','Priority lender connections','6 loan escalations / month','Dedicated success manager','VIP FUSE seating'] },
   { key:'vip', name:'VIP', monthly:169, annual:1699, blurb:'For top-producing brokerages.',
     features:['Everything in Elite','Unlimited loan escalations','1:1 quarterly business strategy','Speaking & feature opportunities','Concierge support'] },
 ];
