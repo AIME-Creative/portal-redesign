@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP Member Portal — Redesign Prototype</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="../assets/AMP-Logo.png" alt="AMP — AIME Member Portal">
+    </div>
+
+    <div class="profile-card" data-nav="settings" title="View profile & settings">
+      <div class="avatar">KL</div>
+      <div>
+        <div class="pname">Kyle Lord</div>
+        <div class="prole">Premium Member</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-nav="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item" data-nav="lenders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>
+        Lenders
+      </button>
+      <button class="nav-item" data-nav="market">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg>
+        Market
+      </button>
+      <button class="nav-item" data-nav="resources">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg>
+        Resources
+      </button>
+      <button class="nav-item" data-nav="events">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+        Events
+      </button>
+
+      <div class="nav-label">Support</div>
+      <button class="nav-item" data-nav="support">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v-3a8 8 0 0116 0v3M4 14a2 2 0 002 2h0v-5H6a2 2 0 00-2 2zM20 14a2 2 0 01-2 2h0v-5h0a2 2 0 012 2zM18 16v1a3 3 0 01-3 3h-3"/></svg>
+        Get Support
+      </button>
+      <button class="nav-item" data-nav="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 00-2-1.2L14 2h-4l-.5 2.6a7 7 0 00-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 005 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 002 1.2L10 22h4l.5-2.6a7 7 0 002-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>
+        Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <button class="fuse-badge" data-nav="fuse" title="Manage your FUSE 2026 registration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="width:20px;height:20px"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        <div style="text-align:left">
+          <div class="ft">FUSE 2026</div>
+          <div class="fs">Manage registration</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" style="width:16px;height:16px;margin-left:auto"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" placeholder="Search lenders, vendors, resources, events…">
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" title="Notifications"><span class="dot"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
+        </button>
+        <button class="btn-ghost-line" title="Log out" data-action="logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Log Out
+        </button>
+        <div class="topbar-user" data-nav="settings" title="View profile & settings">
+          <div class="avatar">KL</div>
+          <div>
+            <div class="u-name">Kyle Lord</div>
+            <div class="u-sub">Premium</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="view active" id="view-dashboard">
+        <div class="hero">
+          <div class="hero-text">
+            <h2>Welcome back, Kyle 👋</h2>
+            <p>New this week on AMP: <strong>3 lenders</strong>, <strong>5 market deals</strong>, <strong>12 resources</strong>, and <strong>4 events</strong>. Here's what's just been added.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-modal="escalate">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h0M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/></svg>
+              Escalate a Loan
+            </button>
+            <button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25)" data-modal="connect">Connect a Lender</button>
+          </div>
+        </div>
+
+        <!-- New this week -->
+        <div class="stat-row">
+          <button class="stat" data-nav="lenders">
+            <div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></div>
+            <div class="s-val">3</div><div class="s-lbl">New lenders</div>
+          </button>
+          <button class="stat" data-nav="market">
+            <div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg></div>
+            <div class="s-val">5</div><div class="s-lbl">New market deals</div>
+          </button>
+          <button class="stat" data-nav="resources">
+            <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg></div>
+            <div class="s-val">12</div><div class="s-lbl">New resources</div>
+          </button>
+          <button class="stat" data-nav="events">
+            <div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
+            <div class="s-val">4</div><div class="s-lbl">New events</div>
+          </button>
+        </div>
+
+        <div class="grid dash-grid">
+          <!-- LEFT column -->
+          <div>
+            <!-- Quick actions -->
+            <div style="margin-bottom:24px">
+              <div class="section-title"><h2>Quick actions</h2></div>
+              <div class="qa-grid">
+                <button class="qa" data-modal="changeae">
+                  <div class="qa-ico navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/></svg></div>
+                  <div><div class="qa-t">Change AE</div><div class="qa-s">Request a new account exec</div></div>
+                </button>
+                <button class="qa" data-modal="connect">
+                  <div class="qa-ico cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg></div>
+                  <div><div class="qa-t">Connect a Lender</div><div class="qa-s">Get matched with a partner</div></div>
+                </button>
+                <button class="qa" data-modal="escalate">
+                  <div class="qa-ico pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h0M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/></svg></div>
+                  <div><div class="qa-t">Escalate a Loan</div><div class="qa-s">Send a report to the lender</div></div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Featured -->
+            <div>
+              <div class="section-title"><h2>Featured</h2></div>
+              <div class="card-grid" id="featured-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT column -->
+          <div>
+            <div class="card card-pad" style="margin-bottom:20px">
+              <div class="section-title"><h2>This week</h2><a href="#" data-nav="events">All events <span>→</span></a></div>
+              <div id="dash-events"></div>
+            </div>
+
+            <div class="card card-pad">
+              <div class="section-title"><h2>Membership</h2></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <div><div style="font-weight:700;font-size:15px">Premium plan</div><div style="color:var(--muted);font-size:12.5px">Renews Jan 14, 2027</div></div>
+                <span class="badge badge-green">Active</span>
+              </div>
+              <div style="height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:8px"><div style="width:62%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink))"></div></div>
+              <div style="font-size:12.5px;color:var(--ink-soft)">7 of 10 escalations remaining this cycle</div>
+              <button class="btn btn-outline btn-sm btn-block" style="margin-top:16px" data-nav="settings" data-tab="billing">Manage membership</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LENDERS ============ -->
+      <section class="view" id="view-lenders">
+        <div class="page-head">
+          <div class="page-head-row">
+            <div><h1>Lenders</h1><p>Connect with our AIME wholesale lender partners and escalate loans in your pipeline.</p></div>
+            <button class="btn btn-primary" data-modal="connect">+ Connect a Lender</button>
+          </div>
+        </div>
+        <div class="filters" id="lender-filters">
+          <button class="chip active">All partners</button>
+          <button class="chip">Gold</button>
+          <button class="chip">Silver</button>
+          <button class="chip">Bronze</button>
+          <span class="count-note" style="margin-left:auto;align-self:center">Showing 8 of 32 lenders</span>
+        </div>
+        <div class="card-grid" id="lender-grid"></div>
+      </section>
+
+      <!-- ============ MARKET ============ -->
+      <section class="view" id="view-market">
+        <div class="page-head"><h1>Market</h1><p>Exclusive vendor discounts and tools, available only to AIME members.</p></div>
+        <div class="filters">
+          <button class="chip active">All categories</button>
+          <button class="chip">Core Partners</button>
+          <button class="chip">Origination Tools</button>
+          <button class="chip">Coaching</button>
+          <button class="chip">Marketing</button>
+          <span class="count-note" style="margin-left:auto;align-self:center">Showing 8 of 48 vendors</span>
+        </div>
+        <div class="card-grid" id="market-grid"></div>
+      </section>
+
+      <!-- ============ RESOURCES ============ -->
+      <section class="view" id="view-resources">
+        <div class="page-head"><h1>Resources</h1><p>Learn and grow with AIME webinars, podcasts, and trainings.</p></div>
+        <div class="filters">
+          <button class="chip active">All types</button>
+          <button class="chip">Podcasts</button>
+          <button class="chip">Webinars</button>
+          <button class="chip">Trainings</button>
+          <span class="count-note" style="margin-left:auto;align-self:center">Showing 8 of 498 resources</span>
+        </div>
+        <div class="card-grid" id="resource-grid"></div>
+      </section>
+
+      <!-- ============ EVENTS ============ -->
+      <section class="view" id="view-events">
+        <div class="page-head"><h1>Events</h1><p>Join the industry's most cutting-edge local, regional, and national events.</p></div>
+        <div class="filters">
+          <button class="chip active">All events</button>
+          <button class="chip">Virtual</button>
+          <button class="chip">In person</button>
+          <button class="chip">Training</button>
+        </div>
+        <div class="card-grid" id="event-grid"></div>
+      </section>
+
+      <!-- ============ SUPPORT ============ -->
+      <section class="view" id="view-support">
+        <div class="page-head"><h1>Get support</h1><p>We're here to help — submit a ticket and our team will respond within one business day.</p></div>
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;align-items:start">
+          <div class="card card-pad">
+            <h3 style="font-size:16px;margin-bottom:18px">Submit a ticket</h3>
+            <div class="field"><label>Subject <span class="req">*</span></label><input class="input" placeholder="Brief description of your issue"></div>
+            <div class="field"><label>Category <span class="req">*</span></label>
+              <select class="select"><option>Select a category</option><option>Lender connection</option><option>Loan escalation</option><option>Billing &amp; membership</option><option>Market / vendor</option><option>Technical issue</option></select>
+            </div>
+            <div class="field"><label>Message <span class="req">*</span></label><textarea class="input" placeholder="Please describe your issue in detail…"></textarea></div>
+            <button class="btn btn-primary btn-block" data-toast="Ticket submitted — we'll be in touch shortly.">Submit ticket</button>
+          </div>
+          <div>
+            <div class="card card-pad" style="margin-bottom:20px">
+              <h3 style="font-size:16px;margin-bottom:6px">Recent tickets</h3>
+              <div class="empty">
+                <div class="e-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                <h4>No tickets yet</h4><p>When you submit a ticket it'll show up here so you can track its status.</p>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <h3 style="font-size:16px;margin-bottom:14px">Other ways to reach us</h3>
+              <div class="list-row"><div class="list-logo" style="background:#e2f4f9;color:var(--cyan-600)">✉</div><div class="list-main"><div class="lt">Email</div><div class="ls">support@aimegroup.com</div></div></div>
+              <div class="list-row"><div class="list-logo" style="background:#fde4ee;color:var(--pink)">☎</div><div class="list-main"><div class="lt">Member line</div><div class="ls">Mon–Fri, 8am–6pm ET</div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings">
+        <div class="page-head"><h1>Settings</h1><p>Manage your account, security, and membership.</p></div>
+        <div class="tabs" id="settings-tabs">
+          <button class="tab active" data-tab="profile">Profile</button>
+          <button class="tab" data-tab="security">Email &amp; Password</button>
+          <button class="tab" data-tab="billing">Membership &amp; Billing</button>
+        </div>
+
+        <div class="tab-panel" id="tab-profile">
+          <div class="card card-pad" style="max-width:760px">
+            <div class="set-block" style="display:flex;align-items:center;gap:18px;margin-bottom:26px">
+              <div class="avatar" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));color:#fff;display:grid;place-items:center;font-weight:700;font-size:24px">KL</div>
+              <div><h3>Profile picture</h3><div class="sub">JPG, PNG or GIF · max 5MB</div><button class="btn btn-outline btn-sm">Change picture</button></div>
+            </div>
+            <div class="form-section-label">Personal information</div>
+            <div class="field-row"><div class="field"><label>First name</label><input class="input" value="Kyle"></div><div class="field"><label>Last name</label><input class="input" value="Lord"></div></div>
+            <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Mobile phone</label><input class="input" value="(555) 014-2278"></div></div>
+            <div class="field"><label>Mailing address</label><input class="input" value="1900 Shore Road Ln"></div>
+            <div class="field-row"><div class="field"><label>City</label><input class="input" value="Berlin"></div><div class="field"><label>State</label><input class="input" value="MD"></div></div>
+            <div class="form-section-label">Licensing</div>
+            <div class="field-row"><div class="field"><label>Individual NMLS</label><input class="input" value="9158"></div><div class="field"><label>State licenses</label><input class="input" value="MD, VA, DE"></div></div>
+            <div style="display:flex;gap:10px;margin-top:8px"><button class="btn btn-primary" data-toast="Profile saved.">Save changes</button><button class="btn btn-outline">Cancel</button></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-security" style="display:none">
+          <div class="card card-pad" style="max-width:560px">
+            <div class="form-section-label">Email address</div>
+            <div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div>
+            <div class="form-section-label">Change password</div>
+            <div class="field"><label>Current password</label><input class="input" type="password" value="********"></div>
+            <div class="field"><label>New password</label><input class="input" type="password" placeholder="••••••••"></div>
+            <div class="field"><label>Confirm new password</label><input class="input" type="password" placeholder="••••••••"></div>
+            <button class="btn btn-primary" data-toast="Security settings updated.">Update password</button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-billing" style="display:none">
+          <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;max-width:860px">
+            <div class="card card-pad">
+              <h3 style="font-size:16px;margin-bottom:14px">Membership</h3>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <div><div style="font-weight:700;font-size:18px;color:var(--pink)">Premium</div><div style="color:var(--muted);font-size:12.5px">Next billing Jan 14, 2027</div></div>
+                <span class="badge badge-green">Active</span>
+              </div>
+              <button class="btn btn-navy btn-block">Change / renew plan</button>
+            </div>
+            <div class="card card-pad">
+              <h3 style="font-size:16px;margin-bottom:14px">Escalations</h3>
+              <div style="font-size:30px;font-weight:700">7 <span style="font-size:15px;color:var(--muted);font-weight:500">remaining</span></div>
+              <div style="color:var(--muted);font-size:12.5px;margin:4px 0 14px">Resets each billing cycle</div>
+              <button class="btn btn-primary btn-block">Purchase additional</button>
+            </div>
+            <div class="card card-pad" style="grid-column:1/-1">
+              <h3 style="font-size:16px;margin-bottom:14px">Payment method</h3>
+              <div class="empty" style="padding:26px">
+                <div class="e-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+                <h4>No payment method on file</h4><p>Add a card to manage your subscription.</p>
+                <button class="btn btn-outline btn-sm" style="margin-top:14px">+ Add card</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LENDER DETAIL ============ -->
+      <section class="view" id="view-lender-detail">
+        <a class="back-link" data-nav="lenders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to lenders</a>
+        <div class="card card-pad">
+          <div class="detail-head">
+            <div class="detail-logo" id="ld-logo">UWM</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 id="ld-name" style="font-size:24px">United Wholesale Mortgage</h1><span class="badge badge-gold" id="ld-tier">Gold partner</span></div>
+              <p style="color:var(--ink-soft);margin:10px 0 0;max-width:680px;line-height:1.6" id="ld-desc">Headquartered in Pontiac, Michigan, UWM is the #1 wholesale lender in the nation, providing state-of-the-art technology and unrivaled client service to independent mortgage brokers nationwide.</p>
+              <div class="tag-row" style="margin-top:16px" id="ld-tags"></div>
+              <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
+                <button class="btn btn-primary" data-modal="escalate">Escalate a loan</button>
+                <button class="btn btn-cyan" data-modal="connect">Connect</button>
+                <button class="btn btn-outline" data-modal="changeae">Change AE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FUSE 2026 REGISTRATION ============ -->
+      <section class="view" id="view-fuse">
+        <a class="back-link" data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to dashboard</a>
+
+        <div class="fuse-hero">
+          <div class="fuse-star">★ AIME PRESENTS ★</div>
+          <h1>FUSE 2026</h1>
+          <div class="fuse-when">September 24–26, 2026 · JW Marriott, Las Vegas, NV</div>
+          <div class="fuse-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> You're registered — General Admission claimed</div>
+        </div>
+
+        <div class="grid" style="grid-template-columns:1.6fr 1fr;align-items:start">
+          <!-- LEFT: manage registration -->
+          <div>
+            <div class="card card-pad" style="margin-bottom:20px">
+              <div class="section-title"><h2>Add-ons & sessions</h2></div>
+              <p style="color:var(--ink-soft);font-size:13.5px;margin:-6px 0 18px">Customize your FUSE experience. Most sessions are included free with your membership.</p>
+
+              <label class="addon-row">
+                <input type="checkbox" data-addon>
+                <div class="ar-main"><div class="ar-t">Hall of AIME — Premium Seating</div><div class="ar-s">Reserved front-section seating for all main-stage sessions</div></div>
+                <div class="ar-price">$199</div>
+              </label>
+              <label class="addon-row">
+                <input type="checkbox" data-addon checked>
+                <div class="ar-main"><div class="ar-t">SHRM at FUSE</div><div class="ar-s">HR & team-building track for growing brokerages</div></div>
+                <div class="ar-price free">Free</div>
+              </label>
+              <label class="addon-row">
+                <input type="checkbox" data-addon checked>
+                <div class="ar-main"><div class="ar-t">Verbal UR Summit</div><div class="ar-s">Live underwriting Q&amp;A with partnered lenders</div></div>
+                <div class="ar-price free">Free</div>
+              </label>
+              <label class="addon-row">
+                <input type="checkbox" data-addon>
+                <div class="ar-main"><div class="ar-t">VIP Luncheon</div><div class="ar-s">Networking lunch with AIME leadership & top originators</div></div>
+                <div class="ar-price free">Free</div>
+              </label>
+            </div>
+
+            <div class="card card-pad">
+              <div class="section-title"><h2>Bring a guest</h2></div>
+              <p style="color:var(--ink-soft);font-size:13.5px;margin:-6px 0 16px">Add a guest pass for a colleague or team member.</p>
+              <button class="btn btn-outline" data-toast="Guest pass added to your order.">+ Add a guest</button>
+            </div>
+          </div>
+
+          <!-- RIGHT: order summary -->
+          <div class="summary-card">
+            <div class="card card-pad">
+              <div class="section-title"><h2>Order summary</h2></div>
+              <div class="summary-line"><div>General Admission <div class="sl-sub">Included with membership</div></div><span style="font-weight:600">$0.00</span></div>
+              <div class="summary-line"><div>SHRM at FUSE</div><span style="font-weight:600;color:var(--green)">Free</span></div>
+              <div class="summary-line"><div>Verbal UR Summit</div><span style="font-weight:600;color:var(--green)">Free</span></div>
+              <div class="summary-total"><span>Total</span><span id="fuse-total">$0.00</span></div>
+              <button class="btn btn-primary btn-block" style="margin-top:18px" data-toast="Registration updated — see you at FUSE 2026!">Update registration</button>
+              <button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-toast="Confirmation re-sent to your email.">Email my confirmation</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invite / referral -->
+        <div class="referral" style="margin-top:24px">
+          <div class="referral-top">
+            <h2>Refer a Broker. Win a Truck. 🛻</h2>
+            <p>Share AIME with your network and earn entries to win a DMC Canyon AT4 valued at $50,000 at FUSE 2026, sponsored by Cake Mortgage.</p>
+          </div>
+          <div class="referral-body">
+            <div class="copy-link">
+              <input class="input" value="https://aimegroup.com/join?ref=kylelord" readonly>
+              <button class="btn btn-cyan" data-toast="Referral link copied to clipboard.">Copy link</button>
+            </div>
+            <div class="steps3">
+              <div class="step3"><div class="s3-n">1</div><div class="s3-t">Get your link</div><div class="s3-s">Your personal referral link is ready above.</div></div>
+              <div class="step3"><div class="s3-n">2</div><div class="s3-t">Refer brokers</div><div class="s3-s">Share it by text, email, or social.</div></div>
+              <div class="step3"><div class="s3-n">3</div><div class="s3-t">Win the truck</div><div class="s3-s">Every member who joins earns you entries.</div></div>
+            </div>
+            <div class="referral-count"><strong>1,518</strong> AIME members are already in the running</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+<div class="modal-overlay" id="modal-escalate">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>Escalate a loan</h2><p>Send a structured report directly to your lender's escalation team.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="stepper">
+        <div class="step active"><span class="sn">1</span> Lender &amp; loan</div>
+        <div class="step-line"></div>
+        <div class="step"><span class="sn">2</span> Details</div>
+        <div class="step-line"></div>
+        <div class="step"><span class="sn">3</span> Review</div>
+      </div>
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Loans should be escalated only after you've exhausted standard channels with your AE. Your contact details are pre-filled from your profile.</p></div>
+      <div class="form-section-label">Lender information</div>
+      <div class="field"><label>Which lender? <span class="req">*</span></label><select class="select"><option>Choose a lender…</option><option>United Wholesale Mortgage</option><option>EPM</option><option>Newrez</option><option>Windsor Mortgage</option></select></div>
+      <div class="field-row"><div class="field"><label>Loan number <span class="req">*</span></label><input class="input" placeholder="e.g. 100482910"></div><div class="field"><label>Loan type</label><select class="select"><option>Conventional</option><option>FHA</option><option>VA</option><option>Jumbo</option></select></div></div>
+      <div class="field-row"><div class="field"><label>Loan amount</label><input class="input" placeholder="$0.00"></div><div class="field"><label>Closing date</label><input class="input" type="date"></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Escalation submitted — the lender has been notified." data-close>Continue &amp; submit</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-connect">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>Connect with a lender partner</h2><p>We'll introduce you to an approved AIME lender partner.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Your contact details below are pulled from your profile. Update them in Settings if anything has changed.</p></div>
+      <div class="field"><label>Which lender would you like to connect with? <span class="req">*</span></label><select class="select"><option>Select a lender partner…</option><option>United Wholesale Mortgage</option><option>EPM</option><option>Newrez</option><option>Newfi</option></select></div>
+      <div class="form-section-label">Your information</div>
+      <div class="field"><label>Name</label><input class="input" value="Kyle Lord"></div>
+      <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Phone number</label><input class="input" value="(555) 014-2278"></div></div>
+      <div class="field-row"><div class="field"><label>NMLS #</label><input class="input" value="9158"></div><div class="field"><label>State licenses</label><input class="input" value="MD, VA, DE"></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Connection request sent — the lender will reach out soon." data-close>Submit request</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-changeae">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>Change Account Executive</h2><p>Having an issue with your AE? Request a change and the AIME team will help.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Which lender? <span class="req">*</span></label><select class="select"><option>Choose a lender…</option><option>United Wholesale Mortgage</option><option>EPM</option><option>Newrez</option></select></div>
+      <div class="field"><label>Current Account Executive name</label><input class="input" placeholder="Type a name"></div>
+      <div class="field"><label>Reason for change <span class="req">*</span></label><select class="select"><option>Choose a reason…</option><option>Unresponsive</option><option>Poor communication</option><option>Relocated / no longer my market</option><option>Other</option></select></div>
+      <div class="field"><label>Tell us more</label><textarea class="input" placeholder="Describe the issue…"></textarea></div>
+      <div class="field" style="display:flex;align-items:center;gap:10px;margin-top:4px"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--pink)"><label style="margin:0">I have already tried to resolve this with my current AE.</label></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Request submitted — we'll follow up within 1 business day." data-close>Submit request</button></div>
+  </div>
+</div>
+
+<!-- ===================== LOGIN / AUTH SCREEN ===================== -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-wrap">
+    <div class="auth-logo"><img src="../assets/AMP-Logo.png" alt="AMP — AIME Member Portal"></div>
+
+    <!-- Log in -->
+    <div class="auth-card auth-panel active" id="auth-login">
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Log in to access your AIME member benefits.</p>
+      <div class="field"><label>Email</label><input class="input" type="email" placeholder="you@company.com" value="kyle@aimegroup.com"></div>
+      <div class="field" style="margin-bottom:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <label style="margin:0">Password</label>
+          <button class="link-pink" data-auth="forgot">Forgot password?</button>
+        </div>
+        <input class="input" type="password" placeholder="••••••••" value="password" style="margin-top:7px">
+      </div>
+      <label class="remember"><input type="checkbox" checked> Keep me logged in</label>
+      <button class="btn btn-primary btn-block" style="margin-top:18px" data-action="login">Log in</button>
+      <div class="auth-divider"><span>New to AIME?</span></div>
+      <button class="btn btn-outline btn-block" data-auth="signup">Create a member account</button>
+    </div>
+
+    <!-- Forgot password -->
+    <div class="auth-card auth-panel" id="auth-forgot">
+      <h2>Reset your password</h2>
+      <p class="auth-sub">Enter your email and we'll send you a link to reset your password.</p>
+      <div class="field"><label>Email</label><input class="input" type="email" placeholder="you@company.com"></div>
+      <button class="btn btn-primary btn-block" style="margin-top:10px" data-action="reset">Send reset link</button>
+      <button class="btn-back-auth" data-auth="login">← Back to log in</button>
+    </div>
+
+    <!-- Sign up -->
+    <div class="auth-card auth-panel" id="auth-signup">
+      <h2>Become a member</h2>
+      <p class="auth-sub">Join AIME to unlock lenders, market deals, resources, and events.</p>
+      <div class="field-row">
+        <div class="field"><label>First name</label><input class="input" placeholder="Kyle"></div>
+        <div class="field"><label>Last name</label><input class="input" placeholder="Lord"></div>
+      </div>
+      <div class="field"><label>Work email</label><input class="input" type="email" placeholder="you@company.com"></div>
+      <div class="field"><label>Create password</label><input class="input" type="password" placeholder="••••••••"></div>
+      <button class="btn btn-primary btn-block" style="margin-top:10px" data-action="signup">Create account</button>
+      <div class="auth-divider"><span>Already a member?</span></div>
+      <button class="btn btn-outline btn-block" data-auth="login">Log in instead</button>
+    </div>
+
+    <p class="auth-legal">© 2026 AIME · Association of Independent Mortgage Experts</p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
+
+<script src="app.js"></script>
+</body>
+</html>
