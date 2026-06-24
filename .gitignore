@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Editor / workspace
+.obsidian/
+.vscode/
+*.swp
