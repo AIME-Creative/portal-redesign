@@ -1,0 +1,116 @@
+/* ============================================================
+   AMP Admin — styles specific to the admin app
+   (loads on top of the shared styles.css design system)
+   ============================================================ */
+
+/* Distinguish admin sidebar */
+.admin-badge {
+  display:inline-block; font-size:10px; font-weight:800; letter-spacing:.12em;
+  background:var(--cyan); color:#021649; padding:2px 8px; border-radius:6px; margin-left:8px; vertical-align:middle;
+}
+.sidebar-foot .exit-link {
+  display:flex; align-items:center; gap:10px; width:100%; color:rgba(255,255,255,.78);
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  padding:11px 13px; border-radius:12px; font-weight:600; font-size:13.5px; transition:.15s;
+}
+.sidebar-foot .exit-link:hover { background:rgba(255,255,255,.12); color:#fff; }
+.sidebar-foot .exit-link svg { width:17px; height:17px; }
+
+/* Toolbar above tables */
+.toolbar { display:flex; align-items:center; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+.toolbar .search { max-width:340px; flex:1; min-width:200px; }
+.toolbar .spacer { flex:1; }
+
+/* Tables */
+.table-wrap { background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow-sm); overflow:hidden; }
+.table-scroll { overflow-x:auto; }
+table.adm { width:100%; border-collapse:collapse; min-width:680px; }
+table.adm th {
+  text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--muted); font-weight:700; padding:13px 18px; border-bottom:1px solid var(--line); background:var(--surface-alt); white-space:nowrap;
+}
+table.adm td { padding:13px 18px; border-bottom:1px solid var(--line-soft); font-size:14px; vertical-align:middle; color:var(--ink); }
+table.adm tr:last-child td { border-bottom:none; }
+table.adm tbody tr { transition:.1s; }
+table.adm tbody tr:hover td { background:#fafbfe; }
+.t-strong { font-weight:600; }
+.t-sub { font-size:12.5px; color:var(--muted); margin-top:1px; }
+.t-right { text-align:right; }
+
+/* mini identity cell */
+.t-id { display:flex; align-items:center; gap:11px; }
+.t-avatar { width:34px; height:34px; border-radius:50%; flex:0 0 34px; display:grid; place-items:center; color:#fff; font-weight:700; font-size:12.5px; background:linear-gradient(135deg,var(--cyan),var(--pink)); }
+.t-logo { width:36px; height:36px; border-radius:9px; flex:0 0 36px; display:grid; place-items:center; font-weight:800; font-size:12px; background:var(--surface-alt); border:1px solid var(--line); color:var(--navy); }
+
+/* row action buttons */
+.row-actions { display:flex; gap:6px; justify-content:flex-end; }
+.icon-act { width:32px; height:32px; border-radius:8px; display:grid; place-items:center; border:1px solid var(--line); background:#fff; color:var(--ink-soft); transition:.13s; }
+.icon-act:hover { border-color:var(--cyan); color:var(--navy); }
+.icon-act.danger:hover { border-color:var(--red); color:var(--red); background:#fdecea; }
+.icon-act svg { width:15px; height:15px; }
+.link-act { font-weight:600; font-size:13px; color:var(--cyan-600); }
+.link-act:hover { color:var(--navy); }
+
+/* status dots */
+.dot-status { display:inline-flex; align-items:center; gap:7px; font-weight:600; font-size:13px; }
+.dot-status::before { content:""; width:8px; height:8px; border-radius:50%; }
+.dot-active::before { background:var(--green); }
+.dot-draft::before { background:var(--amber); }
+.dot-paused::before { background:var(--muted); }
+
+/* requests queue specifics */
+.req-type { display:inline-flex; align-items:center; gap:7px; font-weight:600; font-size:13px; }
+.req-type .rt-ico { width:28px; height:28px; border-radius:8px; display:grid; place-items:center; flex:0 0 28px; }
+.req-type .rt-ico svg { width:15px; height:15px; }
+
+/* section subhead */
+.adm-section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+
+/* stat tile mini icon already from styles.css (.stat) */
+.stat-row.admin5 { grid-template-columns:repeat(5,1fr); }
+@media (max-width:1080px){ .stat-row.admin5{ grid-template-columns:repeat(2,1fr); } }
+
+/* detail rows in request modal */
+.kv { display:flex; gap:14px; padding:10px 0; border-bottom:1px solid var(--line-soft); font-size:14px; }
+.kv:last-child { border-bottom:none; }
+.kv .k { width:140px; flex:0 0 140px; color:var(--muted); font-weight:600; font-size:13px; }
+.kv .v { color:var(--ink); }
+
+/* count pill on nav */
+.nav-count { margin-left:auto; background:rgba(221,25,105,.9); color:#fff; font-size:11px; font-weight:700; padding:1px 8px; border-radius:20px; }
+
+/* Membership breakdown bar */
+.mbar { display:flex; height:12px; border-radius:7px; overflow:hidden; margin:10px 0 16px; background:var(--line); }
+.mbar span { height:100%; }
+.mseg-premium { background:var(--cyan); }
+.mseg-elite { background:var(--pink); }
+.mseg-vip { background:var(--navy); }
+.mrow { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line-soft); font-size:14px; }
+.mrow:last-child { border-bottom:none; }
+.mrow .mdot { width:11px; height:11px; border-radius:3px; flex:0 0 11px; }
+.mrow .mname { font-weight:600; }
+.mrow .mcount { margin-left:auto; font-weight:700; }
+.mrow .mpct { color:var(--muted); font-size:12.5px; width:42px; text-align:right; }
+
+/* Engagement ranked lists */
+.eng-row { display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid var(--line-soft); }
+.eng-row:last-child { border-bottom:none; }
+.eng-info { width:200px; flex:0 0 200px; min-width:0; }
+.eng-name { font-weight:600; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.eng-bar { flex:1; height:9px; border-radius:6px; background:var(--line); overflow:hidden; }
+.eng-bar span { display:block; height:100%; border-radius:6px; }
+.eng-val { width:54px; flex:0 0 54px; text-align:right; font-weight:700; font-size:14px; }
+@media (max-width:560px){ .eng-info{ width:130px; flex-basis:130px; } }
+
+/* Taxonomy management */
+.tax-chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 16px; }
+.tax-chip { display:inline-flex; align-items:center; gap:7px; background:var(--surface-alt); border:1px solid var(--line); border-radius:8px; padding:6px 8px 6px 12px; font-size:13px; font-weight:600; color:var(--ink); }
+.tax-chip button { width:18px; height:18px; border-radius:5px; display:grid; place-items:center; color:var(--muted); font-size:14px; line-height:1; transition:.13s; }
+.tax-chip button:hover { background:#fdecea; color:var(--red); }
+.tax-add { display:flex; gap:8px; }
+.tax-add .input { height:40px; }
+.tax-empty { color:var(--muted); font-size:13px; font-style:italic; margin:14px 0 16px; }
+
+@media (max-width:860px){
+  .content .grid[style*="grid-template-columns"]{ grid-template-columns:1fr !important; }
+}

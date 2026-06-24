@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP Admin — AIME Member Portal</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="assets/AMP-Logo.png" alt="AMP — AIME Member Portal">
+    </div>
+
+    <div class="profile-card">
+      <div class="avatar">AT</div>
+      <div>
+        <div class="pname">AIME Team</div>
+        <div class="prole">Administrator</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" data-nav="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" data-nav="requests">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z"/></svg>
+        Requests <span class="nav-count" id="nav-req-count">0</span>
+      </button>
+      <button class="nav-item" data-nav="analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+        Analytics
+      </button>
+      <button class="nav-item" data-nav="engagement">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Engagement
+      </button>
+
+      <div class="nav-label">Members</div>
+      <button class="nav-item" data-nav="members">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>
+        Members
+      </button>
+
+      <div class="nav-label">Content</div>
+      <button class="nav-item" data-nav="featured">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+        Featured
+      </button>
+      <button class="nav-item" data-nav="lenders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>
+        Lenders
+      </button>
+      <button class="nav-item" data-nav="market">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg>
+        Market
+      </button>
+      <button class="nav-item" data-nav="resources">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg>
+        Resources
+      </button>
+      <button class="nav-item" data-nav="events">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+        Events
+      </button>
+      <button class="nav-item" data-nav="taxonomy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-6.2-6.2A2 2 0 014 13V6a2 2 0 012-2h7a2 2 0 011.4.6l6.2 6.2a2 2 0 010 2.6z"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>
+        Categories &amp; tags
+      </button>
+
+      <div class="nav-label">Access</div>
+      <button class="nav-item" data-nav="team">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a4 4 0 100-8 4 4 0 000 8z"/><path d="M5 21a7 7 0 0114 0M19 5l1.5 1.5M20.5 3.5L19 5"/></svg>
+        Team access
+      </button>
+
+      <div class="nav-label">Events</div>
+      <button class="nav-item" data-nav="fuse">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        FUSE 2026
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <a class="exit-link" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Exit to member view
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" title="Menu" data-action="menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" placeholder="Search members, lenders, requests…">
+      </div>
+      <div class="topbar-right">
+        <span class="badge badge-cyan" style="height:28px;padding:0 12px;font-size:12px">Admin console</span>
+        <a class="btn-ghost-line" href="index.html" title="View member portal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          Member view
+        </a>
+        <div class="topbar-user">
+          <div class="avatar">AT</div>
+          <div><div class="u-name">AIME Team</div><div class="u-sub">Admin</div></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="view active" id="view-dashboard">
+        <div class="page-head"><h1>Admin dashboard</h1><p>Overview of members, content, and incoming requests.</p></div>
+
+        <div class="stat-row admin5">
+          <button class="stat" data-nav="members">
+            <div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg></div>
+            <div class="s-val">2,847</div><div class="s-lbl">Total members</div>
+          </button>
+          <button class="stat" data-nav="requests">
+            <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z"/></svg></div>
+            <div class="s-val" id="dash-pending">0</div><div class="s-lbl">Pending requests</div>
+          </button>
+          <button class="stat" data-nav="lenders">
+            <div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></div>
+            <div class="s-val" id="dash-lenders">0</div><div class="s-lbl">Lender partners</div>
+          </button>
+          <button class="stat" data-nav="market">
+            <div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9"/></svg></div>
+            <div class="s-val" id="dash-vendors">0</div><div class="s-lbl">Market vendors</div>
+          </button>
+          <button class="stat" data-nav="fuse">
+            <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+            <div class="s-val">1,204</div><div class="s-lbl">FUSE registrations</div>
+          </button>
+        </div>
+
+        <div class="grid" style="grid-template-columns:1.7fr 1fr;align-items:start">
+          <div class="card card-pad">
+            <div class="section-title"><h2>Pending requests</h2><a href="#" data-nav="requests">View all <span>→</span></a></div>
+            <div class="table-scroll"><table class="adm" id="dash-requests"></table></div>
+          </div>
+          <div>
+            <div class="card card-pad" style="margin-bottom:20px">
+              <div class="section-title"><h2>Membership breakdown</h2></div>
+              <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="font-size:30px;font-weight:800;letter-spacing:-.02em">2,847</span><span style="color:var(--muted);font-size:13px">total members</span></div>
+              <div class="mbar" id="mbar"></div>
+              <div id="mbreakdown"></div>
+            </div>
+            <div class="card card-pad">
+              <div class="section-title"><h2>Newest members</h2><a href="#" data-nav="members">All members <span>→</span></a></div>
+              <div id="dash-members"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MEMBERS ============ -->
+      <section class="view" id="view-members">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Members</h1><p>Search, view, and manage member accounts.</p></div>
+          <button class="btn btn-primary" data-edit="member:new">+ Add member</button>
+        </div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="member-search" placeholder="Search by name or email…"></div>
+          <select class="select filter-select" id="member-plan"><option value="all">All plans</option><option>Premium</option><option>Elite</option><option>VIP</option></select>
+          <select class="select filter-select" id="member-status"><option value="all">All statuses</option><option>Active</option><option>Paused</option></select>
+          <span class="spacer"></span>
+          <span class="count-note" id="member-count">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Member</th><th>Plan</th><th>Escalations</th><th>Status</th><th>Joined</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="members-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ LENDERS ============ -->
+      <section class="view" id="view-lenders">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Lenders</h1><p>Manage wholesale lender partners shown to members.</p></div>
+          <button class="btn btn-primary" data-edit="lender:new">+ Add lender</button>
+        </div>
+        <div class="toolbar"><span class="count-note" id="lender-count">—</span></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Lender</th><th>Tier</th><th>Products</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="lenders-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ MARKET ============ -->
+      <section class="view" id="view-market">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Market</h1><p>Manage vendor partners and member deals.</p></div>
+          <button class="btn btn-primary" data-edit="vendor:new">+ Add vendor</button>
+        </div>
+        <div class="toolbar"><span class="count-note" id="vendor-count">—</span></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Vendor</th><th>Category</th><th>Member offer</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="vendors-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ RESOURCES ============ -->
+      <section class="view" id="view-resources">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Resources</h1><p>Manage webinars, podcasts, and trainings.</p></div>
+          <button class="btn btn-primary" data-edit="resource:new">+ Add resource</button>
+        </div>
+        <div class="toolbar"><span class="count-note" id="resource-count">—</span></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Title</th><th>Type</th><th>Duration</th><th>Published</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="resources-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ EVENTS ============ -->
+      <section class="view" id="view-events">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Events</h1><p>Manage local, regional, and national events.</p></div>
+          <button class="btn btn-primary" data-edit="event:new">+ Add event</button>
+        </div>
+        <div class="toolbar"><span class="count-note" id="event-count">—</span></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Event</th><th>Date</th><th>Type</th><th>Registrations</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="events-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ REQUESTS ============ -->
+      <section class="view" id="view-requests">
+        <div class="page-head"><h1>Requests &amp; submissions</h1><p>Member-submitted escalations, connections, AE changes, support tickets, and bug reports.</p></div>
+        <div class="filters" id="request-filters">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="Escalation">Escalations</button>
+          <button class="chip" data-filter="Lender connection">Connections</button>
+          <button class="chip" data-filter="Change AE">Change AE</button>
+          <button class="chip" data-filter="Support">Support</button>
+          <button class="chip" data-filter="Bug">Bugs</button>
+          <span class="count-note" id="request-count" style="margin-left:auto;align-self:center">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Type</th><th>Member</th><th>Details</th><th>Submitted</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="requests-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ ANALYTICS ============ -->
+      <section class="view" id="view-analytics">
+        <div class="page-head"><h1>Analytics</h1><p>Escalation and connection activity by partner. Filter by a lender or vendor, then export.</p></div>
+        <div class="filters" id="analytics-tabs">
+          <button class="chip active" data-areport="escalations">Loan escalations</button>
+          <button class="chip" data-areport="connections">Connections</button>
+        </div>
+        <div class="toolbar">
+          <select class="select filter-select" id="analytics-partner" style="min-width:220px"></select>
+          <span class="spacer"></span>
+          <span class="count-note" id="analytics-count">—</span>
+          <button class="btn btn-outline" id="analytics-export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export CSV</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm" id="analytics-table"></table></div></div>
+      </section>
+
+      <!-- ============ ENGAGEMENT ============ -->
+      <section class="view" id="view-engagement">
+        <div class="page-head"><h1>User engagement</h1><p>What members are engaging with across the portal — last 30 days.</p></div>
+        <div class="stat-row">
+          <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-14 9V3z"/></svg></div><div class="s-val">9,418</div><div class="s-lbl">Resource plays</div></div>
+          <div class="stat"><div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/></svg></div><div class="s-val">1,832</div><div class="s-lbl">Market connections</div></div>
+          <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></div><div class="s-val">3,047</div><div class="s-lbl">Lender views</div></div>
+          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/></svg></div><div class="s-val">426</div><div class="s-lbl">Escalations submitted</div></div>
+        </div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
+          <div class="card card-pad"><div class="section-title"><h2>Top resources</h2></div><div id="eng-resources"></div></div>
+          <div class="card card-pad"><div class="section-title"><h2>Top lenders</h2></div><div id="eng-lenders"></div></div>
+          <div class="card card-pad"><div class="section-title"><h2>Top market vendors</h2></div><div id="eng-vendors"></div></div>
+          <div class="card card-pad"><div class="section-title"><h2>Escalations by lender</h2></div><div id="eng-escalations"></div></div>
+        </div>
+      </section>
+
+      <!-- ============ FEATURED ============ -->
+      <section class="view" id="view-featured">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Featured</h1><p>Curate the Featured section on the member home screen — all in one place.</p></div>
+          <button class="btn btn-primary" data-edit="featured:new">+ Add featured item</button>
+        </div>
+        <div class="callout" style="max-width:760px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>These appear in the order shown. Feature anything — a lender, resource, market deal, or event. Members see up to 4 at a time.</p></div>
+        <div class="table-wrap" style="max-width:760px"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Order</th><th>Type</th><th>Item</th><th>Note</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="featured-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ TEAM ACCESS ============ -->
+      <section class="view" id="view-team">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Team access</h1><p>Manage who can access the admin console.</p></div>
+          <button class="btn btn-primary" id="add-admin-btn" data-edit="admin:new">+ Add admin</button>
+        </div>
+        <div class="callout" style="max-width:820px" id="team-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p><strong>Super Admins</strong> can add or remove team members and change roles. <strong>Admins</strong> can manage members and content but can't change team access.</p></div>
+        <div class="table-wrap" style="max-width:900px"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Team member</th><th>Role</th><th>Last active</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="team-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+      <!-- ============ CATEGORIES & TAGS ============ -->
+      <section class="view" id="view-taxonomy">
+        <div class="page-head"><h1>Categories &amp; tags</h1><p>Add and manage the categories and tags used across Lenders, Market, Resources, and Events. New entries become selectable when creating content.</p></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px" id="taxonomy-grid"></div>
+      </section>
+
+      <!-- ============ FUSE ============ -->
+      <section class="view" id="view-fuse">
+        <div class="page-head"><h1>FUSE 2026 registrations</h1><p>JW Marriott Downtown Austin, TX · September 24–26, 2026.</p></div>
+        <div class="stat-row">
+          <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div><div class="s-val">1,204</div><div class="s-lbl">Registered</div></div>
+          <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></div><div class="s-val">312</div><div class="s-lbl">Hall of AIME add-on</div></div>
+          <div class="stat"><div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="s-val">198</div><div class="s-lbl">Guest passes</div></div>
+          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="s-val">$62,088</div><div class="s-lbl">Add-on revenue</div></div>
+        </div>
+        <div class="adm-section-head">
+          <h2 style="font-size:18px;font-weight:700">Attendees</h2>
+          <button class="btn btn-outline" data-toast="Exported attendee list to CSV.">Export CSV</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Member</th><th>Ticket</th><th>Add-ons</th><th>Guest</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="fuse-tbody"></tbody>
+        </table></div></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================== EDIT MODAL (add/edit content & members) ===================== -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2 id="edit-title">Edit</h2><p id="edit-sub">Make changes and save.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="edit-body"></div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" data-close>Cancel</button>
+      <button class="btn btn-primary" id="edit-save" data-toast="Saved." data-close>Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== REQUEST DETAIL MODAL ===================== -->
+<div class="modal-overlay" id="modal-request">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2 id="req-title">Request</h2><p id="req-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="req-body"></div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" data-close>Close</button>
+      <button class="btn btn-navy" data-toast="Marked as in progress." data-close>Mark in progress</button>
+      <button class="btn btn-primary" data-toast="Request resolved." data-close>Resolve</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
+
+<!-- Mobile bottom nav -->
+<nav class="bottom-nav">
+  <button class="bottom-nav-item active" data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span>Home</span></button>
+  <button class="bottom-nav-item" data-nav="members"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg><span>Members</span></button>
+  <button class="bottom-nav-item" data-nav="requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z"/></svg><span>Requests</span></button>
+  <button class="bottom-nav-item" data-nav="lenders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg><span>Lenders</span></button>
+  <button class="bottom-nav-item" data-nav="fuse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg><span>FUSE</span></button>
+</nav>
+
+<script src="admin.js"></script>
+</body>
+</html>
