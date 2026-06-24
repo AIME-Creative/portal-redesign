@@ -340,10 +340,11 @@ button.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); bord
 
 /* Lender logo tile (logo-centric placeholder — real lender logos drop in here) */
 .lender-logo-box {
-  position: relative; height: 104px; background: var(--surface-alt);
+  position: relative; height: 150px; background: #fff;
   border-bottom: 1px solid var(--line-soft); display: grid; place-items: center;
 }
-.lender-logo-ph { font-weight: 800; font-size: 26px; letter-spacing: -.02em; }
+.lender-logo-ph { font-weight: 800; font-size: 32px; letter-spacing: -.02em; }
+.lender-card .card-open { flex: 1; }
 
 /* Lender / vendor card */
 .partner-card {
@@ -397,6 +398,7 @@ button.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); bord
 .set-block { margin-bottom: 30px; }
 .set-block h3 { font-size:16px;font-weight:700;margin-bottom:4px; }
 .set-block .sub { color:var(--muted); font-size:13px; margin-bottom:18px; }
+.profile-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:20px; align-items:start; max-width:1080px; }
 
 /* ============================================================
    MODAL
@@ -738,6 +740,7 @@ button.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); bord
   .stat-row{ grid-template-columns: repeat(2,1fr); }
   .qa-grid{ grid-template-columns:1fr; }
   .auth-screen.wide .auth-wrap{ max-width:560px; }
+  .profile-grid{ grid-template-columns:1fr; }
   .plan-grid{ grid-template-columns:1fr; }
   .plan-card{ flex-direction:row; flex-wrap:wrap; align-items:center; }
   .plan-card .plan-pop{ left:18px; transform:none; }

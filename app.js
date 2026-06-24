@@ -13,6 +13,12 @@ const lenders = [
   { name: "Cake Mortgage",             short: "CK",  tier: "Silver", color: "#2bb673", desc: "Modern wholesale platform with a slice of every product and a fast, digital process.", tags:["Conventional","Non-QM","Jumbo"] },
   { name: "eLEND",                      short: "eL",  tier: "Silver", color: "#1893b1", desc: "Diverse loan options with a focus on first-time and government-backed buyers.", tags:["FHA","VA","USDA","Conventional"] },
   { name: "RCN Capital",               short: "RCN", tier: "Bronze", color: "#0b2a5b", desc: "Nationwide private lender for real estate investors — fix & flip, bridge, and rental loans.", tags:["Fix & Flip","Bridge","DSCR"] },
+  { name: "Kind Lending",              short: "KIND",tier: "Gold",   color: "#e0982a", desc: "Broker-focused lender with a kind, tech-enabled experience across agency and non-QM products.", tags:["Conventional","FHA","VA","Non-QM"] },
+  { name: "Rocket Pro TPO",            short: "RKT", tier: "Gold",   color: "#d6322e", desc: "High-volume national lender with deep technology and marketing support for brokers.", tags:["Conventional","FHA","VA","Jumbo"] },
+  { name: "Plaza Home Mortgage",       short: "PLZ", tier: "Silver", color: "#15467e", desc: "Full-service wholesale lender known for its renovation and reverse mortgage programs.", tags:["Renovation","Jumbo","Reverse","FHA"] },
+  { name: "Home Point",                short: "HP",  tier: "Silver", color: "#1b9d6b", desc: "Relationship-driven lender with competitive agency and government pricing.", tags:["Conventional","FHA","USDA"] },
+  { name: "Angel Oak",                 short: "AO",  tier: "Bronze", color: "#3a6b35", desc: "The leader in non-QM lending — bank statement, DSCR, and asset-qualifier loans.", tags:["Non-QM","Bank Stmt","DSCR"] },
+  { name: "Quontic Wholesale",         short: "QW",  tier: "Bronze", color: "#0b2a5b", desc: "Digital bank offering common-sense non-QM and bank-statement loans.", tags:["Non-QM","Bank Stmt"] },
 ];
 const tierBadge = { Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze" };
 
@@ -25,6 +31,10 @@ const vendors = [
   { name:"Cotality",                     short:"CO",  cat:"Origination", g:["#0b2a5b","#1893b1"], desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"], offer:"Member-only data bundles" },
   { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   g:["#7a1f1a","#e0463c"], desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"], offer:"First month free for members" },
   { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   g:["#0f5e3f","#1b9d6b"], desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"], offer:"Discounted setup for members" },
+  { name:"Xactus",                       short:"XAC", cat:"Core Partner",g:["#1b4f7a","#20adce"], desc:"Verification and credit solutions trusted across the mortgage industry.", tags:["Credit","Verifications"], offer:"Member pricing on verification bundles" },
+  { name:"The CORE Training",            short:"CORE",cat:"Coaching",    g:["#5b2a86","#a23fb0"], desc:"Performance coaching program for top-producing originators and teams.", tags:["Coaching","Scaling"], offer:"Discounted enrollment for members" },
+  { name:"Mortgage Coach",               short:"MC",  cat:"Coaching",    g:["#0b1f5b","#1893b1"], desc:"Interactive presentations that help borrowers understand their options.", tags:["Presentations","Coaching"], offer:"Free trial + member rate" },
+  { name:"Surefire CRM",                 short:"SF",  cat:"Marketing",   g:["#7a1f55","#dd1969"], desc:"Mortgage CRM and marketing automation built for loan officers.", tags:["CRM","Automation"], offer:"Setup fee waived for members" },
 ];
 
 const resources = [
@@ -36,6 +46,9 @@ const resources = [
   { title:"Broker to Broker — Episode 250",     type:"Podcast",  cta:"Listen now", dur:"39 min", g:["#0b1f5b","#163a85"] },
   { title:"AIME Accelerate — Identity Reset",   type:"Training", cta:"Watch now",  dur:"24 min", g:["#1b1b3a","#20adce"] },
   { title:"Scaling Past $1M in Volume",         type:"Training", cta:"Watch now",  dur:"47 min", g:["#021649","#1893b1"] },
+  { title:"Compliance Corner — Q3 Update",      type:"Webinar",  cta:"Watch now",  dur:"38 min", g:["#0b2a5b","#1893b1"] },
+  { title:"Building Your Referral Engine",      type:"Training", cta:"Watch now",  dur:"45 min", g:["#5b2a86","#20adce"] },
+  { title:"Broker to Broker — Episode 249",     type:"Podcast",  cta:"Listen now", dur:"44 min", g:["#0b1f5b","#7a3fb0"] },
 ];
 
 const events = [
@@ -44,24 +57,22 @@ const events = [
   { title:"AIME Accelerate — Run Toward It",  date:"JUN 22", when:"Mon · 1:00 PM ET", type:"Virtual",   g:["#5b2a86","#dd1969"] },
   { title:"Mortgage Mornings — Live",         date:"JUL 1",  when:"Wed · 10:00 AM ET",type:"Virtual",   g:["#0b2a5b","#e0463c"] },
   { title:"AIME Accelerate — Compound",       date:"JUN 29", when:"Mon · 1:00 PM ET", type:"Training",  g:["#1b1b3a","#1893b1"] },
-  { title:"FUSE 2026 — National Conference",  date:"SEP 14", when:"Las Vegas, NV",    type:"In person", g:["#021649","#dd1969"] },
+  { title:"FUSE 2026 — National Conference",  date:"SEP 14", when:"Austin, TX",       type:"In person", loc:"JW Marriott Downtown Austin, TX", g:["#021649","#dd1969"] },
+  { title:"AIME Accelerate — Mindset",        date:"JUL 6",  when:"Mon · 1:00 PM ET", type:"Training",  g:["#1b1b3a","#7a3fb0"] },
+  { title:"Regional Mixer — Dallas",          date:"AUG 12", when:"Tue · 6:00 PM CT", type:"In person", loc:"Downtown Dallas, TX", g:["#0b2a5b","#20adce"] },
 ];
 
 const backArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
 const firstWord = (t) => t.split('—')[0].trim().split(' ')[0].toUpperCase();
 
 /* ---------- Card templates (clickable region + separate action footer) ---------- */
-// Lenders are logo-centric: a clean logo tile placeholder (real lender logos drop in here)
+// Lenders are logo-only on the list page (logo already carries the name; name shows on the detail page)
 function lenderCard(l, i){
-  return `<div class="partner-card" data-tier="${l.tier}" data-products="${l.tags.join('|')}">
-    <button class="card-open" data-open-lender="${i}">
+  return `<div class="partner-card lender-card" data-tier="${l.tier}" data-products="${l.tags.join('|')}">
+    <button class="card-open" data-open-lender="${i}" title="${l.name}">
       <div class="lender-logo-box">
         <span class="badge ${tierBadge[l.tier]}" style="position:absolute;top:12px;right:12px">${l.tier}</span>
         <div class="lender-logo-ph" style="color:${l.color}">${l.short}</div>
-      </div>
-      <div class="partner-body">
-        <h3>${l.name}</h3>
-        <div class="tag-row">${l.tags.slice(0,4).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </button>
     <div class="partner-foot">
@@ -73,7 +84,7 @@ function lenderCard(l, i){
 
 // Market items use the same thumbnail size as Events & Resources
 function vendorCard(v, i){
-  return `<div class="res-card">
+  return `<div class="res-card" data-filter="${v.cat}">
     <button class="card-open" data-open-market="${i}">
       <div class="res-thumb" style="background:linear-gradient(135deg,${v.g[0]},${v.g[1]})">
         <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${v.cat}</span></span>
@@ -85,13 +96,13 @@ function vendorCard(v, i){
       </div>
     </button>
     <div style="padding:0 17px 17px">
-      <button class="btn btn-cyan btn-sm btn-block" data-toast="Connection request sent to ${v.name}.">Connect</button>
+      <button class="btn btn-cyan btn-sm btn-block" data-open-market="${i}">More info</button>
     </div>
   </div>`;
 }
 
 function resCard(r, i){
-  return `<div class="res-card">
+  return `<div class="res-card" data-filter="${r.type}">
     <button class="card-open" data-open-resource="${i}">
       <div class="res-thumb" style="background:linear-gradient(135deg,${r.g[0]},${r.g[1]})">
         <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${r.type}</span></span>
@@ -110,7 +121,7 @@ function resCard(r, i){
 }
 
 function eventCard(e, i){
-  return `<div class="event-card">
+  return `<div class="event-card" data-filter="${e.type}">
     <button class="card-open" data-open-event="${i}">
       <div class="event-banner" style="background:linear-gradient(135deg,${e.g[0]},${e.g[1]})">
         <span style="position:absolute;left:12px;top:12px"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${e.type}</span></span>
@@ -157,7 +168,12 @@ function filterLenders(){
     note.textContent = filtered ? `Showing ${shown} of ${lenders.length} lenders` : `Showing all ${lenders.length} lenders`;
   }
 }
-document.getElementById('lender-filters')?.addEventListener('click', e=>{ if(e.target.closest('.chip')) filterLenders(); });
+document.getElementById('lender-filters')?.addEventListener('click', e=>{
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#lender-filters .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  filterLenders();
+});
 productSelect?.addEventListener('change', filterLenders);
 filterLenders();
 document.getElementById('market-grid').innerHTML  = vendors.map(vendorCard).join('');
@@ -312,7 +328,7 @@ function openEvent(i){
         <h3 style="font-size:16px;margin-bottom:14px">Event details</h3>
         <div class="detail-meta-row"><span>📅</span> ${ev.date}, 2026</div>
         <div class="detail-meta-row"><span>⏰</span> ${ev.when}</div>
-        <div class="detail-meta-row"><span>📍</span> ${ev.type==='In person'?'JW Marriott, Las Vegas, NV':'Online — link sent after registering'}</div>
+        <div class="detail-meta-row"><span>📍</span> ${ev.loc || (ev.type==='In person'?'In person — venue TBA':'Online — link sent after registering')}</div>
         <button class="btn btn-primary btn-block" style="margin-top:16px" data-toast="Registered for ${ev.title}!">Register now</button>
         <button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-toast="Added to your calendar.">Add to calendar</button>
       </div>
@@ -477,15 +493,35 @@ function handleAction(a){
   }
 }
 
-/* ---------- Filter chips (cosmetic) ---------- */
-document.querySelectorAll('.filters').forEach(group=>{
+/* ---------- Generic chip filter (Market / Resources / Events) ---------- */
+function setupChipFilter(filtersId, gridSel, noun){
+  const group = document.getElementById(filtersId);
+  if(!group) return;
+  const cards = () => document.querySelectorAll(gridSel + ' [data-filter]');
+  const total = cards().length;
+  function apply(){
+    const active = group.querySelector('.chip.active');
+    const val = active ? active.dataset.filter : 'all';
+    let shown = 0;
+    cards().forEach(card=>{
+      const show = val==='all' || card.dataset.filter.split('|').includes(val);
+      card.style.display = show ? '' : 'none';
+      if(show) shown++;
+    });
+    const note = group.querySelector('.count-note');
+    if(note) note.textContent = (val==='all') ? `Showing all ${total} ${noun}` : `Showing ${shown} of ${total} ${noun}`;
+  }
   group.addEventListener('click', e=>{
-    const chip = e.target.closest('.chip');
-    if(!chip) return;
+    const chip = e.target.closest('.chip'); if(!chip) return;
     group.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
     chip.classList.add('active');
+    apply();
   });
-});
+  apply();
+}
+setupChipFilter('market-filters',   '#market-grid',   'vendors');
+setupChipFilter('resource-filters', '#resource-grid', 'resources');
+setupChipFilter('event-filters',    '#event-grid',    'events');
 
 /* ---------- Global click delegation (ordered by priority) ---------- */
 document.addEventListener('click', e=>{

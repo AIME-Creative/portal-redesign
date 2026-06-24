@@ -224,13 +224,13 @@
       <!-- ============ MARKET ============ -->
       <section class="view" id="view-market">
         <div class="page-head"><h1>Market</h1><p>Exclusive vendor discounts and tools, available only to AIME members.</p></div>
-        <div class="filters">
-          <button class="chip active">All categories</button>
-          <button class="chip">Core Partners</button>
-          <button class="chip">Origination Tools</button>
-          <button class="chip">Coaching</button>
-          <button class="chip">Marketing</button>
-          <span class="count-note" style="margin-left:auto;align-self:center">Showing 8 of 48 vendors</span>
+        <div class="filters" id="market-filters">
+          <button class="chip active" data-filter="all">All categories</button>
+          <button class="chip" data-filter="Core Partner">Core Partners</button>
+          <button class="chip" data-filter="Origination">Origination Tools</button>
+          <button class="chip" data-filter="Coaching">Coaching</button>
+          <button class="chip" data-filter="Marketing">Marketing</button>
+          <span class="count-note" style="margin-left:auto;align-self:center">Showing all vendors</span>
         </div>
         <div class="card-grid" id="market-grid"></div>
       </section>
@@ -238,12 +238,12 @@
       <!-- ============ RESOURCES ============ -->
       <section class="view" id="view-resources">
         <div class="page-head"><h1>Resources</h1><p>Learn and grow with AIME webinars, podcasts, and trainings.</p></div>
-        <div class="filters">
-          <button class="chip active">All types</button>
-          <button class="chip">Podcasts</button>
-          <button class="chip">Webinars</button>
-          <button class="chip">Trainings</button>
-          <span class="count-note" style="margin-left:auto;align-self:center">Showing 8 of 498 resources</span>
+        <div class="filters" id="resource-filters">
+          <button class="chip active" data-filter="all">All types</button>
+          <button class="chip" data-filter="Podcast">Podcasts</button>
+          <button class="chip" data-filter="Webinar">Webinars</button>
+          <button class="chip" data-filter="Training">Trainings</button>
+          <span class="count-note" style="margin-left:auto;align-self:center">Showing all resources</span>
         </div>
         <div class="card-grid" id="resource-grid"></div>
       </section>
@@ -251,11 +251,12 @@
       <!-- ============ EVENTS ============ -->
       <section class="view" id="view-events">
         <div class="page-head"><h1>Events</h1><p>Join the industry's most cutting-edge local, regional, and national events.</p></div>
-        <div class="filters">
-          <button class="chip active">All events</button>
-          <button class="chip">Virtual</button>
-          <button class="chip">In person</button>
-          <button class="chip">Training</button>
+        <div class="filters" id="event-filters">
+          <button class="chip active" data-filter="all">All events</button>
+          <button class="chip" data-filter="Virtual">Virtual</button>
+          <button class="chip" data-filter="In person">In person</button>
+          <button class="chip" data-filter="Training">Training</button>
+          <span class="count-note" style="margin-left:auto;align-self:center">Showing all events</span>
         </div>
         <div class="card-grid" id="event-grid"></div>
       </section>
@@ -305,31 +306,39 @@
         </div>
 
         <div class="tab-panel" id="tab-profile">
-          <div class="card card-pad" style="max-width:760px">
-            <div class="set-block" style="display:flex;align-items:center;gap:18px;margin-bottom:26px">
-              <div class="avatar" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));color:#fff;display:grid;place-items:center;font-weight:700;font-size:24px">KL</div>
-              <div><h3>Profile picture</h3><div class="sub">JPG, PNG or GIF · max 5MB</div><button class="btn btn-outline btn-sm">Change picture</button></div>
+          <div class="profile-grid">
+            <!-- LEFT: profile picture + personal info -->
+            <div class="card card-pad">
+              <div class="set-block" style="display:flex;align-items:center;gap:18px;margin-bottom:24px">
+                <div class="avatar" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));color:#fff;display:grid;place-items:center;font-weight:700;font-size:24px">KL</div>
+                <div><h3>Profile picture</h3><div class="sub">JPG, PNG or GIF · max 5MB</div><button class="btn btn-outline btn-sm">Change picture</button></div>
+              </div>
+              <div class="form-section-label">Personal information</div>
+              <div class="field-row"><div class="field"><label>First name</label><input class="input" value="Kyle"></div><div class="field"><label>Last name</label><input class="input" value="Lord"></div></div>
+              <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Mobile phone</label><input class="input" value="(555) 014-2278"></div></div>
+              <div class="field"><label>Mailing address</label><input class="input" value="1900 Shore Road Ln"></div>
+              <div class="field-row"><div class="field"><label>City</label><input class="input" value="Berlin"></div><div class="field"><label>State</label><input class="input" value="MD"></div></div>
+              <div class="field-row"><div class="field"><label>Zip code</label><input class="input" value="21811"></div><div class="field"><label>Role type</label><input class="input" value="Loan Officer"></div></div>
+              <div class="field-row"><div class="field"><label>Birthday</label><input class="input" type="date" value="1990-01-25"></div><div class="field"><label>Gender</label><input class="input" value="Male"></div></div>
+              <div class="field-row"><div class="field"><label>Languages spoken</label><input class="input" value="English"></div><div class="field"><label>Race</label><input class="input" value="White"></div></div>
             </div>
-            <div class="form-section-label">Personal information</div>
-            <div class="field-row"><div class="field"><label>First name</label><input class="input" value="Kyle"></div><div class="field"><label>Last name</label><input class="input" value="Lord"></div></div>
-            <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Mobile phone</label><input class="input" value="(555) 014-2278"></div></div>
-            <div class="field"><label>Mailing address</label><input class="input" value="1900 Shore Road Ln"></div>
-            <div class="field-row"><div class="field"><label>City</label><input class="input" value="Berlin"></div><div class="field"><label>State</label><input class="input" value="MD"></div></div>
-            <div class="field-row"><div class="field"><label>Zip code</label><input class="input" value="21811"></div><div class="field"><label>Role type</label><input class="input" value="Loan Officer"></div></div>
-            <div class="field-row"><div class="field"><label>Birthday</label><input class="input" type="date" value="1990-01-25"></div><div class="field"><label>Gender</label><input class="input" value="Male"></div></div>
-            <div class="field-row"><div class="field"><label>Languages spoken</label><input class="input" value="English"></div><div class="field"><label>Race</label><input class="input" value="White"></div></div>
 
-            <div class="form-section-label">Licensing</div>
-            <div class="field-row"><div class="field"><label>Individual NMLS</label><input class="input" value="9158"></div><div class="field"><label>State licenses</label><input class="input" value="MD, VA, DE"></div></div>
+            <!-- RIGHT: company info + licensing -->
+            <div class="card card-pad">
+              <div class="form-section-label" style="margin-top:0">Company information</div>
+              <div class="field"><label>Company name</label><input class="input" value="AIME"></div>
+              <div class="field"><label>Company phone</label><input class="input" value="(555) 014-2278"></div>
+              <div class="field"><label>Company address</label><input class="input" value="1900 Shore Road Ln, Berlin, MD 21811, USA"></div>
+              <div class="field-row"><div class="field"><label>Company city</label><input class="input" value="Berlin"></div><div class="field"><label>Company state</label><input class="input" value="MD"></div></div>
+              <div class="field-row"><div class="field"><label>Company zip code</label><input class="input" value="21811"></div><div class="field"><label>Company NMLS</label><input class="input" value="2890163"></div></div>
 
-            <div class="form-section-label">Company information</div>
-            <div class="field-row"><div class="field"><label>Company name</label><input class="input" value="AIME"></div><div class="field"><label>Company phone</label><input class="input" value="(555) 014-2278"></div></div>
-            <div class="field"><label>Company address</label><input class="input" value="1900 Shore Road Ln, Berlin, MD 21811, USA"></div>
-            <div class="field-row"><div class="field"><label>Company city</label><input class="input" value="Berlin"></div><div class="field"><label>Company state</label><input class="input" value="MD"></div></div>
-            <div class="field-row"><div class="field"><label>Company zip code</label><input class="input" value="21811"></div><div class="field"><label>Company NMLS</label><input class="input" value="2890163"></div></div>
-
-            <div style="display:flex;gap:10px;margin-top:8px"><button class="btn btn-primary" data-toast="Profile saved.">Save changes</button><button class="btn btn-outline">Cancel</button></div>
+              <div class="form-section-label">Licensing</div>
+              <div class="field"><label>Individual NMLS</label><input class="input" value="9158"></div>
+              <div class="field"><label>State licenses</label><input class="input" value="MD, VA, DE"></div>
+            </div>
           </div>
+          <div style="display:flex;gap:10px;margin-top:18px;max-width:1080px"><button class="btn btn-primary" data-toast="Profile saved.">Save changes</button><button class="btn btn-outline">Cancel</button></div>
+        </div>
         </div>
 
         <div class="tab-panel" id="tab-security" style="display:none">
@@ -385,7 +394,7 @@
         <div class="fuse-hero">
           <div class="fuse-star">★ AIME PRESENTS ★</div>
           <h1>FUSE 2026</h1>
-          <div class="fuse-when">September 24–26, 2026 · JW Marriott, Las Vegas, NV</div>
+          <div class="fuse-when">September 24–26, 2026 · JW Marriott Downtown Austin, TX</div>
           <div class="fuse-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> You're registered — General Admission claimed</div>
         </div>
 
