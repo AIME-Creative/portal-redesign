@@ -3,6 +3,16 @@
    (loads on top of the shared styles.css design system)
    ============================================================ */
 
+/* Sidebar scrolls when the nav is taller than the window (admin has more items).
+   Keep brand, profile, and the exit link pinned; let the nav list scroll. */
+#sidebar { overflow:hidden; }
+#sidebar .brand, #sidebar .profile-card, #sidebar .sidebar-foot { flex-shrink:0; }
+#sidebar .nav { flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden; }
+#sidebar .nav::-webkit-scrollbar { width:6px; }
+#sidebar .nav::-webkit-scrollbar-thumb { background:rgba(255,255,255,.18); border-radius:3px; }
+#sidebar .nav::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,.3); }
+#sidebar .nav { scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.18) transparent; }
+
 /* Distinguish admin sidebar */
 .admin-badge {
   display:inline-block; font-size:10px; font-weight:800; letter-spacing:.12em;
