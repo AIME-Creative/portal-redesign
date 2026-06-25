@@ -145,17 +145,19 @@ const connectionRecords = [
 ];
 
 /* ---------- FUSE registrations ---------- */
+const fuseTicketTypes = ["General Admission","GA Plus","VIP"];
+const fuseAddons = ["Hall of AIME","WMN at FUSE","Vetted VA","VIP Luncheon"];
 const fuseRegs = [
-  { member:"Kyle Lord", claimed:true, addons:["WMN at FUSE","Vetted VA"], guest:"—", status:"Confirmed" },
-  { member:"Maria Chen", claimed:true, addons:["Hall of AIME","VIP Luncheon"], guest:"1 guest", status:"Confirmed" },
-  { member:"Alicia Gomez", claimed:true, addons:["Hall of AIME"], guest:"1 guest", status:"Confirmed" },
-  { member:"Ahmed Sayed", claimed:true, addons:["Hall of AIME","WMN at FUSE","VIP Luncheon"], guest:"2 guests", status:"Confirmed" },
-  { member:"Priya Nair", claimed:true, addons:["WMN at FUSE"], guest:"—", status:"Confirmed" },
-  { member:"Carlos Diaz", claimed:true, addons:["Vetted VA"], guest:"—", status:"Confirmed" },
-  { member:"Sam Whitfield", claimed:false, addons:[], guest:"—", status:"Not claimed" },
-  { member:"Janet Park", claimed:true, addons:["Hall of AIME"], guest:"1 guest", status:"Confirmed" },
-  { member:"Rachel Stone", claimed:false, addons:[], guest:"—", status:"Not claimed" },
-  { member:"Darnell Ross", claimed:true, addons:["WMN at FUSE","Vetted VA"], guest:"—", status:"Confirmed" },
+  { member:"Kyle Lord", email:"kyle@aimegroup.com", tier:"Elite", claimed:true, ticket:"General Admission", addons:["WMN at FUSE","Vetted VA"], guest:"—", status:"Confirmed" },
+  { member:"Maria Chen", email:"maria.chen@brightpathmtg.com", tier:"VIP", claimed:true, ticket:"VIP", addons:["Hall of AIME","VIP Luncheon"], guest:"1 guest", status:"Confirmed" },
+  { member:"Alicia Gomez", email:"alicia.gomez@lendwell.com", tier:"VIP", claimed:true, ticket:"VIP", addons:["Hall of AIME"], guest:"1 guest", status:"Confirmed" },
+  { member:"Ahmed Sayed", email:"ahmed@sayedhomeloans.com", tier:"VIP", claimed:true, ticket:"VIP", addons:["Hall of AIME","WMN at FUSE","VIP Luncheon"], guest:"2 guests", status:"Confirmed" },
+  { member:"Priya Nair", email:"priya@nairhomeloans.com", tier:"Elite", claimed:true, ticket:"GA Plus", addons:["WMN at FUSE"], guest:"—", status:"Confirmed" },
+  { member:"Carlos Diaz", email:"carlos@diazcapital.com", tier:"Elite", claimed:true, ticket:"General Admission", addons:["Vetted VA"], guest:"—", status:"Confirmed" },
+  { member:"Sam Whitfield", email:"sam@whitfieldmortgage.com", tier:"Elite", claimed:false, ticket:"—", addons:[], guest:"—", status:"Not claimed" },
+  { member:"Janet Park", email:"jpark@parklending.com", tier:"Premium", claimed:true, ticket:"General Admission", addons:["Hall of AIME"], guest:"1 guest", status:"Confirmed" },
+  { member:"Rachel Stone", email:"rachel@stonemortgage.com", tier:"Elite", claimed:false, ticket:"—", addons:[], guest:"—", status:"Not claimed" },
+  { member:"Darnell Ross", email:"dross@summitlending.com", tier:"Premium", claimed:true, ticket:"GA Plus", addons:["WMN at FUSE","Vetted VA"], guest:"—", status:"Confirmed" },
 ];
 
 /* ---------- Featured (curated for the member home screen) ---------- */
@@ -399,14 +401,26 @@ function renderRequests(){
   $('request-count').textContent = `${rows.length} shown · ${pending} pending`;
 }
 function renderFuse(){
-  $('fuse-tbody').innerHTML = fuseRegs.map(f=>`<tr>
-    <td><div class="t-id"><div class="t-avatar">${initials(f.member)}</div><div class="t-strong">${f.member}</div></div></td>
-    <td>${f.claimed?'<span class="dot-status dot-active">Claimed</span>':'<span class="dot-status dot-draft">Not claimed</span>'}</td>
+  const q = ($('fuse-search')?.value || '').toLowerCase();
+  const tk = $('fuse-ticket') ? $('fuse-ticket').value : 'all';
+  const ad = $('fuse-addon') ? $('fuse-addon').value : 'all';
+  const tr = $('fuse-tier') ? $('fuse-tier').value : 'all';
+  const tierBadge = (t) => t==='VIP'?'badge-navy':t==='Elite'?'badge-pink':'badge-cyan';
+  const rows = fuseRegs.filter(f =>
+    (f.member.toLowerCase().includes(q) || (f.email||'').toLowerCase().includes(q)) &&
+    (tk==='all' || f.ticket===tk) &&
+    (ad==='all' || f.addons.includes(ad)) &&
+    (tr==='all' || f.tier===tr));
+  $('fuse-tbody').innerHTML = rows.map(f=>`<tr>
+    <td><div class="t-id"><div class="t-avatar">${initials(f.member)}</div><div><div class="t-strong">${f.member}</div><div class="t-sub">${f.email||''}</div></div></div></td>
+    <td><span class="badge ${tierBadge(f.tier)}">${f.tier}</span></td>
+    <td>${f.ticket==='—' ? '<span class="t-sub" style="display:inline">—</span>' : f.ticket}</td>
     <td>${f.addons.length? f.addons.join(', ') : '<span class="t-sub" style="display:inline">None</span>'}</td>
     <td>${f.guest}</td>
     <td>${statusPill(f.status)}</td>
     <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Opening ${f.member}'s registration…">View</button></div></td>
   </tr>`).join('');
+  if($('fuse-count')) $('fuse-count').textContent = `${rows.length} of ${fuseRegs.length} attendees`;
 }
 
 /* ---------- Featured ---------- */
@@ -512,6 +526,7 @@ const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const ranges = {
   analytics: { days:30, label:'Last 30 days', from:null, to:null },
   engagement:{ days:30, label:'Last 30 days', from:null, to:null },
+  reports:   { days:36500, label:'All time', from:null, to:null }, // default all time
 };
 function presetCfg(v){
   switch(v){
@@ -559,7 +574,8 @@ function genGrowth(b){
     churned:Math.max(1, Math.round(cTot/k*(1.10 - 0.20*i/span))) }));
 }
 /* wire a date-range control: preset dropdown + custom from/to */
-function setupRange(scope, rerender){
+function setupRange(scope, rerender, opts){
+  opts = opts || {};
   const root = $(scope+'-range'); if(!root) return;
   const preset = root.querySelector('.daterange-preset');
   const custom = root.querySelector('.daterange-custom');
@@ -569,7 +585,11 @@ function setupRange(scope, rerender){
       custom.hidden = false;
       const f = root.querySelector('.daterange-from'), t = root.querySelector('.daterange-to');
       if(!t.value){ t.value = '2026-06-25'; f.value = '2026-05-26'; }
-    } else { custom.hidden = true; apply(presetCfg(preset.value)); }
+    } else {
+      custom.hidden = true;
+      const cfg = (preset.value==='all' && opts.allDays) ? { days:opts.allDays, label:'All time' } : presetCfg(preset.value);
+      apply(cfg);
+    }
   });
   root.querySelector('.daterange-apply').addEventListener('click', () => {
     const fv = root.querySelector('.daterange-from').value, tv = root.querySelector('.daterange-to').value;
@@ -715,33 +735,35 @@ function renderDashboard(){
 }
 
 /* ============================================================
-   Render: analytics
+   Render: reports (escalation & connection records to send to a
+   lender or vendor) — own date range, defaults to All time
    ============================================================ */
-let analyticsReport = 'escalations';
-function partnerOptions(){
-  if(analyticsReport==='escalations') return lenders.map(l=>l.name);
+let reportType = 'escalations';
+function reportPartnerOptions(){
+  if(reportType==='escalations') return lenders.map(l=>l.name);
   return [...lenders.map(l=>l.name), ...vendors.map(v=>v.name)];
 }
-function renderAnalyticsPartners(){
-  const sel = $('analytics-partner');
-  const label = analyticsReport==='escalations' ? 'All lenders' : 'All partners';
-  sel.innerHTML = `<option value="all">${label}</option>` + partnerOptions().map(p=>`<option>${p}</option>`).join('');
+function renderReportPartners(){
+  const sel = $('report-partner'); if(!sel) return;
+  const label = reportType==='escalations' ? 'All lenders' : 'All partners';
+  sel.innerHTML = `<option value="all">${label}</option>` + reportPartnerOptions().map(p=>`<option>${p}</option>`).join('');
 }
-function renderAnalytics(){
-  const partner = $('analytics-partner').value;
-  const t = $('analytics-table');
-  if(analyticsReport==='escalations'){
-    const rows = escalationRecords.filter(r=>(partner==='all'||r.lender===partner) && inWindow('analytics', r.date));
+function renderReports(){
+  const sel = $('report-partner'); if(!sel) return;
+  const partner = sel.value;
+  const t = $('report-table');
+  if(reportType==='escalations'){
+    const rows = escalationRecords.filter(r=>(partner==='all'||r.lender===partner) && inWindow('reports', r.date));
     t.innerHTML = '<thead><tr><th>Member</th><th>Lender</th><th>Loan #</th><th>Submitted</th><th>Status</th></tr></thead><tbody>'+
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.lender}</td><td>#${r.loan}</td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
-        : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No escalations for this lender.</td></tr>')+'</tbody>';
-    $('analytics-count').textContent = `${rows.length} escalation${rows.length===1?'':'s'}`;
+        : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No escalations for this lender in the selected range.</td></tr>')+'</tbody>';
+    $('report-count').textContent = `${rows.length} escalation${rows.length===1?'':'s'} · ${ranges.reports.label}`;
   } else {
-    const rows = connectionRecords.filter(r=>(partner==='all'||r.partner===partner) && inWindow('analytics', r.date));
+    const rows = connectionRecords.filter(r=>(partner==='all'||r.partner===partner) && inWindow('reports', r.date));
     t.innerHTML = '<thead><tr><th>Member</th><th>Partner</th><th>Type</th><th>Requested</th><th>Status</th></tr></thead><tbody>'+
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.partner}</td><td><span class="badge ${r.kind==='Lender'?'badge-navy':'badge-cyan'}">${r.kind}</span></td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
-        : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No connections for this partner.</td></tr>')+'</tbody>';
-    $('analytics-count').textContent = `${rows.length} connection${rows.length===1?'':'s'}`;
+        : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No connections for this partner in the selected range.</td></tr>')+'</tbody>';
+    $('report-count').textContent = `${rows.length} connection${rows.length===1?'':'s'} · ${ranges.reports.label}`;
   }
 }
 
@@ -916,12 +938,13 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
 fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
 renderResources(); renderEvents(); renderRequests(); renderFuse();
-renderAnalyticsPartners(); renderAnalytics(); renderAnalyticsCharts(); renderTaxonomy();
+renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
 renderSubscriptions(); renderAbandoned(); renderCoupons();
 renderSentNotifications(); updateAudience();
-setupRange('analytics', () => { renderAnalyticsCharts(); renderAnalytics(); });
+setupRange('analytics', renderAnalyticsCharts);
 setupRange('engagement', renderEngagement);
+setupRange('reports', renderReports, { allDays:36500 });
 
 /* ---------- Events ---------- */
 ['member-search','member-plan','member-status','member-role','member-state','member-licensed','member-billing']
@@ -929,6 +952,12 @@ setupRange('engagement', renderEngagement);
 ['sub-status','sub-billing'].forEach(id => $(id) && $(id).addEventListener('change', renderSubscriptions));
 $('cart-step') && $('cart-step').addEventListener('change', renderAbandoned);
 ['notif-tier','notif-role'].forEach(id => $(id) && $(id).addEventListener('change', updateAudience));
+['fuse-search','fuse-ticket','fuse-addon','fuse-tier']
+  .forEach(id => $(id) && $(id).addEventListener(id==='fuse-search'?'input':'change', renderFuse));
+$('fuse-export') && $('fuse-export').addEventListener('click', ()=>{
+  const n = document.querySelectorAll('#fuse-tbody tr').length;
+  showToast(`Exported ${n} attendee${n===1?'':'s'} to CSV.`);
+});
 
 $('request-filters').addEventListener('click', e=>{
   const chip = e.target.closest('.chip'); if(!chip) return;
@@ -936,17 +965,22 @@ $('request-filters').addEventListener('click', e=>{
   chip.classList.add('active'); renderRequests();
 });
 
-$('analytics-tabs').addEventListener('click', e=>{
+$('report-tabs').addEventListener('click', e=>{
   const chip = e.target.closest('.chip'); if(!chip) return;
-  document.querySelectorAll('#analytics-tabs .chip').forEach(c=>c.classList.remove('active'));
-  chip.classList.add('active'); analyticsReport = chip.dataset.areport;
-  renderAnalyticsPartners(); renderAnalytics();
+  document.querySelectorAll('#report-tabs .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active'); reportType = chip.dataset.rtype;
+  renderReportPartners(); renderReports();
 });
-$('analytics-partner').addEventListener('change', renderAnalytics);
-$('analytics-export').addEventListener('click', ()=>{
-  const partner = $('analytics-partner').value;
-  const scope = partner==='all' ? 'all partners' : partner;
-  showToast(`Exported ${analyticsReport} for ${scope} to CSV.`);
+$('report-partner').addEventListener('change', renderReports);
+function reportScopeLabel(){
+  const partner = $('report-partner').value;
+  return partner==='all' ? (reportType==='escalations'?'all lenders':'all partners') : partner;
+}
+$('report-export').addEventListener('click', ()=>{
+  showToast(`Exported ${reportType} report for ${reportScopeLabel()} (${ranges.reports.label}) to CSV.`);
+});
+$('report-email').addEventListener('click', ()=>{
+  showToast(`Emailed ${reportType} report for ${reportScopeLabel()} (${ranges.reports.label}).`);
 });
 
 /* ---------- Global click delegation ---------- */

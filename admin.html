@@ -42,6 +42,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         Engagement
       </button>
+      <button class="nav-item" data-nav="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg>
+        Reports
+      </button>
 
       <div class="nav-label">Members</div>
       <button class="nav-item" data-nav="members">
@@ -341,22 +345,41 @@
             <div id="an-acquisition"></div>
           </div>
         </div>
+      </section>
 
-        <div class="card card-pad" style="margin-top:20px">
-          <div class="section-title"><h2>Partner reports</h2></div>
-          <p class="t-sub" style="margin:-4px 0 14px">Escalation and connection activity by partner. Filter by a lender or vendor, then export.</p>
-          <div class="filters" id="analytics-tabs">
-            <button class="chip active" data-areport="escalations">Loan escalations</button>
-            <button class="chip" data-areport="connections">Connections</button>
+      <!-- ============ REPORTS ============ -->
+      <section class="view" id="view-reports">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Reports</h1><p>Generate escalation and connection reports to share with a lender or vendor. Defaults to all time — narrow to a date range if you need a specific window.</p></div>
+          <div class="date-range" id="reports-range">
+            <select class="select filter-select daterange-preset">
+              <option value="all" selected>All time</option>
+              <option value="7d">Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+              <option value="ytd">Year to date</option>
+              <option value="custom">Custom range…</option>
+            </select>
+            <div class="daterange-custom" hidden>
+              <input type="date" class="input daterange-from">
+              <span class="dr-sep">to</span>
+              <input type="date" class="input daterange-to">
+              <button class="btn btn-outline btn-sm daterange-apply">Apply</button>
+            </div>
           </div>
-          <div class="toolbar">
-            <select class="select filter-select" id="analytics-partner" style="min-width:220px"></select>
-            <span class="spacer"></span>
-            <span class="count-note" id="analytics-count">—</span>
-            <button class="btn btn-outline" id="analytics-export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export CSV</button>
-          </div>
-          <div class="table-wrap"><div class="table-scroll"><table class="adm" id="analytics-table"></table></div></div>
         </div>
+        <div class="filters" id="report-tabs">
+          <button class="chip active" data-rtype="escalations">Loan escalations</button>
+          <button class="chip" data-rtype="connections">Connections</button>
+        </div>
+        <div class="toolbar">
+          <select class="select filter-select" id="report-partner" style="min-width:220px"></select>
+          <span class="spacer"></span>
+          <span class="count-note" id="report-count">—</span>
+          <button class="btn btn-outline" id="report-email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg> Email to partner</button>
+          <button class="btn btn-primary" id="report-export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export CSV</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm" id="report-table"></table></div></div>
       </section>
 
       <!-- ============ SUBSCRIPTIONS ============ -->
@@ -529,10 +552,18 @@
         </div>
         <div class="adm-section-head">
           <h2 style="font-size:18px;font-weight:700">Attendees</h2>
-          <button class="btn btn-outline" data-toast="Exported attendee list to CSV.">Export CSV</button>
+          <button class="btn btn-outline" id="fuse-export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export CSV</button>
+        </div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="fuse-search" placeholder="Search by name or email…"></div>
+          <select class="select filter-select" id="fuse-ticket"><option value="all">All ticket types</option><option>General Admission</option><option>GA Plus</option><option>VIP</option></select>
+          <select class="select filter-select" id="fuse-addon"><option value="all">All add-ons</option><option>Hall of AIME</option><option>WMN at FUSE</option><option>Vetted VA</option><option>VIP Luncheon</option></select>
+          <select class="select filter-select" id="fuse-tier"><option value="all">All tiers</option><option>Premium</option><option>Elite</option><option>VIP</option></select>
+          <span class="spacer"></span>
+          <span class="count-note" id="fuse-count">—</span>
         </div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Member</th><th>Ticket</th><th>Add-ons</th><th>Guest</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Member</th><th>Tier</th><th>Ticket</th><th>Add-ons</th><th>Guest</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="fuse-tbody"></tbody>
         </table></div></div>
       </section>
