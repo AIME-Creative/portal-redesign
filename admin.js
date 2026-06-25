@@ -73,18 +73,18 @@ const events = [
 
 /* ---------- Members ---------- */
 const members = [
-  { name:"Kyle Lord", email:"kyle@aimegroup.com", plan:"Elite", used:1, status:"Active", joined:"Jan 14, 2026" },
-  { name:"Maria Chen", email:"maria.chen@brightpathmtg.com", plan:"VIP", used:4, status:"Active", joined:"Jun 22, 2026" },
-  { name:"Darnell Ross", email:"dross@summitlending.com", plan:"Premium", used:0, status:"Active", joined:"Jun 21, 2026" },
-  { name:"Priya Nair", email:"priya@nairhomeloans.com", plan:"Elite", used:5, status:"Active", joined:"Jun 19, 2026" },
-  { name:"Tom Becker", email:"tom@beckerfinancial.com", plan:"Premium", used:1, status:"Paused", joined:"Jun 17, 2026" },
-  { name:"Alicia Gomez", email:"alicia.gomez@lendwell.com", plan:"VIP", used:9, status:"Active", joined:"Jun 14, 2026" },
-  { name:"Sam Whitfield", email:"sam@whitfieldmortgage.com", plan:"Elite", used:2, status:"Active", joined:"Jun 11, 2026" },
-  { name:"Janet Park", email:"jpark@parklending.com", plan:"Premium", used:1, status:"Active", joined:"Jun 9, 2026" },
-  { name:"Carlos Diaz", email:"carlos@diazcapital.com", plan:"Elite", used:6, status:"Active", joined:"Jun 5, 2026" },
-  { name:"Beth Coleman", email:"beth@colemanloans.com", plan:"Premium", used:0, status:"Paused", joined:"Jun 2, 2026" },
-  { name:"Ahmed Sayed", email:"ahmed@sayedhomeloans.com", plan:"VIP", used:12, status:"Active", joined:"May 28, 2026" },
-  { name:"Rachel Stone", email:"rachel@stonemortgage.com", plan:"Elite", used:3, status:"Active", joined:"May 24, 2026" },
+  { name:"Kyle Lord", email:"kyle@aimegroup.com", plan:"Elite", billing:"Annual", role:"Broker Owner", state:"FL", licensed:["FL","GA","NC"], used:1, status:"Active", joined:"Jan 14, 2026" },
+  { name:"Maria Chen", email:"maria.chen@brightpathmtg.com", plan:"VIP", billing:"Annual", role:"Broker Owner", state:"CA", licensed:["CA","NV","AZ"], used:4, status:"Active", joined:"Jun 22, 2026" },
+  { name:"Darnell Ross", email:"dross@summitlending.com", plan:"Premium", billing:"Monthly", role:"Loan Officer", state:"TX", licensed:["TX"], used:0, status:"Active", joined:"Jun 21, 2026" },
+  { name:"Priya Nair", email:"priya@nairhomeloans.com", plan:"Elite", billing:"Monthly", role:"Loan Officer", state:"NY", licensed:["NY","NJ"], used:5, status:"Active", joined:"Jun 19, 2026" },
+  { name:"Tom Becker", email:"tom@beckerfinancial.com", plan:"Premium", billing:"Monthly", role:"Loan Officer Assistant", state:"GA", licensed:["GA"], used:1, status:"Paused", joined:"Jun 17, 2026" },
+  { name:"Alicia Gomez", email:"alicia.gomez@lendwell.com", plan:"VIP", billing:"Annual", role:"Broker Owner", state:"AZ", licensed:["AZ","CA","NV","TX"], used:9, status:"Active", joined:"Jun 14, 2026" },
+  { name:"Sam Whitfield", email:"sam@whitfieldmortgage.com", plan:"Elite", billing:"Annual", role:"Loan Officer", state:"NC", licensed:["NC","SC"], used:2, status:"Active", joined:"Jun 11, 2026" },
+  { name:"Janet Park", email:"jpark@parklending.com", plan:"Premium", billing:"Monthly", role:"Processor", state:"IL", licensed:["IL"], used:1, status:"Active", joined:"Jun 9, 2026" },
+  { name:"Carlos Diaz", email:"carlos@diazcapital.com", plan:"Elite", billing:"Monthly", role:"Broker Owner", state:"WA", licensed:["WA","OR"], used:6, status:"Active", joined:"Jun 5, 2026" },
+  { name:"Beth Coleman", email:"beth@colemanloans.com", plan:"Premium", billing:"Monthly", role:"Loan Officer", state:"CO", licensed:["CO"], used:0, status:"Paused", joined:"Jun 2, 2026" },
+  { name:"Ahmed Sayed", email:"ahmed@sayedhomeloans.com", plan:"VIP", billing:"Annual", role:"Broker Owner", state:"OH", licensed:["OH","MI","IN"], used:12, status:"Active", joined:"May 28, 2026" },
+  { name:"Rachel Stone", email:"rachel@stonemortgage.com", plan:"Elite", billing:"Annual", role:"Loan Officer", state:"NV", licensed:["NV","CA"], used:3, status:"Active", joined:"May 24, 2026" },
 ];
 const planTotal = { Premium:1, Elite:6, VIP:"∞" };
 const membershipBreakdown = [
@@ -207,6 +207,84 @@ const engEscalations = [
   { name:"Windsor Mortgage", val:7 },
 ];
 
+/* ---------- Revenue & subscriptions (synced with Stripe in production) ---------- */
+const revenueKpis = { mrr:"$84.2K", arr:"$1.01M", activeSubs:"2,710", arpu:"$31.07", pastDueAmt:"$1,840" };
+const revenueTrend = [ // MRR by month
+  { label:"Nov", val:61000 }, { label:"Dec", val:64000 }, { label:"Jan", val:68000 },
+  { label:"Feb", val:71200 }, { label:"Mar", val:74100 }, { label:"Apr", val:78300 },
+  { label:"May", val:81200 }, { label:"Jun", val:84200 },
+];
+const subscriptions = [
+  { member:"Kyle Lord", email:"kyle@aimegroup.com", plan:"Elite", billing:"Annual", amount:"$699/yr", status:"Active", next:"Jan 14, 2027" },
+  { member:"Maria Chen", email:"maria.chen@brightpathmtg.com", plan:"VIP", billing:"Annual", amount:"$1,699/yr", status:"Active", next:"Jun 22, 2027" },
+  { member:"Darnell Ross", email:"dross@summitlending.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Active", next:"Jul 21, 2026" },
+  { member:"Priya Nair", email:"priya@nairhomeloans.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", status:"Past due", next:"Jun 19, 2026" },
+  { member:"Tom Becker", email:"tom@beckerfinancial.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Past due", next:"Jun 17, 2026" },
+  { member:"Alicia Gomez", email:"alicia.gomez@lendwell.com", plan:"VIP", billing:"Annual", amount:"$1,699/yr", status:"Active", next:"Jun 14, 2027" },
+  { member:"Sam Whitfield", email:"sam@whitfieldmortgage.com", plan:"Elite", billing:"Annual", amount:"$699/yr", status:"Active", next:"Jun 11, 2027" },
+  { member:"Janet Park", email:"jpark@parklending.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Active", next:"Jul 9, 2026" },
+  { member:"Carlos Diaz", email:"carlos@diazcapital.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", status:"Active", next:"Jul 5, 2026" },
+  { member:"Beth Coleman", email:"beth@colemanloans.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Canceled", next:"—" },
+  { member:"Ahmed Sayed", email:"ahmed@sayedhomeloans.com", plan:"VIP", billing:"Annual", amount:"$1,699/yr", status:"Active", next:"May 28, 2027" },
+  { member:"Rachel Stone", email:"rachel@stonemortgage.com", plan:"Elite", billing:"Annual", amount:"$699/yr", status:"Past due", next:"May 24, 2026" },
+  { member:"Greg Mason", email:"greg@masonlending.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", status:"Trialing", next:"Trial ends Jul 2" },
+  { member:"Tina Alvarez", email:"tina@alvarezhomeloans.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Trialing", next:"Trial ends Jul 5" },
+];
+
+/* ---------- Abandoned carts (contact captured before checkout completed) ---------- */
+const abandonedCarts = [
+  { name:"Brandon Mills", email:"brandon@millsmortgage.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", step:"Checkout started", captured:"2h ago" },
+  { name:"Nina Patel", email:"nina@patellending.com", plan:"VIP", billing:"Annual", amount:"$1,699/yr", step:"Contact captured", captured:"5h ago" },
+  { name:"Derek Stone", email:"derek@stonecapital.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", step:"Payment failed", captured:"Yesterday" },
+  { name:"Olivia Reed", email:"olivia@reedhomeloans.com", plan:"Elite", billing:"Annual", amount:"$699/yr", step:"Checkout started", captured:"Yesterday" },
+  { name:"Marcus Lee", email:"marcus@leefinancial.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", step:"Contact captured", captured:"2d ago" },
+  { name:"Sara Kim", email:"sara@kimmortgage.com", plan:"VIP", billing:"Monthly", amount:"$199.99/mo", step:"Checkout started", captured:"2d ago" },
+  { name:"Hector Ramirez", email:"hector@ramirezloans.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", step:"Payment failed", captured:"3d ago" },
+  { name:"Lauren Wells", email:"lauren@wellslending.com", plan:"Premium", billing:"Annual", amount:"$199/yr", step:"Contact captured", captured:"4d ago" },
+];
+
+/* ---------- Coupons (sync to Stripe) ---------- */
+let coupons = [
+  { code:"FUSE2026", desc:"FUSE early-bird — 20% off annual", dtype:"Percent", value:"20", uses:142, maxUses:"500", start:"Jun 1, 2026", end:"Sep 1, 2026", status:"Active" },
+  { code:"WELCOME10", desc:"New member welcome — 10% off", dtype:"Percent", value:"10", uses:880, maxUses:"∞", start:"Jan 1, 2026", end:"—", status:"Active" },
+  { code:"VIP50", desc:"VIP upgrade — $50 off", dtype:"Amount", value:"50", uses:36, maxUses:"200", start:"May 1, 2026", end:"Aug 1, 2026", status:"Active" },
+  { code:"WMN2026", desc:"Women's Mortgage Network — 15% off", dtype:"Percent", value:"15", uses:64, maxUses:"300", start:"Mar 1, 2026", end:"Dec 31, 2026", status:"Active" },
+  { code:"BROKER25", desc:"Broker referral — 25% off first year", dtype:"Percent", value:"25", uses:210, maxUses:"1000", start:"Feb 1, 2026", end:"—", status:"Active" },
+  { code:"SUMMER199", desc:"Summer promo — $199 off VIP annual", dtype:"Amount", value:"199", uses:18, maxUses:"100", start:"Jun 15, 2026", end:"Jul 15, 2026", status:"Paused" },
+  { code:"RENEW5", desc:"Loyalty renewal — 5% off", dtype:"Percent", value:"5", uses:412, maxUses:"∞", start:"Jan 1, 2026", end:"—", status:"Active" },
+];
+
+/* ---------- Notifications (admin broadcasts) ---------- */
+const sentNotifications = [
+  { title:"New Gold partner: Newrez Wholesale", audience:"All members", type:"Announcement", sent:"2h ago", recipients:"2,847" },
+  { title:"FUSE early-bird ends Sept 1", audience:"Elite + VIP", type:"Promotion", sent:"Yesterday", recipients:"937" },
+  { title:"New training: Scaling Past $1M in Volume", audience:"All members", type:"Update", sent:"3d ago", recipients:"2,847" },
+  { title:"VIP Luncheon seats filling up", audience:"VIP only", type:"Info", sent:"5d ago", recipients:"225" },
+  { title:"Mortgage Mornings is live now", audience:"All members", type:"Info", sent:"1w ago", recipients:"2,847" },
+];
+
+/* ---------- Analytics trends (live between dashboard snapshot & engagement) ---------- */
+const growthTrend = [
+  { month:"Jan", joined:201, churned:34 }, { month:"Feb", joined:188, churned:41 },
+  { month:"Mar", joined:223, churned:38 }, { month:"Apr", joined:245, churned:52 },
+  { month:"May", joined:268, churned:44 }, { month:"Jun", joined:291, churned:49 },
+];
+const acquisition = [ // val = new members per ~30 days (scaled by the selected range)
+  { name:"Referral", sub:"38%", val:96 },
+  { name:"FUSE & events", sub:"22%", val:54 },
+  { name:"Paid social", sub:"18%", val:44 },
+  { name:"Email", sub:"12%", val:30 },
+  { name:"Partner co-marketing", sub:"10%", val:24 },
+];
+const engBase = { plays:9418, connections:1832, lenderViews:3047, escalations:426 }; // per 30 days
+const funnel = [
+  { label:"Signups started", val:1000 },
+  { label:"Contact captured", val:720 },
+  { label:"Checkout started", val:540 },
+  { label:"Paid", val:432 },
+  { label:"Onboarded", val:410 },
+];
+
 /* ============================================================
    Helpers
    ============================================================ */
@@ -216,9 +294,12 @@ const statusPill = (s) => {
   const map = { Active:"badge-green", Draft:"badge-amber", Paused:"badge-navy",
     New:"badge-pink", "In progress":"badge-amber", Resolved:"badge-green",
     Confirmed:"badge-green", "Not claimed":"badge-amber",
-    "In review":"badge-amber", "Lender responded":"badge-cyan", Sent:"badge-cyan", Connected:"badge-green" };
+    "In review":"badge-amber", "Lender responded":"badge-cyan", Sent:"badge-cyan", Connected:"badge-green",
+    "Past due":"badge-red", Trialing:"badge-cyan", Canceled:"badge-navy",
+    "Contact captured":"badge-cyan", "Checkout started":"badge-amber", "Payment failed":"badge-red" };
   return `<span class="badge ${map[s]||'badge-navy'}">${s}</span>`;
 };
+const subDot = (s) => `<span class="dot-status dot-${s.toLowerCase().replace(/\s+/g,'')}">${s}</span>`;
 const editBtn = (ref) => `<button class="icon-act" data-edit="${ref}" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>`;
 const delBtn = (msg) => `<button class="icon-act danger" data-toast="${msg}" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg></button>`;
 
@@ -228,15 +309,20 @@ const delBtn = (msg) => `<button class="icon-act danger" data-toast="${msg}" tit
 function renderMembers(){
   const q = ($('member-search').value || '').toLowerCase();
   const plan = $('member-plan').value, status = $('member-status').value;
+  const role = $('member-role').value, state = $('member-state').value;
+  const lic = $('member-licensed').value, billing = $('member-billing').value;
   const rows = members.filter(m =>
     (m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)) &&
-    (plan==='all' || m.plan===plan) && (status==='all' || m.status===status));
+    (plan==='all' || m.plan===plan) && (status==='all' || m.status===status) &&
+    (role==='all' || m.role===role) && (state==='all' || m.state===state) &&
+    (lic==='all' || m.licensed.includes(lic)) && (billing==='all' || m.billing===billing));
   $('members-tbody').innerHTML = rows.map((m,i) => {
     const idx = members.indexOf(m);
     const tot = planTotal[m.plan];
     return `<tr>
-      <td><div class="t-id"><div class="t-avatar">${initials(m.name)}</div><div><div class="t-strong">${m.name}</div><div class="t-sub">${m.email}</div></div></div></td>
-      <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span></td>
+      <td><div class="t-id"><div class="t-avatar">${initials(m.name)}</div><div><div class="t-strong">${m.name}</div><div class="t-sub">${m.email} · ${m.state}</div></div></div></td>
+      <td>${m.role}</td>
+      <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span><div class="t-sub" style="margin-top:3px">${m.billing}</div></td>
       <td>${m.used} <span class="t-sub" style="display:inline">/ ${tot} used</span></td>
       <td><span class="dot-status dot-${m.status.toLowerCase()}">${m.status}</span></td>
       <td>${m.joined}</td>
@@ -244,6 +330,13 @@ function renderMembers(){
     </tr>`;
   }).join('');
   $('member-count').textContent = `${rows.length} of ${members.length} members`;
+}
+function fillMemberFilters(){
+  const uniq = (arr) => [...new Set(arr)].sort();
+  const opt = (v) => `<option value="${v}">${v}</option>`;
+  $('member-role').innerHTML = '<option value="all">All roles</option>' + uniq(members.map(m=>m.role)).map(opt).join('');
+  $('member-state').innerHTML = '<option value="all">All mailing states</option>' + uniq(members.map(m=>m.state)).map(opt).join('');
+  $('member-licensed').innerHTML = '<option value="all">All licensed states</option>' + uniq(members.flatMap(m=>m.licensed)).map(opt).join('');
 }
 function renderLenders(){
   $('lenders-tbody').innerHTML = lenders.map((l,i)=>`<tr>
@@ -365,10 +458,228 @@ function rankList(items, color){
     </div>`).join('');
 }
 function renderEngagement(){
-  $('eng-resources').innerHTML = rankList(engResources, 'var(--pink)');
-  $('eng-lenders').innerHTML = rankList(engLenders, 'var(--navy)');
-  $('eng-vendors').innerHTML = rankList(engVendors, 'var(--cyan)');
-  $('eng-escalations').innerHTML = rankList(engEscalations, 'var(--amber)');
+  const f = ranges.engagement.days/30, lbl = ranges.engagement.label;
+  const set = (id,v) => { if($(id)) $(id).textContent = Math.round(v).toLocaleString(); };
+  set('eng-s-plays', engBase.plays*f);
+  set('eng-s-connections', engBase.connections*f);
+  set('eng-s-lenders', engBase.lenderViews*f);
+  set('eng-s-escalations', engBase.escalations*f);
+  $('eng-resources').innerHTML = rankList(scaleList(engResources, f), 'var(--pink)');
+  $('eng-lenders').innerHTML = rankList(scaleList(engLenders, f), 'var(--navy)');
+  $('eng-vendors').innerHTML = rankList(scaleList(engVendors, f), 'var(--cyan)');
+  $('eng-escalations').innerHTML = rankList(scaleList(engEscalations, f), 'var(--amber)');
+  if($('eng-range-note')) $('eng-range-note').textContent = lbl;
+}
+
+/* ---------- Chart helpers (CSS-only) ---------- */
+function colChart(items, color, fmt){
+  const max = Math.max(...items.map(i=>i.val), 1);
+  return `<div class="col-chart">${items.map(i=>`
+    <div class="col-item">
+      <div class="col-v">${fmt?fmt(i.val):i.val.toLocaleString()}</div>
+      <div class="col-bar-wrap"><span class="col-bar" style="height:${(i.val/max*100).toFixed(0)}%;background:${color}"></span></div>
+      <div class="col-x">${i.label}</div>
+    </div>`).join('')}</div>`;
+}
+function growthChart(items){
+  const max = Math.max(...items.flatMap(i=>[i.joined,i.churned]), 1);
+  return `<div class="col-chart">${items.map(i=>`
+    <div class="col-item">
+      <div class="col-bar-wrap dual">
+        <span class="col-bar" style="height:${(i.joined/max*100).toFixed(0)}%;background:var(--green)" title="${i.joined} new"></span>
+        <span class="col-bar" style="height:${(i.churned/max*100).toFixed(0)}%;background:var(--red)" title="${i.churned} churned"></span>
+      </div>
+      <div class="col-x">${i.month}</div>
+    </div>`).join('')}</div>`;
+}
+function funnelChart(items){
+  const top = items[0].val;
+  return `<div class="funnel">${items.map((i,idx)=>`
+    <div class="funnel-row">
+      <div class="funnel-label">${i.label}</div>
+      <div class="funnel-track"><span class="funnel-fill" style="width:${(i.val/top*100).toFixed(0)}%"></span><span class="funnel-num">${i.val.toLocaleString()}</span></div>
+      <div class="funnel-pct">${idx===0?'—':(i.val/items[idx-1].val*100).toFixed(0)+'%'}</div>
+    </div>`).join('')}</div>`;
+}
+
+/* ============================================================
+   Date range (Analytics & Engagement) — default last 30 days
+   ============================================================ */
+const TODAY = new Date('2026-06-25T00:00:00');
+const MONTH_LABELS = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun']; // ends current month
+const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+// scope state — { days, label, from, to }
+const ranges = {
+  analytics: { days:30, label:'Last 30 days', from:null, to:null },
+  engagement:{ days:30, label:'Last 30 days', from:null, to:null },
+};
+function presetCfg(v){
+  switch(v){
+    case '7d':  return { days:7,   label:'Last 7 days' };
+    case '90d': return { days:90,  label:'Last 90 days' };
+    case 'ytd': return { days:175, label:'Year to date' };
+    case 'all': return { days:365, label:'All time' };
+    default:    return { days:30,  label:'Last 30 days' };
+  }
+}
+function rangeBuckets(days){
+  const factor = days/30;
+  if(days<=10)  return { factor, gran:'day',   n:Math.min(7, days) || 7 };
+  if(days<=45)  return { factor, gran:'week',  n:Math.max(2, Math.round(days/7)) };
+  return { factor, gran:'month', n:Math.min(12, Math.max(2, Math.round(days/30))) };
+}
+function bucketLabels(b){
+  if(b.gran==='day')  return DAY_LABELS.slice(0, b.n);
+  if(b.gran==='week') return Array.from({length:b.n}, (_,i)=>'Wk '+(i+1));
+  return MONTH_LABELS.slice(-b.n);
+}
+const scaleList = (list, f) => list.map(i => ({ ...i, val:Math.max(1, Math.round(i.val*f)) }));
+function fmtShort(d){ return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
+function windowFor(scope){
+  const r = ranges[scope];
+  const to = r.to || TODAY;
+  const from = r.from || new Date(to.getTime() - r.days*86400000);
+  return { from, to };
+}
+function inWindow(scope, dateStr){
+  const d = new Date(dateStr); if(isNaN(d)) return true;
+  const { from, to } = windowFor(scope);
+  return d >= from && d <= to;
+}
+function genRevenue(b){
+  const labels = bucketLabels(b), end = 84200;
+  const step = b.gran==='month' ? 3.5 : b.gran==='week' ? 1.0 : 0.35, k = labels.length;
+  return labels.map((label,i) => ({ label, val:Math.round(end*(1 - step/100*(k-1-i))) }));
+}
+function genGrowth(b){
+  const labels = bucketLabels(b), k = labels.length, jTot = 255*b.factor, cTot = 43*b.factor;
+  const span = Math.max(1, k-1);
+  return labels.map((label,i) => ({ month:label,
+    joined: Math.max(1, Math.round(jTot/k*(0.85 + 0.30*i/span))),
+    churned:Math.max(1, Math.round(cTot/k*(1.10 - 0.20*i/span))) }));
+}
+/* wire a date-range control: preset dropdown + custom from/to */
+function setupRange(scope, rerender){
+  const root = $(scope+'-range'); if(!root) return;
+  const preset = root.querySelector('.daterange-preset');
+  const custom = root.querySelector('.daterange-custom');
+  const apply = (cfg) => { Object.assign(ranges[scope], { from:null, to:null }, cfg); rerender(); };
+  preset.addEventListener('change', () => {
+    if(preset.value==='custom'){
+      custom.hidden = false;
+      const f = root.querySelector('.daterange-from'), t = root.querySelector('.daterange-to');
+      if(!t.value){ t.value = '2026-06-25'; f.value = '2026-05-26'; }
+    } else { custom.hidden = true; apply(presetCfg(preset.value)); }
+  });
+  root.querySelector('.daterange-apply').addEventListener('click', () => {
+    const fv = root.querySelector('.daterange-from').value, tv = root.querySelector('.daterange-to').value;
+    if(!fv || !tv) return;
+    const from = new Date(fv+'T00:00:00'), to = new Date(tv+'T00:00:00');
+    if(to < from) return showToast('End date must be after the start date.');
+    const days = Math.max(1, Math.round((to-from)/86400000));
+    apply({ days, label:`${fmtShort(from)} – ${fmtShort(to)}`, from, to });
+  });
+}
+
+/* ---------- Analytics trend charts ---------- */
+function renderAnalyticsCharts(){
+  const b = rangeBuckets(ranges.analytics.days), lbl = ranges.analytics.label;
+  $('an-revenue').innerHTML = colChart(genRevenue(b), 'var(--cyan)', v=>'$'+Math.round(v/1000)+'K');
+  $('an-growth').innerHTML = growthChart(genGrowth(b));
+  $('an-funnel').innerHTML = funnelChart(scaleList(funnel, b.factor));
+  $('an-acquisition').innerHTML = rankList(scaleList(acquisition, b.factor), 'var(--pink)');
+  ['an-cap-revenue','an-cap-funnel','an-cap-acq'].forEach(id => { if($(id)) $(id).textContent = lbl; });
+  if($('an-range-note')) $('an-range-note').textContent = lbl;
+}
+
+/* ---------- Subscriptions ---------- */
+function renderSubscriptions(){
+  const planBadge = (p) => p==='VIP'?'badge-navy':p==='Elite'?'badge-pink':'badge-cyan';
+  const status = $('sub-status') ? $('sub-status').value : 'all';
+  const billing = $('sub-billing') ? $('sub-billing').value : 'all';
+  const rows = subscriptions.filter(s =>
+    (status==='all' || s.status===status) && (billing==='all' || s.billing===billing));
+  $('subs-tbody').innerHTML = rows.map(s=>{
+    const past = s.status==='Past due';
+    const action = past
+      ? `<button class="link-act" data-toast="Sent payment-update link to ${s.member}.">Send payment link</button>`
+      : `<button class="link-act" data-toast="Opening ${s.member}'s subscription…">Manage</button>`;
+    return `<tr>
+      <td><div class="t-id"><div class="t-avatar">${initials(s.member)}</div><div><div class="t-strong">${s.member}</div><div class="t-sub">${s.email}</div></div></div></td>
+      <td><span class="badge ${planBadge(s.plan)}">${s.plan}</span></td>
+      <td>${s.billing}</td>
+      <td>${s.amount}</td>
+      <td>${subDot(s.status)}</td>
+      <td>${s.next}</td>
+      <td class="t-right"><div class="row-actions">${action}</div></td>
+    </tr>`;
+  }).join('');
+  if($('sub-count')) $('sub-count').textContent = `${rows.length} of ${subscriptions.length} subscriptions`;
+  // summary tiles
+  const n = (st)=>subscriptions.filter(s=>s.status===st).length;
+  if($('sub-active')) $('sub-active').textContent = n('Active').toLocaleString();
+  if($('sub-pastdue')) $('sub-pastdue').textContent = n('Past due').toLocaleString();
+  if($('sub-trialing')) $('sub-trialing').textContent = n('Trialing').toLocaleString();
+}
+
+/* ---------- Abandoned carts ---------- */
+function renderAbandoned(){
+  const planBadge = (p) => p==='VIP'?'badge-navy':p==='Elite'?'badge-pink':'badge-cyan';
+  const step = $('cart-step') ? $('cart-step').value : 'all';
+  const rows = abandonedCarts.filter(c => step==='all' || c.step===step);
+  $('cart-tbody').innerHTML = rows.map(c=>`<tr>
+    <td><div class="t-id"><div class="t-avatar">${initials(c.name)}</div><div><div class="t-strong">${c.name}</div><div class="t-sub">${c.email}</div></div></div></td>
+    <td><span class="badge ${planBadge(c.plan)}">${c.plan}</span><div class="t-sub" style="margin-top:3px">${c.billing}</div></td>
+    <td>${c.amount}</td>
+    <td>${statusPill(c.step)}</td>
+    <td>${c.captured}</td>
+    <td class="t-right"><div class="row-actions">
+      <button class="link-act" data-toast="Resent checkout link to ${c.name}.">Resend link</button>
+      <button class="icon-act" data-toast="Marked ${c.name} as contacted." title="Mark contacted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></button>
+    </div></td>
+  </tr>`).join('');
+  if($('cart-count')) $('cart-count').textContent = `${rows.length} of ${abandonedCarts.length} carts`;
+}
+
+/* ---------- Coupons ---------- */
+function renderCoupons(){
+  $('coupons-tbody').innerHTML = coupons.map((c,i)=>`<tr>
+    <td><span class="code-chip">${c.code}</span></td>
+    <td>${c.desc}</td>
+    <td>${c.dtype==='Percent'? c.value+'% off' : '$'+c.value+' off'}</td>
+    <td>${c.uses.toLocaleString()} <span class="t-sub" style="display:inline">/ ${c.maxUses}</span></td>
+    <td>${c.start}${(c.end && c.end!=='—')?' – '+c.end:''}</td>
+    <td><span class="dot-status dot-${c.status==='Active'?'active':'paused'}">${c.status}</span></td>
+    <td class="t-right"><div class="row-actions">
+      <button class="icon-act" data-toast="Copied ${c.code} to clipboard." title="Copy code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+      ${editBtn('coupon:'+i)}${delBtn('Deleted '+c.code+' (removed from Stripe).')}
+    </div></td>
+  </tr>`).join('');
+  if($('coupon-count')) $('coupon-count').textContent = `${coupons.length} coupons`;
+  const active = coupons.filter(c=>c.status==='Active').length;
+  const redemptions = coupons.reduce((a,c)=>a+c.uses,0);
+  if($('coupon-active')) $('coupon-active').textContent = active;
+  if($('coupon-redemptions')) $('coupon-redemptions').textContent = redemptions.toLocaleString();
+}
+
+/* ---------- Notifications composer ---------- */
+function renderSentNotifications(){
+  const typeBadge = { Announcement:'badge-pink', Promotion:'badge-amber', Update:'badge-cyan', Info:'badge-navy', Success:'badge-green', Warning:'badge-amber' };
+  $('sent-list').innerHTML = sentNotifications.map(n=>`
+    <div class="list-row">
+      <div class="list-main"><div class="lt">${n.title}</div><div class="ls">${n.audience} · ${n.recipients} recipients · ${n.sent}</div></div>
+      <span class="badge ${typeBadge[n.type]||'badge-navy'}">${n.type}</span>
+    </div>`).join('');
+}
+function updateAudience(){
+  if(!$('notif-tier')) return;
+  const tier = $('notif-tier').value;
+  let n = totalMembers;
+  if(tier!=='All tiers'){ const b = membershipBreakdown.find(x=>x.plan===tier); n = b ? b.count : 0; }
+  const role = $('notif-role').value;
+  const roleNote = role!=='All roles' ? ` · ${role}` : '';
+  $('aud-est').textContent = `~${n.toLocaleString()} member${n===1?'':'s'}${roleNote}`;
+  $('send-notif').dataset.toast = `Notification sent to ~${n.toLocaleString()} members.`;
 }
 
 /* ============================================================
@@ -380,6 +691,7 @@ function renderDashboard(){
   $('nav-req-count').textContent = pending;
   $('dash-lenders').textContent = lenders.length;
   $('dash-vendors').textContent = vendors.length;
+  if($('dash-pastdue')) $('dash-pastdue').textContent = subscriptions.filter(s=>s.status==='Past due').length;
   // pending requests table (top 5)
   $('dash-requests').innerHTML =
     '<thead><tr><th>Type</th><th>Member</th><th>Submitted</th><th>Status</th></tr></thead><tbody>' +
@@ -419,13 +731,13 @@ function renderAnalytics(){
   const partner = $('analytics-partner').value;
   const t = $('analytics-table');
   if(analyticsReport==='escalations'){
-    const rows = escalationRecords.filter(r=>partner==='all'||r.lender===partner);
+    const rows = escalationRecords.filter(r=>(partner==='all'||r.lender===partner) && inWindow('analytics', r.date));
     t.innerHTML = '<thead><tr><th>Member</th><th>Lender</th><th>Loan #</th><th>Submitted</th><th>Status</th></tr></thead><tbody>'+
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.lender}</td><td>#${r.loan}</td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
         : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No escalations for this lender.</td></tr>')+'</tbody>';
     $('analytics-count').textContent = `${rows.length} escalation${rows.length===1?'':'s'}`;
   } else {
-    const rows = connectionRecords.filter(r=>partner==='all'||r.partner===partner);
+    const rows = connectionRecords.filter(r=>(partner==='all'||r.partner===partner) && inWindow('analytics', r.date));
     t.innerHTML = '<thead><tr><th>Member</th><th>Partner</th><th>Type</th><th>Requested</th><th>Status</th></tr></thead><tbody>'+
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.partner}</td><td><span class="badge ${r.kind==='Lender'?'badge-navy':'badge-cyan'}">${r.kind}</span></td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
         : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No connections for this partner.</td></tr>')+'</tbody>';
@@ -480,15 +792,18 @@ function openEdit(ref){
   const idx = isNew ? -1 : +idStr;
   let title='', sub='', body='';
   if(type==='member'){
-    const m = isNew ? {name:'',email:'',plan:'Premium',used:0,status:'Active'} : members[idx];
+    const m = isNew ? {name:'',email:'',plan:'Premium',billing:'Monthly',role:'Loan Officer',state:'',licensed:[],used:0,status:'Active'} : members[idx];
     title = isNew ? 'Add member' : 'Manage member';
     sub = isNew ? 'Create a new member account.' : m.email;
     body = `
       <div class="form-section-label" style="margin-top:0">Account</div>
       <div class="field-row">${field('Full name', m.name)}${field('Email', m.email)}</div>
+      <div class="field-row">${selectField('Role', ['Broker Owner','Loan Officer','Loan Officer Assistant','Processor'], m.role)}${field('Mailing state', m.state, 'placeholder="e.g. FL"')}</div>
+      ${field('Licensed states', (m.licensed||[]).join(', '), 'placeholder="e.g. FL, GA, NC"')}
       <div class="form-section-label">Subscription</div>
-      <div class="field-row">${selectField('Plan', ['Premium','Elite','VIP'], m.plan)}${selectField('Billing status', ['Active','Paused','Cancelled'], m.status)}</div>
-      <div class="field-row">${field('Escalations used this cycle', m.used, 'type="number"')}${field('Next billing date', 'Jan 14, 2027')}</div>
+      <div class="field-row">${selectField('Plan', ['Premium','Elite','VIP'], m.plan)}${selectField('Billing period', ['Monthly','Annual'], m.billing)}</div>
+      <div class="field-row">${selectField('Billing status', ['Active','Paused','Cancelled'], m.status)}${field('Next billing date', 'Jan 14, 2027')}</div>
+      <div class="field-row">${field('Escalations used this cycle', m.used, 'type="number"')}${field('Escalation allotment', planTotal[m.plan]+'/yr', 'disabled')}</div>
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Plan escalation allotments: Premium 1/mo · Elite 6/mo · VIP unlimited. Members can purchase additional escalations at $199 each.</p></div>
       ${isNew?'':`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><button class="btn btn-outline btn-sm" data-toast="Granted 1 complimentary escalation." data-close>+ Grant escalation</button><button class="btn btn-outline btn-sm" data-toast="Subscription paused." data-close>Pause subscription</button><button class="btn btn-outline btn-sm" data-toast="Sent password reset email." data-close>Reset password</button></div>`}`;
   } else if(type==='lender'){
@@ -534,6 +849,17 @@ function openEdit(ref){
       <div class="field-row">${field('Full name', a.name)}${field('Work email', a.email)}</div>
       ${selectField('Role', ['Admin','Super Admin'], a.role)}
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p><strong>Super Admin:</strong> full access, including team &amp; roles. <strong>Admin:</strong> manage members and content only.</p></div>`;
+  } else if(type==='coupon'){
+    const c = isNew ? {code:'',desc:'',dtype:'Percent',value:'',maxUses:'',start:'',end:'',status:'Active'} : coupons[idx];
+    title = isNew ? 'Add coupon' : 'Edit coupon';
+    sub = isNew ? 'Create a discount code. Syncs to Stripe on save.' : c.code;
+    body = `
+      <div class="field-row">${field('Code', c.code, 'placeholder="e.g. FUSE2026"')}${selectField('Discount type', ['Percent','Amount'], c.dtype)}</div>
+      <div class="field-row">${field('Value', c.value, 'placeholder="20"')}${field('Max redemptions', c.maxUses==='∞'?'':c.maxUses, 'placeholder="Blank = unlimited"')}</div>
+      ${field('Description', c.desc)}
+      <div class="field-row">${field('Valid from', c.start, 'placeholder="Jun 1, 2026"')}${field('Valid until', c.end==='—'?'':c.end, 'placeholder="Optional"')}</div>
+      ${selectField('Status', ['Active','Paused'], c.status)}
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Saving creates or updates this code in <strong>Stripe</strong>. Redemption counts sync automatically.</p></div>`;
   }
   $('edit-title').textContent = title;
   $('edit-sub').textContent = sub;
@@ -587,15 +913,22 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
 /* ============================================================
    Initial render
    ============================================================ */
+fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
 renderResources(); renderEvents(); renderRequests(); renderFuse();
-renderAnalyticsPartners(); renderAnalytics(); renderTaxonomy();
+renderAnalyticsPartners(); renderAnalytics(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
+renderSubscriptions(); renderAbandoned(); renderCoupons();
+renderSentNotifications(); updateAudience();
+setupRange('analytics', () => { renderAnalyticsCharts(); renderAnalytics(); });
+setupRange('engagement', renderEngagement);
 
 /* ---------- Events ---------- */
-$('member-search').addEventListener('input', renderMembers);
-$('member-plan').addEventListener('change', renderMembers);
-$('member-status').addEventListener('change', renderMembers);
+['member-search','member-plan','member-status','member-role','member-state','member-licensed','member-billing']
+  .forEach(id => $(id) && $(id).addEventListener(id==='member-search'?'input':'change', renderMembers));
+['sub-status','sub-billing'].forEach(id => $(id) && $(id).addEventListener('change', renderSubscriptions));
+$('cart-step') && $('cart-step').addEventListener('change', renderAbandoned);
+['notif-tier','notif-role'].forEach(id => $(id) && $(id).addEventListener('change', updateAudience));
 
 $('request-filters').addEventListener('click', e=>{
   const chip = e.target.closest('.chip'); if(!chip) return;
