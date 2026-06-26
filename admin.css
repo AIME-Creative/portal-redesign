@@ -151,6 +151,47 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .chart-legend { display:flex; gap:18px; margin-top:12px; font-size:12.5px; color:var(--ink-soft); font-weight:600; }
 .chart-legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:7px; vertical-align:middle; }
 
+/* ---------- Member journeys (Mixpanel) ---------- */
+.mixpanel-banner { display:flex; align-items:center; gap:10px; background:#f4f1ff; border:1px solid #ddd3fb; border-radius:12px; padding:10px 16px; font-size:13px; color:var(--ink-soft); flex-wrap:wrap; }
+.mp-dot { width:9px; height:9px; border-radius:50%; background:#7856ff; box-shadow:0 0 0 3px rgba(120,86,255,.18); flex:0 0 auto; }
+.jr-kpi-sub { font-size:11.5px; color:var(--muted); margin-top:5px; }
+.jr-delta.up { color:var(--green); font-weight:700; }
+.jr-delta.down { color:var(--red); font-weight:700; }
+.cohort-scroll { overflow-x:auto; }
+.cohort-table { border-collapse:separate; border-spacing:4px; font-size:12.5px; min-width:560px; }
+.cohort-table th { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; padding:4px 8px; text-align:center; }
+.cohort-table th:first-child, .cohort-table th:nth-child(2) { text-align:left; }
+.co-label { font-weight:700; color:var(--navy); white-space:nowrap; padding-right:10px; }
+.co-size { color:var(--ink-soft); }
+.co-cell { text-align:center; font-weight:700; border-radius:7px; padding:9px 10px; min-width:46px; }
+.co-empty { background:var(--surface-alt) !important; }
+/* journey flow (plain left-to-right) */
+.flow { display:flex; align-items:center; overflow-x:auto; padding:8px 2px 4px; }
+.flow-step { flex:0 0 auto; }
+.flow-node { width:152px; background:var(--surface-alt); border:1px solid var(--line); border-radius:14px; padding:14px 12px; text-align:center; }
+.flow-ico { width:36px; height:36px; border-radius:10px; margin:0 auto 9px; display:grid; place-items:center; background:#eef0fb; color:var(--navy); }
+.flow-ico svg { width:18px; height:18px; }
+.flow-label { font-size:12.5px; font-weight:700; color:var(--navy); line-height:1.3; min-height:33px; display:flex; align-items:center; justify-content:center; }
+.flow-count { font-size:23px; font-weight:800; color:var(--navy); margin-top:4px; }
+.flow-of { font-size:11px; color:var(--muted); margin-top:1px; }
+.flow-link { flex:0 0 auto; width:104px; display:flex; flex-direction:column; align-items:center; gap:5px; padding:0 6px; }
+.flow-cont { font-size:12px; font-weight:700; color:var(--green); white-space:nowrap; }
+.flow-bar { width:100%; height:7px; border-radius:7px; background:#f3d6d6; overflow:hidden; }
+.flow-bar span { display:block; height:100%; border-radius:7px; background:var(--green); }
+.flow-drop { font-size:11px; font-weight:600; color:var(--red); white-space:nowrap; }
+.flow-caption { font-size:12.5px; color:var(--ink-soft); margin:16px 0 0; line-height:1.55; max-width:760px; }
+.health-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+@media (max-width:900px){ .health-row { grid-template-columns:repeat(2,1fr); } }
+.health-item { background:var(--surface-alt); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+.h-val { font-size:24px; font-weight:800; color:var(--navy); }
+.h-lbl { font-size:13px; font-weight:600; color:var(--ink); margin-top:2px; }
+.h-sub { font-size:11.5px; color:var(--muted); margin-top:2px; }
+/* activity heatmap (day × time) */
+.heatmap { border-collapse:separate; border-spacing:5px; min-width:560px; }
+.heatmap th { font-size:10.5px; font-weight:700; color:var(--muted); padding:2px 0; text-align:center; }
+.hm-day { font-size:11.5px; font-weight:700; color:var(--navy); padding-right:10px; text-align:left; white-space:nowrap; }
+.hm-cell { width:44px; height:30px; border-radius:6px; }
+
 /* Conversion funnel */
 .funnel { display:flex; flex-direction:column; gap:11px; }
 .funnel-row { display:flex; align-items:center; gap:12px; }

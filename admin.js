@@ -600,6 +600,223 @@ function funnelChart(items){
     </div>`).join('')}</div>`;
 }
 
+/* ---------- Member journeys (synced from Mixpanel) ----------
+   Funnel = Mixpanel Funnels report; cohorts = Mixpanel Retention report;
+   adoption = Segmentation; KPIs = Insights. Numbers here are sample data. */
+const journeyKPIs = [
+  { label:"Activation rate",    val:"63%",      sub:"signup → first key action", delta:"▲ 4 pts vs prior",  up:true,  ico:'i-pink',  svg:'<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>' },
+  { label:"Time to activate",   val:"9.2 days", sub:"median, from signup",       delta:"▼ 1.4 days",        up:true,  ico:'i-cyan',  svg:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>' },
+  { label:"Week-4 retention",   val:"71%",      sub:"of activated members",      delta:"▲ 2 pts",           up:true,  ico:'i-navy',  svg:'<path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/>' },
+  { label:"Sessions / member",  val:"14",       sub:"median per 30 days",        delta:"▲ 1",               up:true,  ico:'i-green', svg:'<path d="M5 3l14 9-14 9V3z"/>' },
+];
+// Signup → subscription journey (mirrors the Mixpanel "Subscription Flow" funnel,
+// shown as a plain left-to-right flow with continued/dropped between each step).
+const journeyFlow = [
+  { label:"Created account",        val:1280, ico:'<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>' },
+  { label:"Started checkout",       val:1044, ico:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/>' },
+  { label:"Payment succeeded",      val:902,  ico:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>' },
+  { label:"Subscription activated", val:806,  ico:'<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>' },
+  { label:"Active in week 1",       val:642,  ico:'<path d="M5 3l14 9-14 9V3z"/>' },
+];
+// Plain left-to-right flow: a box per step + a connector showing how many
+// continued (green) vs dropped off (red). Easier to read than a Sankey.
+function flowChart(steps){
+  const start = steps[0].val;
+  return `<div class="flow">` + steps.map((s,i)=>{
+    let link = '';
+    if(i>0){
+      const prev = steps[i-1].val;
+      const cont = s.val/prev*100;
+      const dropped = prev - s.val;
+      link = `<div class="flow-link">
+        <div class="flow-cont">${cont.toFixed(0)}% continued</div>
+        <div class="flow-bar"><span style="width:${cont.toFixed(0)}%"></span></div>
+        <div class="flow-drop">▼ ${dropped.toLocaleString()} dropped off</div>
+      </div>`;
+    }
+    const node = `<div class="flow-step"><div class="flow-node">
+      <div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${s.ico}</svg></div>
+      <div class="flow-label">${s.label}</div>
+      <div class="flow-count">${s.val.toLocaleString()}</div>
+      <div class="flow-of">${(s.val/start*100).toFixed(0)}% of signups</div>
+    </div></div>`;
+    return link + node;
+  }).join('') + `</div>`;
+}
+const journeyAdoption = [
+  { name:"Lenders",            val:88 },
+  { name:"Resources & hubs",   val:74 },
+  { name:"Market deals",       val:61 },
+  { name:"Loan escalations",   val:43 },
+  { name:"Events & FUSE",      val:39 },
+  { name:"Documents",          val:31 },
+];
+// Triangular: recent cohorts have fewer weeks of data. ret[0] is always 100 (W0).
+const retentionCohorts = [
+  { cohort:"Jan 2026", size:188, ret:[100,68,55,49,45,42,40] },
+  { cohort:"Feb 2026", size:214, ret:[100,71,58,52,48,45] },
+  { cohort:"Mar 2026", size:236, ret:[100,73,60,54,50] },
+  { cohort:"Apr 2026", size:251, ret:[100,72,61,55] },
+  { cohort:"May 2026", size:268, ret:[100,75,63] },
+  { cohort:"Jun 2026", size:262, ret:[100,76] },
+];
+function adoptionList(items){
+  return items.map(i=>`
+    <div class="eng-row">
+      <div class="eng-info"><div class="eng-name">${i.name}</div></div>
+      <div class="eng-bar"><span style="width:${i.val}%;background:var(--cyan)"></span></div>
+      <div class="eng-val">${i.val}%</div>
+    </div>`).join('');
+}
+function cohortGrid(cohorts){
+  const maxLen = Math.max(...cohorts.map(c=>c.ret.length));
+  const head = `<tr><th>Cohort</th><th>Members</th>${Array.from({length:maxLen},(_,i)=>`<th>W${i}</th>`).join('')}</tr>`;
+  const rows = cohorts.map(c=>{
+    const cells = Array.from({length:maxLen},(_,i)=>{
+      if(i>=c.ret.length) return `<td class="co-cell co-empty"></td>`;
+      const v = c.ret[i];
+      return `<td class="co-cell" style="background:rgba(221,25,105,${(0.10+v/100*0.80).toFixed(2)});color:${v>52?'#fff':'var(--navy)'}">${v}%</td>`;
+    }).join('');
+    return `<tr><td class="co-label">${c.cohort}</td><td class="co-size">${c.size}</td>${cells}</tr>`;
+  }).join('');
+  return `<table class="cohort-table">${head}${rows}</table>`;
+}
+// Active-member health (DAU/WAU/MAU + stickiness) — Mixpanel Insights.
+const journeyActive = [
+  { val:"612",   label:"Daily active",   sub:"avg members per day" },
+  { val:"1,840", label:"Weekly active",  sub:"unique this week" },
+  { val:"2,847", label:"Monthly active", sub:"unique this month" },
+  { val:"22%",   label:"Stickiness",     sub:"daily ÷ monthly active" },
+];
+// Where members go first after signing in (% of sessions) — Mixpanel User Flows / top events.
+const journeyPaths = [
+  { name:"Lenders",           val:34 },
+  { name:"Market",            val:23 },
+  { name:"Resources & hubs",  val:18 },
+  { name:"Escalate a loan",   val:12 },
+  { name:"Events",            val:8 },
+  { name:"Documents",         val:5 },
+];
+// Top in-portal searches — Mixpanel "Search" event by term. noResult flags unmet demand.
+const journeySearches = [
+  { term:"UWM",                     count:286 },
+  { term:"DSCR",                    count:241 },
+  { term:"VA loan",                 count:198 },
+  { term:"down payment assistance", count:132, noResult:true },
+  { term:"bank statement",          count:121 },
+  { term:"reverse mortgage",        count:74,  noResult:true },
+];
+function searchList(items){
+  const max = Math.max(...items.map(i=>i.count), 1);
+  return items.map(i=>`
+    <div class="eng-row">
+      <div class="eng-info"><div class="eng-name">${i.term}${i.noResult?' <span class="badge badge-amber" style="font-weight:600;margin-left:6px">no results</span>':''}</div></div>
+      <div class="eng-bar"><span style="width:${(i.count/max*100).toFixed(0)}%;background:${i.noResult?'var(--amber)':'var(--navy)'}"></span></div>
+      <div class="eng-val">${i.count.toLocaleString()}</div>
+    </div>`).join('');
+}
+// Journey metrics split by membership tier — Mixpanel "Breakdown by tier".
+const tierJourneys = [
+  { tier:"Premium", members:1180, activation:"54%", retention:"62%", stickiness:"17%", sessions:11 },
+  { tier:"Elite",   members:1290, activation:"66%", retention:"73%", stickiness:"23%", sessions:15 },
+  { tier:"VIP",     members:377,  activation:"81%", retention:"84%", stickiness:"31%", sessions:22 },
+];
+const tierPill = (t) => t==='VIP'
+  ? `<span class="badge" style="background:#fbf0d8;color:#9a6a05">VIP</span>`
+  : `<span class="badge ${t==='Elite'?'badge-pink':'badge-navy'}">${t}</span>`;
+// Activity heatmap: when members are in the portal — day of week × time of day.
+const activityHours = ['6a','8a','10a','12p','2p','4p','6p','8p','10p'];
+const activityByDay = [
+  { day:'Mon', vals:[12,48,82,74,68,71,45,30,14] },
+  { day:'Tue', vals:[14,52,88,80,72,75,48,33,16] },
+  { day:'Wed', vals:[15,55,90,84,76,78,50,35,18] },
+  { day:'Thu', vals:[13,50,85,78,70,73,47,32,15] },
+  { day:'Fri', vals:[11,44,76,70,62,58,38,26,12] },
+  { day:'Sat', vals:[6, 18,30,34,30,26,20,16,9] },
+  { day:'Sun', vals:[5, 14,24,28,32,30,24,20,11] },
+];
+function heatmapGrid(rows, cols){
+  const head = `<tr><th></th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+  const body = rows.map(r=>`<tr><td class="hm-day">${r.day}</td>${
+    r.vals.map((v,i)=>`<td class="hm-cell" style="background:rgba(32,173,206,${(0.06+v/100*0.84).toFixed(2)})" title="${r.day} ${cols[i]} — ${v}/100 activity"></td>`).join('')
+  }</tr>`).join('');
+  return `<table class="heatmap">${head}${body}</table>`;
+}
+function renderJourneys(){
+  const f = ranges.journeys.days/30;
+  $('jr-kpis').innerHTML = journeyKPIs.map(k=>`
+    <div class="stat">
+      <div class="s-ico ${k.ico}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${k.svg}</svg></div>
+      <div class="s-val">${k.val}</div>
+      <div class="s-lbl">${k.label}</div>
+      <div class="jr-kpi-sub">${k.sub} · <span class="jr-delta ${k.up?'up':'down'}">${k.delta}</span></div>
+    </div>`).join('');
+  $('jr-flow').innerHTML = flowChart(journeyFlow.map(s=>({ ...s, val:Math.max(1, Math.round(s.val*f)) })));
+  $('jr-health').innerHTML = journeyActive.map(h=>`
+    <div class="health-item"><div class="h-val">${h.val}</div><div class="h-lbl">${h.label}</div><div class="h-sub">${h.sub}</div></div>`).join('');
+  $('jr-paths').innerHTML = adoptionList(journeyPaths);
+  $('jr-searches').innerHTML = searchList(journeySearches.map(s=>({ ...s, count:Math.max(1, Math.round(s.count*f)) })));
+  $('jr-tiers-tbody').innerHTML = tierJourneys.map(t=>`<tr>
+    <td>${tierPill(t.tier)}</td>
+    <td class="t-strong">${t.members.toLocaleString()}</td>
+    <td>${t.activation}</td>
+    <td>${t.retention}</td>
+    <td>${t.stickiness}</td>
+    <td>${t.sessions}</td>
+  </tr>`).join('');
+  $('jr-activity').innerHTML = heatmapGrid(activityByDay, activityHours);
+  $('jr-adoption').innerHTML = adoptionList(journeyAdoption);
+  $('jr-cohorts').innerHTML = cohortGrid(retentionCohorts);
+  if($('jr-range-note')) $('jr-range-note').textContent = ranges.journeys.label.toLowerCase();
+}
+
+/* ---------- Vendor clickthroughs (for the vendor team to share with vendors) ---------- */
+// `tiers` = clicks split by membership tier; total clicks = premium + elite + vip.
+const vendorClicks = [
+  { name:"Direct Authority AI",          short:"DAi",  cat:"Marketing",    impressions:5120, tiers:{premium:548,elite:402,vip:124}, connections:142 },
+  { name:"Waive Inspection Fee",         short:"WIF",  cat:"Origination",  impressions:4680, tiers:{premium:360,elite:360,vip:122}, connections:120 },
+  { name:"Lead Hackers",                 short:"LH",   cat:"Marketing",    impressions:3940, tiers:{premium:360,elite:266,vip:80},  connections:96 },
+  { name:"Arive",                        short:"AR",   cat:"Origination",  impressions:3610, tiers:{premium:230,elite:200,vip:68},  connections:73 },
+  { name:"The CORE Training",            short:"CORE", cat:"Coaching",     impressions:3120, tiers:{premium:120,elite:180,vip:102}, connections:51 },
+  { name:"Xactus",                       short:"XAC",  cat:"Core Partner", impressions:2840, tiers:{premium:150,elite:130,vip:50},  connections:44 },
+  { name:"Ask Mindy",                    short:"AM",   cat:"Origination",  impressions:2510, tiers:{premium:130,elite:118,vip:40},  connections:39 },
+  { name:"Advantage Partners Solutions", short:"APS",  cat:"Core Partner", impressions:2190, tiers:{premium:96,elite:86,vip:30},   connections:28 },
+  { name:"BrokerVA",                     short:"BVA",  cat:"Coaching",     impressions:1760, tiers:{premium:50,elite:70,vip:40},    connections:21 },
+  { name:"Cotality",                     short:"CO",   cat:"Origination",  impressions:1430, tiers:{premium:55,elite:48,vip:18},    connections:15 },
+];
+function renderVendorClicks(){
+  const f = ranges.vendorclicks.days/30;
+  const scaled = vendorClicks.map(v=>{
+    const premium = Math.round(v.tiers.premium*f), elite = Math.round(v.tiers.elite*f), vip = Math.round(v.tiers.vip*f);
+    return { ...v, impressions:Math.round(v.impressions*f), connections:Math.round(v.connections*f),
+      premium, elite, vip, clicks: premium+elite+vip };
+  });
+  const totI = scaled.reduce((a,v)=>a+v.impressions,0);
+  const totC = scaled.reduce((a,v)=>a+v.clicks,0);
+  const totCon = scaled.reduce((a,v)=>a+v.connections,0);
+  const set = (id,val) => { if($(id)) $(id).textContent = val; };
+  set('vc-impr', totI.toLocaleString());
+  set('vc-clicks', totC.toLocaleString());
+  set('vc-ctr', (totI ? (totC/totI*100) : 0).toFixed(1) + '%');
+  set('vc-conn', totCon.toLocaleString());
+  $('vendorclicks-tbody').innerHTML = scaled.map(v=>{
+    const ctr = v.impressions ? (v.clicks/v.impressions*100) : 0;
+    return `<tr>
+      <td><div class="t-id"><div class="t-logo">${v.short}</div><div class="t-strong">${v.name}</div></div></td>
+      <td><span class="badge badge-navy">${v.cat}</span></td>
+      <td>${v.impressions.toLocaleString()}</td>
+      <td class="t-strong">${v.clicks.toLocaleString()}</td>
+      <td>${v.premium.toLocaleString()}</td>
+      <td>${v.elite.toLocaleString()}</td>
+      <td>${v.vip.toLocaleString()}</td>
+      <td>${ctr.toFixed(1)}%</td>
+      <td>${v.connections.toLocaleString()}</td>
+      <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${v.name} their clickthrough report.">Email vendor</button></div></td>
+    </tr>`;
+  }).join('');
+  $('vendorclicks-count').textContent = `${scaled.length} vendors · ${ranges.vendorclicks.label}`;
+}
+
 /* ============================================================
    Date range (Analytics & Engagement) — default last 30 days
    ============================================================ */
@@ -610,6 +827,8 @@ const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const ranges = {
   analytics: { days:30, label:'Last 30 days', from:null, to:null },
   engagement:{ days:30, label:'Last 30 days', from:null, to:null },
+  journeys:  { days:30, label:'Last 30 days', from:null, to:null },
+  vendorclicks: { days:30, label:'Last 30 days', from:null, to:null },
   reports:   { days:36500, label:'All time', from:null, to:null }, // default all time
 };
 function presetCfg(v){
@@ -1076,13 +1295,15 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
 fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
 renderResources(); renderEvents(); renderRequests(); renderFuse();
-renderHubs(); renderDocuments();
+renderHubs(); renderDocuments(); renderJourneys(); renderVendorClicks();
 renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
 renderSubscriptions(); renderAbandoned(); renderCoupons();
 renderSentNotifications(); updateAudience();
 setupRange('analytics', renderAnalyticsCharts);
 setupRange('engagement', renderEngagement);
+setupRange('journeys', renderJourneys);
+setupRange('vendorclicks', renderVendorClicks);
 setupRange('reports', renderReports, { allDays:36500 });
 
 /* ---------- Events ---------- */

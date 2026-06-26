@@ -42,6 +42,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         Engagement
       </button>
+      <button class="nav-item" data-nav="journeys">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M5 8v4a4 4 0 004 4h6"/><path d="M14 12l3-3-3-3"/></svg>
+        Member Journeys
+      </button>
+      <button class="nav-item" data-nav="vendorclicks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/><circle cx="12" cy="12" r="1"/></svg>
+        Vendor Clicks
+      </button>
       <button class="nav-item" data-nav="reports">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg>
         Reports
@@ -560,6 +568,129 @@
           <div class="card card-pad"><div class="section-title"><h2>Top market vendors</h2></div><div id="eng-vendors"></div></div>
           <div class="card card-pad"><div class="section-title"><h2>Escalations by lender</h2></div><div id="eng-escalations"></div></div>
         </div>
+      </section>
+
+      <!-- ============ MEMBER JOURNEYS (Mixpanel) ============ -->
+      <section class="view" id="view-journeys">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Member Journeys</h1><p>How members move from signup to active — funnels, retention, and feature adoption for <span id="jr-range-note">the last 30 days</span>.</p></div>
+          <div class="date-range" id="journeys-range">
+            <select class="select filter-select daterange-preset">
+              <option value="7d">Last 7 days</option>
+              <option value="30d" selected>Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+              <option value="ytd">Year to date</option>
+              <option value="all">All time</option>
+              <option value="custom">Custom range…</option>
+            </select>
+            <div class="daterange-custom" hidden>
+              <input type="date" class="input daterange-from">
+              <span class="dr-sep">to</span>
+              <input type="date" class="input daterange-to">
+              <button class="btn btn-outline btn-sm daterange-apply">Apply</button>
+            </div>
+          </div>
+        </div>
+        <div class="mixpanel-banner">
+          <span class="mp-dot"></span>
+          <span>Synced once daily from <strong>Mixpanel</strong> · project <strong>AMP Production</strong> · last sync <span id="jr-synced">today, 8:00 AM</span></span>
+          <button class="btn btn-outline btn-sm" data-toast="Re-syncing from Mixpanel…" style="margin-left:auto">Sync now</button>
+        </div>
+        <div class="stat-row admin4" style="margin:18px 0 20px" id="jr-kpis"></div>
+
+        <div class="card card-pad" style="margin-bottom:20px">
+          <div class="section-title"><h2>Signup → subscription flow</h2><span class="t-sub" style="display:inline">where members continue &amp; drop off</span></div>
+          <div id="jr-flow"></div>
+          <p class="flow-caption">Read left to right — each box is a step toward becoming a paying member. The <strong style="color:var(--green)">green</strong> bar shows how many <strong>continued</strong> to the next step; <strong style="color:var(--red)">red</strong> shows how many <strong>dropped off</strong> there.</p>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:20px">
+          <div class="section-title"><h2>Active members &amp; stickiness</h2><span class="t-sub" style="display:inline">how often members come back</span></div>
+          <div class="health-row" id="jr-health"></div>
+          <p class="flow-caption">“Active” means a member opened the portal in that window. <strong>Stickiness</strong> = daily ÷ monthly active — a higher % means members return more often, not just once a month.</p>
+        </div>
+
+        <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px;margin-bottom:20px">
+          <div class="card card-pad">
+            <div class="section-title"><h2>Where members go first</h2><span class="t-sub" style="display:inline">after signing in</span></div>
+            <div id="jr-paths"></div>
+          </div>
+          <div class="card card-pad">
+            <div class="section-title"><h2>Top searches</h2><span class="t-sub" style="display:inline">what members look for</span></div>
+            <div id="jr-searches"></div>
+            <p class="flow-caption">Searches tagged <strong style="color:#b07c08">no results</strong> are things members wanted but couldn’t find — good candidates for new content or partners.</p>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:20px">
+          <div class="section-title"><h2>How tiers compare</h2><span class="t-sub" style="display:inline">Premium · Elite · VIP</span></div>
+          <div class="cohort-scroll"><table class="adm">
+            <thead><tr><th>Tier</th><th>Members</th><th>Activation</th><th>Wk-4 retention</th><th>Stickiness</th><th>Sessions / mo</th></tr></thead>
+            <tbody id="jr-tiers-tbody"></tbody>
+          </table></div>
+          <p class="flow-caption">Higher tiers tend to activate faster and stay more engaged — handy for spotting which tier needs more onboarding help, and for showing the value of upgrading.</p>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:20px">
+          <div class="section-title"><h2>When members are active</h2><span class="t-sub" style="display:inline">day of week × time of day</span></div>
+          <div class="cohort-scroll"><div id="jr-activity"></div></div>
+          <p class="flow-caption">Darker squares = more members active. Brokers are busiest on weekday mornings — the best windows to send notifications or schedule live sessions. Times are ET.</p>
+        </div>
+
+        <div class="card card-pad" style="margin-bottom:20px">
+          <div class="section-title"><h2>Feature adoption</h2><span class="t-sub" style="display:inline">% of active members</span></div>
+          <div id="jr-adoption"></div>
+          <p class="flow-caption">The share of active members who used each area at least once in this period.</p>
+        </div>
+
+        <div class="card card-pad">
+          <div class="section-title"><h2>Retention by signup cohort</h2><span class="t-sub" style="display:inline">% still active, weeks since signup</span></div>
+          <div class="cohort-scroll"><div id="jr-cohorts"></div></div>
+          <p class="flow-caption">Each row is a group of members who joined in the same month. Moving right shows the % still active 1 week, 2 weeks, etc. after they joined — darker means more stayed.</p>
+        </div>
+      </section>
+
+      <!-- ============ VENDOR CLICKTHROUGHS ============ -->
+      <section class="view" id="view-vendorclicks">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Vendor clickthroughs</h1><p>How much attention each Market vendor gets — numbers your vendor team can share with partners.</p></div>
+          <div class="date-range" id="vendorclicks-range">
+            <select class="select filter-select daterange-preset">
+              <option value="7d">Last 7 days</option>
+              <option value="30d" selected>Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+              <option value="ytd">Year to date</option>
+              <option value="all">All time</option>
+              <option value="custom">Custom range…</option>
+            </select>
+            <div class="daterange-custom" hidden>
+              <input type="date" class="input daterange-from">
+              <span class="dr-sep">to</span>
+              <input type="date" class="input daterange-to">
+              <button class="btn btn-outline btn-sm daterange-apply">Apply</button>
+            </div>
+          </div>
+        </div>
+        <div class="mixpanel-banner">
+          <span class="mp-dot"></span>
+          <span>Synced once daily from <strong>Mixpanel</strong> · "AMP — Vendor Clickthroughs" board</span>
+          <button class="btn btn-outline btn-sm" data-toast="Re-syncing from Mixpanel…" style="margin-left:auto">Sync now</button>
+        </div>
+        <div class="stat-row admin4" style="margin:18px 0 20px">
+          <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="s-val" id="vc-impr">0</div><div class="s-lbl">Impressions (card views)</div></div>
+          <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="s-val" id="vc-clicks">0</div><div class="s-lbl">Clicks</div></div>
+          <div class="stat"><div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div><div class="s-val" id="vc-ctr">0%</div><div class="s-lbl">Avg clickthrough rate</div></div>
+          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg></div><div class="s-val" id="vc-conn">0</div><div class="s-lbl">Connection requests</div></div>
+        </div>
+        <div class="toolbar" style="justify-content:space-between">
+          <span class="count-note" id="vendorclicks-count">—</span>
+          <button class="btn btn-outline btn-sm" data-toast="Exported vendor clickthrough report to CSV.">Export CSV</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Vendor</th><th>Category</th><th>Impressions</th><th>Clicks</th><th>Premium</th><th>Elite</th><th>VIP</th><th>CTR</th><th>Connections</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="vendorclicks-tbody"></tbody>
+        </table></div></div>
+        <p class="flow-caption"><strong>Impressions</strong> = times the vendor's Market card was seen · <strong>Clicks</strong> = members who opened it (broken out by membership tier) · <strong>CTR</strong> = clicks ÷ impressions · <strong>Connections</strong> = members who requested an intro. "Email vendor" sends that partner their own numbers.</p>
       </section>
 
       <!-- ============ FEATURED ============ -->
