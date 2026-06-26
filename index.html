@@ -44,6 +44,47 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
         Events
       </button>
+      <button class="nav-item" data-nav="documents">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+        Documents
+      </button>
+
+      <div class="nav-label">Learning &amp; Training</div>
+      <button class="nav-item" data-nav="brokersedge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5L7 22l5-3 5 3-1.5-9.5"/></svg>
+        Brokers Edge
+      </button>
+      <button class="nav-item" data-nav="mortgagemornings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0M12 17v4M8 21h8"/></svg>
+        Mortgage Mornings
+      </button>
+      <button class="nav-item" data-nav="acceleratelive">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        Accelerate Live
+      </button>
+
+      <div class="nav-label">My Hubs</div>
+      <button class="nav-item" data-nav="wmn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        WMN
+      </button>
+      <button class="nav-item" data-nav="ascent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+        Ascent
+        <span class="nav-badge vip">VIP</span>
+      </button>
+      <button class="nav-item" data-nav="vip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.5 7 .9-5 4.7 1.3 7L12 18l-6.3 3.1L7 14 2 9.4l7-.9L12 2z"/></svg>
+        VIP
+        <span class="nav-badge vip">VIP</span>
+      </button>
+
+      <div class="nav-label">Store</div>
+      <a class="nav-item" href="https://www.aimegroup.com/" target="_blank" rel="noopener" title="Opens the AIME Exchange store in a new tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 13h6"/></svg>
+        AIME Exchange
+        <span class="nav-badge ext">↗</span>
+      </a>
 
       <div class="nav-label">Support</div>
       <button class="nav-item" data-nav="support">
@@ -244,10 +285,13 @@
       <section class="view" id="view-resources">
         <div class="page-head"><h1>Resources</h1><p>Learn and grow with AIME webinars, podcasts, and trainings.</p></div>
         <div class="filters" id="resource-filters">
-          <button class="chip active" data-filter="all">All types</button>
+          <button class="chip active" data-filter="all">All</button>
           <button class="chip" data-filter="Podcast">Podcasts</button>
           <button class="chip" data-filter="Webinar">Webinars</button>
           <button class="chip" data-filter="Training">Trainings</button>
+          <button class="chip" data-filter="AI Strategy">AI Strategy</button>
+          <button class="chip" data-filter="Marketing">Marketing</button>
+          <button class="chip" data-filter="Sales">Sales</button>
           <span class="count-note" style="margin-left:auto;align-self:center">Showing all resources</span>
         </div>
         <div class="card-grid" id="resource-grid"></div>
@@ -390,6 +434,18 @@
       <section class="view" id="view-market-detail"><div id="market-detail-body"></div></section>
       <section class="view" id="view-resource-detail"><div id="resource-detail-body"></div></section>
       <section class="view" id="view-event-detail"><div id="event-detail-body"></div></section>
+
+      <!-- ============ DOCUMENTS (rendered by app.js) ============ -->
+      <section class="view" id="view-documents"></section>
+
+      <!-- ============ RESOURCE HUBS (rendered by app.js) ============ -->
+      <section class="view" id="view-brokersedge"></section>
+      <section class="view" id="view-mortgagemornings"></section>
+      <section class="view" id="view-acceleratelive"></section>
+      <section class="view" id="view-wmn"></section>
+      <section class="view" id="view-ascent"></section>
+      <section class="view" id="view-vip"></section>
+      <section class="view" id="view-hub-detail"><div id="hub-detail-body"></div></section>
 
       <!-- ============ FUSE 2026 REGISTRATION ============ -->
       <section class="view" id="view-fuse">
@@ -722,6 +778,8 @@
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
 
 <script src="app.js"></script>
+<!-- events calendar add-on (preview) — remove this line + events-schedule.js to drop it -->
+<script src="events-schedule.js"></script>
 <!-- review-only: member/admin toggle — remove before launch -->
 <script src="review-toggle.js"></script>
 </body>

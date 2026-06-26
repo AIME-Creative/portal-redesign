@@ -7,13 +7,15 @@
 const taxonomies = {
   lenderProducts:    ["Conventional","FHA","VA","Jumbo","Non-QM","USDA","DSCR","Bank Stmt","Renovation","Reverse","Fix & Flip","Bridge"],
   vendorCategories:  ["Core Partner","Origination","Coaching","Marketing"],
-  resourceTypes:     ["Podcast","Webinar","Training"],
+  resourceTypes:     ["Podcast","Webinar","Training","Recording","Certification"],
+  resourceTopics:    ["AI Strategy","Marketing","Sales"],
   eventTypes:        ["Virtual","In person","Training"],
 };
 const taxMeta = {
   lenderProducts:   { label:"Lender product types", sub:"Shown on lender cards and the product filter." },
   vendorCategories: { label:"Market categories",     sub:"Group vendors in the Market." },
   resourceTypes:    { label:"Resource types",        sub:"Used to label and filter resources." },
+  resourceTopics:   { label:"Resource topics",        sub:"Topic tags members filter by on Resources (AI Strategy, Marketing, Sales…)." },
   eventTypes:       { label:"Event types",           sub:"Used to label and filter events." },
 };
 
@@ -49,27 +51,68 @@ const vendors = [
   { name:"Mortgage Coach", short:"MC", cat:"Coaching", offer:"Free trial + member rate", status:"Draft" },
   { name:"Surefire CRM", short:"SF", cat:"Marketing", offer:"Setup fee waived", status:"Active" },
 ];
+// `collection` assigns a resource to a hub (— = none); `topic` is an optional topic tag.
 const resources = [
-  { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast", dur:"28 min", pub:"Jun 20, 2026", status:"Active" },
-  { title:"Broker to Broker — Episode 251", type:"Podcast", dur:"41 min", pub:"Jun 18, 2026", status:"Active" },
-  { title:"Broker Power-Up: Episode 65", type:"Webinar", dur:"52 min", pub:"Jun 15, 2026", status:"Active" },
-  { title:"Mortgage Mornings — June 17, 2026", type:"Webinar", dur:"35 min", pub:"Jun 17, 2026", status:"Active" },
-  { title:"Women's Mortgage Network Podcast", type:"Podcast", dur:"33 min", pub:"Jun 12, 2026", status:"Active" },
-  { title:"AIME Accelerate — Identity Reset", type:"Training", dur:"24 min", pub:"Jun 6, 2026", status:"Active" },
-  { title:"Scaling Past $1M in Volume", type:"Training", dur:"47 min", pub:"Jun 2, 2026", status:"Active" },
-  { title:"Compliance Corner — Q3 Update", type:"Webinar", dur:"38 min", pub:"Jun 24, 2026", status:"Draft" },
-  { title:"Building Your Referral Engine", type:"Training", dur:"45 min", pub:"—", status:"Draft" },
+  { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast", dur:"28 min", pub:"Jun 20, 2026", collection:"—", topic:"Sales", status:"Active" },
+  { title:"Broker to Broker — Episode 251", type:"Podcast", dur:"41 min", pub:"Jun 18, 2026", collection:"—", topic:"—", status:"Active" },
+  { title:"Broker Power-Up: Episode 65", type:"Webinar", dur:"52 min", pub:"Jun 15, 2026", collection:"—", topic:"Marketing", status:"Active" },
+  { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", pub:"Jun 17, 2026", collection:"Mortgage Mornings", topic:"—", status:"Active" },
+  { title:"Women's Mortgage Network Podcast", type:"Podcast", dur:"33 min", pub:"Jun 12, 2026", collection:"WMN", topic:"—", status:"Active" },
+  { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"Brokers Edge", topic:"—", status:"Active" },
+  { title:"Ascent — Leading at Scale", type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
+  { title:"Scaling Past $1M in Volume", type:"Training", dur:"47 min", pub:"Jun 2, 2026", collection:"—", topic:"Sales", status:"Active" },
+  { title:"Using AI to Pre-Qualify Borrowers", type:"Webinar", dur:"39 min", pub:"Jun 5, 2026", collection:"—", topic:"AI Strategy", status:"Active" },
+  { title:"Compliance Corner — Q3 Update", type:"Webinar", dur:"38 min", pub:"Jun 24, 2026", collection:"—", topic:"—", status:"Draft" },
+  { title:"Building Your Referral Engine", type:"Training", dur:"45 min", pub:"—", collection:"—", topic:"Marketing", status:"Draft" },
 ];
+// `hub` assigns an event to a hub (— = appears only on the main Events page/calendar).
 const events = [
-  { title:"AIME Accelerate — Identity Reset", date:"Jun 6, 2026", type:"Virtual", regs:842, status:"Active" },
-  { title:"AIME Accelerate — Win the Day", date:"Jun 15, 2026", type:"Virtual", regs:770, status:"Active" },
-  { title:"AIME Accelerate — Run Toward It", date:"Jun 22, 2026", type:"Virtual", regs:615, status:"Active" },
-  { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", regs:412, status:"Active" },
-  { title:"AIME Accelerate — Compound", date:"Jun 29, 2026", type:"Training", regs:308, status:"Active" },
-  { title:"FUSE 2026 — National Conference", date:"Sep 14, 2026", type:"In person", regs:1204, status:"Active" },
-  { title:"AIME Accelerate — Mindset", date:"Jul 6, 2026", type:"Training", regs:0, status:"Draft" },
-  { title:"Regional Mixer — Dallas", date:"Aug 12, 2026", type:"In person", regs:86, status:"Active" },
+  { title:"AIME Accelerate — Identity Reset", date:"Jun 6, 2026", type:"Virtual", hub:"—", regs:842, status:"Active" },
+  { title:"AIME Accelerate — Win the Day", date:"Jun 15, 2026", type:"Virtual", hub:"—", regs:770, status:"Active" },
+  { title:"AIME Accelerate — Run Toward It", date:"Jun 22, 2026", type:"Virtual", hub:"—", regs:615, status:"Active" },
+  { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", hub:"Mortgage Mornings", regs:412, status:"Active" },
+  { title:"AIME Accelerate — Compound", date:"Jun 29, 2026", type:"Training", hub:"—", regs:308, status:"Active" },
+  { title:"FUSE 2026 — National Conference", date:"Sep 14, 2026", type:"In person", hub:"—", regs:1204, status:"Active" },
+  { title:"VIP Quarterly Mastermind", date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
+  { title:"WMN Monthly Meetup", date:"Jul 9, 2026", type:"Virtual", hub:"WMN", regs:138, status:"Active" },
+  { title:"Regional Mixer — Dallas", date:"Aug 12, 2026", type:"In person", hub:"—", regs:86, status:"Active" },
 ];
+
+/* ---------- Resource hubs + documents (member-side Hubs & Documents) ---------- */
+// Membership tiers, ordered. "All Members" is a special access value meaning everyone.
+const tierOptions = ["Premium","Elite","VIP"];
+const accessOptions = ["All Members", ...tierOptions];
+// `access` is an array: ["All Members"] (everyone) or specific tiers, e.g. ["Elite","VIP"].
+const hubs = [
+  { name:"Brokers Edge",      kind:"Standard", access:["All Members"], items:4, docs:3, status:"Active" },
+  { name:"Mortgage Mornings", kind:"Standard", access:["All Members"], items:4, docs:2, status:"Active" },
+  { name:"Accelerate Live",   kind:"Standard", access:["All Members"], items:4, docs:2, status:"Active" },
+  { name:"Ascent",            kind:"Standard", access:["VIP"],         items:3, docs:2, status:"Active" },
+  { name:"VIP",               kind:"Mixed",    access:["VIP"],         items:2, docs:2, status:"Active" },
+  { name:"WMN",               kind:"Mixed",    access:["All Members"], items:2, docs:2, status:"Active" },
+];
+const exchangeUrl = "https://www.aimegroup.com/";
+// source = "General" or a hub name; access controls tier-gating on the member Documents page.
+const documents = [
+  { title:"AIME Member Handbook",            source:"General",           access:"All members", added:"Jun 1, 2026",  status:"Active" },
+  { title:"Loan Escalation Guide",           source:"General",           access:"All members", added:"May 12, 2026", status:"Active" },
+  { title:"AIME Brand & Logo Kit",           source:"General",           access:"All members", added:"Apr 2, 2026",  status:"Active" },
+  { title:"2026 Membership Agreement",       source:"General",           access:"All members", added:"Jan 1, 2026",  status:"Active" },
+  { title:"Brokers Edge Curriculum Guide",   source:"Brokers Edge",      access:"All members", added:"Jun 10, 2026", status:"Active" },
+  { title:"Certification Completion Checklist", source:"Brokers Edge",   access:"All members", added:"Jun 10, 2026", status:"Active" },
+  { title:"Continuing Education Credit Form",source:"Brokers Edge",      access:"All members", added:"Jun 10, 2026", status:"Active" },
+  { title:"Rate Sheet Roundup — This Week",  source:"Mortgage Mornings", access:"All members", added:"Jun 24, 2026", status:"Active" },
+  { title:"Show Notes Archive (2026)",       source:"Mortgage Mornings", access:"All members", added:"Jun 1, 2026",  status:"Active" },
+  { title:"Accelerate Live — Session Workbook", source:"Accelerate Live", access:"All members", added:"Jun 20, 2026", status:"Active" },
+  { title:"Weekly Action Plan Template",     source:"Accelerate Live",   access:"All members", added:"Jun 20, 2026", status:"Active" },
+  { title:"WMN Mentorship Program Overview", source:"WMN",               access:"All members", added:"Jun 9, 2026",  status:"Active" },
+  { title:"WMN Community Guidelines",        source:"WMN",               access:"All members", added:"May 1, 2026",  status:"Active" },
+  { title:"Ascent Workbook — Q3 Cohort",     source:"Ascent",            access:"VIP only",    added:"Jun 8, 2026",  status:"Active" },
+  { title:"90-Day Growth Plan Template",     source:"Ascent",            access:"VIP only",    added:"Jun 8, 2026",  status:"Active" },
+  { title:"VIP Benefits Guide",              source:"VIP",               access:"VIP only",    added:"Jun 1, 2026",  status:"Active" },
+  { title:"Speaking & Feature Opportunities",source:"VIP",               access:"VIP only",    added:"Jun 1, 2026",  status:"Active" },
+];
+const hubNames = () => hubs.map(h=>h.name);
 
 /* ---------- Members ---------- */
 const members = [
@@ -360,10 +403,12 @@ function renderVendors(){
   </tr>`).join('');
   $('vendor-count').textContent = `${vendors.length} vendors`;
 }
+const collTag = (v) => (!v || v==='—') ? '<span class="t-sub" style="display:inline;color:var(--muted)">—</span>' : `<span class="badge badge-navy">${v}</span>`;
 function renderResources(){
   $('resources-tbody').innerHTML = resources.map((r,i)=>`<tr>
-    <td class="t-strong">${r.title}</td>
+    <td class="t-strong">${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</td>
     <td><span class="badge badge-cyan">${r.type}</span></td>
+    <td>${collTag(r.collection)}</td>
     <td>${r.dur}</td>
     <td>${r.pub}</td>
     <td><span class="dot-status dot-${r.status.toLowerCase()}">${r.status}</span></td>
@@ -376,11 +421,50 @@ function renderEvents(){
     <td class="t-strong">${e.title}</td>
     <td>${e.date}</td>
     <td><span class="badge badge-amber">${e.type}</span></td>
+    <td>${collTag(e.hub)}</td>
     <td>${e.regs.toLocaleString()}</td>
     <td><span class="dot-status dot-${e.status.toLowerCase()}">${e.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('event:'+i)}${delBtn('Removed event.')}</div></td>
   </tr>`).join('');
   $('event-count').textContent = `${events.length} events`;
+}
+const accessBadge = (a) => a==='VIP only'
+  ? `<span class="badge" style="background:#fbf0d8;color:#9a6a05">VIP only</span>`
+  : `<span class="badge badge-navy">All members</span>`;
+// Hubs use an array of tiers (or ["All Members"]). Render one badge per audience.
+function accessTags(access){
+  const arr = Array.isArray(access) ? access : [access];
+  if(arr.includes('All Members')) return `<span class="badge badge-navy">All members</span>`;
+  return arr.map(t => t==='VIP'
+    ? `<span class="badge" style="background:#fbf0d8;color:#9a6a05">VIP</span>`
+    : `<span class="badge badge-navy">${t}</span>`).join(' ') || `<span class="t-sub" style="display:inline;color:var(--muted)">No access set</span>`;
+}
+function renderHubs(){
+  $('hubs-tbody').innerHTML = hubs.map((h,i)=>`<tr>
+    <td class="t-strong">${h.name}</td>
+    <td><span class="badge ${h.kind==='Mixed'?'badge-amber':'badge-cyan'}">${h.kind}</span></td>
+    <td>${accessTags(h.access)}</td>
+    <td>${h.items} item${h.items===1?'':'s'}</td>
+    <td>${h.docs} doc${h.docs===1?'':'s'}</td>
+    <td><span class="dot-status dot-${h.status.toLowerCase()}">${h.status}</span></td>
+    <td class="t-right"><div class="row-actions">${editBtn('hub:'+i)}${delBtn('Removed '+h.name+' hub.')}</div></td>
+  </tr>`).join('');
+  $('hub-count').textContent = `${hubs.length} hubs`;
+  const ex = $('exchange-url'); if(ex) ex.value = exchangeUrl;
+}
+function renderDocuments(){
+  const active = document.querySelector('#document-filters .chip.active');
+  const f = active ? active.dataset.filter : 'all';
+  const rows = documents.map((d,i)=>({d,i})).filter(o => f==='all' || o.d.source===f);
+  $('documents-tbody').innerHTML = rows.map(({d,i})=>`<tr>
+    <td class="t-strong">${d.title}</td>
+    <td>${d.source==='General' ? '<span class="t-sub" style="display:inline;color:var(--ink-soft)">General</span>' : `<span class="badge badge-navy">${d.source}</span>`}</td>
+    <td>${accessBadge(d.access)}</td>
+    <td>${d.added}</td>
+    <td><span class="dot-status dot-${d.status.toLowerCase()}">${d.status}</span></td>
+    <td class="t-right"><div class="row-actions">${editBtn('document:'+i)}${delBtn('Removed document.')}</div></td>
+  </tr>`).join('');
+  $('document-count').textContent = `${rows.length} of ${documents.length} documents`;
 }
 function renderRequests(){
   const active = document.querySelector('#request-filters .chip.active');
@@ -843,19 +927,44 @@ function openEdit(ref){
       <div class="field-row">${selectField('Category', taxonomies.vendorCategories, v.cat)}${selectField('Status', ['Active','Draft'], v.status)}</div>
       ${field('Member offer', v.offer)}`;
   } else if(type==='resource'){
-    const r = isNew ? {title:'',type:taxonomies.resourceTypes[0],dur:'',status:'Draft'} : resources[idx];
-    title = isNew ? 'Add resource' : 'Edit resource'; sub = isNew?'Add a webinar, podcast, or training.':r.title;
+    const r = isNew ? {title:'',type:taxonomies.resourceTypes[0],dur:'',collection:'—',topic:'—',status:'Draft'} : resources[idx];
+    title = isNew ? 'Add resource' : 'Edit resource'; sub = isNew?'Add a webinar, podcast, training, recording, or certification.':r.title;
     body = `
       ${field('Title', r.title)}
       <div class="field-row">${selectField('Type', taxonomies.resourceTypes, r.type)}${field('Duration', r.dur)}</div>
-      ${selectField('Status', ['Active','Draft'], r.status)}`;
+      <div class="field-row">${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}${selectField('Topic tag', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
+      ${field('Content link', '', 'placeholder="Video / audio URL"')}
+      ${selectField('Status', ['Active','Draft'], r.status)}
+      <div class="hint">Assigning a <strong>hub</strong> makes this appear inside that hub (Brokers Edge, Mortgage Mornings, etc.). <strong>Topic</strong> drives the AI Strategy / Marketing / Sales filters on Resources.</div>`;
   } else if(type==='event'){
-    const e = isNew ? {title:'',date:'',type:taxonomies.eventTypes[0],status:'Draft'} : events[idx];
+    const e = isNew ? {title:'',date:'',type:taxonomies.eventTypes[0],hub:'—',status:'Draft'} : events[idx];
     title = isNew ? 'Add event' : 'Edit event'; sub = isNew?'Create a new event.':e.title;
     body = `
       ${field('Event title', e.title)}
       <div class="field-row">${field('Date', e.date)}${selectField('Type', taxonomies.eventTypes, e.type)}</div>
-      ${selectField('Status', ['Active','Draft'], e.status)}`;
+      ${selectField('Hub / collection', ['—', ...hubNames()], e.hub)}
+      ${selectField('Status', ['Active','Draft'], e.status)}
+      <div class="hint">Assign a hub to surface this event inside a member hub (e.g. VIP, WMN). Leave as “—” for a general event — it still shows on the Events page &amp; calendar.</div>`;
+  } else if(type==='hub'){
+    const h = isNew ? {name:'',kind:'Standard',access:['All Members'],status:'Active'} : hubs[idx];
+    title = isNew ? 'Add hub' : 'Edit hub'; sub = isNew?'Create a content hub shown in the member sidebar.':h.name;
+    body = `
+      ${field('Hub name', h.name)}
+      ${selectField('Layout', ['Standard','Mixed'], h.kind)}
+      ${accessPicker(h.access)}
+      <div class="field"><label>Description</label><textarea class="input" placeholder="Short description shown at the top of the hub page…" style="min-height:70px"></textarea></div>
+      ${selectField('Status', ['Active','Draft'], h.status)}
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p><strong>Standard</strong> = a videos/recordings grid + a Documents tab. <strong>Mixed</strong> = videos, events &amp; documents in one hub (VIP, WMN). Use <strong>Access</strong> to gate the hub — pick the tiers that can see it, or All Members for everyone. Add content from Resources, Events &amp; Documents by setting their hub to this one.</p></div>`;
+  } else if(type==='document'){
+    const d = isNew ? {title:'',source:'General',access:'All members',status:'Active'} : documents[idx];
+    title = isNew ? 'Add document' : 'Edit document'; sub = isNew?'Upload a document for the Documents page or a hub.':d.title;
+    body = `
+      ${field('Title', d.title)}
+      ${field('Description', d.desc, 'placeholder="One line shown under the title"')}
+      <div class="field-row">${selectField('Source', ['General', ...hubNames()], d.source)}${selectField('Access', ['All members','VIP only'], d.access)}</div>
+      <div class="field"><label>File</label><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><p>Drag a PDF here or <strong>browse</strong> to upload. (Interface only in this prototype.)</p></div></div>
+      ${selectField('Status', ['Active','Draft'], d.status)}
+      <div class="hint"><strong>Source “General”</strong> lists the doc on the main Documents page only; choosing a hub also adds it to that hub’s Documents tab. <strong>VIP only</strong> documents are hidden from non-VIP members everywhere.</div>`;
   } else if(type==='featured'){
     title='Add featured item'; sub='Feature a lender, resource, market deal, or event on the member home screen.';
     body = `
@@ -900,6 +1009,35 @@ function tagPicker(label, all, selected){
     </div>
     <div class="hint">Manage the full list under Categories &amp; tags.</div></div>`;
 }
+// Multi-select hub access: "All Members" (everyone) OR one or more tiers.
+function accessPicker(selected){
+  selected = (selected && selected.length) ? selected : ['All Members'];
+  return `<div class="field"><label>Access</label>
+    <div class="tax-chips" id="access-picker" style="margin:6px 0 0">
+      ${accessOptions.map(o=>{
+        const on = selected.includes(o);
+        return `<label class="tax-chip access-opt${on?' on':''}" data-access-opt="${o}" style="cursor:pointer"><input type="checkbox" ${on?'checked':''} tabindex="-1" style="margin-right:6px;accent-color:var(--pink)">${o}</label>`;
+      }).join('')}
+    </div>
+    <div class="hint"><strong>All Members</strong> includes everyone. Or select specific tiers (Premium, Elite, VIP) to gate this hub.</div></div>`;
+}
+function toggleAccess(opt){
+  const picker = $('access-picker'); if(!picker) return;
+  let sel = [...picker.querySelectorAll('.access-opt.on')].map(c=>c.dataset.accessOpt);
+  const isOn = sel.includes(opt);
+  if(opt==='All Members'){
+    sel = isOn ? [] : ['All Members'];
+  } else {
+    sel = sel.filter(x=>x!=='All Members');         // a specific tier clears "All Members"
+    sel = isOn ? sel.filter(x=>x!==opt) : [...sel, opt];
+  }
+  if(!sel.length) sel = ['All Members'];             // never leave a hub with no audience
+  picker.querySelectorAll('.access-opt').forEach(c=>{
+    const on = sel.includes(c.dataset.accessOpt);
+    c.classList.toggle('on', on);
+    const cb = c.querySelector('input'); if(cb) cb.checked = on;
+  });
+}
 
 /* ---------- Request detail modal ---------- */
 function openRequest(idx){
@@ -938,6 +1076,7 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
 fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
 renderResources(); renderEvents(); renderRequests(); renderFuse();
+renderHubs(); renderDocuments();
 renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
 renderSubscriptions(); renderAbandoned(); renderCoupons();
@@ -965,6 +1104,13 @@ $('request-filters').addEventListener('click', e=>{
   chip.classList.add('active'); renderRequests();
 });
 
+$('document-filters') && $('document-filters').addEventListener('click', e=>{
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#document-filters .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active'); renderDocuments();
+});
+$('exchange-save') && $('exchange-save').addEventListener('click', ()=> showToast('AIME Exchange link saved.'));
+
 $('report-tabs').addEventListener('click', e=>{
   const chip = e.target.closest('.chip'); if(!chip) return;
   document.querySelectorAll('#report-tabs .chip').forEach(c=>c.classList.remove('active'));
@@ -987,6 +1133,7 @@ $('report-email').addEventListener('click', ()=>{
 document.addEventListener('click', e=>{
   const t = e.target;
   let m;
+  if((m = t.closest('[data-access-opt]')))  { e.preventDefault(); toggleAccess(m.dataset.accessOpt); return; }
   if((m = t.closest('[data-edit]')))        { e.preventDefault(); openEdit(m.dataset.edit); return; }
   if((m = t.closest('[data-request]')))      { e.preventDefault(); openRequest(+m.dataset.request); return; }
   if((m = t.closest('[data-feat-move]')))    { e.preventDefault(); const [i,d]=m.dataset.featMove.split(':').map(Number); moveFeatured(i,d); return; }

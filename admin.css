@@ -119,6 +119,8 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .tax-chip { display:inline-flex; align-items:center; gap:7px; background:var(--surface-alt); border:1px solid var(--line); border-radius:8px; padding:6px 8px 6px 12px; font-size:13px; font-weight:600; color:var(--ink); }
 .tax-chip button { width:18px; height:18px; border-radius:5px; display:grid; place-items:center; color:var(--muted); font-size:14px; line-height:1; transition:.13s; }
 .tax-chip button:hover { background:#fdecea; color:var(--red); }
+.tax-chip.access-opt { padding:6px 12px; }
+.tax-chip.access-opt.on { border-color:var(--pink); background:#fef4f8; color:var(--navy); }
 .tax-add { display:flex; gap:8px; }
 .tax-add .input { height:40px; }
 .tax-empty { color:var(--muted); font-size:13px; font-style:italic; margin:14px 0 16px; }

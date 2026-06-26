@@ -111,6 +111,20 @@ h1,h2,h3,h4 { margin: 0; color: var(--ink); line-height: 1.25; }
 .profile-card .prole { font-size: 12px; color: rgba(255,255,255,.6); }
 
 .nav { display: flex; flex-direction: column; gap: 4px; }
+/* Scroll the nav list when it's taller than the viewport; keep brand, profile,
+   and the FUSE/footer pinned. The negative margin + matching padding keep the
+   active item's left indicator (::before at -16px) from being clipped by overflow. */
+.sidebar { overflow: hidden; }
+.brand, .profile-card, .sidebar-foot { flex-shrink: 0; }
+.nav {
+  flex: 1 1 auto; min-height: 0;
+  overflow-y: auto; overflow-x: hidden;
+  margin-left: -16px; padding-left: 16px;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.18) transparent;
+}
+.nav::-webkit-scrollbar { width: 6px; }
+.nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 3px; }
+.nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.3); }
 .nav-label {
   font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
   color: rgba(255,255,255,.4); padding: 14px 12px 6px; font-weight: 600;
@@ -760,6 +774,26 @@ button.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); bord
 .view { display:none; }
 .view.active { display:block; animation: fade .25s ease; }
 @keyframes fade { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+
+/* ===== Resource hubs & VIP gating (added 2026-06-26) ===== */
+.nav-badge.vip { background: linear-gradient(120deg,#e0982a,#c9851f); }
+.nav-badge.ext { background: rgba(255,255,255,.16); font-weight: 700; padding: 1px 7px; }
+.vip-note {
+  background: var(--amber-bg); color: #8a6400; border: 1px solid #f0d68a;
+  border-radius: 12px; padding: 12px 16px; font-size: 13.5px; margin: 0 0 22px;
+}
+.doc-card .list-row:first-child { padding-top: 4px; }
+.doc-row .list-logo { background: #fde4ee; color: var(--pink); font-size: 18px; }
+.doc-row .btn { flex: 0 0 auto; align-self: center; }
+.hub-section-title { font-size: 15px; font-weight: 700; color: var(--navy); margin: 28px 0 14px; }
+.hub-section-title:first-child { margin-top: 0; }
+.doc-src {
+  flex: 0 0 auto; align-self: center; white-space: nowrap;
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  background: var(--surface-alt); border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px 11px;
+}
+@media (max-width: 680px){ .doc-src { display: none; } }
 
 /* Responsive */
 @media (max-width: 1080px){
