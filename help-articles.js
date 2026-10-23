@@ -1,0 +1,275 @@
+/* ============================================================
+   AMP Help Center — knowledge base content (shared)
+   ------------------------------------------------------------
+   Read by the member Help Center (help-center.js) and the admin
+   Help Center manager (admin-help.js). In production this is a
+   Supabase table edited from admin; here it's static sample data.
+
+   Article fields
+     slug, title, category (key of HELP_CATEGORIES), summary,
+     tags[], minutes (read time), updated, popular, status,
+     views / helpful [yes, no]  (admin stats, sample numbers),
+     actions[] — "Try it now" buttons: { label, attr } where attr
+                 is a data-* attribute the member app already
+                 understands (data-nav / data-modal),
+     body — HTML. Use <ol class="kb-steps">, <div class="kb-tip">.
+   ============================================================ */
+window.HELP_CATEGORIES = {
+  start:       { name: 'Getting started',          ico: '<path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>', desc: 'Find your way around the portal.' },
+  escalations: { name: 'Loan escalations',          ico: '<path d="M12 9v4M12 17h0M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/>', desc: 'Escalate a loan, track it, follow up.' },
+  lenders:     { name: 'Lenders & connections',     ico: '<path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/>', desc: 'Connect with lenders, change your AE.' },
+  market:      { name: 'Market & vendors',          ico: '<path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/>', desc: 'Member discounts and vendor intros.' },
+  learning:    { name: 'Resources & hubs',          ico: '<path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/>', desc: 'Trainings, hubs, and documents.' },
+  events:      { name: 'Events & FUSE',             ico: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>', desc: 'Events, the calendar, and FUSE 2026.' },
+  billing:     { name: 'Membership & billing',      ico: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>', desc: 'Plans, payments, and escalation allowance.' },
+  account:     { name: 'Account & support',         ico: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0116 0v1"/>', desc: 'Profile, password, tickets, and requests.' },
+};
+
+window.HELP_ARTICLES = [
+  /* ---------------- Getting started ---------------- */
+  { slug: 'portal-tour', title: 'A quick tour of the member portal', category: 'start', popular: true,
+    summary: 'What lives where — the sidebar, search, your escalation count, and quick actions.',
+    tags: ['tour', 'walkthrough', 'navigation', 'new member', 'dashboard'], minutes: 2, updated: 'Oct 20, 2026', status: 'Published',
+    views: 1840, helpful: [212, 9],
+    actions: [{ label: 'Take the walkthrough', attr: 'data-tour-start' }],
+    body: `
+      <p>The portal is built around a few places you'll use every week:</p>
+      <ul>
+        <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions.</li>
+        <li><strong>The sidebar</strong> — Lenders, Market, Resources, Events, Documents, your learning hubs, and Support.</li>
+        <li><strong>Search</strong> (top of every page) — find any lender, vendor, resource, or event by name.</li>
+        <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more.</li>
+        <li><strong>My Requests</strong> — every escalation, connection, AE change, and support ticket you've submitted, with its status.</li>
+      </ul>
+      <div class="kb-tip"><strong>Tip:</strong> You can replay the guided walkthrough any time from the <strong>?</strong> menu in the top bar or from this Help Center.</div>` },
+
+  { slug: 'mobile', title: 'Using the portal on your phone', category: 'start',
+    summary: 'Where the menu and main sections are on mobile.',
+    tags: ['mobile', 'phone', 'app', 'menu'], minutes: 1, updated: 'Oct 2, 2026', status: 'Published',
+    views: 402, helpful: [51, 4], actions: [],
+    body: `
+      <p>The portal works in any mobile browser — there's nothing to install.</p>
+      <ol class="kb-steps">
+        <li>The <strong>bottom bar</strong> takes you to Home, Lenders, Market, Resources, and Events.</li>
+        <li>Tap the <strong>☰ menu</strong> (top left) for everything else: hubs, Documents, My Requests, Help Center, and Settings.</li>
+        <li>Your escalation count and notifications stay in the top bar.</li>
+      </ol>
+      <div class="kb-tip"><strong>Tip:</strong> Add the portal to your home screen from your browser's Share menu for one-tap access.</div>` },
+
+  /* ---------------- Escalations ---------------- */
+  { slug: 'escalate-a-loan', title: 'How to escalate a loan', category: 'escalations', popular: true,
+    summary: 'Send a structured report straight to a lender’s escalation team.',
+    tags: ['escalate', 'escalation', 'loan', 'lender', 'pipeline', 'stuck'], minutes: 2, updated: 'Oct 21, 2026', status: 'Published',
+    views: 3120, helpful: [388, 14],
+    actions: [{ label: 'Escalate a loan', attr: 'data-modal="escalate"' }],
+    body: `
+      <p>Escalate when a loan is stuck and you've already tried your account executive.</p>
+      <ol class="kb-steps">
+        <li>Click <strong>Escalate a Loan</strong> on Home, or <strong>Escalate a loan</strong> on any lender's page.</li>
+        <li>Choose the lender and enter the loan number, loan type, amount, and closing date.</li>
+        <li>Describe the issue — what's stuck, since when, and what you need.</li>
+        <li>Click <strong>Continue &amp; submit</strong>. The report goes straight to the lender's escalation team by email.</li>
+      </ol>
+      <p>Each escalation uses one from your plan's allowance (see <a href="#" data-help-article="escalation-allowance">escalation allowance</a>).</p>
+      <div class="kb-tip"><strong>Tip:</strong> The more specific the issue description, the faster lenders can act — include dates and conditions.</div>` },
+
+  { slug: 'track-escalation', title: 'Tracking an escalation: what each status means', category: 'escalations', popular: true,
+    summary: 'Received, Responded, and Resolved — and where to see lender replies.',
+    tags: ['status', 'track', 'received', 'responded', 'resolved', 'my requests'], minutes: 2, updated: 'Oct 23, 2026', status: 'Published',
+    views: 1215, helpful: [140, 6],
+    actions: [{ label: 'Open My Requests', attr: 'data-nav="requests"' }],
+    body: `
+      <p>Every escalation appears in <strong>My Requests</strong> with a status tracker and an activity log.</p>
+      <ul>
+        <li><strong>Received</strong> — delivered to the lender's escalation team.</li>
+        <li><strong>Responded</strong> — the lender has replied. Their response shows in the activity log.</li>
+        <li><strong>Resolved</strong> — the issue is closed, by the lender, the AIME team, or you.</li>
+      </ul>
+      <p>Lenders reply by email or with a one-click update, so you'll see responses here even though they never log in to the portal. If a lender's answer fixes things, click <strong>Mark as resolved</strong>.</p>` },
+
+  { slug: 'escalation-follow-up', title: 'The lender hasn’t responded — requesting a follow-up', category: 'escalations',
+    summary: 'Have the AIME membership team chase the lender for you.',
+    tags: ['follow up', 'no response', 'lender not responding', 'reminder', 'stuck'], minutes: 1, updated: 'Oct 23, 2026', status: 'Published',
+    views: 688, helpful: [92, 3],
+    actions: [{ label: 'Open My Requests', attr: 'data-nav="requests"' }],
+    body: `
+      <p>Lenders get an automatic reminder after two business days without a response. If you still haven't heard back:</p>
+      <ol class="kb-steps">
+        <li>Open the escalation in <strong>My Requests</strong>.</li>
+        <li>Click <strong>Request a follow-up</strong> and add any context (e.g. "rate lock expires Thursday").</li>
+        <li>We re-send it to the lender right away, and the AIME membership team contacts their escalation desk directly.</li>
+        <li>What we hear back is posted on your escalation's activity log.</li>
+      </ol>
+      <div class="kb-tip">You can have one open follow-up per escalation at a time. It closes automatically when the lender responds.</div>` },
+
+  { slug: 'escalation-allowance', title: 'Your escalation allowance and buying more', category: 'escalations',
+    summary: 'How many escalations each plan includes, and add-ons at $199 each.',
+    tags: ['allowance', 'how many', 'buy', 'purchase', 'escalations left', 'premium', 'elite', 'vip'], minutes: 1, updated: 'Sep 30, 2026', status: 'Published',
+    views: 954, helpful: [101, 7],
+    actions: [{ label: 'Buy escalations', attr: 'data-modal="escalations"' }],
+    body: `
+      <ul>
+        <li><strong>Premium</strong> — 1 escalation per month</li>
+        <li><strong>Elite</strong> — 6 escalations per month</li>
+        <li><strong>VIP</strong> — unlimited</li>
+      </ul>
+      <p>Your remaining count is always in the top bar. Need more this cycle? Tap the <strong>+</strong> next to it (or <strong>Buy more</strong> in the escalation form) and choose a quantity — additional escalations are <strong>$199 each</strong>.</p>` },
+
+  /* ---------------- Lenders & connections ---------------- */
+  { slug: 'connect-lender', title: 'Connecting with a lender partner', category: 'lenders', popular: true,
+    summary: 'Request an intro to an approved AIME lender.',
+    tags: ['connect', 'connection', 'intro', 'lender', 'partner', 'approved'], minutes: 1, updated: 'Oct 10, 2026', status: 'Published',
+    views: 1402, helpful: [160, 8],
+    actions: [{ label: 'Connect a lender', attr: 'data-modal="connect"' }],
+    body: `
+      <ol class="kb-steps">
+        <li>Click <strong>Connect a Lender</strong> on Home, or <strong>Connect</strong> on a lender's page.</li>
+        <li>Pick the lender. Your name, email, phone, NMLS #, and licensed states are filled in from your profile.</li>
+        <li>Click <strong>Submit request</strong>. It's delivered to the lender's partner team, and they reach out to you directly.</li>
+      </ol>
+      <p>Your request shows in <strong>My Requests</strong> as <strong>Delivered</strong>. Haven't heard back in a week? Open a support ticket and we'll nudge them.</p>` },
+
+  { slug: 'change-ae', title: 'Requesting a new account executive', category: 'lenders',
+    summary: 'Having trouble with your AE? Ask for a change.',
+    tags: ['ae', 'account executive', 'change ae', 'unresponsive', 'switch'], minutes: 1, updated: 'Sep 18, 2026', status: 'Published',
+    views: 611, helpful: [70, 5],
+    actions: [{ label: 'Change AE', attr: 'data-modal="changeae"' }],
+    body: `
+      <ol class="kb-steps">
+        <li>Click <strong>Change AE</strong> on Home or on the lender's page.</li>
+        <li>Choose the lender, enter your current AE's name, and pick a reason.</li>
+        <li>Add details and confirm you've tried to resolve it with your AE first.</li>
+        <li>Submit. The lender and the AIME membership team both receive it and will contact you about your new AE.</li>
+      </ol>` },
+
+  { slug: 'find-lender', title: 'Finding the right lender for a scenario', category: 'lenders',
+    summary: 'Filter lenders by tier and product type (Non-QM, DSCR, Jumbo…).',
+    tags: ['find lender', 'non-qm', 'dscr', 'jumbo', 'bank statement', 'filter', 'products'], minutes: 1, updated: 'Aug 28, 2026', status: 'Published',
+    views: 870, helpful: [88, 6],
+    actions: [{ label: 'Browse lenders', attr: 'data-nav="lenders"' }],
+    body: `
+      <ol class="kb-steps">
+        <li>Open <strong>Lenders</strong> from the sidebar.</li>
+        <li>Use the <strong>tier</strong> chips (Gold, Silver, Bronze) and the <strong>product type</strong> menu to narrow the list.</li>
+        <li>Open a lender to see their full product list, then connect or escalate from there.</li>
+      </ol>
+      <div class="kb-tip">Still not sure? Open a support ticket with your scenario — our team can point you to the best fit.</div>` },
+
+  /* ---------------- Market ---------------- */
+  { slug: 'market-deals', title: 'Using Market vendor discounts', category: 'market',
+    summary: 'How to claim member pricing from Market vendors.',
+    tags: ['market', 'vendor', 'discount', 'deal', 'coupon', 'pricing'], minutes: 1, updated: 'Sep 9, 2026', status: 'Published',
+    views: 745, helpful: [79, 6],
+    actions: [{ label: 'Open the Market', attr: 'data-nav="market"' }],
+    body: `
+      <ol class="kb-steps">
+        <li>Open <strong>Market</strong> and filter by category.</li>
+        <li>Click <strong>More info</strong> on a vendor to see the member offer.</li>
+        <li>Click <strong>Connect with …</strong> — the vendor reaches out within one business day.</li>
+        <li>Mention AIME to claim your member pricing.</li>
+      </ol>
+      <p>Vendor connections also appear in <strong>My Requests</strong> as Delivered.</p>` },
+
+  /* ---------------- Resources & hubs ---------------- */
+  { slug: 'hubs', title: 'What are hubs (Brokers Edge, WMN, Ascent, VIP…)?', category: 'learning',
+    summary: 'Collections of trainings, events, and documents for a program or audience.',
+    tags: ['hub', 'brokers edge', 'mortgage mornings', 'accelerate', 'wmn', 'ascent', 'vip'], minutes: 2, updated: 'Oct 1, 2026', status: 'Published',
+    views: 520, helpful: [58, 4],
+    actions: [{ label: 'Open Brokers Edge', attr: 'data-nav="brokersedge"' }],
+    body: `
+      <p>Hubs gather everything for one program in one place:</p>
+      <ul>
+        <li><strong>Learning &amp; Training</strong> — Brokers Edge (certifications), Mortgage Mornings (recordings), Accelerate Live (replays).</li>
+        <li><strong>My Hubs</strong> — WMN (Women's Mortgage Network) and, for VIP members, Ascent and VIP.</li>
+      </ul>
+      <p>Each hub has its own content and a <strong>Documents</strong> tab. Some hubs are only available on certain plans.</p>` },
+
+  { slug: 'documents', title: 'Finding and downloading documents', category: 'learning',
+    summary: 'Templates, checklists, and guides from every hub in one list.',
+    tags: ['documents', 'download', 'pdf', 'template', 'checklist'], minutes: 1, updated: 'Sep 22, 2026', status: 'Published',
+    views: 498, helpful: [55, 2],
+    actions: [{ label: 'Open Documents', attr: 'data-nav="documents"' }],
+    body: `
+      <p><strong>Documents</strong> in the sidebar lists every document you have access to. Use the source chips to filter by hub, then click <strong>Download</strong>. Hub pages also show their own documents under the <strong>Documents</strong> tab.</p>` },
+
+  /* ---------------- Events & FUSE ---------------- */
+  { slug: 'fuse-ticket', title: 'Claiming your FUSE 2026 ticket and add-ons', category: 'events', popular: true,
+    summary: 'Your membership includes FUSE — claim it, add sessions, bring guests.',
+    tags: ['fuse', 'ticket', 'claim', 'conference', 'add-ons', 'guest', 'austin'], minutes: 2, updated: 'Oct 15, 2026', status: 'Published',
+    views: 2210, helpful: [251, 11],
+    actions: [{ label: 'Manage FUSE registration', attr: 'data-nav="fuse"' }],
+    body: `
+      <p>FUSE 2026 is at the JW Marriott Downtown Austin, TX, September 24–26.</p>
+      <ol class="kb-steps">
+        <li>Click <strong>FUSE 2026</strong> at the bottom of the sidebar (or the "Claim your ticket" banner).</li>
+        <li>Your ticket is claimed when you open the page. Choose your add-ons — Hall of AIME, WMN at FUSE, Vetted VA, and more.</li>
+        <li>Add guest passes if you're bringing anyone, then click <strong>Update registration</strong>.</li>
+      </ol>
+      <div class="kb-tip">Need your invoice for an expense report? Use <strong>Email my confirmation</strong> on the same page.</div>` },
+
+  { slug: 'events-calendar', title: 'Viewing events as a calendar', category: 'events',
+    summary: 'Switch the Events page between cards and a month calendar.',
+    tags: ['events', 'calendar', 'schedule', 'webinar'], minutes: 1, updated: 'Sep 5, 2026', status: 'Published',
+    views: 301, helpful: [33, 2],
+    actions: [{ label: 'Open Events', attr: 'data-nav="events"' }],
+    body: `<p>On <strong>Events</strong>, use the <strong>Cards / Calendar</strong> toggle above the list. The calendar shows a month at a time; click any event to open its details.</p>` },
+
+  /* ---------------- Billing ---------------- */
+  { slug: 'change-plan', title: 'Upgrading or changing your membership plan', category: 'billing',
+    summary: 'Move between Premium, Elite, and VIP, or switch annual/monthly.',
+    tags: ['upgrade', 'plan', 'premium', 'elite', 'vip', 'annual', 'monthly', 'membership'], minutes: 1, updated: 'Sep 30, 2026', status: 'Published',
+    views: 690, helpful: [72, 9],
+    actions: [{ label: 'Membership & billing', attr: 'data-nav="settings" data-tab="billing"' }],
+    body: `
+      <ol class="kb-steps">
+        <li>Go to <strong>Settings → Membership &amp; Billing</strong> (or click your name, then <strong>Manage membership</strong>).</li>
+        <li>Choose a new plan or billing cycle.</li>
+        <li>Upgrades are prorated — your billing date moves to the upgrade date.</li>
+      </ol>` },
+
+  { slug: 'payment-method', title: 'Updating your payment card', category: 'billing',
+    summary: 'Change the card on file for your membership.',
+    tags: ['card', 'payment', 'billing', 'declined', 'credit card', 'invoice'], minutes: 1, updated: 'Oct 8, 2026', status: 'Published',
+    views: 433, helpful: [39, 6],
+    actions: [{ label: 'Membership & billing', attr: 'data-nav="settings" data-tab="billing"' }],
+    body: `
+      <p>Open <strong>Settings → Membership &amp; Billing</strong> and choose <strong>Add / update payment method</strong>. Cards are processed securely by Stripe — AIME never stores your full card number.</p>
+      <div class="kb-tip">Seeing "declined" with no charge on your bank's side? Try another browser — older Safari versions can block the card form.</div>` },
+
+  /* ---------------- Account & support ---------------- */
+  { slug: 'support-ticket', title: 'Opening a support ticket and replying to our team', category: 'account', popular: true,
+    summary: 'Tickets are a conversation — we reply in the portal and you can answer back.',
+    tags: ['support', 'ticket', 'help', 'contact', 'reply', 'question'], minutes: 1, updated: 'Oct 23, 2026', status: 'Published',
+    views: 980, helpful: [117, 5],
+    actions: [{ label: 'Get support', attr: 'data-nav="support"' }],
+    body: `
+      <ol class="kb-steps">
+        <li>Open <strong>Get Support</strong>, choose a category, and describe the issue.</li>
+        <li>Our team replies right in the portal, usually within one business day. You'll see a <strong>New reply</strong> badge in My Requests.</li>
+        <li>Reply back if you need to — the ticket moves to <strong>In progress</strong>. Replying to a resolved ticket reopens it.</li>
+      </ol>
+      <p>Statuses: <strong>Received</strong> → <strong>In progress</strong> → <strong>Responded</strong> → <strong>Resolved</strong>.</p>` },
+
+  { slug: 'update-profile', title: 'Updating your profile and company information', category: 'account',
+    summary: 'Keep your NMLS #, licenses, and contact details current.',
+    tags: ['profile', 'nmls', 'company', 'address', 'phone', 'licenses'], minutes: 1, updated: 'Aug 30, 2026', status: 'Published',
+    views: 377, helpful: [41, 3],
+    actions: [{ label: 'Open Settings', attr: 'data-nav="settings"' }],
+    body: `<p>Go to <strong>Settings → Profile</strong> (or click your name). Update your personal details and <strong>Company Information</strong>, then <strong>Save changes</strong>. Lender connection forms use these details, so keep your NMLS # and licensed states current.</p>` },
+
+  { slug: 'reset-password', title: 'Changing your email or password', category: 'account',
+    summary: 'Update your login email or reset a forgotten password.',
+    tags: ['password', 'login', 'email', 'reset', 'forgot', 'sign in'], minutes: 1, updated: 'Aug 30, 2026', status: 'Published',
+    views: 812, helpful: [80, 12],
+    actions: [{ label: 'Email & password', attr: 'data-nav="settings" data-tab="security"' }],
+    body: `
+      <p><strong>Signed in?</strong> Go to <strong>Settings → Email &amp; Password</strong>.</p>
+      <p><strong>Locked out?</strong> On the sign-in screen click <strong>Forgot password</strong> — we'll email you a reset link.</p>` },
+
+  { slug: 'report-bug', title: 'Reporting a bug', category: 'account',
+    summary: 'Spotted something broken? Send us a screenshot and details.',
+    tags: ['bug', 'broken', 'error', 'not working', 'screenshot'], minutes: 1, updated: 'Jul 30, 2026', status: 'Draft',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'Report a bug', attr: 'data-modal="bug"' }],
+    body: `<p>Click <strong>Report a bug</strong> (bottom right of every page). We capture a screenshot you can annotate — add what you expected to happen and submit.</p>` },
+];

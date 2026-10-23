@@ -35,7 +35,7 @@
     const who = {
       message: a.by === 'team' ? `${a.author} replied` : first ? 'Ticket opened' : 'Member replied',
       'followup-request': 'Follow-up requested', 'followup-update': 'Follow-up posted',
-      'lender-response': 'Lender response logged', status: `Status → ${a.text}`,
+      'lender-response': a.via ? `Lender responded (${a.via})` : 'Lender responded', 'lender-reminder': 'Reminder sent to lender', status: `Status → ${a.text}`,
       submitted: 'Submitted', delivered: 'Delivered', note: 'Internal note',
     }[a.kind] || '';
     return `<div>${esc(who)}</div><div class="t-sub">${fmt.ago(a.at)}</div>`;
@@ -142,7 +142,7 @@
     reply:    { ph: 'Write a reply to the member — they can respond in the portal…', btns: [['send', 'Send reply', 'btn-primary'], ['send-resolve', 'Send & resolve', 'btn-outline']],
                 hint: 'Sets the ticket to Responded. The member is notified.' },
     lender:   { ph: "Paste or summarize the lender's response (from email, phone, etc.)…", btns: [['lender', 'Log response', 'btn-primary']],
-                hint: 'Lenders rarely update the portal — log what they told you. Visible to the member; sets status to Responded.' },
+                hint: 'For responses that reach us outside the lender email (phone, direct email). Email replies and one-click updates are captured automatically.' },
     followup: { ph: 'What did the lender say? This update is posted for the member…', btns: [['followup', 'Post update & close follow-up', 'btn-primary']],
                 hint: 'Visible to the member. Closes the open follow-up request.' },
     note:     { ph: 'Add a note for the team — not visible to the member…', btns: [['note', 'Add note', 'btn-navy']],
@@ -185,6 +185,25 @@
             <p class="t-sub">${n ? `${n} requested so far · none open.` : 'The member hasn\'t requested a follow-up.'}</p></div>`;
     }
 
+    let lenderCard = '';
+    if (r.type === 'escalation') {
+      const c = S.lenderContact(r.partner);
+      const sends = r.activity.filter((a) => a.kind === 'delivered' || a.kind === 'lender-reminder');
+      const lastSend = sends.length ? sends.sort(S.byAt)[sends.length - 1].at : r.createdAt;
+      const heard = r.activity.some((a) => a.kind === 'lender-response');
+      lenderCard = `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Lender contact</h3>
+        <div class="rq-kv"><span class="k">Escalation inbox</span><span class="v">${esc(c.inbox)}</span></div>
+        ${c.backup ? `<div class="rq-kv"><span class="k">Backup</span><span class="v">${esc(c.backup)}</span></div>` : ''}
+        <div class="rq-kv"><span class="k">Reply address</span><span class="v rq-ref">${esc(S.replyAddress(r.id))}</span></div>
+        <div class="rq-kv"><span class="k">Emails sent</span><span class="v">${sends.length} · last ${fmt.ago(lastSend).toLowerCase()}</span></div>
+        <div class="rq-kv"><span class="k">Lender has responded</span><span class="v">${heard ? 'Yes' : 'Not yet'}</span></div>
+        <p class="t-sub" style="margin:10px 0 12px">Lenders reply to the email or click a status button — no login. Auto-reminder after ${c.reminderDays} business days without a response.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn btn-outline btn-sm" href="lender-email.html?esc=${encodeURIComponent(r.id)}" target="_blank" rel="noopener">Preview email</a>
+          ${r.status !== 'Resolved' ? '<button class="btn btn-outline btn-sm" data-arq-remind>Send reminder now</button>' : ''}
+        </div></div>`;
+    }
+
     const memberCard = `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Member</h3>
       <div class="rq-kv"><span class="k">Name</span><span class="v">${esc(r.member)}</span></div>
       <div class="rq-kv"><span class="k">Email</span><span class="v">${esc(r.email)}</span></div>
@@ -194,7 +213,7 @@
     const fields = Object.entries(r.fields).map(([k, v]) =>
       `<div class="rq-kv ${String(v).length > 40 ? 'block' : ''}"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join('');
     const fieldsCard = fields ? `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Submitted details</h3>${fields}</div>` : '';
-    return statusCard + assignCard + fuCard + memberCard + fieldsCard;
+    return statusCard + assignCard + fuCard + lenderCard + memberCard + fieldsCard;
   }
 
   function renderDetail() {
@@ -247,7 +266,7 @@
     switch (kind) {
       case 'send':         S.reply(r.id, 'team', ME, text, false); showToast(`Reply sent to ${r.member}.`); break;
       case 'send-resolve': S.reply(r.id, 'team', ME, text, true);  showToast(`Reply sent and ticket resolved.`); break;
-      case 'lender':       S.lenderResponse(r.id, text, ME);       showToast(`Lender response logged — ${r.member} can see it.`); break;
+      case 'lender':       S.lenderResponse(r.id, text, `logged by ${ME}`);       showToast(`Lender response logged — ${r.member} can see it.`); break;
       case 'followup':     S.completeFollowUp(r.id, text, ME); mode = null; showToast(`Follow-up update posted for ${r.member}.`); break;
       case 'note':         S.addNote(r.id, text, ME);              showToast('Internal note added.'); break;
     }
@@ -280,6 +299,13 @@
       return;
     }
     if ((m = e.target.closest('[data-arq-act]'))) { e.preventDefault(); act(m.dataset.arqAct); return; }
+    if (e.target.closest('[data-arq-remind]')) {
+      e.preventDefault();
+      const r = S.get(currentId);
+      S.remindLender(r.id, `sent by ${ME}`);
+      showToast(`Reminder emailed to ${S.lenderContact(r.partner).inbox}.`);
+      return;
+    }
     if ((m = e.target.closest('[data-arq-status]'))) {
       e.preventDefault();
       const r = S.get(currentId), s = m.dataset.arqStatus;

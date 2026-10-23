@@ -17,7 +17,7 @@
      Connection / Change AE : Delivered
    ============================================================ */
 (function () {
-  const KEY = 'amp-requests-v1';
+  const KEY = 'amp-requests-v2';   // bump when the seed shape changes
   const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: 'Elite' };
 
   const TYPES = {
@@ -27,6 +27,17 @@
     changeae:   { label: 'Change AE',         prefix: 'CAE', flow: ['Delivered'] },
   };
   const TEAM = ['AIME Team', 'Jordan Blake', 'Sofia Marin', 'Wes Carter'];
+
+  // Where each lender's escalations are emailed. Lenders never log in: they reply to that
+  // email or click a one-click status link in it. Admin-editable per lender in production.
+  const LENDER_CONTACTS = {
+    'United Wholesale Mortgage': { inbox: 'escalations@uwm.com', backup: 'Dana Whitaker — escalation desk lead' },
+    'EPM':                       { inbox: 'wholesale.escalations@epm.net', backup: 'Marcus Lee — wholesale ops' },
+    'Newrez Wholesale':          { inbox: 'tpo.escalations@newrez.com', backup: '' },
+    'Newrez':                    { inbox: 'tpo.escalations@newrez.com', backup: '' },
+    'Windsor Mortgage':          { inbox: 'escalate@windsormortgage.com', backup: 'Priya Shah — VP operations' },
+  };
+  const REMINDER_DAYS = 2;   // business days without a lender response before an automatic reminder
 
   /* ---------- seed data (timestamps relative to now so it always reads fresh) ---------- */
   const H = 3600e3, D = 24 * H;
@@ -45,6 +56,7 @@
       activity: [
         { at: t(4 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Escalation submitted.' },
         { at: t(4 * D - 2 * 60e3), kind: 'delivered', by: 'system', text: "Report delivered to United Wholesale Mortgage's escalation team." },
+        { at: t(2 * D), kind: 'lender-reminder', by: 'system', text: "Automatic reminder sent to United Wholesale Mortgage's escalation team (no response in 2 business days)." },
       ] });
     r.push({ id: 'ESC-1037', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'Newrez Wholesale', title: 'CD error — loan #100471552',
@@ -57,8 +69,8 @@
         { at: t(9 * D - 3 * 60e3), kind: 'delivered', by: 'system', text: "Report delivered to Newrez Wholesale's escalation team." },
         { at: t(7 * D), kind: 'followup-request', by: 'member', author: ME.name, text: 'No word yet and closing is close — can someone check in?' },
         { at: t(6 * D), kind: 'followup-update', by: 'team', author: 'Sofia Marin', text: "We reached Newrez's escalation desk — they've assigned a closer and expect to re-disclose within 48 hours." },
-        { at: t(5 * D), kind: 'lender-response', by: 'lender', author: 'Newrez escalations', text: 'Corrected CD issued this morning. Please have the borrower e-sign; we can close as scheduled.' },
-        { at: t(5 * D), kind: 'status', by: 'team', author: 'Sofia Marin', text: 'Responded' },
+        { at: t(5 * D), kind: 'lender-response', by: 'lender', author: 'Newrez Wholesale', via: 'email reply', text: 'Corrected CD issued this morning. Please have the borrower e-sign; we can close as scheduled.' },
+        { at: t(5 * D), kind: 'status', by: 'lender', author: 'Newrez Wholesale', text: 'Responded' },
       ] });
     r.push({ id: 'ESC-1021', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'EPM', title: 'UW conditions stalled — loan #100460318',
@@ -69,8 +81,8 @@
       activity: [
         { at: t(26 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Escalation submitted.' },
         { at: t(26 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to EPM's escalation team." },
-        { at: t(25 * D), kind: 'lender-response', by: 'lender', author: 'EPM escalations', text: 'Conditions reviewed and cleared. Clear to close issued.' },
-        { at: t(25 * D), kind: 'status', by: 'team', author: 'Jordan Blake', text: 'Responded' },
+        { at: t(25 * D), kind: 'lender-response', by: 'lender', author: 'EPM', via: 'one-click link', text: 'Conditions reviewed and cleared. Clear to close issued.' },
+        { at: t(25 * D), kind: 'status', by: 'lender', author: 'EPM', text: 'Responded' },
         { at: t(24 * D), kind: 'status', by: 'member', author: ME.name, text: 'Resolved' },
       ] });
     r.push({ id: 'TKT-2201', type: 'support', member: ME.name, email: ME.email, tier: ME.tier,
@@ -137,7 +149,9 @@
       followUp: { requestedAt: t(20 * H), note: "Still nothing from Windsor and the lock expires Friday. Please help!", status: 'open' },
       activity: [{ at: t(6 * D), kind: 'submitted', by: 'member', author: 'Carlos Diaz', text: 'Escalation submitted.' },
         { at: t(6 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to Windsor Mortgage's escalation team." },
-        { at: t(20 * H), kind: 'followup-request', by: 'member', author: 'Carlos Diaz', text: 'Still nothing from Windsor and the lock expires Friday. Please help!' }] });
+        { at: t(4 * D), kind: 'lender-reminder', by: 'system', text: "Automatic reminder sent to Windsor Mortgage's escalation team (no response in 2 business days)." },
+        { at: t(20 * H), kind: 'followup-request', by: 'member', author: 'Carlos Diaz', text: 'Still nothing from Windsor and the lock expires Friday. Please help!' },
+        { at: t(20 * H), kind: 'lender-reminder', by: 'system', text: "Reminder sent to Windsor Mortgage's escalation team (follow-up requested)." }] });
     other({ id: 'ESC-1035', type: 'escalation', member: 'Ahmed Sayed', email: 'ahmed@sayedmortgage.com', tier: 'Premium',
       partner: 'EPM', title: 'Appraisal review — loan #100460912', status: 'Received', createdAt: t(3 * D),
       fields: { 'Loan number': '100460912', 'Loan type': 'FHA', 'Loan amount': '$276,000', 'Closing date': 'Jul 8, 2026', Issue: 'Appraisal came in low; reconsideration of value submitted 5 days ago.' },
@@ -264,20 +278,48 @@
       if (by === 'team') { r.adminSeenAt = nowISO(); if (!r.assignee) r.assignee = author; } else r.memberSeenAt = nowISO();
       changed();
     },
-    // Escalation: the lender's reply, logged by the team (lenders rarely log in) → Responded
-    lenderResponse(id, text, author) {
+    // Escalation: a lender response → Responded. `via` says how it arrived:
+    //   'email reply'    — lender replied to the escalation email (captured from the reply address)
+    //   'one-click link' — lender used a status button in the email (no login)
+    //   'logged by X'    — the membership team entered it (phone call, email to AIME, etc.)
+    lenderResponse(id, text, via) {
       const r = find(id); if (!r || !text.trim()) return;
-      log(r, { kind: 'lender-response', by: 'lender', author: r.partner + ' (logged by ' + author + ')', text: text.trim() });
-      if (r.status === 'Received') { r.status = 'Responded'; log(r, { kind: 'status', by: 'team', author, text: 'Responded' }); }
+      log(r, { kind: 'lender-response', by: 'lender', author: r.partner, via, text: text.trim() });
+      if (r.status === 'Received') { r.status = 'Responded'; log(r, { kind: 'status', by: 'lender', author: r.partner, text: 'Responded' }); }
+      closeFollowUp(r);
       changed();
     },
+    // One-click link from the lender email: 'working' (We're on it) or 'resolved', optional note.
+    lenderAction(id, action, note) {
+      const r = find(id); if (!r) return;
+      const text = (note || '').trim() || (action === 'resolved'
+        ? 'Marked this escalation resolved.' : "We're on it — this escalation is being worked.");
+      log(r, { kind: 'lender-response', by: 'lender', author: r.partner, via: 'one-click link', text });
+      const next = action === 'resolved' ? 'Resolved' : (r.status === 'Received' ? 'Responded' : null);
+      if (next && r.status !== next) { r.status = next; log(r, { kind: 'status', by: 'lender', author: r.partner, text: next }); }
+      closeFollowUp(r);
+      changed();
+    },
+    // Re-send the escalation email to the lender (automatic, on member follow-up, or by the team).
+    remindLender(id, why) {
+      const r = find(id); if (!r) return;
+      log(r, { kind: 'lender-reminder', by: 'system', text: `Reminder sent to ${r.partner}'s escalation team${why ? ` (${why})` : ''}.` });
+      changed();
+    },
+    // Member follow-up: flags the membership team AND re-sends the email to the lender.
     requestFollowUp(id, note) {
       const r = find(id); if (!r || (r.followUp && r.followUp.status === 'open')) return;
       r.followUp = { requestedAt: nowISO(), note: note || '', status: 'open' };
       log(r, { kind: 'followup-request', by: 'member', author: r.member, text: note || '' });
+      log(r, { kind: 'lender-reminder', by: 'system', text: `Reminder sent to ${r.partner}'s escalation team (follow-up requested).` });
       r.memberSeenAt = nowISO();
       changed();
     },
+    lenderContact: (name) => Object.assign({ reminderDays: REMINDER_DAYS },
+      LENDER_CONTACTS[name] || { inbox: 'escalations@' + name.toLowerCase().split(' ')[0].replace(/[^a-z]/g, '') + '.com', backup: '' }),
+    replyAddress: (id) => id.toLowerCase() + '@replies.aimegroup.com',
+    // Prototype link. Production: a signed, expiring token scoped to this one escalation.
+    lenderLink: (id, action) => `lender-respond.html?esc=${encodeURIComponent(id)}&action=${action}`,
     completeFollowUp(id, text, author) {
       const r = find(id); if (!r || !r.followUp) return;
       r.followUp.status = 'done'; r.followUp.doneAt = nowISO();
@@ -289,6 +331,10 @@
     assign(id, who) { const r = find(id); if (!r) return; r.assignee = who; changed(); },
     reset() { items = seed(); markAllSeen(); changed(); },
   };
+  // The lender answering is what a member follow-up was waiting for, so it closes the request.
+  function closeFollowUp(r) {
+    if (r.followUp && r.followUp.status === 'open') { r.followUp.status = 'done'; r.followUp.doneAt = nowISO(); }
+  }
   function lastMsgBy(r) {
     const msgs = r.activity.filter((a) => a.kind === 'message');
     return msgs.length ? msgs.sort(byAt)[msgs.length - 1].by : null;
@@ -361,7 +407,8 @@
         case 'submitted': ico = ICON.send; title = you(a) ? `You submitted this ${label}` : `${esc(a.author)} submitted this ${label}`; text = ''; break;
         case 'delivered': ico = ICON.check; title = esc(a.text); text = ''; break;
         case 'status': cls = 'minor'; title = `Status changed to <strong>${esc(a.text)}</strong>` + (a.author ? ` by ${you(a) ? 'you' : esc(a.author)}` : ''); text = ''; break;
-        case 'lender-response': cls = 'lender'; ico = ICON.reply; title = `Response from ${esc(a.author)}`; break;
+        case 'lender-response': cls = 'lender'; ico = ICON.reply; title = `Response from ${esc(a.author)}` + (a.via ? ` <span style="font-weight:500;color:var(--muted)">· via ${esc(a.via)}</span>` : ''); break;
+        case 'lender-reminder': cls = 'minor'; ico = ICON.send; title = esc(a.text); text = ''; break;
         case 'followup-request': cls = 'followup'; ico = ICON.flag; title = you(a) ? 'You requested a follow-up' : `${esc(a.author)} requested a follow-up`; break;
         case 'followup-update': cls = 'team'; ico = ICON.reply; title = `AIME membership team followed up — ${esc(a.author)}`; break;
         case 'message': cls = a.by === 'team' ? 'team' : ''; ico = ICON.support; title = a.by === 'team' ? `${esc(a.author)} (AIME team) replied` : you(a) ? 'You replied' : `${esc(a.author)} replied`; break;

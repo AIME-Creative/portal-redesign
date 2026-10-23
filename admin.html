@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="admin.css">
 <link rel="stylesheet" href="requests.css">
+<link rel="stylesheet" href="help.css">
 </head>
 <body>
 <div class="app">
@@ -114,6 +115,10 @@
       <button class="nav-item" data-nav="taxonomy">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-6.2-6.2A2 2 0 014 13V6a2 2 0 012-2h7a2 2 0 011.4.6l6.2 6.2a2 2 0 010 2.6z"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>
         Categories &amp; tags
+      </button>
+      <button class="nav-item" data-nav="help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3M12 17h0"/></svg>
+        Help Center
       </button>
 
       <div class="nav-label">Access</div>
@@ -379,6 +384,45 @@
         <div style="margin-top:14px;text-align:right"><button class="rq-reset" id="arq-reset" title="Prototype only — restores the sample requests">Reset demo request data</button></div>
       </section>
       <section class="view" id="view-request-detail"><div id="arq-detail-body"></div></section>
+
+      <!-- ============ HELP CENTER (rendered by admin-help.js) ============ -->
+      <section class="view" id="view-help">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Help Center</h1><p>Guides members see in the Help Center, what they search for and don't find, and how the first-time walkthrough is doing.</p></div>
+          <button class="btn btn-primary" data-kb-new="">+ New article</button>
+        </div>
+        <div class="stat-row admin4" id="kb-stats"></div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="kb-admin-q" placeholder="Search articles…"></div>
+          <select class="select filter-select" id="kb-admin-cat"></select>
+          <select class="select filter-select" id="kb-admin-status"><option value="all">All statuses</option><option>Published</option><option>Draft</option></select>
+          <span class="spacer"></span>
+          <span class="count-note" id="kb-count">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>Article</th><th>Topic</th><th>Status</th><th>Views</th><th>Helpful</th><th>Updated</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="kb-tbody"></tbody>
+        </table></div></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;margin-top:24px">
+          <div class="card card-pad">
+            <h3 style="font-size:16px;margin-bottom:4px">Searches with no results</h3>
+            <p class="t-sub" style="margin:0 0 10px">What members looked for and didn't find — candidates for new guides.</p>
+            <div id="kb-misses"></div>
+          </div>
+          <div class="card card-pad">
+            <h3 style="font-size:16px;margin-bottom:4px">First-time walkthrough</h3>
+            <p class="t-sub" style="margin:0 0 16px">New members in the last 30 days (sample data). Members can replay it from the ? menu, the Help Center, or Settings.</p>
+            <div class="kb-funnel">
+              <div class="fr"><span>Shown</span><span class="bar"><i style="width:100%"></i></span><b>412</b></div>
+              <div class="fr"><span>Started tour</span><span class="bar"><i style="width:77%"></i></span><b>318</b></div>
+              <div class="fr"><span>Finished</span><span class="bar"><i style="width:49%;background:var(--green)"></i></span><b>201</b></div>
+              <div class="fr"><span>Skipped</span><span class="bar"><i style="width:28%;background:var(--pink)"></i></span><b>117</b></div>
+              <div class="fr"><span>Replayed later</span><span class="bar"><i style="width:9%;background:var(--navy)"></i></span><b>38</b></div>
+            </div>
+            <p class="t-sub" style="margin:14px 0 0">Most common skip point: <strong>step 4 · Your escalations</strong>.</p>
+          </div>
+        </div>
+      </section>
 
       <!-- ============ ANALYTICS ============ -->
       <section class="view" id="view-analytics">
@@ -785,6 +829,18 @@
   </div>
 </div>
 
+<!-- ===================== HELP ARTICLE EDITOR ===================== -->
+<div class="modal-overlay" id="modal-kb-edit">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-head">
+      <div><h2 id="kb-edit-title">Edit article</h2><p id="kb-edit-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="kb-edit-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="kbe-save">Save article</button></div>
+  </div>
+</div>
+
 <!-- ===================== REQUEST DETAIL MODAL ===================== -->
 <div class="modal-overlay" id="modal-request">
   <div class="modal">
@@ -816,6 +872,8 @@
 <script src="requests-store.js"></script>
 <script src="admin.js"></script>
 <script src="admin-requests.js"></script>
+<script src="help-articles.js"></script>
+<script src="admin-help.js"></script>
 <!-- review-only: member/admin toggle — remove before launch -->
 <script src="review-toggle.js"></script>
 </body>

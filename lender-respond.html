@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Escalation — AIME</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="requests.css">
+</head>
+<body class="lender-page" data-page="respond">
+<!-- One-click page a lender lands on from the escalation email. No login: in production the link
+     carries a signed, expiring token for this one escalation. Rendered by lender.js. -->
+<div class="lp-wrap">
+  <div class="lp-card">
+    <div class="lp-band"><img src="assets/AMP-Logo.png" alt="AMP — AIME Member Portal"></div>
+    <div class="lp-body" id="lr-body"></div>
+  </div>
+  <p class="lp-foot">No login needed — this secure link only works for this one escalation.<br>Questions? <a href="mailto:partners@aimegroup.com">partners@aimegroup.com</a></p>
+</div>
+<script src="requests-store.js"></script>
+<script src="lender.js"></script>
+</body>
+</html>

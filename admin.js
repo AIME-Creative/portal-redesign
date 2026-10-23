@@ -91,7 +91,7 @@ const hubs = [
   { name:"VIP",               kind:"Mixed",    access:["VIP"],         items:2, docs:2, status:"Active" },
   { name:"WMN",               kind:"Mixed",    access:["All Members"], items:2, docs:2, status:"Active" },
 ];
-const exchangeUrl = "https://www.aimegroup.com/";
+const exchangeUrl = "http://theaimeexchange.com/";
 // source = "General" or a hub name; access controls tier-gating on the member Documents page.
 const documents = [
   { title:"AIME Member Handbook",            source:"General",           access:"All members", added:"Jun 1, 2026",  status:"Active" },
@@ -1101,7 +1101,12 @@ function openEdit(ref){
     body = `
       <div class="field-row">${field('Lender name', l.name)}${field('Logo abbreviation', l.short)}</div>
       <div class="field-row">${selectField('Tier', ['Gold','Silver','Bronze'], l.tier)}${selectField('Status', ['Active','Draft'], l.status)}</div>
-      ${tagPicker('Product types', taxonomies.lenderProducts, l.products)}`;
+      ${tagPicker('Product types', taxonomies.lenderProducts, l.products)}
+      <div class="form-section-label" style="margin-top:18px">Escalation contact</div>
+      <p style="color:var(--muted);font-size:12.5px;margin:-4px 0 12px">Escalations are emailed here. The lender replies to the email or clicks a status button — no portal login.</p>
+      ${(() => { const c = (window.AmpRequests && !isNew) ? AmpRequests.lenderContact(l.name) : { inbox:'', backup:'', reminderDays:2 };
+        return `<div class="field-row">${field('Escalation inbox', c.inbox, 'placeholder="escalations@lender.com"')}${field('Backup contact', c.backup, 'placeholder="Name — role (optional)"')}</div>
+      ${selectField('Remind the lender if no response after', ['1 business day','2 business days','3 business days','Never'], c.reminderDays + ' business days')}`; })()}`;
   } else if(type==='vendor'){
     const v = isNew ? {name:'',short:'',cat:taxonomies.vendorCategories[0],offer:'',status:'Active'} : vendors[idx];
     title = isNew ? 'Add vendor' : 'Edit vendor'; sub = isNew?'Add a Market vendor partner.':v.name;

@@ -123,8 +123,9 @@
           <button class="btn btn-outline btn-sm" data-rq-followup="${r.id}">Request a follow-up</button>
         </div></div>`;
     }
+    const reminded = r.activity.some((a) => a.kind === 'lender-reminder');
     return `<div class="rq-fu"><h3>No update from the lender?</h3>
-      <p>Lenders don't always respond in the portal. Ask the AIME membership team to follow up with ${esc(r.partner)} on your behalf.${lastDone}</p>
+      <p>We emailed ${esc(r.partner)}'s escalation team${reminded ? ' and sent them a reminder' : ''}. Still no word? Ask the AIME membership team to follow up — we'll remind the lender and chase their escalation desk for you.${lastDone}</p>
       <button class="btn btn-primary btn-sm" data-rq-followup="${r.id}">Request a follow-up</button></div>`;
   }
 

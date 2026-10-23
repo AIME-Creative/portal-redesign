@@ -6,6 +6,7 @@
 <title>AMP Member Portal — Redesign Prototype</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="requests.css">
+<link rel="stylesheet" href="help.css">
 </head>
 <body>
 <div class="app">
@@ -81,7 +82,7 @@
       </button>
 
       <div class="nav-label">Store</div>
-      <a class="nav-item" href="https://www.aimegroup.com/" target="_blank" rel="noopener" title="Opens the AIME Exchange store in a new tab">
+      <a class="nav-item" href="http://theaimeexchange.com/" target="_blank" rel="noopener" title="Opens the AIME Exchange store in a new tab">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 13h6"/></svg>
         AIME Exchange
         <span class="nav-badge ext">↗</span>
@@ -92,6 +93,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12h6M9 16h4"/></svg>
         My Requests
         <span class="rq-nav-count" id="rq-nav-count" title="Requests with new updates"></span>
+      </button>
+      <button class="nav-item" data-nav="help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3M12 17h0"/></svg>
+        Help Center
       </button>
       <button class="nav-item" data-nav="support">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v-3a8 8 0 0116 0v3M4 14a2 2 0 002 2h0v-5H6a2 2 0 00-2 2zM20 14a2 2 0 01-2 2h0v-5h0a2 2 0 012 2zM18 16v1a3 3 0 01-3 3h-3"/></svg>
@@ -136,6 +141,15 @@
           <span class="esc-count">5</span><span class="esc-label">escalations left</span>
           <span class="esc-plus">+</span>
         </button>
+        <div class="help-wrap">
+          <button class="icon-btn" id="help-btn" title="Help" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3M12 17h0"/></svg></button>
+          <div class="help-menu" id="help-menu" role="menu">
+            <button role="menuitem" data-nav="help"><strong>Help Center</strong><span>Step-by-step guides</span></button>
+            <button role="menuitem" data-tour-start><strong>Take the walkthrough</strong><span>A one-minute tour of the portal</span></button>
+            <button role="menuitem" data-nav="support"><strong>Contact support</strong><span>Open a ticket — we reply here</span></button>
+            <button role="menuitem" data-modal="bug"><strong>Report a bug</strong><span>Something broken? Tell us</span></button>
+          </div>
+        </div>
         <div class="notif-wrap">
           <button class="icon-btn" title="Notifications" data-action="notifications"><span class="dot"></span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
@@ -382,9 +396,19 @@
       </section>
       <section class="view" id="view-request-detail"><div id="rq-detail-body"></div></section>
 
+      <!-- ============ HELP CENTER (rendered by help-center.js) ============ -->
+      <section class="view" id="view-help"><div id="help-body"></div></section>
+      <section class="view" id="view-help-article"><div id="help-article-body"></div></section>
+
       <!-- ============ SETTINGS ============ -->
       <section class="view" id="view-settings">
-        <div class="page-head"><h1>Settings</h1><p>Manage your account, security, and membership.</p></div>
+        <div class="page-head page-head-row">
+          <div><h1>Settings</h1><p>Manage your account, security, and membership.</p></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" data-nav="help">Help Center</button>
+            <button class="btn btn-outline btn-sm" data-tour-start>Replay walkthrough</button>
+          </div>
+        </div>
         <div class="tabs" id="settings-tabs">
           <button class="tab active" data-tab="profile">Profile</button>
           <button class="tab" data-tab="security">Email &amp; Password</button>
@@ -647,7 +671,7 @@
       <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Lenders don't always update the portal. When you request a follow-up, our team reaches out to the lender's escalation desk directly and posts what they hear back on this escalation.</p></div>
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>We'll re-send your escalation to the lender, and our membership team will reach out to their escalation desk directly and post what they hear back on this escalation.</p></div>
       <div class="field"><label>Anything we should know? <span style="color:var(--muted);font-weight:500">(optional)</span></label><textarea class="input" id="fu-note" placeholder="e.g. Closing is Friday and the rate lock expires Thursday."></textarea></div>
     </div>
     <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="fu-submit">Request follow-up</button></div>
@@ -832,6 +856,10 @@
 <script src="requests-store.js"></script>
 <script src="app.js"></script>
 <script src="my-requests.js"></script>
+<script src="help-articles.js"></script>
+<script src="help-center.js"></script>
+<!-- first-time walkthrough — replay from the ? menu, Help Center, or Settings -->
+<script src="walkthrough.js"></script>
 <!-- events calendar add-on (preview) — remove this line + events-schedule.js to drop it -->
 <script src="events-schedule.js"></script>
 <!-- review-only: member/admin toggle — remove before launch -->

@@ -553,6 +553,7 @@ function navigate(view){
     (view==='resource-detail'&&n.dataset.nav==='resources') ||
     (view==='event-detail'&&n.dataset.nav==='events') ||
     (view==='request-detail'&&n.dataset.nav==='requests') ||
+    (view==='help-article'&&n.dataset.nav==='help') ||
     (view==='hub-detail'&&n.dataset.nav===currentHub);
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
