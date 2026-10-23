@@ -192,13 +192,18 @@
     body.innerHTML = header(r) + main;
   }
 
-  function openDetail(id) {
+  // `preview` (used by the walkthrough) shows a request without marking its updates as read.
+  function openDetail(id, preview) {
     currentId = id;
-    S.markSeen(id, 'member');
+    if (!preview) S.markSeen(id, 'member');
     renderDetail();
     navigate('request-detail');
     renderAll();
   }
+  window.AmpMyRequests = {
+    preview: (id) => openDetail(id, true),
+    showList: (f) => { filter = f || 'all'; renderList(); navigate('requests'); },
+  };
 
   function renderAll() {
     renderList(); renderRecentTickets(); renderNavCount();

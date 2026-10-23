@@ -1,0 +1,48 @@
+/* ============================================================
+   Subscription changes — admin Reports → Subscriptions, and the
+   member "Cancel membership" form. Builds on styles.css tokens.
+   ============================================================ */
+
+/* ---------- admin: summary tiles ---------- */
+.sub-tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:22px; }
+.sub-tile { display:flex; align-items:center; justify-content:space-between; text-align:left; padding:18px 20px; border-radius:var(--radius); border:1.5px solid; transition:.15s; }
+.sub-tile:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+.sub-tile .st-lbl { font-size:13.5px; font-weight:600; }
+.sub-tile .st-val { font-size:28px; font-weight:800; line-height:1.15; margin-top:4px; }
+.sub-tile svg { width:28px; height:28px; }
+.sub-tile.up     { background:#effbf4; border-color:#bfe7d0; color:#15803d; }
+.sub-tile.down   { background:#fff7ec; border-color:#f6d3a4; color:#c2410c; }
+.sub-tile.cancel { background:#fdf0f1; border-color:#f4c4c9; color:#dc2626; }
+.sub-tile.active { box-shadow:0 0 0 3px currentColor inset; }
+
+/* ---------- admin: type badge ---------- */
+.sub-type { display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:20px; }
+.sub-type.up     { background:#dcf5e6; color:#15803d; }
+.sub-type.down   { background:#ffedd5; color:#c2410c; }
+.sub-type.cancel { background:#fde2e4; color:#b91c1c; }
+
+/* ---------- admin: cancellation reasons ---------- */
+.sub-reason-row { display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:7px 8px; border-radius:9px; font-size:13.5px; }
+.sub-reason-row:hover { background:var(--surface-alt); }
+.sub-reason-row.active { background:#fdf0f1; }
+.sr-lbl { width:280px; flex:0 0 280px; color:var(--ink); }
+.sr-bar { flex:1; height:10px; border-radius:6px; background:var(--line-soft); overflow:hidden; }
+.sr-bar i { display:block; height:100%; border-radius:6px; background:#ef6b78; }
+.sr-n { width:34px; text-align:right; font-weight:700; color:var(--ink); }
+.sr-pct { width:42px; text-align:right; color:var(--muted); }
+.sub-show { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); font-weight:600; }
+
+/* ---------- member: cancel form ---------- */
+.cancel-reasons { display:grid; gap:8px; margin:6px 0 4px; }
+.cancel-reasons label { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1.5px solid var(--line); border-radius:12px; cursor:pointer; font-size:14px; color:var(--ink); transition:.15s; margin:0; font-weight:500; }
+.cancel-reasons label:hover { border-color:var(--cyan); }
+.cancel-reasons input { width:18px; height:18px; accent-color:var(--pink); flex:0 0 18px; margin:0; }
+.cancel-reasons label:has(input:checked) { border-color:var(--navy); background:#f4f6fc; }
+.cancel-offer { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; background:var(--surface-alt); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-top:16px; font-size:13.5px; color:var(--ink-soft); }
+.link-muted { color:var(--muted); font-weight:600; font-size:13px; text-decoration:underline; }
+.link-muted:hover { color:var(--red); }
+
+@media (max-width:860px){
+  .sub-tiles { grid-template-columns:1fr; }
+  .sr-lbl { width:auto; flex:1 1 140px; }
+}

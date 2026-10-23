@@ -16,7 +16,7 @@
    ============================================================ */
 window.HELP_CATEGORIES = {
   start:       { name: 'Getting started',          ico: '<path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>', desc: 'Find your way around the portal.' },
-  escalations: { name: 'Loan escalations',          ico: '<path d="M12 9v4M12 17h0M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/>', desc: 'Escalate a loan, track it, follow up.' },
+  escalations: { name: 'Loan escalations',          ico: '<path d="M12 9v4M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/>', desc: 'Escalate a loan, track it, follow up.' },
   lenders:     { name: 'Lenders & connections',     ico: '<path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/>', desc: 'Connect with lenders, change your AE.' },
   market:      { name: 'Market & vendors',          ico: '<path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/>', desc: 'Member discounts and vendor intros.' },
   learning:    { name: 'Resources & hubs',          ico: '<path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/>', desc: 'Trainings, hubs, and documents.' },
@@ -41,6 +41,7 @@ window.HELP_ARTICLES = [
         <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more.</li>
         <li><strong>My Requests</strong> — every escalation, connection, AE change, and support ticket you've submitted, with its status.</li>
       </ul>
+      <p>The guided walkthrough also shows you, step by step, how to fill in an escalation and where replies to your requests appear.</p>
       <div class="kb-tip"><strong>Tip:</strong> You can replay the guided walkthrough any time from the <strong>?</strong> menu in the top bar or from this Help Center.</div>` },
 
   { slug: 'mobile', title: 'Using the portal on your phone', category: 'start',

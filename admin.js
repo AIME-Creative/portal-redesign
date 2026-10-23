@@ -139,7 +139,7 @@ const totalMembers = 2847;
 
 /* ---------- Requests & submissions ---------- */
 const reqTypeMeta = {
-  "Escalation":        { ico:'<path d="M12 9v4M12 17h0M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/>', cls:"i-pink" },
+  "Escalation":        { ico:'<path d="M12 9v4M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/>', cls:"i-pink" },
   "Lender connection": { ico:'<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/>', cls:"i-cyan" },
   "Change AE":         { ico:'<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/>', cls:"i-navy" },
   "Support":           { ico:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', cls:"i-cyan" },
@@ -180,6 +180,58 @@ const connectionRecords = [
   { member:"Maria Chen", partner:"The CORE Training", kind:"Vendor", date:"Jun 9, 2026", status:"Delivered" },
   { member:"Beth Coleman", partner:"EPM", kind:"Lender", date:"Jun 6, 2026", status:"Delivered" },
 ];
+const changeAERecords = [
+  { member:"Tom Becker", lender:"United Wholesale Mortgage", ae:"Dana Price", reason:"Poor communication", date:"Jun 24, 2026", status:"Delivered" },
+  { member:"Kyle Lord", lender:"United Wholesale Mortgage", ae:"Brett Hollis", reason:"Unresponsive", date:"Jun 13, 2026", status:"Delivered" },
+  { member:"Priya Nair", lender:"EPM", ae:"Grant Ellis", reason:"Relocated / no longer my market", date:"Jun 11, 2026", status:"Delivered" },
+  { member:"Carlos Diaz", lender:"Newrez Wholesale", ae:"Mia Torres", reason:"Unresponsive", date:"Jun 6, 2026", status:"Delivered" },
+  { member:"Janet Park", lender:"Windsor Mortgage", ae:"Ray Quinn", reason:"Poor communication", date:"May 29, 2026", status:"Delivered" },
+  { member:"Sam Whitfield", lender:"United Wholesale Mortgage", ae:"Dana Price", reason:"Unresponsive", date:"May 21, 2026", status:"Delivered" },
+  { member:"Rachel Stone", lender:"Kind Lending", ae:"Owen Pike", reason:"Other", date:"May 12, 2026", status:"Delivered" },
+  { member:"Ahmed Sayed", lender:"EPM", ae:"Grant Ellis", reason:"Unresponsive", date:"Apr 30, 2026", status:"Delivered" },
+  { member:"Darnell Ross", lender:"Rocket Pro TPO", ae:"Lena Moss", reason:"Poor communication", date:"Apr 18, 2026", status:"Delivered" },
+];
+
+/* Subscription conversions (Reports → Subscriptions). Sample history generated
+   deterministically back from TODAY; member-side cancellations (subscriptions-shared.js)
+   are added on top. Production: Stripe subscription webhooks + cancel_reason. */
+const TIER_RANK_ADMIN = { Premium:1, Elite:2, VIP:3 };
+let sampleSubs = null;   // built on first use — TODAY is declared further down
+function sampleSubscriptionEvents(){
+  if(sampleSubs) return sampleSubs;
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const pick = (a) => a[Math.floor(rnd() * a.length)];
+  const first = ["John","Aron","Margaret","Troy","Jerrold","Ryan","Craig","Solymar","Angela","Sasha","Travis","Kenneth","Dana","Luis","Monica","Derek","Hannah","Marcus","Teresa","Brandon","Keisha","Victor","Lauren","Omar","Grace","Wesley","Nina","Calvin","Paula","Reggie"];
+  const last = ["Menke","Padierna","Brown","Molitor","Smith","Jacobs","Messman","Gonzalez","Scurry","Luger","Vickers","Davis","Whitley","Ortega","Hale","Fischer","Yoon","Bell","Navarro","Cole","Grant","Ibarra","Ford","Haddad","Kim","Pruitt","Lowe","Reyes","Sutton","Banks"];
+  const domains = ["ratetrac.com","lockitlending.com","communitylenders.com","molitorfinancial.com","gmail.com","jacobsmortgageadvisors.com","guaranteedcorp.com","pinnpropdata.com","southwestern.com","homequestmtg.com"];
+  const notes = { "Too expensive":["Can't justify it in a slow market.","Cutting costs this quarter.",""], "Not using it enough":["Only used it once or twice.",""],
+    "Other":["Merging with another brokerage.","Taking a break for a few months."] };
+  const out = [];
+  for(let k = 0; k < 110; k++){
+    const daysAgo = Math.floor(rnd() * 150), r = rnd();
+    const type = r < 0.14 ? 'upgrade' : r < 0.21 ? 'downgrade' : 'cancellation';
+    const fn = pick(first), ln = pick(last);
+    let from, to;
+    if(type === 'upgrade'){ from = pick(['Premium','Premium','Elite']); to = from === 'Premium' ? pick(['Elite','Elite','VIP']) : 'VIP'; }
+    else if(type === 'downgrade'){ from = pick(['Elite','VIP']); to = from === 'VIP' ? pick(['Elite','Premium']) : 'Premium'; }
+    else { from = pick(['Premium','Premium','Premium','Elite','Elite','VIP']); to = 'Canceled'; }
+    const ev = { name:`${fn} ${ln}`, email:`${fn.toLowerCase()}${rnd() < .5 ? '' : '.' + ln[0].toLowerCase()}@${pick(domains)}`, type, from, to,
+      date: new Date(TODAY.getTime() - daysAgo * 86400000) };
+    if(type === 'cancellation'){
+      const w = rnd();
+      ev.reason = CANCEL_REASONS[w < .32 ? 0 : w < .55 ? 1 : w < .68 ? 2 : w < .78 ? 3 : w < .87 ? 4 : w < .93 ? 5 : 6];
+      ev.detail = notes[ev.reason] ? pick(notes[ev.reason]) : '';
+    }
+    out.push(ev);
+  }
+  return sampleSubs = out;
+}
+function allSubscriptionEvents(){
+  // Cancellations made in the member prototype count as "today" in this June-anchored admin.
+  const live = (window.AmpSubEvents ? AmpSubEvents.all() : []).map(e => Object.assign({}, e, { date: TODAY, live: true }));
+  return [...live, ...sampleSubscriptionEvents()].sort((a, b) => b.date - a.date);
+}
 
 /* ---------- FUSE registrations ---------- */
 const fuseTicketTypes = ["General Admission","GA Plus","VIP"];
@@ -1006,15 +1058,22 @@ function renderDashboard(){
    lender or vendor) — own date range, defaults to All time
    ============================================================ */
 let reportType = 'escalations';
+const fmtDate = (d) => d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 function reportPartnerOptions(){
-  if(reportType==='escalations') return lenders.map(l=>l.name);
-  return [...lenders.map(l=>l.name), ...vendors.map(v=>v.name)];
+  if(reportType==='connections') return [...lenders.map(l=>l.name), ...vendors.map(v=>v.name)];
+  return lenders.map(l=>l.name);
 }
 function renderReportPartners(){
   const sel = $('report-partner'); if(!sel) return;
-  const label = reportType==='escalations' ? 'All lenders' : 'All partners';
+  const label = reportType==='connections' ? 'All partners' : 'All lenders';
   sel.innerHTML = `<option value="all">${label}</option>` + reportPartnerOptions().map(p=>`<option>${p}</option>`).join('');
+  const subs = reportType==='subscriptions';
+  sel.hidden = subs;
+  document.querySelectorAll('#view-reports .sub-only').forEach(el => el.hidden = !subs);
+  $('sub-report').hidden = !subs;
+  if(subs) $('sub-reason').hidden = $('sub-type').value !== 'cancellation';
 }
+const emptyRow = (cols, msg) => `<tr><td colspan="${cols}" style="text-align:center;color:var(--muted);padding:28px">${msg}</td></tr>`;
 function renderReports(){
   const sel = $('report-partner'); if(!sel) return;
   const partner = sel.value;
@@ -1023,15 +1082,66 @@ function renderReports(){
     const rows = escalationRecords.filter(r=>(partner==='all'||r.lender===partner) && inWindow('reports', r.date));
     t.innerHTML = '<thead><tr><th>Member</th><th>Lender</th><th>Loan #</th><th>Submitted</th><th>Status</th></tr></thead><tbody>'+
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.lender}</td><td>#${r.loan}</td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
-        : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No escalations for this lender in the selected range.</td></tr>')+'</tbody>';
+        : emptyRow(5, 'No escalations for this lender in the selected range.'))+'</tbody>';
     $('report-count').textContent = `${rows.length} escalation${rows.length===1?'':'s'} · ${ranges.reports.label}`;
-  } else {
+  } else if(reportType==='connections'){
     const rows = connectionRecords.filter(r=>(partner==='all'||r.partner===partner) && inWindow('reports', r.date));
     t.innerHTML = '<thead><tr><th>Member</th><th>Partner</th><th>Type</th><th>Requested</th><th>Status</th></tr></thead><tbody>'+
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.partner}</td><td><span class="badge ${r.kind==='Lender'?'badge-navy':'badge-cyan'}">${r.kind}</span></td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
-        : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No connections for this partner in the selected range.</td></tr>')+'</tbody>';
+        : emptyRow(5, 'No connections for this partner in the selected range.'))+'</tbody>';
     $('report-count').textContent = `${rows.length} connection${rows.length===1?'':'s'} · ${ranges.reports.label}`;
+  } else if(reportType==='changeae'){
+    const rows = changeAERecords.filter(r=>(partner==='all'||r.lender===partner) && inWindow('reports', r.date));
+    t.innerHTML = '<thead><tr><th>Member</th><th>Lender</th><th>Current AE</th><th>Reason</th><th>Requested</th><th>Status</th></tr></thead><tbody>'+
+      (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.lender}</td><td>${r.ae}</td><td>${r.reason}</td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
+        : emptyRow(6, 'No AE change requests for this lender in the selected range.'))+'</tbody>';
+    $('report-count').textContent = `${rows.length} AE change request${rows.length===1?'':'s'} · ${ranges.reports.label}`;
+  } else {
+    renderSubscriptionReport();
   }
+}
+
+const SUB_META = {
+  upgrade:      { label:'Upgrades',      cls:'up',   ico:'<path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>' },
+  downgrade:    { label:'Downgrades',    cls:'down', ico:'<path d="M23 18l-9.5-9.5-5 5L1 6"/><path d="M17 18h6v-6"/>' },
+  cancellation: { label:'Cancellations', cls:'cancel', ico:'<circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>' },
+};
+function renderSubscriptionReport(){
+  const inRange = allSubscriptionEvents().filter(e => inWindow('reports', e.date));
+  const type = $('sub-type').value, reason = $('sub-reason').value, show = +$('sub-show').value;
+  // Tiles (always the whole range; click one to filter the table)
+  $('sub-tiles').innerHTML = Object.entries(SUB_META).map(([k, m]) => {
+    const n = inRange.filter(e => e.type === k).length;
+    return `<button class="sub-tile ${m.cls} ${type===k?'active':''}" data-sub-type="${k}">
+      <div><div class="st-lbl">${m.label}</div><div class="st-val">${n}</div></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${m.ico}</svg></button>`;
+  }).join('');
+  // Cancellation reasons breakdown
+  const cancels = inRange.filter(e => e.type === 'cancellation');
+  const counts = CANCEL_REASONS.map(r => ({ r, n: cancels.filter(e => e.reason === r).length })).filter(x => x.n).sort((a, b) => b.n - a.n);
+  const max = counts.length ? counts[0].n : 1;
+  $('sub-reasons-card').hidden = !cancels.length;
+  $('sub-reasons-note').textContent = `${cancels.length} cancellation${cancels.length===1?'':'s'} · ${ranges.reports.label}`;
+  $('sub-reasons').innerHTML = counts.map(x => `<button class="sub-reason-row ${reason===x.r?'active':''}" data-sub-reason="${x.r}">
+      <span class="sr-lbl">${x.r}</span><span class="sr-bar"><i style="width:${(x.n/max*100).toFixed(0)}%"></i></span>
+      <span class="sr-n">${x.n}</span><span class="sr-pct">${Math.round(x.n/cancels.length*100)}%</span></button>`).join('');
+  // Reason filter options (only meaningful for cancellations)
+  const rs = $('sub-reason');
+  if(!rs.options.length) rs.innerHTML = '<option value="all">All reasons</option>' + CANCEL_REASONS.map(r => `<option>${r}</option>`).join('');
+  rs.hidden = type !== 'cancellation';
+
+  const rows = inRange.filter(e => (type==='all' || e.type===type) && (type!=='cancellation' || reason==='all' || e.reason===reason));
+  const shown = rows.slice(0, show);
+  $('report-table').innerHTML = '<thead><tr><th>User</th><th>Type</th><th>From tier</th><th>To tier</th><th>Reason</th><th>Date</th></tr></thead><tbody>' +
+    (shown.length ? shown.map(e => `<tr>
+      <td><div class="t-strong">${e.name}${e.live ? ' <span class="badge badge-cyan" style="margin-left:4px">New</span>' : ''}</div><div class="t-sub">${e.email}</div></td>
+      <td><span class="sub-type ${SUB_META[e.type].cls}">${e.type}</span></td>
+      <td>${e.from}</td><td>${e.to}</td>
+      <td>${e.type==='cancellation' ? `<div>${e.reason}</div>${e.detail ? `<div class="t-sub">“${e.detail}”</div>` : ''}` : '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${fmtDate(e.date)}</td></tr>`).join('')
+    : emptyRow(6, 'No subscription changes match these filters.')) + '</tbody>';
+  const noun = type==='all' ? 'conversion' : type;
+  $('report-count').textContent = `Showing ${shown.length} of ${rows.length} ${noun}${rows.length===1?'':'s'} · ${ranges.reports.label}`;
 }
 
 /* ============================================================
@@ -1093,7 +1203,7 @@ function openEdit(ref){
       <div class="field-row">${selectField('Plan', ['Premium','Elite','VIP'], m.plan)}${selectField('Billing period', ['Monthly','Annual'], m.billing)}</div>
       <div class="field-row">${selectField('Billing status', ['Active','Paused','Cancelled'], m.status)}${field('Next billing date', 'Jan 14, 2027')}</div>
       <div class="field-row">${field('Escalations used this cycle', m.used, 'type="number"')}${field('Escalation allotment', planTotal[m.plan]+'/yr', 'disabled')}</div>
-      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Plan escalation allotments: Premium 1/mo · Elite 6/mo · VIP unlimited. Members can purchase additional escalations at $199 each.</p></div>
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p>Plan escalation allotments: Premium 1/mo · Elite 6/mo · VIP unlimited. Members can purchase additional escalations at $199 each.</p></div>
       ${isNew?'':`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><button class="btn btn-outline btn-sm" data-toast="Granted 1 complimentary escalation." data-close>+ Grant escalation</button><button class="btn btn-outline btn-sm" data-toast="Subscription paused." data-close>Pause subscription</button><button class="btn btn-outline btn-sm" data-toast="Sent password reset email." data-close>Reset password</button></div>`}`;
   } else if(type==='lender'){
     const l = isNew ? {name:'',short:'',tier:'Gold',products:[],status:'Active'} : lenders[idx];
@@ -1142,7 +1252,7 @@ function openEdit(ref){
       ${accessPicker(h.access)}
       <div class="field"><label>Description</label><textarea class="input" placeholder="Short description shown at the top of the hub page…" style="min-height:70px"></textarea></div>
       ${selectField('Status', ['Active','Draft'], h.status)}
-      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p><strong>Standard</strong> = a videos/recordings grid + a Documents tab. <strong>Mixed</strong> = videos, events &amp; documents in one hub (VIP, WMN). Use <strong>Access</strong> to gate the hub — pick the tiers that can see it, or All Members for everyone. Add content from Resources, Events &amp; Documents by setting their hub to this one.</p></div>`;
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p><strong>Standard</strong> = a videos/recordings grid + a Documents tab. <strong>Mixed</strong> = videos, events &amp; documents in one hub (VIP, WMN). Use <strong>Access</strong> to gate the hub — pick the tiers that can see it, or All Members for everyone. Add content from Resources, Events &amp; Documents by setting their hub to this one.</p></div>`;
   } else if(type==='document'){
     const d = isNew ? {title:'',source:'General',access:'All members',status:'Active'} : documents[idx];
     title = isNew ? 'Add document' : 'Edit document'; sub = isNew?'Upload a document for the Documents page or a hub.':d.title;
@@ -1167,7 +1277,7 @@ function openEdit(ref){
     body = `
       <div class="field-row">${field('Full name', a.name)}${field('Work email', a.email)}</div>
       ${selectField('Role', ['Admin','Super Admin'], a.role)}
-      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p><strong>Super Admin:</strong> full access, including team &amp; roles. <strong>Admin:</strong> manage members and content only.</p></div>`;
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p><strong>Super Admin:</strong> full access, including team &amp; roles. <strong>Admin:</strong> manage members and content only.</p></div>`;
   } else if(type==='coupon'){
     const c = isNew ? {code:'',desc:'',dtype:'Percent',value:'',maxUses:'',start:'',end:'',status:'Active'} : coupons[idx];
     title = isNew ? 'Add coupon' : 'Edit coupon';
@@ -1178,7 +1288,7 @@ function openEdit(ref){
       ${field('Description', c.desc)}
       <div class="field-row">${field('Valid from', c.start, 'placeholder="Jun 1, 2026"')}${field('Valid until', c.end==='—'?'':c.end, 'placeholder="Optional"')}</div>
       ${selectField('Status', ['Active','Paused'], c.status)}
-      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Saving creates or updates this code in <strong>Stripe</strong>. Redemption counts sync automatically.</p></div>`;
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p>Saving creates or updates this code in <strong>Stripe</strong>. Redemption counts sync automatically.</p></div>`;
   }
   $('edit-title').textContent = title;
   $('edit-sub').textContent = sub;
@@ -1303,15 +1413,21 @@ $('report-tabs').addEventListener('click', e=>{
   renderReportPartners(); renderReports();
 });
 $('report-partner').addEventListener('change', renderReports);
+['sub-type','sub-reason','sub-show'].forEach(id => $(id).addEventListener('change', () => { if(id==='sub-type') $('sub-reason').value = 'all'; renderReports(); }));
+$('sub-report').addEventListener('click', e => {
+  let m;
+  if((m = e.target.closest('[data-sub-type]'))){ const k = m.dataset.subType; $('sub-type').value = $('sub-type').value===k ? 'all' : k; $('sub-reason').value = 'all'; renderReports(); }
+  else if((m = e.target.closest('[data-sub-reason]'))){ $('sub-type').value = 'cancellation'; const r = m.dataset.subReason; $('sub-reason').value = $('sub-reason').value===r ? 'all' : r; renderReports(); }
+});
+window.addEventListener('storage', e => { if(e.key === 'amp-sub-events-v1' && reportType === 'subscriptions') renderReports(); });
 function reportScopeLabel(){
+  if(reportType==='subscriptions'){ const ty = $('sub-type').value; return ty==='all' ? 'all subscription changes' : ty + 's'; }
   const partner = $('report-partner').value;
-  return partner==='all' ? (reportType==='escalations'?'all lenders':'all partners') : partner;
+  return partner==='all' ? (reportType==='connections'?'all partners':'all lenders') : partner;
 }
 $('report-export').addEventListener('click', ()=>{
-  showToast(`Exported ${reportType} report for ${reportScopeLabel()} (${ranges.reports.label}) to CSV.`);
-});
-$('report-email').addEventListener('click', ()=>{
-  showToast(`Emailed ${reportType} report for ${reportScopeLabel()} (${ranges.reports.label}).`);
+  const name = { escalations:'escalations', connections:'connections', changeae:'Change AE', subscriptions:'subscriptions' }[reportType];
+  showToast(`Exported ${name} report for ${reportScopeLabel()} (${ranges.reports.label}) to CSV.`);
 });
 
 /* ---------- Global click delegation ---------- */

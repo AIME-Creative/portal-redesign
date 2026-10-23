@@ -65,7 +65,7 @@
   const sideCards = () => `
     <div class="card card-pad kb-side-tour">
       <div class="kb-side-ico">${svg('<path d="M12 2a10 10 0 100 20 10 10 0 000-20zM16.2 7.8l-2.1 6.3-6.3 2.1 2.1-6.3z"/>')}</div>
-      <h3>New here?</h3><p>Take the one-minute walkthrough of the portal.</p>
+      <h3>New here?</h3><p>Take the two-minute walkthrough of the portal.</p>
       <button class="btn btn-navy btn-sm btn-block" data-tour-start>Start the walkthrough</button>
     </div>
     <div class="card card-pad" style="margin-top:20px">
