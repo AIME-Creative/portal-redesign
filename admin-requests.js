@@ -250,6 +250,7 @@
     renderDetail();
     navigate('request-detail');
   }
+  window.AmpAdminRequests = { open: openDetail, showQueue: () => navigate('requests') };   // used by the admin walkthrough
 
   function renderAll() {
     renderQueue(); renderDashboard();

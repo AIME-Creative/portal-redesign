@@ -205,8 +205,11 @@ function sampleSubscriptionEvents(){
   const first = ["John","Aron","Margaret","Troy","Jerrold","Ryan","Craig","Solymar","Angela","Sasha","Travis","Kenneth","Dana","Luis","Monica","Derek","Hannah","Marcus","Teresa","Brandon","Keisha","Victor","Lauren","Omar","Grace","Wesley","Nina","Calvin","Paula","Reggie"];
   const last = ["Menke","Padierna","Brown","Molitor","Smith","Jacobs","Messman","Gonzalez","Scurry","Luger","Vickers","Davis","Whitley","Ortega","Hale","Fischer","Yoon","Bell","Navarro","Cole","Grant","Ibarra","Ford","Haddad","Kim","Pruitt","Lowe","Reyes","Sutton","Banks"];
   const domains = ["ratetrac.com","lockitlending.com","communitylenders.com","molitorfinancial.com","gmail.com","jacobsmortgageadvisors.com","guaranteedcorp.com","pinnpropdata.com","southwestern.com","homequestmtg.com"];
-  const notes = { "Too expensive":["Can't justify it in a slow market.","Cutting costs this quarter.",""], "Not using it enough":["Only used it once or twice.",""],
-    "Other":["Merging with another brokerage.","Taking a break for a few months."] };
+  // Sample mix, in CANCEL_REASONS order (usage, ROI, expectations, price, leaving, poor experience,
+  // not relevant, one event, other) — weights sum to 1.
+  const weights = [.24, .17, .09, .2, .08, .04, .06, .08, .04];
+  const notes = { 0:["Only logged in once or twice.",""], 1:["Didn't close enough extra loans to justify it.",""], 3:["Can't justify it in a slow market.","Cutting costs this quarter.",""],
+    7:["Came for FUSE — will rejoin next year.",""], 8:["Merging with another brokerage.","Taking a break for a few months."] };
   const out = [];
   for(let k = 0; k < 110; k++){
     const daysAgo = Math.floor(rnd() * 150), r = rnd();
@@ -220,8 +223,10 @@ function sampleSubscriptionEvents(){
       date: new Date(TODAY.getTime() - daysAgo * 86400000) };
     if(type === 'cancellation'){
       const w = rnd();
-      ev.reason = CANCEL_REASONS[w < .32 ? 0 : w < .55 ? 1 : w < .68 ? 2 : w < .78 ? 3 : w < .87 ? 4 : w < .93 ? 5 : 6];
-      ev.detail = notes[ev.reason] ? pick(notes[ev.reason]) : '';
+      let k = 0, acc = weights[0];
+      while(w > acc && k < weights.length - 1) acc += weights[++k];
+      ev.reason = CANCEL_REASONS[k];
+      ev.detail = notes[k] ? pick(notes[k]) : '';
     }
     out.push(ev);
   }

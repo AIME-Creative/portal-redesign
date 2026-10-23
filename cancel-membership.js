@@ -15,7 +15,8 @@
   if (!REASONS || !EV || !document.getElementById('modal-cancel')) return;
   const $ = (id) => document.getElementById(id);
   const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', plan: 'Elite', ends: 'Jan 14, 2027' };
-  const OFFER_FOR = ['Too expensive', 'Not using it enough'];
+  // Reasons where a cheaper plan might keep them (matched by position in CANCEL_REASONS: usage, ROI, price)
+  const OFFER_FOR = [REASONS[0], REASONS[1], REASONS[3]];
 
   $('cancel-reasons').innerHTML = REASONS.map((r) =>
     `<label><input type="radio" name="cancel-reason" value="${r}"> ${r}</label>`).join('');

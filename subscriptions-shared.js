@@ -9,12 +9,14 @@
      column written by the cancel flow.
    ============================================================ */
 window.CANCEL_REASONS = [
-  'Too expensive',
-  'Not using it enough',
-  "Benefits didn't fit my business",
-  'Switching to another membership or service',
-  'Leaving the industry or retiring',
-  'Technical or billing problems',
+  'I’m not using the benefits enough',
+  'I didn’t see enough ROI for my business',
+  'The benefits weren’t what I expected',
+  'It’s too expensive',
+  'I’m leaving the wholesale mortgage industry',
+  'I had a poor experience with support or an event',
+  'Content or events aren’t relevant to me',
+  'I only joined for one event',
   'Other',
 ];
 

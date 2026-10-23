@@ -8,8 +8,8 @@
 .help-wrap { position:relative; }
 .help-menu { position:absolute; right:0; top:calc(100% + 8px); width:270px; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-lg); padding:6px; z-index:60; display:none; }
 .help-menu.open { display:block; }
-.help-menu button { display:block; width:100%; text-align:left; padding:10px 12px; border-radius:10px; }
-.help-menu button:hover { background:var(--surface-alt); }
+.help-menu button, .help-menu a { display:block; width:100%; text-align:left; padding:10px 12px; border-radius:10px; text-decoration:none; }
+.help-menu button:hover, .help-menu a:hover { background:var(--surface-alt); }
 .help-menu strong { display:block; font-size:13.5px; color:var(--ink); }
 .help-menu span { display:block; font-size:12px; color:var(--muted); margin-top:1px; }
 #help-btn.wt-pulse { animation:wtPulse 1.2s ease-in-out 2; border-color:var(--pink); color:var(--pink); }
