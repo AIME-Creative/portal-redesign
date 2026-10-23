@@ -1,0 +1,144 @@
+/* ============================================================
+   Request tracking — shared by member (index.html) and admin
+   (admin.html). Builds on the tokens + components in styles.css.
+   ============================================================ */
+
+/* ---------- type icons ---------- */
+.rq-ico { width:40px; height:40px; border-radius:11px; display:grid; place-items:center; flex:0 0 40px; }
+.rq-ico svg { width:19px; height:19px; }
+.rq-ico.t-escalation { background:#fde4ee; color:var(--pink); }
+.rq-ico.t-support    { background:#e2f4f9; color:var(--cyan-600); }
+.rq-ico.t-connection { background:#e6eaf5; color:var(--navy); }
+.rq-ico.t-changeae   { background:#efe8fb; color:#6a3fb0; }
+.rq-ico.sm { width:30px; height:30px; flex-basis:30px; border-radius:8px; }
+.rq-ico.sm svg { width:15px; height:15px; }
+
+/* ---------- list rows (member) ---------- */
+.rq-list { padding:4px 0; }
+.rq-row { display:flex; align-items:center; gap:14px; width:100%; text-align:left; padding:15px 22px; border-bottom:1px solid var(--line-soft); transition:background .15s; }
+.rq-row:last-child { border-bottom:none; }
+.rq-row:hover { background:var(--surface-alt); }
+.rq-main { flex:1; min-width:0; }
+.rq-title { display:block; font-weight:600; color:var(--ink); font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rq-meta { display:block; color:var(--muted); font-size:12.5px; margin-top:3px; }
+.rq-when { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:92px; text-align:right; }
+.rq-chev { width:16px; height:16px; color:var(--muted); flex:0 0 16px; }
+.rq-flag { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; background:#fde4ee; color:var(--pink-600); }
+.rq-flag::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+.rq-flag.amber { background:var(--amber-bg); color:#b07c08; }
+.rq-flag.cyan { background:#e2f4f9; color:var(--cyan-600); }
+.rq-empty { padding:40px 20px; }
+
+/* sidebar unread count (member) */
+.rq-nav-count { margin-left:auto; background:var(--pink); color:#fff; font-size:11px; font-weight:700; padding:1px 8px; border-radius:20px; }
+.rq-nav-count:empty { display:none; }
+
+/* ---------- detail header ---------- */
+.rq-head { display:flex; gap:16px; align-items:flex-start; }
+.rq-head h1 { font-size:22px; line-height:1.3; }
+.rq-head-meta { display:flex; flex-wrap:wrap; gap:6px 18px; color:var(--ink-soft); font-size:13px; margin-top:8px; }
+.rq-head-meta strong { color:var(--ink); font-weight:600; }
+
+/* ---------- status tracker ---------- */
+.rq-track { display:flex; align-items:flex-start; margin-top:22px; padding-top:20px; border-top:1px solid var(--line-soft); }
+.rq-step { display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center; flex:0 0 auto; min-width:84px; }
+.rq-step .dot { width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:var(--line); color:var(--muted); font-size:12px; font-weight:700; }
+.rq-step .dot svg { width:14px; height:14px; }
+.rq-step .lbl { font-size:12.5px; font-weight:600; color:var(--muted); }
+.rq-step .when { font-size:11.5px; color:var(--muted); margin-top:-4px; }
+.rq-step.done .dot { background:var(--green); color:#fff; }
+.rq-step.done .lbl { color:var(--ink); }
+.rq-step.current .dot { background:var(--pink); color:#fff; box-shadow:0 0 0 4px #fde4ee; }
+.rq-step.current .lbl { color:var(--navy); }
+.rq-line { flex:1; height:2px; background:var(--line); margin-top:13px; min-width:20px; }
+.rq-line.done { background:var(--green); }
+
+/* ---------- activity timeline ---------- */
+.rq-timeline { position:relative; }
+.rq-ev { display:flex; gap:12px; padding:0 0 18px; position:relative; }
+.rq-ev:not(:last-child)::before { content:''; position:absolute; left:13px; top:30px; bottom:4px; width:2px; background:var(--line-soft); }
+.rq-ev .ev-dot { width:28px; height:28px; border-radius:50%; flex:0 0 28px; display:grid; place-items:center; background:var(--surface-alt); border:1.5px solid var(--line); color:var(--ink-soft); }
+.rq-ev .ev-dot svg { width:13px; height:13px; }
+.rq-ev .ev-body { flex:1; min-width:0; padding-top:4px; }
+.rq-ev .ev-title { font-size:13.5px; font-weight:600; color:var(--ink); }
+.rq-ev .ev-time { font-size:12px; color:var(--muted); margin-top:1px; }
+.rq-ev .ev-text { margin-top:8px; padding:12px 14px; border-radius:12px; background:var(--surface-alt); border:1px solid var(--line-soft); font-size:13.5px; line-height:1.55; color:var(--ink); white-space:pre-wrap; }
+.rq-ev.lender .ev-dot { background:#e2f4f9; border-color:#bfe6f1; color:var(--cyan-600); }
+.rq-ev.lender .ev-text { background:#f1fafd; border-color:#cdebf3; }
+.rq-ev.followup .ev-dot { background:var(--amber-bg); border-color:#f3dca8; color:#b07c08; }
+.rq-ev.team .ev-dot { background:#e6eaf5; border-color:#cbd3ea; color:var(--navy); }
+.rq-ev.team .ev-text { background:#f4f6fc; border-color:#dfe4f2; }
+.rq-ev.internal .ev-dot { background:#fff7e0; border-color:#f0dc9c; color:#9a6b07; }
+.rq-ev.internal .ev-text { background:#fffbef; border-color:#f3e6b8; }
+.rq-ev.minor .ev-title { font-weight:500; color:var(--ink-soft); }
+
+/* ---------- conversation thread (support) ---------- */
+.rq-thread { display:flex; flex-direction:column; gap:16px; }
+.rq-msg { display:flex; gap:11px; max-width:88%; }
+.rq-msg .av { width:34px; height:34px; border-radius:50%; flex:0 0 34px; display:grid; place-items:center; color:#fff; font-weight:700; font-size:12px; background:linear-gradient(135deg,var(--cyan),var(--pink)); }
+.rq-msg.team .av { background:var(--navy); }
+.rq-msg .bubble { padding:12px 15px; border-radius:14px; background:var(--surface-alt); border:1px solid var(--line); font-size:14px; line-height:1.55; color:var(--ink); white-space:pre-wrap; }
+.rq-msg .who { font-size:12px; color:var(--muted); margin-bottom:5px; }
+.rq-msg .who strong { color:var(--ink); font-weight:600; }
+.rq-msg.mine { align-self:flex-end; flex-direction:row-reverse; }
+.rq-msg.mine .who { text-align:right; }
+.rq-msg.mine .bubble { background:var(--navy); border-color:var(--navy); color:#fff; border-top-right-radius:4px; }
+.rq-msg:not(.mine) .bubble { border-top-left-radius:4px; }
+.rq-sys { align-self:center; font-size:12px; color:var(--muted); background:var(--surface-alt); border:1px solid var(--line-soft); padding:4px 12px; border-radius:20px; }
+.rq-sys.internal { background:#fffbef; border-color:#f3e6b8; color:#8a6410; max-width:88%; text-align:left; border-radius:12px; padding:8px 12px; align-self:flex-end; }
+
+.rq-composer { margin-top:20px; padding-top:18px; border-top:1px solid var(--line-soft); }
+.rq-composer textarea { min-height:96px; }
+.rq-composer-foot { display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
+.rq-composer-foot .hint { color:var(--muted); font-size:12.5px; margin-right:auto; }
+.rq-waiting { margin-top:20px; display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-radius:12px; background:var(--surface-alt); border:1px dashed var(--line); color:var(--ink-soft); font-size:13.5px; line-height:1.5; }
+.rq-waiting svg { width:18px; height:18px; flex:0 0 18px; color:var(--cyan-600); margin-top:1px; }
+
+/* ---------- follow-up panel (escalations) ---------- */
+.rq-fu { border-radius:14px; padding:18px; background:linear-gradient(135deg,#fff7fa,#f4f8ff); border:1px solid #f3d5e2; }
+.rq-fu h3 { font-size:15px; margin-bottom:6px; }
+.rq-fu p { color:var(--ink-soft); font-size:13.5px; line-height:1.55; margin:0 0 14px; }
+.rq-fu.pending { background:var(--amber-bg); border-color:#f3dca8; }
+.rq-fu.pending p { margin:0; color:#7a5a12; }
+.rq-fu.done { background:var(--green-bg); border-color:#bfe7d4; }
+.rq-fu.done p { margin:0; color:#1b6e4d; }
+
+.rq-kv { display:flex; justify-content:space-between; gap:14px; padding:10px 0; border-bottom:1px solid var(--line-soft); font-size:13.5px; }
+.rq-kv:last-child { border-bottom:none; }
+.rq-kv .k { color:var(--muted); font-weight:600; flex:0 0 auto; }
+.rq-kv .v { color:var(--ink); text-align:right; }
+.rq-kv.block { flex-direction:column; gap:4px; }
+.rq-kv.block .v { text-align:left; line-height:1.55; }
+
+/* ---------- admin ---------- */
+.s-ico.i-amber { background:var(--amber-bg); color:#b07c08; }
+.rq-seg { display:inline-flex; flex-wrap:wrap; gap:4px; background:var(--surface-alt); border:1px solid var(--line); border-radius:12px; padding:4px; width:100%; }
+.rq-seg button { flex:1; padding:8px 10px; border-radius:9px; font-size:12.5px; font-weight:600; color:var(--ink-soft); white-space:nowrap; }
+.rq-seg button:hover { color:var(--navy); background:#fff; }
+.rq-seg button.active { background:var(--navy); color:#fff; }
+.rq-tabs { display:flex; gap:4px; margin-bottom:12px; }
+.rq-tabs button { padding:7px 14px; border-radius:20px; font-size:12.5px; font-weight:600; color:var(--ink-soft); border:1px solid var(--line); background:#fff; }
+.rq-tabs button.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+.rq-tabs button.note.active { background:#9a6b07; border-color:#9a6b07; }
+.chip.attn.active { background:var(--pink); border-color:var(--pink); }
+tr.rq-attn td:first-child { box-shadow:inset 3px 0 0 var(--pink); }
+.rq-ref { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap; }
+.rq-reset { color:var(--muted); font-size:12.5px; font-weight:600; text-decoration:underline; }
+.rq-reset:hover { color:var(--navy); }
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .rq-detail-grid { grid-template-columns:1fr !important; }
+}
+@media (max-width:640px){
+  .rq-row { padding:14px 16px; flex-wrap:wrap; }
+  .rq-main { flex-basis:calc(100% - 60px); }
+  .rq-when { min-width:0; text-align:left; margin-left:54px; }
+  .rq-chev { display:none; }
+  .rq-step { min-width:0; flex:1 1 0; }
+  .rq-step .lbl { font-size:11px; }
+  .rq-step .when { font-size:10.5px; }
+  .rq-line { min-width:6px; margin-left:-14px; margin-right:-14px; }
+  .rq-msg { max-width:100%; }
+  .rq-head { flex-direction:column; }
+}

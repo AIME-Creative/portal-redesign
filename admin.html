@@ -6,6 +6,7 @@
 <title>AMP Admin — AIME Member Portal</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="requests.css">
 </head>
 <body>
 <div class="app">
@@ -348,23 +349,36 @@
         </table></div></div>
       </section>
 
-      <!-- ============ REQUESTS ============ -->
+      <!-- ============ REQUESTS (rendered by admin-requests.js) ============ -->
       <section class="view" id="view-requests">
-        <div class="page-head"><h1>Requests &amp; submissions</h1><p>Member-submitted escalations, connections, AE changes, support tickets, and bug reports.</p></div>
+        <div class="page-head"><h1>Requests &amp; submissions</h1><p>Track every member escalation, connection, AE change, and support ticket — plus bug reports.</p></div>
+        <div class="stat-row admin4" id="arq-stats"></div>
         <div class="filters" id="request-filters">
           <button class="chip active" data-filter="all">All</button>
-          <button class="chip" data-filter="Escalation">Escalations</button>
-          <button class="chip" data-filter="Lender connection">Connections</button>
-          <button class="chip" data-filter="Change AE">Change AE</button>
-          <button class="chip" data-filter="Support">Support</button>
-          <button class="chip" data-filter="Bug">Bugs</button>
-          <span class="count-note" id="request-count" style="margin-left:auto;align-self:center">—</span>
+          <button class="chip" data-filter="escalation">Escalations</button>
+          <button class="chip" data-filter="support">Support tickets</button>
+          <button class="chip" data-filter="connection">Connections</button>
+          <button class="chip" data-filter="changeae">Change AE</button>
+          <button class="chip" data-filter="bug">Bugs</button>
+          <button class="chip attn" id="arq-attn" title="Follow-ups requested, unanswered tickets, unassigned escalations">⚑ Needs attention</button>
+        </div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="arq-search" placeholder="Search by member, lender, ref, or subject…"></div>
+          <select class="select filter-select" id="arq-status">
+            <option value="open">Open (not resolved)</option><option value="all">All statuses</option>
+            <option>Received</option><option>In progress</option><option>Responded</option><option>Resolved</option><option>Delivered</option>
+          </select>
+          <select class="select filter-select" id="arq-assignee"><option value="all">Anyone</option><option value="">Unassigned</option></select>
+          <span class="spacer"></span>
+          <span class="count-note" id="request-count">—</span>
         </div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Type</th><th>Member</th><th>Details</th><th>Submitted</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Ref</th><th>Request</th><th>Member</th><th>Assigned</th><th>Last activity</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="requests-tbody"></tbody>
         </table></div></div>
+        <div style="margin-top:14px;text-align:right"><button class="rq-reset" id="arq-reset" title="Prototype only — restores the sample requests">Reset demo request data</button></div>
       </section>
+      <section class="view" id="view-request-detail"><div id="arq-detail-body"></div></section>
 
       <!-- ============ ANALYTICS ============ -->
       <section class="view" id="view-analytics">
@@ -799,7 +813,9 @@
   <button class="bottom-nav-item" data-nav="fuse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg><span>FUSE</span></button>
 </nav>
 
+<script src="requests-store.js"></script>
 <script src="admin.js"></script>
+<script src="admin-requests.js"></script>
 <!-- review-only: member/admin toggle — remove before launch -->
 <script src="review-toggle.js"></script>
 </body>

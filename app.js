@@ -552,6 +552,7 @@ function navigate(view){
     (view==='market-detail'&&n.dataset.nav==='market') ||
     (view==='resource-detail'&&n.dataset.nav==='resources') ||
     (view==='event-detail'&&n.dataset.nav==='events') ||
+    (view==='request-detail'&&n.dataset.nav==='requests') ||
     (view==='hub-detail'&&n.dataset.nav===currentHub);
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
@@ -614,7 +615,7 @@ function openVendor(i){
         <p style="color:var(--ink-soft);margin:14px 0;max-width:720px;line-height:1.7">${v.desc} As an AIME member, you unlock exclusive pricing and priority onboarding with ${v.name}.</p>
         <div class="tag-row">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
         <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
-          <button class="btn btn-cyan" data-toast="Connection request sent to ${v.name}.">Connect with ${v.name}</button>
+          <button class="btn btn-cyan" data-submit="vendor" data-vendor="${v.name}" data-toast="Connection request sent to ${v.name} — track it in My Requests.">Connect with ${v.name}</button>
           <button class="btn btn-outline" data-toast="Opening website…">Visit website</button>
         </div>
       </div>

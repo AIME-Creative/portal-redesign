@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AMP Member Portal — Redesign Prototype</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="requests.css">
 </head>
 <body>
 <div class="app">
@@ -87,6 +88,11 @@
       </a>
 
       <div class="nav-label">Support</div>
+      <button class="nav-item" data-nav="requests">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12h6M9 16h4"/></svg>
+        My Requests
+        <span class="rq-nav-count" id="rq-nav-count" title="Requests with new updates"></span>
+      </button>
       <button class="nav-item" data-nav="support">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v-3a8 8 0 0116 0v3M4 14a2 2 0 002 2h0v-5H6a2 2 0 00-2 2zM20 14a2 2 0 01-2 2h0v-5h0a2 2 0 012 2zM18 16v1a3 3 0 01-3 3h-3"/></svg>
         Get Support
@@ -328,20 +334,17 @@
         <div class="grid" style="grid-template-columns:1.4fr 1fr;align-items:start">
           <div class="card card-pad">
             <h3 style="font-size:16px;margin-bottom:18px">Submit a ticket</h3>
-            <div class="field"><label>Subject <span class="req">*</span></label><input class="input" placeholder="Brief description of your issue"></div>
+            <div class="field"><label>Subject <span class="req">*</span></label><input class="input" id="tk-subject" placeholder="Brief description of your issue"></div>
             <div class="field"><label>Category <span class="req">*</span></label>
-              <select class="select"><option>Select a category</option><option>Lender connection</option><option>Loan escalation</option><option>Billing &amp; membership</option><option>Market / vendor</option><option>Technical issue</option></select>
+              <select class="select" id="tk-category"><option>Select a category</option><option>Lender connection</option><option>Loan escalation</option><option>Billing &amp; membership</option><option>Market / vendor</option><option>Technical issue</option></select>
             </div>
-            <div class="field"><label>Message <span class="req">*</span></label><textarea class="input" placeholder="Please describe your issue in detail…"></textarea></div>
-            <button class="btn btn-primary btn-block" data-toast="Ticket submitted — we'll be in touch shortly.">Submit ticket</button>
+            <div class="field"><label>Message <span class="req">*</span></label><textarea class="input" id="tk-message" placeholder="Please describe your issue in detail…"></textarea></div>
+            <button class="btn btn-primary btn-block" data-submit="support" data-toast="Ticket submitted — track replies in My Requests.">Submit ticket</button>
           </div>
           <div>
             <div class="card card-pad" style="margin-bottom:20px">
-              <h3 style="font-size:16px;margin-bottom:6px">Recent tickets</h3>
-              <div class="empty">
-                <div class="e-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-                <h4>No tickets yet</h4><p>When you submit a ticket it'll show up here so you can track its status.</p>
-              </div>
+              <div class="section-title" style="margin-bottom:6px"><h3 style="font-size:16px">Recent tickets</h3><a href="#" data-rq-filter="support">View all <span>→</span></a></div>
+              <div id="rq-recent-tickets"></div>
             </div>
             <div class="card card-pad">
               <h3 style="font-size:16px;margin-bottom:14px">Other ways to reach us</h3>
@@ -356,6 +359,28 @@
           </div>
         </div>
       </section>
+
+      <!-- ============ MY REQUESTS (rendered by my-requests.js) ============ -->
+      <section class="view" id="view-requests">
+        <div class="page-head page-head-row">
+          <div><h1>My requests</h1><p>Everything you've submitted — escalations, lender connections, AE changes, and support tickets — and where each one stands.</p></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" data-nav="support">New support ticket</button>
+            <button class="btn btn-primary btn-sm" data-modal="escalate">Escalate a loan</button>
+          </div>
+        </div>
+        <div class="stat-row" id="rq-stats"></div>
+        <div class="filters" id="rq-filters">
+          <button class="chip active" data-rqf="all">All</button>
+          <button class="chip" data-rqf="escalation">Escalations</button>
+          <button class="chip" data-rqf="support">Support tickets</button>
+          <button class="chip" data-rqf="connection">Connections</button>
+          <button class="chip" data-rqf="changeae">Change AE</button>
+          <span class="count-note" id="rq-count" style="margin-left:auto;align-self:center"></span>
+        </div>
+        <div class="card rq-list" id="rq-list"></div>
+      </section>
+      <section class="view" id="view-request-detail"><div id="rq-detail-body"></div></section>
 
       <!-- ============ SETTINGS ============ -->
       <section class="view" id="view-settings">
@@ -575,7 +600,7 @@
       <div class="field-row"><div class="field"><label>Loan number <span class="req">*</span></label><input class="input" placeholder="e.g. 100482910"></div><div class="field"><label>Loan type</label><select class="select"><option>Conventional</option><option>FHA</option><option>VA</option><option>Jumbo</option></select></div></div>
       <div class="field-row"><div class="field"><label>Loan amount</label><input class="input" placeholder="$0.00"></div><div class="field"><label>Closing date</label><input class="input" type="date"></div></div>
     </div>
-    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Escalation submitted — the lender has been notified." data-close>Continue &amp; submit</button></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-submit="escalation" data-toast="Escalation submitted — track it in My Requests." data-close>Continue &amp; submit</button></div>
   </div>
 </div>
 
@@ -593,7 +618,7 @@
       <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Phone number</label><input class="input" value="(555) 014-2278"></div></div>
       <div class="field-row"><div class="field"><label>NMLS #</label><input class="input" value="9158"></div><div class="field"><label>State licenses</label><input class="input" value="MD, VA, DE"></div></div>
     </div>
-    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Connection request sent — the lender will reach out soon." data-close>Submit request</button></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-submit="connection" data-toast="Connection request sent — the lender will reach out soon." data-close>Submit request</button></div>
   </div>
 </div>
 
@@ -610,7 +635,22 @@
       <div class="field"><label>Tell us more</label><textarea class="input" placeholder="Describe the issue…"></textarea></div>
       <div class="field" style="display:flex;align-items:center;gap:10px;margin-top:4px"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--pink)"><label style="margin:0">I have already tried to resolve this with my current AE.</label></div>
     </div>
-    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-toast="Request submitted — we'll follow up within 1 business day." data-close>Submit request</button></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" data-submit="changeae" data-toast="Request submitted — we'll follow up within 1 business day." data-close>Submit request</button></div>
+  </div>
+</div>
+
+<!-- ===================== ESCALATION FOLLOW-UP ===================== -->
+<div class="modal-overlay" id="modal-followup">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <div><h2>Request a follow-up</h2><p id="fu-sub">The AIME membership team will contact the lender on your behalf.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h0"/></svg><p>Lenders don't always update the portal. When you request a follow-up, our team reaches out to the lender's escalation desk directly and posts what they hear back on this escalation.</p></div>
+      <div class="field"><label>Anything we should know? <span style="color:var(--muted);font-weight:500">(optional)</span></label><textarea class="input" id="fu-note" placeholder="e.g. Closing is Friday and the rate lock expires Thursday."></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="fu-submit">Request follow-up</button></div>
   </div>
 </div>
 
@@ -789,7 +829,9 @@
 <!-- Toast -->
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
 
+<script src="requests-store.js"></script>
 <script src="app.js"></script>
+<script src="my-requests.js"></script>
 <!-- events calendar add-on (preview) — remove this line + events-schedule.js to drop it -->
 <script src="events-schedule.js"></script>
 <!-- review-only: member/admin toggle — remove before launch -->

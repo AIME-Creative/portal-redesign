@@ -145,46 +145,40 @@ const reqTypeMeta = {
   "Support":           { ico:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', cls:"i-cyan" },
   "Bug":               { ico:'<rect x="8" y="6" width="8" height="13" rx="4"/><path d="M12 6V3M8 11H3M16 11h5"/>', cls:"i-pink" },
 };
+// Bug reports stay here (interface only). Escalations, connections, Change AE and
+// support tickets are tracked in requests-store.js and rendered by admin-requests.js.
 const requests = [
-  { type:"Escalation", member:"Maria Chen", detail:"UWM · Loan #100482910 — appraisal delay", date:"2h ago", status:"New" },
-  { type:"Lender connection", member:"Darnell Ross", detail:"Requested intro to EPM", date:"4h ago", status:"New" },
   { type:"Bug", member:"Priya Nair", detail:"Market filter not updating on Safari", date:"5h ago", status:"New" },
-  { type:"Change AE", member:"Tom Becker", detail:"UWM — AE unresponsive", date:"Yesterday", status:"In progress" },
-  { type:"Support", member:"Sam Whitfield", detail:"Can't update billing card", date:"Yesterday", status:"New" },
-  { type:"Escalation", member:"Carlos Diaz", detail:"Newrez · Loan #100471552 — CD error", date:"2d ago", status:"In progress" },
-  { type:"Lender connection", member:"Janet Park", detail:"Requested intro to Newfi", date:"2d ago", status:"Resolved" },
-  { type:"Support", member:"Alicia Gomez", detail:"Question about VIP escalations", date:"3d ago", status:"Resolved" },
-  { type:"Escalation", member:"Ahmed Sayed", detail:"EPM · Loan #100460318 — UW conditions", date:"3d ago", status:"New" },
   { type:"Bug", member:"Rachel Stone", detail:"Logo overlaps banner on mobile", date:"4d ago", status:"In progress" },
 ];
 
 /* ---------- Analytics records ---------- */
 const escalationRecords = [
-  { member:"Maria Chen", lender:"United Wholesale Mortgage", loan:"100482910", date:"Jun 24, 2026", status:"In review" },
-  { member:"Carlos Diaz", lender:"Newrez Wholesale", loan:"100471552", date:"Jun 22, 2026", status:"Lender responded" },
-  { member:"Ahmed Sayed", lender:"EPM", loan:"100460318", date:"Jun 21, 2026", status:"New" },
+  { member:"Maria Chen", lender:"United Wholesale Mortgage", loan:"100482910", date:"Jun 24, 2026", status:"Received" },
+  { member:"Carlos Diaz", lender:"Newrez Wholesale", loan:"100471552", date:"Jun 22, 2026", status:"Responded" },
+  { member:"Ahmed Sayed", lender:"EPM", loan:"100460318", date:"Jun 21, 2026", status:"Received" },
   { member:"Priya Nair", lender:"United Wholesale Mortgage", loan:"100455201", date:"Jun 19, 2026", status:"Resolved" },
-  { member:"Sam Whitfield", lender:"Windsor Mortgage", loan:"100451090", date:"Jun 18, 2026", status:"In review" },
+  { member:"Sam Whitfield", lender:"Windsor Mortgage", loan:"100451090", date:"Jun 18, 2026", status:"Received" },
   { member:"Kyle Lord", lender:"United Wholesale Mortgage", loan:"100448817", date:"Jun 16, 2026", status:"Resolved" },
   { member:"Rachel Stone", lender:"EPM", loan:"100442204", date:"Jun 14, 2026", status:"Resolved" },
-  { member:"Alicia Gomez", lender:"Newrez Wholesale", loan:"100439912", date:"Jun 12, 2026", status:"In review" },
+  { member:"Alicia Gomez", lender:"Newrez Wholesale", loan:"100439912", date:"Jun 12, 2026", status:"Received" },
   { member:"Janet Park", lender:"Newfi Wholesale", loan:"100431774", date:"Jun 10, 2026", status:"Resolved" },
   { member:"Darnell Ross", lender:"United Wholesale Mortgage", loan:"100428650", date:"Jun 8, 2026", status:"Resolved" },
   { member:"Maria Chen", lender:"Cake Mortgage", loan:"100421039", date:"Jun 5, 2026", status:"Resolved" },
   { member:"Tom Becker", lender:"EPM", loan:"100417788", date:"Jun 3, 2026", status:"Resolved" },
 ];
 const connectionRecords = [
-  { member:"Darnell Ross", partner:"EPM", kind:"Lender", date:"Jun 24, 2026", status:"Sent" },
-  { member:"Janet Park", partner:"Newfi Wholesale", kind:"Lender", date:"Jun 23, 2026", status:"Connected" },
-  { member:"Priya Nair", partner:"Advantage Partners Solutions", kind:"Vendor", date:"Jun 22, 2026", status:"Connected" },
-  { member:"Sam Whitfield", partner:"United Wholesale Mortgage", kind:"Lender", date:"Jun 20, 2026", status:"Sent" },
-  { member:"Kyle Lord", partner:"Arive", kind:"Vendor", date:"Jun 19, 2026", status:"Connected" },
-  { member:"Alicia Gomez", partner:"Surefire CRM", kind:"Vendor", date:"Jun 17, 2026", status:"Connected" },
-  { member:"Carlos Diaz", partner:"Newrez Wholesale", kind:"Lender", date:"Jun 15, 2026", status:"Connected" },
-  { member:"Rachel Stone", partner:"BrokerVA", kind:"Vendor", date:"Jun 13, 2026", status:"Sent" },
-  { member:"Ahmed Sayed", partner:"United Wholesale Mortgage", kind:"Lender", date:"Jun 11, 2026", status:"Connected" },
-  { member:"Maria Chen", partner:"The CORE Training", kind:"Vendor", date:"Jun 9, 2026", status:"Connected" },
-  { member:"Beth Coleman", partner:"EPM", kind:"Lender", date:"Jun 6, 2026", status:"Sent" },
+  { member:"Darnell Ross", partner:"EPM", kind:"Lender", date:"Jun 24, 2026", status:"Delivered" },
+  { member:"Janet Park", partner:"Newfi Wholesale", kind:"Lender", date:"Jun 23, 2026", status:"Delivered" },
+  { member:"Priya Nair", partner:"Advantage Partners Solutions", kind:"Vendor", date:"Jun 22, 2026", status:"Delivered" },
+  { member:"Sam Whitfield", partner:"United Wholesale Mortgage", kind:"Lender", date:"Jun 20, 2026", status:"Delivered" },
+  { member:"Kyle Lord", partner:"Arive", kind:"Vendor", date:"Jun 19, 2026", status:"Delivered" },
+  { member:"Alicia Gomez", partner:"Surefire CRM", kind:"Vendor", date:"Jun 17, 2026", status:"Delivered" },
+  { member:"Carlos Diaz", partner:"Newrez Wholesale", kind:"Lender", date:"Jun 15, 2026", status:"Delivered" },
+  { member:"Rachel Stone", partner:"BrokerVA", kind:"Vendor", date:"Jun 13, 2026", status:"Delivered" },
+  { member:"Ahmed Sayed", partner:"United Wholesale Mortgage", kind:"Lender", date:"Jun 11, 2026", status:"Delivered" },
+  { member:"Maria Chen", partner:"The CORE Training", kind:"Vendor", date:"Jun 9, 2026", status:"Delivered" },
+  { member:"Beth Coleman", partner:"EPM", kind:"Lender", date:"Jun 6, 2026", status:"Delivered" },
 ];
 
 /* ---------- FUSE registrations ---------- */
@@ -337,7 +331,7 @@ const $ = (id) => document.getElementById(id);
 const initials = (name) => name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
 const statusPill = (s) => {
   const map = { Active:"badge-green", Draft:"badge-amber", Paused:"badge-navy",
-    New:"badge-pink", "In progress":"badge-amber", Resolved:"badge-green",
+    New:"badge-pink", Received:"badge-pink", "In progress":"badge-amber", Responded:"badge-cyan", Resolved:"badge-green", Delivered:"badge-navy",
     Confirmed:"badge-green", "Not claimed":"badge-amber",
     "In review":"badge-amber", "Lender responded":"badge-cyan", Sent:"badge-cyan", Connected:"badge-green",
     "Past due":"badge-red", Trialing:"badge-cyan", Canceled:"badge-navy",
@@ -465,24 +459,6 @@ function renderDocuments(){
     <td class="t-right"><div class="row-actions">${editBtn('document:'+i)}${delBtn('Removed document.')}</div></td>
   </tr>`).join('');
   $('document-count').textContent = `${rows.length} of ${documents.length} documents`;
-}
-function renderRequests(){
-  const active = document.querySelector('#request-filters .chip.active');
-  const f = active ? active.dataset.filter : 'all';
-  const rows = requests.map((r,i)=>({r,i})).filter(o => f==='all' || o.r.type===f);
-  $('requests-tbody').innerHTML = rows.map(({r,i})=>{
-    const m = reqTypeMeta[r.type];
-    return `<tr>
-      <td><span class="req-type"><span class="rt-ico ${m.cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${m.ico}</svg></span>${r.type}</span></td>
-      <td class="t-strong">${r.member}</td>
-      <td>${r.detail}</td>
-      <td>${r.date}</td>
-      <td>${statusPill(r.status)}</td>
-      <td class="t-right"><div class="row-actions"><button class="link-act" data-request="${i}">Review</button></div></td>
-    </tr>`;
-  }).join('');
-  const pending = requests.filter(r=>r.status!=='Resolved').length;
-  $('request-count').textContent = `${rows.length} shown · ${pending} pending`;
 }
 function renderFuse(){
   const q = ($('fuse-search')?.value || '').toLowerCase();
@@ -1009,21 +985,9 @@ function updateAudience(){
    Render: dashboard
    ============================================================ */
 function renderDashboard(){
-  const pending = requests.filter(r=>r.status!=='Resolved').length;
-  $('dash-pending').textContent = pending;
-  $('nav-req-count').textContent = pending;
   $('dash-lenders').textContent = lenders.length;
   $('dash-vendors').textContent = vendors.length;
   if($('dash-pastdue')) $('dash-pastdue').textContent = subscriptions.filter(s=>s.status==='Past due').length;
-  // pending requests table (top 5)
-  $('dash-requests').innerHTML =
-    '<thead><tr><th>Type</th><th>Member</th><th>Submitted</th><th>Status</th></tr></thead><tbody>' +
-    requests.filter(r=>r.status!=='Resolved').slice(0,5).map(r=>{
-      const i = requests.indexOf(r); const m = reqTypeMeta[r.type];
-      return `<tr style="cursor:pointer" data-request="${i}">
-        <td><span class="req-type"><span class="rt-ico ${m.cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${m.ico}</svg></span>${r.type}</span></td>
-        <td class="t-strong">${r.member}</td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`;
-    }).join('') + '</tbody>';
   // newest members
   $('dash-members').innerHTML = members.slice(0,5).map(m=>`
     <div class="list-row"><div class="t-avatar">${initials(m.name)}</div>
@@ -1279,8 +1243,9 @@ function openRequest(idx){
 function navigate(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===view));
-  document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===view));
+  const navView = view==='request-detail' ? 'requests' : view;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
+  document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
   window.scrollTo(0,0);
 }
@@ -1294,7 +1259,7 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
    ============================================================ */
 fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
-renderResources(); renderEvents(); renderRequests(); renderFuse();
+renderResources(); renderEvents(); renderFuse();
 renderHubs(); renderDocuments(); renderJourneys(); renderVendorClicks();
 renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
@@ -1317,12 +1282,6 @@ $('cart-step') && $('cart-step').addEventListener('change', renderAbandoned);
 $('fuse-export') && $('fuse-export').addEventListener('click', ()=>{
   const n = document.querySelectorAll('#fuse-tbody tr').length;
   showToast(`Exported ${n} attendee${n===1?'':'s'} to CSV.`);
-});
-
-$('request-filters').addEventListener('click', e=>{
-  const chip = e.target.closest('.chip'); if(!chip) return;
-  document.querySelectorAll('#request-filters .chip').forEach(c=>c.classList.remove('active'));
-  chip.classList.add('active'); renderRequests();
 });
 
 $('document-filters') && $('document-filters').addEventListener('click', e=>{
