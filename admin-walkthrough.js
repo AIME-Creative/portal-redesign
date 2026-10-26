@@ -54,7 +54,7 @@
     { sec: 3, page: 'members', target: '#view-members .toolbar', title: 'Members',
       body: 'Every member with their tier, NMLS #, and licensed states. Search by name, email, or NMLS #, and filter by role, tier, billing, and state. <strong>Manage</strong> opens their role, plan, billing, and escalation allowance.' },
     { sec: 3, page: 'partners', target: '#view-partners .adm-section-head', title: 'Partner users',
-      body: 'Lender and vendor accounts — only admins create them, and there\'s no billing. Pick Lender or Vendor and the company; they get an email to set a password. Everyone at a company sees its dashboard and requests. Who each request is sent to is set on the lender or vendor listing.' },
+      body: 'Free lender and vendor accounts — never a paid membership. Only admins create them: pick Lender or Vendor and the company, and they get an email to set a password. Add one per person; everyone at a company has the same access to its dashboard and requests. Who each request is sent to is set on the lender or vendor listing.' },
     { sec: 4, page: 'members', target: navItems('subscriptions', 'abandoned', 'coupons'), mTarget: '.menu-btn', title: 'Billing',
       body: 'Subscriptions (with past-due follow-up), abandoned sign-ups to win back, and coupons — all synced with Stripe.' },
     { sec: 5, page: 'notifications', target: '#view-notifications .composer-grid', title: 'Notify members',

@@ -2,12 +2,13 @@
    AMP Admin — Partner users (lender & vendor accounts)
    ------------------------------------------------------------
    Sidebar → Partner users. Admins create every partner account
-   (no self-signup, no billing): First, Last, Email, Phone,
+   (no self-signup; free — never a paid membership): First, Last, Email, Phone,
    Lender / Vendor, and Company. The company list is Active
    lenders, or Active vendor companies (products grouped by
    their Company field). The new user gets an invite email to
    set a password. Row actions: Edit, Resend invite, Deactivate /
-   Reactivate. Escalation and "Sent to" contacts live on the
+   Reactivate. Many users per company, all with identical access
+   (no per-user permissions). Escalation and "Sent to" contacts live on the
    lender / vendor listing, not here.
    Data: partner-store.js (AmpPartners, shared with the member app).
    Uses admin.js globals: lenders, vendors, navigate, openModal,
@@ -71,7 +72,7 @@
       <div class="field-row">${inp('Email', 'email', 'email')}${inp('Phone', 'phone', 'tel')}</div>
       <div class="field"><label>Company</label><select class="select" id="pu-f-company">${companyOptions(u.type, u.company)}</select>
         <div class="hint" id="pu-company-hint"></div></div>
-      <p class="t-sub" style="margin:6px 0 0">Partner accounts have no billing. They see their company's dashboard and requests, and view-only Lenders &amp; Market. Who requests are sent to is set on the company's ${u.type === 'Lender' ? 'lender' : 'vendor'} listing.</p>`;
+      <p class="t-sub" style="margin:6px 0 0">Partner accounts are free — never a paid membership, no tier or billing. Every user at a company has the same access: the company's dashboard and requests, and view-only Lenders &amp; Market. Who requests are sent to is set on the company's ${u.type === 'Lender' ? 'lender' : 'vendor'} listing.</p>`;
     hint();
     openModal('partner');
   }

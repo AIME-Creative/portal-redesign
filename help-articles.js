@@ -54,7 +54,7 @@ window.HELP_ARTICLES = [
       <div class="kb-tip">Who requests are sent to is set on your company listing. To change it, email AIME (lenders@aimegroup.com or vendors@aimegroup.com).</div>` },
   { slug: 'partner-access', audience: 'partner', title: 'What partner accounts can and can’t do', category: 'partners',
     summary: 'View-only Lenders and Market, full resources and events, support, and listing changes.',
-    tags: ['access', 'view only', 'partner account', 'listing', 'change listing', 'market', 'lenders', 'resources'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['access', 'view only', 'partner account', 'listing', 'change listing', 'market', 'lenders', 'resources', 'team', 'teammate', 'add user', 'permissions'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
     views: 0, helpful: [0, 0], actions: [{ label: 'Get support', attr: 'data-nav="support"' }],
     body: `
       <ul>
@@ -62,8 +62,9 @@ window.HELP_ARTICLES = [
         <li><strong>Lenders and Market</strong> — view only: partner accounts can't submit escalations, connections, or Change AE requests, or use member discounts.</li>
         <li><strong>Support</strong> — open tickets and reply to our team, just like members. Your tickets are under <strong>Requests → My support tickets</strong>.</li>
         <li><strong>AIME Exchange</strong> — available from the sidebar.</li>
+        <li><strong>Your team</strong> — each person at your company has their own login, and everyone has the same access: the same dashboard, every request, and the ability to reply.</li>
       </ul>
-      <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are created by AIME — ask us to add a teammate.</p>` },
+      <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are free and created by AIME — ask us to add a teammate.</p>` },
 
   /* ---------------- Getting started ---------------- */
   { slug: 'portal-tour', title: 'A quick tour of the member portal', category: 'start', popular: true,
