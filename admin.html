@@ -64,6 +64,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>
         Members
       </button>
+      <button class="nav-item" data-nav="partners">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/><path d="M9 21v-5h6v5"/></svg>
+        Partner users
+      </button>
 
       <div class="nav-label">Billing</div>
       <button class="nav-item" data-nav="subscriptions">
@@ -811,6 +815,24 @@
       </section>
 
       <!-- ============ FUSE ============ -->
+      <!-- ============ PARTNER USERS (admin-partners.js) ============ -->
+      <section class="view" id="view-partners">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Partner users</h1><p>Lender and vendor accounts. Created by admins only — no self-signup, no billing. Everyone at a company sees that company's dashboard and requests.</p></div>
+          <button class="btn btn-primary" data-partner-edit="">+ Add partner user</button>
+        </div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="pu-q" placeholder="Search by name, email, or company…"></div>
+          <select class="select filter-select" id="pu-type"><option value="all">Lenders &amp; vendors</option><option>Lender</option><option>Vendor</option></select>
+          <select class="select filter-select" id="pu-status"><option value="all">All statuses</option><option>Active</option><option>Invited</option><option>Deactivated</option></select>
+          <span class="spacer"></span><span class="count-note" id="pu-count">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm">
+          <thead><tr><th>User</th><th>Type</th><th>Company</th><th>Status</th><th>Last login</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="pu-tbody"></tbody>
+        </table></div></div>
+      </section>
+
       <!-- ============ EVENT REGISTRATIONS (admin-event-reg.js) ============ -->
       <section class="view" id="view-registrations">
         <div class="adm-section-head">
@@ -855,6 +877,18 @@
       <button class="btn btn-outline" data-close>Cancel</button>
       <button class="btn btn-primary" id="edit-save" data-toast="Saved." data-close>Save</button>
     </div>
+  </div>
+</div>
+
+<!-- ===================== PARTNER USER (admin-partners.js) ===================== -->
+<div class="modal-overlay" id="modal-partner">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-head">
+      <div><h2 id="pu-title">Add partner user</h2><p id="pu-sub">They'll get an email to set their password.</p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="pu-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="pu-save">Send invite</button></div>
   </div>
 </div>
 
@@ -911,6 +945,7 @@
 </nav>
 
 <script src="requests-store.js"></script>
+<script src="partner-store.js"></script>
 <script src="event-registration-store.js"></script>
 <script src="subscriptions-shared.js"></script>
 <script src="admin.js"></script>
@@ -918,6 +953,7 @@
 <script src="help-articles.js"></script>
 <script src="admin-help.js"></script>
 <script src="admin-event-reg.js"></script>
+<script src="admin-partners.js"></script>
 <!-- admin first-time walkthrough (separate from the member tour) -->
 <script src="tour-engine.js"></script>
 <script src="admin-walkthrough.js"></script>

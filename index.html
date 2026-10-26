@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="help.css">
 <link rel="stylesheet" href="subscriptions.css">
 <link rel="stylesheet" href="event-registration.css">
+<link rel="stylesheet" href="partner.css">
 </head>
 <body>
 <div class="app">
@@ -397,6 +398,11 @@
         <div class="card rq-list" id="rq-list"></div>
       </section>
       <section class="view" id="view-request-detail"><div id="rq-detail-body"></div></section>
+
+      <!-- ============ LENDER / VENDOR PARTNER PAGES (partner-portal.js) ============ -->
+      <section class="view" id="view-partner"><div id="partner-body"></div></section>
+      <section class="view" id="view-partner-requests"><div id="partner-requests-body"></div></section>
+      <section class="view" id="view-partner-request"><div id="partner-request-body"></div></section>
 
       <!-- ============ HELP CENTER (rendered by help-center.js) ============ -->
       <section class="view" id="view-help"><div id="help-body"></div></section>
@@ -890,6 +896,7 @@
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
 
 <script src="requests-store.js"></script>
+<script src="partner-store.js"></script>
 <script src="subscriptions-shared.js"></script>
 <script src="app.js"></script>
 <script src="my-requests.js"></script>
@@ -898,9 +905,12 @@
 <script src="cancel-membership.js"></script>
 <script src="event-registration-store.js"></script>
 <script src="event-registration.js"></script>
+<!-- lender / vendor partner users (only active when signed in as a partner) -->
+<script src="partner-portal.js"></script>
 <!-- first-time walkthrough — replay from the ? menu, Help Center, or Settings -->
 <script src="tour-engine.js"></script>
 <script src="walkthrough.js"></script>
+<script src="partner-walkthrough.js"></script>
 <!-- events calendar add-on (preview) — remove this line + events-schedule.js to drop it -->
 <script src="events-schedule.js"></script>
 <!-- review-only: member/admin toggle — remove before launch -->

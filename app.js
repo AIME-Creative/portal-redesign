@@ -31,6 +31,7 @@ const vendors = [
   { name:"Cotality",                     short:"CO",  cat:"Origination", g:["#0b2a5b","#1893b1"], desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"], offer:"Member-only data bundles" },
   { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   g:["#7a1f1a","#e0463c"], desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"], offer:"First month free for members" },
   { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   g:["#0f5e3f","#1b9d6b"], desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"], offer:"Discounted setup for members" },
+  { name:"APS Verification Services",    short:"APS", cat:"Core Partner", g:["#14613d","#20adce"], desc:"Employment, income, and asset verifications from Advantage Partners Solutions.", tags:["Verifications","VOE"], offer:"Member pricing on VOE / VOI bundles" },
   { name:"Xactus",                       short:"XAC", cat:"Core Partner",g:["#1b4f7a","#20adce"], desc:"Verification and credit solutions trusted across the mortgage industry.", tags:["Credit","Verifications"], offer:"Member pricing on verification bundles" },
   { name:"The CORE Training",            short:"CORE",cat:"Coaching",    g:["#5b2a86","#a23fb0"], desc:"Performance coaching program for top-producing originators and teams.", tags:["Coaching","Scaling"], offer:"Discounted enrollment for members" },
   { name:"Mortgage Coach",               short:"MC",  cat:"Coaching",    g:["#0b1f5b","#1893b1"], desc:"Interactive presentations that help borrowers understand their options.", tags:["Presentations","Coaching"], offer:"Free trial + member rate" },
@@ -231,8 +232,15 @@ document.getElementById('dash-events').innerHTML = events.slice(0,3).map((e,i)=>
    content can be reviewed. Flip SHOW_VIP_IN_PROTOTYPE to false to see the real
    member-tier behavior.
    ===================================================================== */
-// The member's tier. Prototype only: the review toggle can switch it (localStorage amp-proto-tier); defaults to Elite.
-const memberTier = (() => { try { const t = localStorage.getItem('amp-proto-tier'); return ['Premium','Elite','VIP'].includes(t) ? t : 'Elite'; } catch(e){ return 'Elite'; } })();
+// Who's signed in. 'member' (with a tier) or a lender / vendor partner user (partner-portal.js).
+// Prototype only: the review toggle switches it (localStorage amp-proto-tier = Premium|Elite|VIP|Lender|Vendor).
+const PROTO_VIEW = (() => { try { return localStorage.getItem('amp-proto-tier') || 'Elite'; } catch(e){ return 'Elite'; } })();
+const userType = PROTO_VIEW === 'Lender' ? 'lender' : PROTO_VIEW === 'Vendor' ? 'vendor' : 'member';
+window.AMP_USER_TYPE = userType;
+// The signed-in partner user (prototype: a sample user from partner-store.js)
+window.AMP_PARTNER_USER = userType === 'member' || !window.AmpPartners ? null : AmpPartners.sampleUser(userType === 'lender' ? 'Lender' : 'Vendor');
+// Partners aren't members; member-only features are hidden for them, so this just needs a valid value.
+const memberTier = ['Premium','Elite','VIP'].includes(PROTO_VIEW) ? PROTO_VIEW : 'Elite';
 // Tier-specific labels in the page ([data-tier-label="name|price|esc|esc-count|esc-bar"]).
 // Not [data-tier] — lender cards and the tier filter chips already use that for Gold/Silver/Bronze.
 const TIER_INFO = {
@@ -570,6 +578,7 @@ function navigate(view){
     (view==='event-detail'&&n.dataset.nav==='events') ||
     (view==='request-detail'&&n.dataset.nav==='requests') ||
     (view==='help-article'&&n.dataset.nav==='help') ||
+    (view==='partner-request'&&n.dataset.nav==='partner-requests') ||
     (view==='hub-detail'&&n.dataset.nav===currentHub);
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', navMatch(n)));

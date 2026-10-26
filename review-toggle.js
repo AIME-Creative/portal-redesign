@@ -1,8 +1,9 @@
 /* ============================================================
    Review-only Member/Admin toggle  —  REMOVE BEFORE LAUNCH
    Self-contained: injects its own button + styles, no deps.
-   On the member side it also switches the tier you're viewing as
-   (Premium / Elite / VIP → localStorage amp-proto-tier, read by app.js).
+   On the member side it also switches who you're viewing as: a member
+   tier (Premium / Elite / VIP) or a partner user (Lender / Vendor) →
+   localStorage amp-proto-tier, read by app.js.
    Included by both index.html and admin.html.
    ============================================================ */
 (function () {
@@ -49,8 +50,11 @@
       var cur = 'Elite';
       try { cur = localStorage.getItem('amp-proto-tier') || 'Elite'; } catch (e) { /* default */ }
       el.insertAdjacentHTML('beforeend', '<span class="rev-sep"></span><span class="rev-tag" style="margin-right:2px">AS</span>' +
-        ['Premium', 'Elite', 'VIP'].map(function (t) {
-          return '<button type="button" class="rev-tier' + (t === cur ? ' on' : '') + '" data-rev-tier="' + t + '" title="View the portal as a ' + t + ' member">' + t + '</button>';
+        ['Premium', 'Elite', 'VIP', '|', 'Lender', 'Vendor'].map(function (t) {
+          if (t === '|') return '<span class="rev-sep"></span>';
+          var partner = t === 'Lender' || t === 'Vendor';
+          return '<button type="button" class="rev-tier' + (t === cur ? ' on' : '') + '" data-rev-tier="' + t + '" title="' +
+            (partner ? 'View the portal as a ' + t.toLowerCase() + ' partner user' : 'View the portal as a ' + t + ' member') + '">' + t + '</button>';
         }).join(''));
       el.addEventListener('click', function (e) {
         var b = e.target.closest('[data-rev-tier]');

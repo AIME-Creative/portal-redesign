@@ -69,6 +69,8 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .dot-active::before { background:var(--green); }
 .dot-draft::before { background:var(--amber); }
 .dot-paused::before { background:var(--muted); }
+.dot-invited::before { background:var(--cyan); }
+.dot-deactivated::before { background:var(--red); }
 
 /* requests queue specifics */
 .req-type { display:inline-flex; align-items:center; gap:7px; font-weight:600; font-size:13px; }
@@ -221,3 +223,7 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 /* Members table: licensed-state tags wrap within the cell */
 .lic-tags { display:flex; flex-wrap:wrap; gap:4px; max-width:220px; }
 .lic-tags .tag { margin:0; }
+
+/* Partner users table (admin-partners.js) */
+#pu-tbody .link-act { white-space:nowrap; }
+#pu-tbody .pu-actions { flex-direction:column; align-items:flex-end; gap:4px; }

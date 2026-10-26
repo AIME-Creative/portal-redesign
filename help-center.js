@@ -18,7 +18,10 @@
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const svg = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${d}</svg>`;
-  const live = () => ALL.filter((a) => a.status === 'Published');
+  // Members and lender/vendor partners see different guides (article.audience: member | partner | all)
+  const AUDIENCE = window.AMP_USER_TYPE && window.AMP_USER_TYPE !== 'member' ? 'partner' : 'member';
+  const live = () => ALL.filter((a) => a.status === 'Published' && [AUDIENCE, 'all'].includes(a.audience || 'member'));
+  const firstName = () => (window.AMP_PARTNER_USER && window.AMP_PARTNER_USER.first) || 'Kyle';
   const bySlug = (s) => live().find((a) => a.slug === s);
 
   let cat = null, query = '', current = null;   // current = slug of the open article
@@ -80,7 +83,7 @@
     const box = $('help-body'); if (!box) return;
     const hero = `
       <div class="kb-hero">
-        <h1>How can we help, Kyle?</h1>
+        <h1>How can we help, ${esc(firstName())}?</h1>
         <p>Search guides for escalations, lenders, billing, FUSE, and more.</p>
         <div class="kb-search">${svg('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>')}
           <input type="search" id="kb-q" placeholder="e.g. escalate a loan, FUSE ticket, change my AE" value="${esc(query)}" autocomplete="off" aria-label="Search the Help Center"></div>
@@ -105,11 +108,12 @@
       main = `<div class="section-title"><h2>Browse by topic</h2></div>
         <div class="kb-cats">${Object.entries(CATS).map(([k, c]) => {
           const n = live().filter((a) => a.category === k).length;
+          if (!n) return '';
           return `<button class="kb-cat" data-kb-cat="${k}"><span class="kb-cat-ico">${svg(c.ico)}</span>
             <span class="kb-cat-t">${c.name}</span><span class="kb-cat-s">${c.desc}</span><span class="kb-cat-n">${n} guide${n === 1 ? '' : 's'}</span></button>`;
         }).join('')}</div>
         <div class="section-title" style="margin-top:28px"><h2>Popular guides</h2></div>
-        <div class="card kb-list">${live().filter((a) => a.popular).map(row).join('')}</div>`;
+        <div class="card kb-list">${live().filter((a) => a.popular || (AUDIENCE === 'partner' && a.audience === 'partner')).map(row).join('')}</div>`;
     }
 
     box.innerHTML = hero + `<div class="grid rq-detail-grid kb-grid" style="grid-template-columns:1fr 300px;align-items:start;margin-top:24px">

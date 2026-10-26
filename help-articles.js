@@ -22,10 +22,48 @@ window.HELP_CATEGORIES = {
   learning:    { name: 'Resources & hubs',          ico: '<path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/>', desc: 'Trainings, hubs, and documents.' },
   events:      { name: 'Events & FUSE',             ico: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>', desc: 'Events, the calendar, and FUSE 2026.' },
   billing:     { name: 'Membership & billing',      ico: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>', desc: 'Plans, payments, and escalation allowance.' },
+  partners:    { name: 'For lender & vendor partners', ico: '<path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/>', desc: 'Your dashboard, requests, and what partner accounts can do.' },
   account:     { name: 'Account & support',         ico: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0116 0v1"/>', desc: 'Profile, password, tickets, and requests.' },
 };
 
 window.HELP_ARTICLES = [
+  /* ---------------- Lender & vendor partners (audience: partner) ---------------- */
+  { slug: 'partner-dashboard', audience: 'partner', title: 'Your partner dashboard', category: 'partners', popular: true,
+    summary: 'Page views by member tier and the latest requests sent to your company.',
+    tags: ['dashboard', 'page views', 'analytics', 'tier', 'partner', 'lender', 'vendor', 'stats'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    views: 0, helpful: [0, 0], actions: [{ label: 'Open my dashboard', attr: 'data-nav="partner"' }],
+    body: `
+      <p>Your <strong>Dashboard</strong> is your home page in AMP. Everyone at your company sees the same numbers.</p>
+      <ul>
+        <li><strong>Lenders</strong> — views of your lender page, broken out by the viewing member's tier (Premium, Elite, VIP) plus the total and unique members, and counts of escalations, connections, and Change AE requests.</li>
+        <li><strong>Vendors</strong> — views of each of your Market products by member tier, with a total across all your products, plus your connection requests.</li>
+      </ul>
+      <p>Use the date range at the top right to change the period. The <strong>Recent requests</strong> list links to the full details.</p>` },
+  { slug: 'partner-requests', audience: 'partner', title: 'Requests sent to your company', category: 'partners', popular: true,
+    summary: 'See full member details, reply to escalations, and email members who asked to connect.',
+    tags: ['requests', 'escalation', 'reply', 'connection', 'change ae', 'email', 'sent to', 'partner'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    views: 0, helpful: [0, 0], actions: [{ label: 'Open requests', attr: 'data-nav="partner-requests"' }],
+    body: `
+      <p><strong>Requests</strong> lists every request AIME members send to your company, with the member's name, email, phone, NMLS #, company, and licensed states — the same details as the email — and <strong>Sent to</strong>, the person at your company it was emailed to.</p>
+      <ol class="kb-steps">
+        <li><strong>Escalations (lenders):</strong> open one and use <strong>Reply</strong> to update the member, or <strong>Reply &amp; mark resolved</strong> when it's fixed. You can also simply reply to the escalation email — no login needed — and it lands here.</li>
+        <li><strong>Connections and Change AE:</strong> use <strong>Email &lt;member&gt;</strong> to start an email to them directly.</li>
+        <li>A <strong>Member requested follow-up</strong> flag means the member asked AIME to check in — the AIME team may contact you too.</li>
+      </ol>
+      <div class="kb-tip">Who requests are sent to is set on your company listing. To change it, email AIME (lenders@aimegroup.com or vendors@aimegroup.com).</div>` },
+  { slug: 'partner-access', audience: 'partner', title: 'What partner accounts can and can’t do', category: 'partners',
+    summary: 'View-only Lenders and Market, full resources and events, support, and listing changes.',
+    tags: ['access', 'view only', 'partner account', 'listing', 'change listing', 'market', 'lenders', 'resources'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
+    views: 0, helpful: [0, 0], actions: [{ label: 'Get support', attr: 'data-nav="support"' }],
+    body: `
+      <ul>
+        <li><strong>Resources and Events</strong> — the same as members (event registration is for members).</li>
+        <li><strong>Lenders and Market</strong> — view only: partner accounts can't submit escalations, connections, or Change AE requests, or use member discounts.</li>
+        <li><strong>Support</strong> — open tickets and reply to our team, just like members. Your tickets are under <strong>Requests → My support tickets</strong>.</li>
+        <li><strong>AIME Exchange</strong> — available from the sidebar.</li>
+      </ul>
+      <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are created by AIME — ask us to add a teammate.</p>` },
+
   /* ---------------- Getting started ---------------- */
   { slug: 'portal-tour', title: 'A quick tour of the member portal', category: 'start', popular: true,
     summary: 'What lives where — the sidebar, search, your escalation count, and quick actions.',
@@ -44,7 +82,7 @@ window.HELP_ARTICLES = [
       <p>The guided walkthrough also shows you, step by step, how to fill in an escalation and where replies to your requests appear.</p>
       <div class="kb-tip"><strong>Tip:</strong> You can replay the guided walkthrough any time from the <strong>?</strong> menu in the top bar or from this Help Center.</div>` },
 
-  { slug: 'mobile', title: 'Using the portal on your phone', category: 'start',
+  { slug: 'mobile', audience: 'all', title: 'Using the portal on your phone', category: 'start',
     summary: 'Where the menu and main sections are on mobile.',
     tags: ['mobile', 'phone', 'app', 'menu'], minutes: 1, updated: 'Oct 2, 2026', status: 'Published',
     views: 402, helpful: [51, 4], actions: [],
@@ -231,7 +269,7 @@ window.HELP_ARTICLES = [
       <div class="kb-tip"><strong>Guests:</strong> each guest needs their own name, email, phone number, and gender — email and phone can't be the same as yours. Guests can join add-ons you've selected (some, like women-only sessions, have their own rules). Some memberships include a free guest; if you're bringing them, their details are required.</div>
       <p>Some events are for specific membership tiers — you'll see who they're for on the event page. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
 
-  { slug: 'events-calendar', title: 'Viewing events as a calendar', category: 'events',
+  { slug: 'events-calendar', audience: 'all', title: 'Viewing events as a calendar', category: 'events',
     summary: 'Switch the Events page between cards and a month calendar.',
     tags: ['events', 'calendar', 'schedule', 'webinar'], minutes: 1, updated: 'Sep 5, 2026', status: 'Published',
     views: 301, helpful: [33, 2],
@@ -261,7 +299,7 @@ window.HELP_ARTICLES = [
       <div class="kb-tip">Seeing "declined" with no charge on your bank's side? Try another browser — older Safari versions can block the card form.</div>` },
 
   /* ---------------- Account & support ---------------- */
-  { slug: 'support-ticket', title: 'Opening a support ticket and replying to our team', category: 'account', popular: true,
+  { slug: 'support-ticket', audience: 'all', title: 'Opening a support ticket and replying to our team', category: 'account', popular: true,
     summary: 'Tickets are a conversation — we reply in the portal and you can answer back.',
     tags: ['support', 'ticket', 'help', 'contact', 'reply', 'question'], minutes: 1, updated: 'Oct 23, 2026', status: 'Published',
     views: 980, helpful: [117, 5],
@@ -274,14 +312,14 @@ window.HELP_ARTICLES = [
       </ol>
       <p>Statuses: <strong>Received</strong> → <strong>In progress</strong> → <strong>Responded</strong> → <strong>Resolved</strong>.</p>` },
 
-  { slug: 'update-profile', title: 'Updating your profile and company information', category: 'account',
+  { slug: 'update-profile', audience: 'all', title: 'Updating your profile and company information', category: 'account',
     summary: 'Keep your NMLS #, licenses, and contact details current.',
     tags: ['profile', 'nmls', 'company', 'address', 'phone', 'licenses'], minutes: 1, updated: 'Aug 30, 2026', status: 'Published',
     views: 377, helpful: [41, 3],
     actions: [{ label: 'Open Settings', attr: 'data-nav="settings"' }],
     body: `<p>Go to <strong>Settings → Profile</strong> (or click your name). Update your personal details and <strong>Company Information</strong>, then <strong>Save changes</strong>. Lender connection forms use these details, so keep your NMLS # and licensed states current.</p>` },
 
-  { slug: 'reset-password', title: 'Changing your email or password', category: 'account',
+  { slug: 'reset-password', audience: 'all', title: 'Changing your email or password', category: 'account',
     summary: 'Update your login email or reset a forgotten password.',
     tags: ['password', 'login', 'email', 'reset', 'forgot', 'sign in'], minutes: 1, updated: 'Aug 30, 2026', status: 'Published',
     views: 812, helpful: [80, 12],
@@ -290,7 +328,7 @@ window.HELP_ARTICLES = [
       <p><strong>Signed in?</strong> Go to <strong>Settings → Email &amp; Password</strong>.</p>
       <p><strong>Locked out?</strong> On the sign-in screen click <strong>Forgot password</strong> — we'll email you a reset link.</p>` },
 
-  { slug: 'report-bug', title: 'Reporting a bug', category: 'account',
+  { slug: 'report-bug', audience: 'all', title: 'Reporting a bug', category: 'account',
     summary: 'Spotted something broken? Send us a screenshot and details.',
     tags: ['bug', 'broken', 'error', 'not working', 'screenshot'], minutes: 1, updated: 'Jul 30, 2026', status: 'Draft',
     views: 0, helpful: [0, 0],

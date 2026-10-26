@@ -53,6 +53,7 @@
 
   /* ---------- event cards: badges ---------- */
   function decorateCards() {
+    if (PARTNER) return;
     document.querySelectorAll('.event-card').forEach((card) => {
       const btn = card.querySelector('[data-open-event]'); if (!btn) return;
       const ev = events[+btn.dataset.openEvent]; if (!ev) return;
@@ -67,7 +68,9 @@
   }
 
   /* ---------- event detail: registration panel ---------- */
+  const PARTNER = window.AMP_USER_TYPE && window.AMP_USER_TYPE !== 'member';
   function panelHTML(ev) {
+    if (PARTNER) return `<p class="er-note">Event registration is for AIME members.</p>`;
     const st = status(ev), s = st.setup;
     if (!s) return `<p class="er-note">No registration needed — add it to your calendar and we'll send the details beforehand.</p>`;
     const tiersLine = `<div class="er-meta">${s.mode === 'rsvp' ? 'Free · RSVP' : 'Ticketed'} · ${R.tierText(s.tiers)}${st.left != null ? ` · ${st.left} spot${st.left === 1 ? '' : 's'} left` : ''}</div>`;
@@ -433,7 +436,7 @@
   // (so the member sees which ticket they're getting before the one click).
   const FUSE = 'FUSE 2026 — National Conference';
   function syncClaimBanner() {
-    if (typeof updateClaimBanner !== 'function') return;
+    if (typeof updateClaimBanner !== 'function' || PARTNER) return;
     ticketClaimed = !!R.find(FUSE, ME.email);   // app.js global
     updateClaimBanner();
   }

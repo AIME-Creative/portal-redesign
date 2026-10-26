@@ -72,8 +72,9 @@
   }
 
   function renderNavCount() {
+    const el = $('rq-nav-count'); if (!el) return; // partner-portal.js swaps in its own badge
     const n = S.mine().filter(S.memberUnread).length;
-    $('rq-nav-count').textContent = n ? n : '';
+    el.textContent = n ? n : '';
   }
 
   /* ---------- detail ---------- */
@@ -245,8 +246,10 @@
     } else if (kind === 'support') {
       const subj = $('tk-subject'), cat = $('tk-category'), msg = $('tk-message');
       const category = cat.selectedIndex > 0 ? cat.value : 'General';
-      const r = S.create('support', { partner: category, title: subj.value.trim() || 'Support request',
-        fields: { Category: category }, message: msg.value.trim() || '(No message)' });
+      const pu = window.AMP_PARTNER_USER;   // partner users file tickets under their own name
+      const r = S.create('support', Object.assign({ partner: category, title: subj.value.trim() || 'Support request',
+        fields: { Category: category }, message: msg.value.trim() || '(No message)' },
+        pu ? { member: `${pu.first} ${pu.last}`, email: pu.email, tier: `${pu.type} partner` } : {}));
       subj.value = ''; msg.value = ''; cat.selectedIndex = 0;
       return r;
     }

@@ -24,6 +24,7 @@
    ============================================================ */
 (function () {
   if (!window.AmpTourEngine) return;
+  if (window.AMP_USER_TYPE && window.AMP_USER_TYPE !== 'member') return;   // partners: partner-walkthrough.js
 
   const ESC = '#modal-escalate';
   const escRow = (n) => () => document.querySelectorAll(`${ESC} .modal-body > .field-row`)[n];

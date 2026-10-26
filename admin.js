@@ -39,6 +39,7 @@ const lenders = [
 ];
 const vendors = [
   { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", offer:"Up to 20% off credit reports", status:"Active" },
+  { name:"APS Verification Services", short:"APS", cat:"Core Partner", offer:"Member pricing on VOE / VOI bundles", status:"Active" },
   { name:"Ask Mindy", short:"AM", cat:"Origination", offer:"Free for AIME members", status:"Active" },
   { name:"Waive Inspection Fee", short:"WIF", cat:"Origination", offer:"$0 inspection fee on qualifying loans", status:"Active" },
   { name:"Arive", short:"AR", cat:"Origination", offer:"Member pricing on Pro plans", status:"Active" },
@@ -1199,14 +1200,24 @@ function openEdit(ref){
       <p style="color:var(--muted);font-size:12.5px;margin:-4px 0 12px">Escalations are emailed here. The lender replies to the email or clicks a status button — no portal login.</p>
       ${(() => { const c = (window.AmpRequests && !isNew) ? AmpRequests.lenderContact(l.name) : { inbox:'', backup:'', reminderDays:2 };
         return `<div class="field-row">${field('Escalation inbox', c.inbox, 'placeholder="escalations@lender.com"')}${field('Backup contact', c.backup, 'placeholder="Name — role (optional)"')}</div>
-      ${selectField('Remind the lender if no response after', ['1 business day','2 business days','3 business days','Never'], c.reminderDays + ' business days')}`; })()}`;
+      ${selectField('Remind the lender if no response after', ['1 business day','2 business days','3 business days','Never'], c.reminderDays + ' business days')}`; })()}
+      <div class="form-section-label" style="margin-top:18px">Who other requests go to</div>
+      <p style="color:var(--muted);font-size:12.5px;margin:-4px 0 12px">Shown to this lender's partner users as "Sent to". Partner users themselves are managed under Members → Partner users.</p>
+      ${(() => { const c = window.AmpPartners && !isNew ? AmpPartners.contacts(l.name, 'lender') : { connection:{name:'',email:''}, changeae:{name:'',email:''} };
+        return `<div class="field-row">${field('Connections — name', c.connection.name)}${field('Connections — email', c.connection.email)}</div>
+      <div class="field-row">${field('Change AE — name', c.changeae.name)}${field('Change AE — email', c.changeae.email)}</div>`; })()}`;
   } else if(type==='vendor'){
     const v = isNew ? {name:'',short:'',cat:taxonomies.vendorCategories[0],offer:'',status:'Active'} : vendors[idx];
     title = isNew ? 'Add vendor' : 'Edit vendor'; sub = isNew?'Add a Market vendor partner.':v.name;
     body = `
       <div class="field-row">${field('Vendor name', v.name)}${field('Logo abbreviation', v.short)}</div>
       <div class="field-row">${selectField('Category', taxonomies.vendorCategories, v.cat)}${selectField('Status', ['Active','Draft'], v.status)}</div>
-      ${field('Member offer', v.offer)}`;
+      ${field('Member offer', v.offer)}
+      ${(() => { const co = window.AmpPartners && !isNew ? AmpPartners.companyOf(v.name) : ''; const c = window.AmpPartners && co ? AmpPartners.contacts(co, 'vendor').connection : { name:'', email:'' };
+        return `${field('Company', co, 'placeholder="Company that owns this product"')}
+      <div class="hint" style="margin:-6px 0 14px">Products with the same company roll up together — on that company's partner dashboard and in the Partner users company list.</div>
+      <div class="form-section-label">Connection requests go to</div>
+      <div class="field-row">${field('Name', c.name)}${field('Email', c.email)}</div>`; })()}`;
   } else if(type==='resource'){
     const r = isNew ? {title:'',type:taxonomies.resourceTypes[0],dur:'',collection:'—',topic:'—',status:'Draft'} : resources[idx];
     title = isNew ? 'Add resource' : 'Edit resource'; sub = isNew?'Add a webinar, podcast, training, recording, or certification.':r.title;

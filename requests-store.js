@@ -17,9 +17,9 @@
      Connection / Change AE : Delivered
    ============================================================ */
 (function () {
-  const KEY = 'amp-requests-v2';   // bump when the seed shape changes
+  const KEY = 'amp-requests-v3';   // bump when the seed shape changes
   // Example member; tier follows the prototype's tier switch (review toggle) if set
-  const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: (() => { try { return localStorage.getItem('amp-proto-tier') || 'Elite'; } catch (e) { return 'Elite'; } })() };
+  const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: (() => { try { const t = localStorage.getItem('amp-proto-tier'); return ['Premium', 'Elite', 'VIP'].includes(t) ? t : 'Elite'; } catch (e) { return 'Elite'; } })() };
 
   const TYPES = {
     escalation: { label: 'Escalation',        prefix: 'ESC', flow: ['Received', 'Responded', 'Resolved'] },
@@ -179,6 +179,17 @@
       fields: { Lender: 'EPM' },
       activity: [{ at: t(4 * H), kind: 'submitted', by: 'member', author: 'Darnell Ross', text: 'Connection request submitted.' },
         { at: t(4 * H - 60e3), kind: 'delivered', by: 'system', text: "Delivered to EPM's partner team." }] });
+    // Connections to UWM and to Advantage Partners Solutions' products (shown to those partner users)
+    const conn = (id, who, email, tier, partner, vendor, ago) => other({ id, type: 'connection', member: who, email, tier, partner,
+      title: `Connection request — ${partner}`, status: 'Delivered', createdAt: t(ago),
+      fields: vendor ? { Vendor: partner, 'Shared with vendor': 'Name, email, phone, NMLS #, licensed states' } : { Lender: partner, 'Shared with lender': 'Name, email, phone, NMLS #, licensed states' },
+      activity: [{ at: t(ago), kind: 'submitted', by: 'member', author: who, text: 'Connection request submitted.' },
+        { at: t(ago - 60e3), kind: 'delivered', by: 'system', text: `Delivered to ${partner}'s ${vendor ? '' : 'partner '}team.`.replace('  ', ' ') }] });
+    conn('CON-3321', 'Maria Chen', 'maria@chenlending.com', 'VIP', 'United Wholesale Mortgage', false, 1 * D);
+    conn('CON-3322', 'Sam Whitfield', 'sam@whitfieldfunding.com', 'Elite', 'United Wholesale Mortgage', false, 5 * D);
+    conn('CON-3323', ME.name, ME.email, ME.tier, 'Advantage Partners Solutions', true, 6 * D);
+    conn('CON-3324', 'Priya Nair', 'priya@nairhomeloans.com', 'Elite', 'APS Verification Services', true, 2 * D);
+    conn('CON-3325', 'Tom Becker', 'tom@beckerhomes.com', 'Elite', 'Advantage Partners Solutions', true, 10 * D);
     other({ id: 'CAE-0421', type: 'changeae', member: 'Tom Becker', email: 'tom@beckerhomes.com', tier: 'Elite',
       partner: 'United Wholesale Mortgage', title: 'Change AE — United Wholesale Mortgage', status: 'Delivered', createdAt: t(1 * D),
       fields: { Lender: 'United Wholesale Mortgage', 'Current AE': 'Dana Price', Reason: 'Poor communication' },
@@ -231,7 +242,8 @@
   window.AmpRequests = {
     TYPES, TEAM, ME, byAt,
     all: () => items.slice().sort((a, b) => (lastActivity(b) > lastActivity(a) ? 1 : -1)),
-    mine: () => window.AmpRequests.all().filter((r) => r.member === ME.name),
+    // The signed-in user's own requests (a partner user only has their own support tickets)
+    mine: () => window.AmpRequests.all().filter((r) => (window.AMP_PARTNER_USER ? r.email === window.AMP_PARTNER_USER.email : r.member === ME.name)),
     get: find,
     lastActivity,
     onChange: (fn) => listeners.push(fn),
@@ -291,11 +303,11 @@
       changed();
     },
     // One-click link from the lender email: 'working' (We're on it) or 'resolved', optional note.
-    lenderAction(id, action, note) {
+    lenderAction(id, action, note, via) {
       const r = find(id); if (!r) return;
       const text = (note || '').trim() || (action === 'resolved'
         ? 'Marked this escalation resolved.' : "We're on it — this escalation is being worked.");
-      log(r, { kind: 'lender-response', by: 'lender', author: r.partner, via: 'one-click link', text });
+      log(r, { kind: 'lender-response', by: 'lender', author: r.partner, via: via || 'one-click link', text });
       const next = action === 'resolved' ? 'Resolved' : (r.status === 'Received' ? 'Responded' : null);
       if (next && r.status !== next) { r.status = next; log(r, { kind: 'status', by: 'lender', author: r.partner, text: next }); }
       closeFollowUp(r);
