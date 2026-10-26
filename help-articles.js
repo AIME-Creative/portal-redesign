@@ -235,7 +235,7 @@ window.HELP_ARTICLES = [
   /* ---------------- Resources & hubs ---------------- */
   { slug: 'hubs', title: 'What are hubs (Brokers Edge, WMN, Ascent, VIP…)?', category: 'learning',
     summary: 'Collections of trainings, events, and documents for a program or audience.',
-    tags: ['hub', 'brokers edge', 'mortgage mornings', 'accelerate', 'wmn', 'ascent', 'vip'], minutes: 2, updated: 'Oct 1, 2026', status: 'Published',
+    tags: ['hub', 'brokers edge', 'mortgage mornings', 'accelerate', 'wmn', 'ascent', 'vip', 'upgrade'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
     views: 520, helpful: [58, 4],
     actions: [{ label: 'Open Brokers Edge', attr: 'data-nav="brokersedge"' }],
     body: `
@@ -244,7 +244,7 @@ window.HELP_ARTICLES = [
         <li><strong>Learning &amp; Training</strong> — Brokers Edge (certifications), Mortgage Mornings (recordings), Accelerate Live (replays).</li>
         <li><strong>My Hubs</strong> — WMN (Women's Mortgage Network) and, for VIP members, Ascent and VIP.</li>
       </ul>
-      <p>Each hub has its own content and a <strong>Documents</strong> tab. Some hubs are only available on certain plans.</p>` },
+      <p>Each hub has its own content and a <strong>Documents</strong> tab. Ascent and VIP are for VIP members only — they don't appear in your sidebar on other plans. To get them, upgrade to VIP in <strong>Settings → Membership &amp; Billing</strong>.</p>` },
 
   { slug: 'documents', title: 'Finding and downloading documents', category: 'learning',
     summary: 'Templates, checklists, and guides from every hub in one list.',
@@ -279,7 +279,7 @@ window.HELP_ARTICLES = [
 
   { slug: 'event-registration', title: 'Registering or RSVPing for an event', category: 'events', popular: false,
     summary: 'Which events need registration, tickets and add-ons, guests, and changing your registration.',
-    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'claim'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'claim', 'upgrade', 'vip only'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
     body: `
@@ -290,7 +290,7 @@ window.HELP_ARTICLES = [
         <li>Add guests if the event allows them, answer any questions, and submit. Paid registrations go through secure checkout.</li>
       </ol>
       <div class="kb-tip"><strong>Guests:</strong> each guest needs their own name, email, phone number, and gender — email and phone can't be the same as yours. Guests can join add-ons you've selected (some, like women-only sessions, have their own rules). Some memberships include a free guest; if you're bringing them, their details are required.</div>
-      <p>Some events are for specific membership tiers — you'll see who they're for on the event page. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
+      <p>Some events are for specific membership tiers. You can still see their details, but registration is limited — for example, only VIP members can register for AIME Ascent 2027. If your plan doesn't include it, the event page shows an <strong>Upgrade to VIP</strong> button that takes you to your membership options. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
 
   { slug: 'events-calendar', audience: 'all', title: 'Viewing events as a calendar', category: 'events',
     summary: 'Switch the Events page between cards and a month calendar.',

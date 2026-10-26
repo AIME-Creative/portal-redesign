@@ -20,7 +20,7 @@
        included guest", which makes those fields required
    Data: event-registration-store.js (shared with admin).
    Wraps app.js's openEvent() and uses its globals: events,
-   memberTier, SHOW_VIP_IN_PROTOTYPE, navigate, openModal,
+   memberTier, navigate, openModal,
    closeModals, showToast, backArrow.
    Deep link: index.html#register=<event-slug>
    ============================================================ */
@@ -84,9 +84,10 @@
         <button class="link-muted" style="display:block;margin:12px auto 0" data-er-cancel>${s.mode === 'rsvp' ? 'Cancel my RSVP' : 'Cancel registration'}</button>`;
     }
     if (!st.eligible) {
-      return `<div class="er-locked">${lockIco}<div><strong>For ${s.tiers.join(' & ')} members</strong><div class="er-meta">Registration for this event is limited to ${esc(s.tiers.join(' & '))} members.</div></div></div>
-        <button class="btn btn-outline btn-block" style="margin-top:14px" data-nav="settings" data-tab="billing">See membership options</button>
-        ${typeof SHOW_VIP_IN_PROTOTYPE !== 'undefined' && SHOW_VIP_IN_PROTOTYPE ? '<button class="link-muted" style="display:block;margin:12px auto 0" data-er-open data-preview>Preview the form (prototype only)</button>' : ''}`;
+      const top = ['VIP', 'Elite', 'Premium'].find((t) => s.tiers.includes(t)) || s.tiers[0];   // the tier to upgrade to
+      return `<div class="er-locked">${lockIco}<div><strong>Registration is for ${s.tiers.join(' & ')} members</strong><div class="er-meta">You can see the event details, but only ${esc(s.tiers.join(' & '))} members can register. Upgrade to ${esc(top)} to save your spot.</div></div></div>
+        <button class="btn btn-primary btn-block" style="margin-top:14px" data-nav="settings" data-tab="billing">Upgrade to ${esc(top)}</button>
+        <button class="link-muted" style="display:block;margin:10px auto 0" data-nav="settings" data-tab="billing">Compare membership plans</button>`;
     }
     if (st.closed) return tiersLine + `<p class="er-note">Registration closed on ${esc(R.fmtDate(s.closes))}.</p>`;
     if (st.left === 0) return tiersLine + `<p class="er-note">This event is full.</p><button class="btn btn-outline btn-block" data-toast="You're on the waitlist — we'll email you if a spot opens.">Join the waitlist</button>`;

@@ -226,11 +226,10 @@ document.getElementById('dash-events').innerHTML = events.slice(0,3).map((e,i)=>
    content grid + a Documents tab. Mixed hubs (VIP / WMN) bundle videos, events
    and documents into one exclusive hub.
 
-   VIP gating: in production, `vip:true` hubs are shown ONLY to VIP members.
-   The test profile is Elite, so we'd normally hide Ascent + VIP — but for this
-   prototype we keep them visible (with a "VIP" badge + preview note) so the
-   content can be reviewed. Flip SHOW_VIP_IN_PROTOTYPE to false to see the real
-   member-tier behavior.
+   VIP gating: `vip:true` hubs (Ascent, VIP) are shown ONLY to VIP members —
+   their sidebar links are hidden and their pages can't be opened by other
+   tiers. Switch tiers with the review pill (AS Premium / Elite / VIP) to see
+   it. Production must enforce this server-side.
    ===================================================================== */
 // Who's signed in. 'member' (with a tier) or a lender / vendor partner user (partner-portal.js).
 // Prototype only: the review toggle switches it (localStorage amp-proto-tier = Premium|Elite|VIP|Lender|Vendor).
@@ -255,8 +254,7 @@ document.querySelectorAll('[data-tier-label]').forEach(el => {
   else if(k==='esc-count') el.textContent = info.count;
   else el.textContent = info[k];
 });
-const SHOW_VIP_IN_PROTOTYPE = true;
-const canSeeVIP = (memberTier === 'VIP') || SHOW_VIP_IN_PROTOTYPE;
+const canSeeVIP = memberTier === 'VIP' && userType === 'member';
 
 const hubs = {
   brokersedge: {
@@ -404,7 +402,7 @@ function renderHub(key){
   const root = document.getElementById('view-'+key);
   if(!hub || !root) return;
 
-  const vipNote = hub.vip ? `<div class="vip-note">⭐ <strong>VIP-only hub.</strong> You're seeing a preview — in the live portal this is visible only to VIP members.</div>` : '';
+  const vipNote = '';   // VIP-only hubs are only reachable by VIP members (see canSeeVIP)
   const grid = (items, kind) => `<div class="card-grid">${items.map((it,i)=>hubContentCard(it,key,kind,i)).join('')}</div>`;
   const eventGrid = (items) => `<div class="card-grid">${items.map((e,i)=>hubEventCard(e,key,i)).join('')}</div>`;
 
@@ -440,6 +438,10 @@ function renderHub(key){
   }
 }
 Object.keys(hubs).forEach(renderHub);
+// Hide VIP-only hubs from everyone else (sidebar links; navigate() blocks the pages too)
+Object.keys(hubs).filter(k => hubs[k].vip && !canSeeVIP).forEach(k => {
+  document.querySelectorAll(`.nav-item[data-nav="${k}"]`).forEach(n => { n.style.display = 'none'; });
+});
 
 function setHubTab(view, tab){
   const root = document.getElementById('view-'+view);
@@ -516,8 +518,7 @@ const generalDocuments = [
 
 const TIER_RANK = { Premium:1, Elite:2, VIP:3 };
 // A doc is accessible if the member's tier clears its source hub's requirement.
-// VIP-only hubs require the VIP tier. (NB: this uses the REAL member tier, not the
-// SHOW_VIP_IN_PROTOTYPE preview flag — so the page demonstrates true tier-gating.)
+// VIP-only hubs require the VIP tier (the tier picked with the review pill).
 function memberCanAccess(isVip){ return !isVip || TIER_RANK[memberTier] >= TIER_RANK.VIP; }
 
 const DOC_SOURCE_LABEL = { general:"General", brokersedge:"Brokers Edge",
@@ -569,6 +570,7 @@ function filterDocuments(val){
 
 /* ---------- Navigation ---------- */
 function navigate(view){
+  if(hubs[view] && hubs[view].vip && !canSeeVIP){ showToast(`${hubs[view].name} is for VIP members.`); view = 'dashboard'; }
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+view)?.classList.add('active');
   const navMatch = (n)=> n.dataset.nav===view ||
