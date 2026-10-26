@@ -52,6 +52,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>
         Members
       </button>
+      <button class="nav-item" data-nav="groups">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Group memberships
+      </button>
+      <button class="nav-item" data-nav="enterprise">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg>
+        Enterprise
+      </button>
       <button class="nav-item" data-nav="partners">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/><path d="M9 21v-5h6v5"/></svg>
         Partner users
@@ -259,6 +267,7 @@
           <select class="select filter-select" id="member-state"><option value="all">All mailing states</option></select>
           <select class="select filter-select" id="member-licensed"><option value="all">All licensed states</option></select>
           <select class="select filter-select" id="member-status"><option value="all">All statuses</option><option>Active</option><option>Past due</option><option>Trialing</option><option>Canceled</option></select>
+          <select class="select filter-select" id="member-mship"><option value="all">All memberships</option><option>Individual</option><option>Group</option><option>Enterprise</option></select>
           <span class="spacer"></span>
           <span class="count-note" id="member-count">—</span>
           <button class="btn btn-outline" data-toast="Exported members to CSV.">Export CSV</button>
@@ -811,6 +820,12 @@
         <p class="flow-caption">Statuses come from Resend. <strong>Bounced</strong> = the address rejected it · <strong>Delayed</strong> = still retrying · <strong>Suppressed</strong> = Resend won't send to that address after an earlier bounce or spam complaint. Previews are available for 30 days after sending.</p>
       </section>
 
+      <!-- ============ GROUP + ENTERPRISE MEMBERSHIPS (admin-memberships.js) ============ -->
+      <section class="view" id="view-groups"><div id="grp-list"></div></section>
+      <section class="view" id="view-group-detail"><div id="grp-detail"></div></section>
+      <section class="view" id="view-enterprise"><div id="ent-list"></div></section>
+      <section class="view" id="view-enterprise-detail"><div id="ent-detail"></div></section>
+
       <!-- ============ PARTNER USERS (admin-partners.js) ============ -->
       <section class="view" id="view-partners">
         <div class="adm-section-head">
@@ -885,6 +900,18 @@
     </div>
     <div class="modal-body" id="em-m-body"></div>
     <div class="modal-foot"><span class="hint" id="em-m-note" style="margin:0 auto 0 0;max-width:360px"></span><button class="btn btn-outline" data-close>Close</button><button class="btn btn-primary" id="em-m-resend">Resend</button></div>
+  </div>
+</div>
+
+<!-- ===================== GROUP / ENTERPRISE FORMS (admin-memberships.js) ===================== -->
+<div class="modal-overlay" id="modal-mship">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head">
+      <div><h2 id="ms-title"></h2><p id="ms-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="ms-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="ms-save">Save</button></div>
   </div>
 </div>
 
@@ -963,6 +990,7 @@
 <script src="admin-event-reg.js"></script>
 <script src="admin-partners.js"></script>
 <script src="admin-emails.js"></script>
+<script src="admin-memberships.js"></script>
 <!-- admin first-time walkthrough (separate from the member tour) -->
 <script src="tour-engine.js"></script>
 <script src="admin-walkthrough.js"></script>

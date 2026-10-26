@@ -405,7 +405,8 @@ function renderMembers(){
   const plan = $('member-plan').value, status = $('member-status').value;
   const role = $('member-role').value, state = $('member-state').value;
   const lic = $('member-licensed').value, billing = $('member-billing').value;
-  const rows = members.filter(m =>
+  const mship = $('member-mship') ? $('member-mship').value : 'all';   // Individual / Group / Enterprise
+  const rows = members.filter(m => (mship==='all' || (m.membership||'Individual')===mship) &&
     (m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q) || String(m.nmls||'').includes(q)) &&
     (plan==='all' || m.plan===plan) && (status==='all' || m.status===status) &&
     (role==='all' || m.role===role) && (state==='all' || m.state===state) &&
@@ -414,10 +415,12 @@ function renderMembers(){
     const idx = members.indexOf(m);
     return `<tr>
       <td><div class="t-id"><div class="t-avatar">${initials(m.name)}</div><div><div class="t-strong">${m.name}</div><div class="t-sub">${m.email} · ${m.state}</div></div></div></td>
-      <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span><div class="t-sub" style="margin-top:3px">${m.billing}</div><div class="t-sub">${m.amount || '—'}</div></td>
+      <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span>${m.membership ? ` <span class="mship-tag ${m.membership==='Enterprise'?'ent':'grp'}">${m.membership}</span>` : ''}${m.org
+        ? `<div class="t-sub" style="margin-top:3px">${m.org}</div>`
+        : `<div class="t-sub" style="margin-top:3px">${m.billing}</div><div class="t-sub">${m.amount || '—'}</div>`}</td>
       <td class="rq-ref">${m.nmls || '—'}</td>
       <td><div class="lic-tags">${(m.licensed||[]).map(s=>`<span class="tag">${s}</span>`).join('') || '<span class="t-sub" style="display:inline">—</span>'}</div></td>
-      <td>${subDot(m.status)}${m.next && m.next!=='—' ? `<div class="t-sub" style="margin-top:3px">${/^Trial/.test(m.next) ? m.next : 'Next: ' + m.next}</div>` : ''}</td>
+      <td>${subDot(m.status)}${m.org ? `<div class="t-sub" style="margin-top:3px">Billed to ${m.membership==='Group' ? 'the buyer' : m.org}</div>` : m.next && m.next!=='—' ? `<div class="t-sub" style="margin-top:3px">${/^Trial/.test(m.next) ? m.next : 'Next: ' + m.next}</div>` : ''}</td>
       <td style="white-space:nowrap">${m.joined}</td>
       <td class="t-right"><div class="row-actions stack">${m.status==='Past due' ? `<button class="link-act" data-toast="Sent payment-update link to ${m.name}.">Send payment link</button>` : ''}<button class="link-act" data-edit="member:${idx}">Manage</button></div></td>
     </tr>`;
@@ -1338,7 +1341,7 @@ function navigate(view){
   if(view==='subscriptions') view = 'members';   // billing now lives on the Members list
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : view==='event-reg' ? 'events' : ['engagement','journeys','vendorclicks'].includes(view) ? 'analytics' : view;
+  const navView = view==='request-detail' ? 'requests' : view==='event-reg' ? 'events' : ['engagement','journeys','vendorclicks'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
@@ -1367,7 +1370,7 @@ setupRange('vendorclicks', renderVendorClicks);
 setupRange('reports', renderReports, { allDays:36500 });
 
 /* ---------- Events ---------- */
-['member-search','member-plan','member-status','member-role','member-state','member-licensed','member-billing']
+['member-search','member-plan','member-status','member-role','member-state','member-licensed','member-billing','member-mship']
   .forEach(id => $(id) && $(id).addEventListener(id==='member-search'?'input':'change', renderMembers));
 $('cart-step') && $('cart-step').addEventListener('change', renderAbandoned);
 ['notif-tier','notif-role'].forEach(id => $(id) && $(id).addEventListener('change', updateAudience));

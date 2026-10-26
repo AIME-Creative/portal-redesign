@@ -52,7 +52,10 @@
       body: 'Assign each request so the team knows who has it. Your reply assigns it to you automatically if nobody has it yet.' },
 
     { sec: 3, page: 'members', target: '#view-members .toolbar', title: 'Members',
-      body: 'Every member with their tier, NMLS #, licensed states, and billing from Stripe — status (active, past due, trialing, canceled), amount, and next payment. Filter by any of them; <strong>Send payment link</strong> appears on past-due members. <strong>Manage</strong> opens their role, plan, billing, and escalation allowance.' },
+      body: 'Every member — individual, Group, or Enterprise (tagged) — with their tier, NMLS #, licensed states, and billing from Stripe — status (active, past due, trialing, canceled), amount, and next payment. Filter by any of them; <strong>Send payment link</strong> appears on past-due members. <strong>Manage</strong> opens their role, plan, billing, and escalation allowance.' },
+    { sec: 3, page: 'members', target: navItems('groups', 'enterprise'), mTarget: '.menu-btn', title: 'Group & Enterprise memberships',
+      body: '<strong>Group memberships</strong>: one person buys several memberships for others — assign each one, or transfer it to someone new. <strong>Enterprise</strong>: a company\'s whole roster, plus VIP / Elite seats, FUSE tickets, Ascent seats, and podcast appearances to grant and reassign. Their members also show on the Members list, tagged Group or Enterprise.',
+      mBody: 'In the ☰ menu under Members: <strong>Group memberships</strong> (one buyer, several memberships to assign or transfer) and <strong>Enterprise</strong> (a company roster plus seats and tickets to grant and reassign).' },
     { sec: 3, page: 'partners', target: '#view-partners .adm-section-head', title: 'Partner users',
       body: 'Free lender and vendor accounts — never a paid membership. Only admins create them: pick Lender or Vendor and the company, and they get an email to set a password. Add one per person; everyone at a company has the same access to its dashboard and requests. Edit or remove a user from their row. Who each request is sent to is set on the lender or vendor listing.' },
     { sec: 4, page: 'members', target: navItems('abandoned', 'coupons'), mTarget: '.menu-btn', title: 'Billing',
