@@ -194,24 +194,29 @@ window.HELP_ARTICLES = [
       <p><strong>Documents</strong> in the sidebar lists every document you have access to. Use the source chips to filter by hub, then click <strong>Download</strong>. Hub pages also show their own documents under the <strong>Documents</strong> tab.</p>` },
 
   /* ---------------- Events & FUSE ---------------- */
-  { slug: 'fuse-ticket', title: 'Claiming your FUSE 2026 ticket and add-ons', category: 'events', popular: true,
-    summary: 'Your membership includes FUSE — claim it, add sessions, bring guests.',
-    tags: ['fuse', 'ticket', 'claim', 'conference', 'add-ons', 'guest', 'austin'], minutes: 2, updated: 'Oct 15, 2026', status: 'Published',
+  { slug: 'fuse-ticket', title: 'Claiming your FUSE 2026 ticket, add-ons, and guests', category: 'events', popular: true,
+    summary: 'One click claims your included ticket — then add sessions, the Hall of AIME, and guests.',
+    tags: ['fuse', 'ticket', 'claim', 'conference', 'add-ons', 'guest', 'hall of aime', 'vip', 'austin'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
     views: 2210, helpful: [251, 11],
-    actions: [{ label: 'Manage FUSE registration', attr: 'data-nav="fuse"' }],
+    actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
     body: `
-      <p>FUSE 2026 is at the JW Marriott Downtown Austin, TX, September 24–26.</p>
+      <p>FUSE 2026 is at the JW Marriott Downtown Austin, TX, September 24–26. Your ticket is included with your membership:</p>
+      <ul>
+        <li><strong>Premium and Elite</strong> — General Admission.</li>
+        <li><strong>VIP</strong> — a VIP ticket <strong>plus 1 free guest</strong>. The Hall of AIME is also free for you and your included guest.</li>
+      </ul>
       <ol class="kb-steps">
-        <li>Click the <strong>"Claim your ticket"</strong> banner, or open FUSE 2026 on the Events page and click <strong>Register</strong>.</li>
-        <li>General Admission is included with Premium and Elite (VIP members get the VIP Experience). Choose your add-ons — Hall of AIME, WMN at FUSE, Vetted VA, and more.</li>
-        <li>Add guests if you're bringing anyone, then register. Early-bird prices apply through July 8.</li>
+        <li>Click the <strong>"Claim your ticket"</strong> banner, or open FUSE 2026 on the Events page. The card shows which ticket you're getting.</li>
+        <li>Click <strong>Claim my … ticket</strong>. That's it — you're registered.</li>
+        <li>A window opens where you can pick sessions (WMN at FUSE, Vetted VA, the Hall of AIME) and add guests, with an order summary. Choose what you want and click <strong>Update registration</strong> — or just close it if you don't need anything else.</li>
       </ol>
-      <p>To change add-ons later, open FUSE 2026 on the Events page and click <strong>View / edit registration</strong>.</p>
-      <div class="kb-tip">Need your invoice for an expense report? Use <strong>Email my confirmation</strong> on the same page.</div>` },
+      <div class="kb-tip"><strong>Included add-ons still need to be selected</strong> (like the Hall of AIME for VIP members) so we save your seat.</div>
+      <p><strong>Bringing a guest?</strong> Each guest needs their own name, email, and phone — they can't match yours. VIP members: if you're bringing your included guest, check <strong>I'm bringing my included guest</strong> and fill in their details. Additional guests are $299 early-bird ($349 after July 8).</p>
+      <p>To change add-ons or guests later, open FUSE 2026 on the Events page and click <strong>Manage add-ons &amp; guests</strong>. You'll only pay for anything new.</p>` },
 
   { slug: 'event-registration', title: 'Registering or RSVPing for an event', category: 'events', popular: false,
     summary: 'Which events need registration, tickets and add-ons, guests, and changing your registration.',
-    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'early-bird', 'ascent', 'cancel registration'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'claim'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
     body: `
@@ -221,6 +226,7 @@ window.HELP_ARTICLES = [
         <li>Your name, email, and phone come from your profile. Pick a ticket and any add-ons — prices show early-bird discounts while they last, and some tickets are included with your membership.</li>
         <li>Add guests if the event allows them, answer any questions, and submit. Paid registrations go through secure checkout.</li>
       </ol>
+      <div class="kb-tip"><strong>Guests:</strong> each guest needs their own name, email, and phone number — they can't be the same as yours. Some memberships include a free guest; if you're bringing them, their details are required.</div>
       <p>Some events are for specific membership tiers — you'll see who they're for on the event page. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
 
   { slug: 'events-calendar', title: 'Viewing events as a calendar', category: 'events',

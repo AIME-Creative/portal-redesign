@@ -20,7 +20,7 @@
   const navItems = (...keys) => () => keys.map((k) => document.querySelector(`#sidebar .nav-item[data-nav="${k}"]`));
   const detailCard = (title) => () => [...document.querySelectorAll('#arq-detail-body .card')].find((c) => (c.querySelector('h3') || {}).textContent === title);
 
-  const SECTIONS = 11;
+  const SECTIONS = 12;
   // page: an admin view id ('dashboard', 'requests', 'members'…) or 'esc' / 'tkt' (example request detail).
   const ALL_STEPS = [
     { sec: 0, page: 'dashboard', target: '#sidebar .nav', mTarget: '.menu-btn', title: 'Your admin console',
@@ -52,7 +52,7 @@
       body: 'Assign each request so the team knows who has it. Your reply assigns it to you automatically if nobody has it yet.' },
 
     { sec: 3, page: 'members', target: '#view-members .toolbar', title: 'Members',
-      body: 'Search and filter by role, tier, billing, and state. <strong>Manage</strong> on a member opens their plan, billing status, and escalation allowance.' },
+      body: 'Every member with their tier, NMLS #, and licensed states. Search by name, email, or NMLS #, and filter by role, tier, billing, and state. <strong>Manage</strong> opens their role, plan, billing, and escalation allowance.' },
     { sec: 4, page: 'members', target: navItems('subscriptions', 'abandoned', 'coupons'), mTarget: '.menu-btn', title: 'Billing',
       body: 'Subscriptions (with past-due follow-up), abandoned sign-ups to win back, and coupons — all synced with Stripe.' },
     { sec: 5, page: 'notifications', target: '#view-notifications .composer-grid', title: 'Notify members',
@@ -65,7 +65,11 @@
       body: 'Escalation, connection, and Change AE reports for partners, plus subscription upgrades, downgrades, and cancellations with reasons. Export any of them to CSV.' },
     { sec: 9, page: 'reports', target: navItems('analytics', 'engagement', 'journeys', 'vendorclicks'), mTarget: '.menu-btn', title: 'Analytics',
       body: 'Revenue and growth trends, what content members use, member journeys from sign-up to active, and Market vendor clickthroughs.' },
-    { sec: 10, page: 'team', target: '#view-team .table-wrap', title: 'Team access',
+    { sec: 10, page: 'events', target: () => document.querySelector('#events-tbody [data-ereg]'), title: 'Event registration',
+      body: 'Registration is set per event — click <strong>Registration</strong> on any event to turn it on: RSVP or ticketed, which tiers, early-bird pricing, ticket types, add-ons, guests, custom questions, and one-click claim (FUSE).' },
+    { sec: 10, chapter: 'Events', page: 'registrations', target: () => [$('ereg-stats'), $('ereg-breakdowns')], title: 'Event registrations',
+      body: 'Pick an event to see totals, breakdowns by tier, ticket, add-on, and question, and every registration — with each guest\'s contact details and add-ons. Export to CSV.' },
+    { sec: 11, page: 'team', target: '#view-team .table-wrap', title: 'Team access',
       body: 'Super Admins add admins, change roles, and remove access. Replay this walkthrough any time from the <strong>?</strong> menu in the top bar.' },
   ];
 
@@ -103,7 +107,7 @@
     intro: () => `
       <div class="wt-hero">🛠️</div>
       <h2 id="wt-title">Welcome to the AMP admin console</h2>
-      <p>A two-minute tour of where things live — we'll walk through working the request queue, then members, billing, content, the Help Center, and reports.</p>
+      <p>A two-minute tour of where things live — we'll walk through working the request queue, then members, billing, content, the Help Center, reports, and event registrations.</p>
       <div class="wt-actions wt-stack">
         <button class="btn btn-primary btn-block" data-wt="next">Show me around</button>
         <button class="btn btn-outline btn-block" data-wt="skip">Skip for now</button>

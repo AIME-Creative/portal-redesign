@@ -217,3 +217,7 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .daterange-custom[hidden] { display:none; }
 .daterange-custom .input { width:auto; height:38px; min-width:142px; border-radius:11px; }
 .dr-sep { color:var(--muted); font-size:13px; }
+
+/* Members table: licensed-state tags wrap within the cell */
+.lic-tags { display:flex; flex-wrap:wrap; gap:4px; max-width:220px; }
+.lic-tags .tag { margin:0; }

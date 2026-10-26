@@ -1,6 +1,8 @@
 /* ============================================================
    Review-only Member/Admin toggle  —  REMOVE BEFORE LAUNCH
    Self-contained: injects its own button + styles, no deps.
+   On the member side it also switches the tier you're viewing as
+   (Premium / Elite / VIP → localStorage amp-proto-tier, read by app.js).
    Included by both index.html and admin.html.
    ============================================================ */
 (function () {
@@ -21,6 +23,11 @@
     '.rev-toggle .rev-opt:hover{color:#fff;background:rgba(255,255,255,.10);}' +
     '.rev-toggle .rev-opt.on{background:#dd1969;color:#fff;}' +
     '.rev-toggle .rev-opt.on:hover{background:#dd1969;}' +
+    '.rev-toggle .rev-sep{width:1px;height:18px;background:rgba(255,255,255,.18);margin:0 4px;}' +
+    '.rev-toggle .rev-tier{color:rgba(255,255,255,.72);font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;cursor:pointer;' +
+      'background:none;border:0;font-family:inherit;}' +
+    '.rev-toggle .rev-tier:hover{color:#fff;background:rgba(255,255,255,.10);}' +
+    '.rev-toggle .rev-tier.on{background:#fff;color:#021649;}' +
     '@media (max-width:860px){.rev-toggle{left:14px;bottom:78px;}}';
 
   function build() {
@@ -35,6 +42,23 @@
       '<span class="rev-tag">REVIEW</span>' +
       '<a class="rev-opt' + (!isAdmin ? ' on' : '') + '" href="index.html">Member</a>' +
       '<a class="rev-opt' + (isAdmin ? ' on' : '') + '" href="admin.html">Admin</a>';
+
+    // Member side: switch which membership tier you're viewing as (things change by tier —
+    // event tickets, VIP hubs, escalation allowance). Saved in localStorage; the page reloads.
+    if (!isAdmin) {
+      var cur = 'Elite';
+      try { cur = localStorage.getItem('amp-proto-tier') || 'Elite'; } catch (e) { /* default */ }
+      el.insertAdjacentHTML('beforeend', '<span class="rev-sep"></span><span class="rev-tag" style="margin-right:2px">AS</span>' +
+        ['Premium', 'Elite', 'VIP'].map(function (t) {
+          return '<button type="button" class="rev-tier' + (t === cur ? ' on' : '') + '" data-rev-tier="' + t + '" title="View the portal as a ' + t + ' member">' + t + '</button>';
+        }).join(''));
+      el.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-rev-tier]');
+        if (!b || b.classList.contains('on')) return;
+        try { localStorage.setItem('amp-proto-tier', b.getAttribute('data-rev-tier')); } catch (err) { return; }
+        location.reload();
+      });
+    }
     document.body.appendChild(el);
   }
 

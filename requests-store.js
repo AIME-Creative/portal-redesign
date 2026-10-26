@@ -18,7 +18,8 @@
    ============================================================ */
 (function () {
   const KEY = 'amp-requests-v2';   // bump when the seed shape changes
-  const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: 'Elite' };
+  // Example member; tier follows the prototype's tier switch (review toggle) if set
+  const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: (() => { try { return localStorage.getItem('amp-proto-tier') || 'Elite'; } catch (e) { return 'Elite'; } })() };
 
   const TYPES = {
     escalation: { label: 'Escalation',        prefix: 'ESC', flow: ['Received', 'Responded', 'Resolved'] },

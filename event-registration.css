@@ -23,6 +23,33 @@
 .er-registered svg, .er-locked svg { width:20px; height:20px; flex:0 0 20px; margin-top:1px; }
 .er-registered strong, .er-locked strong { color:var(--ink); }
 
+/* ---------- member: one-click claim ---------- */
+.er-claim { margin-top:12px; padding:14px 16px; border-radius:12px; border:1.5px solid #f3d5e2; background:linear-gradient(135deg,#fff7fa,#f4f8ff); transition:box-shadow .3s; }
+.er-claim-k { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--pink); }
+.er-claim-t { font-size:17px; font-weight:800; color:var(--navy); margin:4px 0 6px; }
+.er-claim-t span { font-size:12px; font-weight:700; color:var(--green); background:var(--green-bg); padding:2px 9px; border-radius:20px; margin-left:6px; vertical-align:middle; }
+.er-claim.er-flash { animation:erFlash 1.6s ease; }
+@keyframes erFlash { 0%,100% { box-shadow:0 0 0 0 rgba(221,25,105,0); } 30%,60% { box-shadow:0 0 0 6px rgba(221,25,105,.25); } }
+.er-success { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-radius:12px; background:var(--green-bg); color:#1b6e4d; font-size:13.5px; line-height:1.55; margin-bottom:14px; }
+.er-success svg { width:22px; height:22px; flex:0 0 22px; margin-top:1px; }
+.er-success > div > strong:first-child { display:block; color:var(--ink); font-size:14.5px; margin-bottom:2px; }
+.er-success div div strong { color:#145a3e; }
+.er-whoami { font-size:13px; color:var(--ink-soft); padding:10px 14px; border-radius:10px; background:var(--surface-alt); border:1px solid var(--line-soft); }
+.er-ticket-fixed { cursor:default; background:#f4f6fc; border-color:#cbd3ea; }
+.er-ticket-fixed:hover { border-color:#cbd3ea; }
+.er-tk-ico { font-size:20px; flex:0 0 22px; }
+
+/* ---------- member: guests ---------- */
+.er-guest-note { font-size:13px; color:#7a5a12; background:#fff7e0; border:1px solid #f0dc9c; border-radius:10px; padding:10px 14px; margin-bottom:12px; }
+.er-incl-guest { margin-bottom:12px; }
+.er-guest-card { border:1px solid var(--line); border-radius:12px; padding:14px 16px 4px; margin-bottom:12px; background:#fff; }
+.er-guest-card.incl { border-color:#bfe7d0; background:#f7fcf9; }
+.er-guest-h { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; font-size:14px; }
+.er-guest-card .field { margin-bottom:12px; }
+.er-gaddon { align-items:center; margin:2px 0 12px; }
+.er-gaddon span:first-of-type { flex:1; }
+.er-line.sub { padding-left:12px; font-size:13px; color:var(--ink-soft); }
+
 /* ---------- member: form ---------- */
 .er-eb-banner { background:linear-gradient(90deg,#fbf0d8,#fff7e8); color:#7a5a12; font-weight:700; font-size:13px; padding:10px 14px; border-radius:10px; margin-bottom:6px; }
 .er-help { color:var(--muted); font-size:12.5px; margin-top:6px; line-height:1.45; }

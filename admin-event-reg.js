@@ -52,6 +52,8 @@
     const ev = events.find((e) => e.title === editTitle) || { title: editTitle, date: '', type: '' };
     // normalise dates for <input type=date>
     draft.closes = toISO(draft.closes); draft.earlyBird.until = toISO(draft.earlyBird.until);
+    draft.guests.included = draft.guests.included || {};
+    draft.addons.forEach((a) => { a.included = a.included || []; a.perGuest = !!a.perGuest; });
     const ticketed = draft.mode === 'ticketed', on = draft.enabled;
     const itemRow = (kind, it, k) => `<div class="ereg-item">
         <div class="ereg-item-grid">
@@ -60,7 +62,10 @@
           <div class="field"><label>Early-bird price</label>${inp(`${kind}.${k}.ebPrice`, draft.earlyBird.on ? 'optional' : 'turn on early-bird', 'number', draft.earlyBird.on ? '' : 'disabled')}</div>
         </div>
         <div class="field"><label>Description</label>${inp(`${kind}.${k}.desc`, 'Shown under the name')}</div>
-        ${kind === 'tickets' ? `<div class="field"><label>Included free for</label>${chips(`${kind}.${k}.included`, R.TIERS)}<div class="er-help">e.g. FUSE General Admission is included with Premium and Elite.</div></div>` : ''}
+        <div class="field"><label>Included free for</label>${chips(`${kind}.${k}.included`, R.TIERS)}<div class="er-help">${kind === 'tickets'
+          ? 'e.g. FUSE General Admission is included with Premium and Elite; the VIP ticket with VIP.'
+          : 'Free for these tiers — and for their included guests (e.g. Hall of AIME for VIP + their free guest). Members still select it.'}</div></div>
+        ${kind === 'addons' ? `<label class="ereg-req" style="margin:0 0 12px"><input type="checkbox" data-k="addons.${k}.perGuest" data-t="bool" ${it.perGuest ? 'checked' : ''}> Guests can be added to this too</label>` : ''}
         <div class="field"><label>Available to</label>${chips(`${kind}.${k}.tiers`, ['All', ...R.TIERS])}</div>
         <button type="button" class="link-muted ereg-del" data-del="${kind}.${k}">Remove</button>
       </div>`;
@@ -99,6 +104,8 @@
                 <label class="${!ticketed ? 'on' : ''}"><input type="radio" name="ereg-mode" value="rsvp" ${!ticketed ? 'checked' : ''}><strong>RSVP only</strong><span>Free — members confirm they're coming</span></label>
                 <label class="${ticketed ? 'on' : ''}"><input type="radio" name="ereg-mode" value="ticketed" ${ticketed ? 'checked' : ''}><strong>Ticketed</strong><span>Ticket types, paid add-ons, early-bird</span></label>
               </div></div>
+            ${ticketed ? `<div class="field">${toggle('quickClaim', 'One-click claim for included tickets')}
+              <p class="er-help" style="margin:6px 0 0 52px">Members whose tier includes a ticket see "Claim my … ticket" — one click registers them, then add-ons and guests are optional. Used for FUSE.</p></div>` : ''}
             <div class="field"><label>Who can register</label>${chips('tiers', ['All', ...R.TIERS])}</div>
             <div class="field-row">
               <div class="field"><label>Capacity <span class="er-dim">(incl. guests — blank = no limit)</span></label>${inp('capacity', 'No limit', 'number')}</div>
@@ -118,7 +125,11 @@
               <div class="field"><label>Max per member</label>${inp('guests.max', '1', 'number')}</div>
               <div class="field"><label>Guest price</label>${inp('guests.price', '0', 'number')}</div>
               <div class="field"><label>Early-bird</label>${inp('guests.ebPrice', 'optional', 'number', draft.earlyBird.on ? '' : 'disabled')}</div>
-            </div>` : ''}
+            </div>
+            <div class="field"><label>Free guests included <span class="er-dim">(per member, by tier)</span></label>
+              <div class="ereg-item-grid">${R.TIERS.map((tr) => `<div class="field" style="margin:0"><label class="er-dim" style="font-size:12px">${tr}</label>${inp('guests.included.' + tr, '0', 'number')}</div>`).join('')}</div>
+              <p class="er-help">e.g. FUSE VIP members get 1 free guest; additional guests pay the guest price.</p></div>
+            <p class="er-help">Guests give their name, email, and phone — which must be different from the member's.</p>` : ''}
         </div>
       </div>
 
@@ -152,6 +163,7 @@
     if ([...draft.tickets, ...draft.addons].some((x) => !String(x.name || '').trim())) problems.push('every ticket and add-on needs a name');
     if (draft.fields.some((f) => !String(f.label || '').trim())) problems.push('every custom field needs a label');
     if (draft.earlyBird.on && !draft.earlyBird.until) problems.push('set the early-bird end date');
+    if (draft.mode === 'ticketed' && draft.quickClaim && draft.fields.some((f) => f.required)) problems.push('one-click claim can’t have required questions — make them optional or turn off one-click claim');
     if (problems.length) { showToast('Before saving: ' + problems.join('; ') + '.'); return; }
     R.saveSetup(editTitle, draft);
     renderEvents();
@@ -238,7 +250,10 @@
     cards.push(['By membership tier', bars(R.TIERS.map((t) => ({ label: t, n: regs.filter((r) => r.tier === t).length })), regs.length)]);
     if (ticketed) {
       cards.push(['Ticket types', bars(s.tickets.map((t) => { const rs = regs.filter((r) => r.ticket === t.id); return { label: t.name, n: rs.length, extra: (t.included || []).length ? `${rs.filter((r) => t.included.includes(r.tier)).length} included` : money(rs.length * R.unit(t, false)) }; }))]);
-      if (s.addons.length) cards.push(['Add-ons & sessions', bars(s.addons.map((a) => ({ label: a.name, n: regs.filter((r) => (r.addons || []).includes(a.id)).length, extra: +a.price ? '' : 'free' })), regs.length)]);
+      if (s.addons.length) cards.push(['Add-ons & sessions', bars(s.addons.map((a) => {
+        const g = regs.reduce((n, r) => n + (r.guests || []).filter((x) => (x.addons || []).includes(a.id)).length, 0);
+        return { label: a.name, n: regs.filter((r) => (r.addons || []).includes(a.id)).length + g, extra: g ? `${g} guest${g > 1 ? 's' : ''}` : +a.price ? '' : 'free' };
+      }), regs.length)]);
     }
     s.fields.filter((f) => f.type === 'select' || f.type === 'yesno').forEach((f) => {
       const opts = f.type === 'yesno' ? ['Yes', 'No'] : f.options;
@@ -270,7 +285,7 @@
         <td>${tierBadge(r.tier)}</td>
         ${ticketed ? `<td>${t ? esc(t.name) + ((t.included || []).includes(r.tier) ? ' <span class="t-sub" style="display:inline">· included</span>' : '') : '—'}</td>
           <td>${adds.length ? adds.map((a) => `<span class="tag">${esc(a)}</span>`).join(' ') : '<span class="t-sub" style="display:inline">None</span>'}</td>` : ''}
-        <td>${(r.guests || []).length ? `<span title="${esc(r.guests.map((g) => g.name).join(', '))}">${r.guests.length}</span>` : '—'}</td>
+        <td>${(r.guests || []).length ? `<span title="${esc(r.guests.map((g) => `${g.name} · ${g.email || ''}`).join('\n'))}">${r.guests.length}${R.freeGuests(s, r.tier) ? ` <span class="t-sub" style="display:inline">(${Math.min(R.freeGuests(s, r.tier), r.guests.length)} incl.)</span>` : ''}</span>` : '—'}</td>
         ${ticketed ? `<td>${r.total ? money(r.total) : '<span class="t-sub" style="display:inline">$0</span>'}${r.earlyBird ? ' <span class="badge badge-amber" style="margin-left:4px">EB</span>' : ''}</td>` : ''}
         <td>${new Date(r.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
         <td class="t-right"><div class="row-actions"><button class="link-act" data-reg-view="${r.id}">View</button></div></td>
@@ -289,7 +304,7 @@
     $('reg-detail-body').innerHTML =
       kv('Email', esc(r.email)) + kv('Phone', esc(r.phone || '—')) + kv('Tier', tierBadge(r.tier)) +
       (s.mode === 'ticketed' ? kv('Ticket', t ? esc(t.name) : '—') + kv('Add-ons', (r.addons || []).map((id) => esc((s.addons.find((a) => a.id === id) || {}).name || id)).join(', ') || 'None') : kv('Type', 'RSVP')) +
-      kv('Guests', (r.guests || []).length ? r.guests.map((g) => esc(g.name)).join(', ') : 'None') +
+      kv('Guests', (r.guests || []).length ? r.guests.map((g, k) => `<div style="margin-bottom:6px"><strong>${esc(g.name)}</strong>${k < R.freeGuests(s, r.tier) ? ' <span class="badge badge-green">Included</span>' : ''}<br><span class="t-sub" style="display:inline">${esc(g.email || '—')} · ${esc(g.phone || '—')}${(g.addons || []).length ? ' · ' + g.addons.map((id) => esc((s.addons.find((a) => a.id === id) || {}).name || id)).join(', ') : ''}</span></div>`).join('') : 'None') +
       s.fields.map((f) => { const v = (r.answers || {})[f.id]; return kv(f.type === 'checkbox' ? (f.label.length > 40 ? 'Marketing consent' : f.label) : f.label, f.type === 'checkbox' ? (v ? 'Yes' : 'No') : v ? esc(v) : '—'); }).join('') +
       (s.mode === 'ticketed' ? kv('Paid', `${money(r.total)}${r.earlyBird ? ' · early-bird' : ''}`) + `<div class="er-help" style="margin-top:8px">${p.lines.map((l) => `${esc(l.label)}: ${l.amount ? money(l.amount) : 'free'}${l.note ? ' (' + esc(l.note) + ')' : ''}`).join(' · ')}</div>` : '') +
       kv('Registered', new Date(r.at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }));

@@ -14,7 +14,7 @@
   const REASONS = window.CANCEL_REASONS, EV = window.AmpSubEvents;
   if (!REASONS || !EV || !document.getElementById('modal-cancel')) return;
   const $ = (id) => document.getElementById(id);
-  const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', plan: 'Elite', ends: 'Jan 14, 2027' };
+  const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', plan: typeof memberTier !== 'undefined' ? memberTier : 'Elite', ends: 'Jan 14, 2027' };
   // Reasons where a cheaper plan might keep them (matched by position in CANCEL_REASONS: usage, ROI, price)
   const OFFER_FOR = [REASONS[0], REASONS[1], REASONS[3]];
 

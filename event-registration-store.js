@@ -11,10 +11,17 @@
      capacity     max attendees incl. guests (null = no limit)
      closes       registration close date (optional)
      earlyBird    { on, until } — items with an ebPrice use it until then
+     quickClaim   one-click claim for members whose tier has an included ticket
+                  (registers instantly, then offers add-ons / guests) — FUSE
      tickets[]    { id, name, desc, price, ebPrice, included:[tiers], tiers:[...] }
                   "included" = free for those tiers (e.g. FUSE GA for Premium/Elite)
-     addons[]     { id, name, desc, price, ebPrice, tiers:[...] }
-     guests       { on, max, price, ebPrice }
+     addons[]     { id, name, desc, price, ebPrice, included:[tiers], perGuest, tiers:[...] }
+                  included = free for those tiers AND their included (free) guests;
+                  perGuest = guests can be signed up for it too
+     guests       { on, max, price, ebPrice, included:{tier: n} }
+                  included = free guests per tier (FUSE: VIP gets 1); the rest pay
+                  Each guest: { name, email, phone, addons[] } — email/phone must
+                  differ from the member's
      fields[]     custom fields { id, label, type, options[], required, help }
                   type: text | textarea | select | yesno | checkbox
    Registration
@@ -27,7 +34,7 @@
    event_registrations) + Stripe Checkout for anything with a cost.
    ============================================================ */
 (function () {
-  const KEY = 'amp-event-reg-v1';
+  const KEY = 'amp-event-reg-v2';   // bump when the seed shape changes
   const TIERS = ['Premium', 'Elite', 'VIP'];
   // The prototype's "today" — matches the admin console (June 2026) so early-bird windows read correctly.
   const TODAY = new Date('2026-06-25T12:00:00');
@@ -36,20 +43,19 @@
   function seedSetups() {
     return {
       'FUSE 2026 — National Conference': {
-        enabled: true, mode: 'ticketed', tiers: ['All'], capacity: 1500, closes: 'Sep 10, 2026',
+        enabled: true, mode: 'ticketed', quickClaim: true, tiers: ['All'], capacity: 1500, closes: 'Sep 10, 2026',
         earlyBird: { on: true, until: 'Jul 8, 2026' },
         tickets: [
-          { id: 'ga', name: 'General Admission', desc: 'All main-stage sessions, expo hall, and the opening party.', price: 499, ebPrice: 399, included: ['Premium', 'Elite'], tiers: ['All'] },
-          { id: 'gaplus', name: 'GA Plus', desc: 'General Admission + reserved seating and the Thursday happy hour.', price: 649, ebPrice: 549, included: [], tiers: ['All'] },
-          { id: 'vip', name: 'VIP Experience', desc: 'Front-row seating, VIP lounge, and the VIP Luncheon.', price: 999, ebPrice: 899, included: ['VIP'], tiers: ['VIP'] },
+          { id: 'ga', name: 'General Admission', desc: 'All main-stage sessions, expo hall, and the opening party.', price: 499, ebPrice: 399, included: ['Premium', 'Elite'], tiers: ['Premium', 'Elite'] },
+          { id: 'vip', name: 'VIP', desc: 'VIP seating and lounge access, plus the VIP Luncheon.', price: 999, ebPrice: 899, included: ['VIP'], tiers: ['VIP'] },
         ],
         addons: [
-          { id: 'hoa', name: 'Hall of AIME', desc: 'Awards dinner celebrating the year’s top brokers.', price: 249, ebPrice: 199, tiers: ['All'] },
-          { id: 'wmn', name: 'WMN at FUSE', desc: "Women's Mortgage Network track", price: 0, ebPrice: null, tiers: ['All'] },
-          { id: 'vva', name: 'Vetted VA', desc: 'VA loan training to better serve veteran borrowers', price: 0, ebPrice: null, tiers: ['All'] },
-          { id: 'vipl', name: 'VIP Luncheon', desc: 'Networking lunch with AIME leadership & top originators', price: 0, ebPrice: null, tiers: ['VIP'] },
+          { id: 'hoa', name: 'Hall of AIME', desc: 'Awards dinner celebrating the year’s top brokers.', price: 249, ebPrice: 199, included: ['VIP'], perGuest: true, tiers: ['All'] },
+          { id: 'wmn', name: 'WMN at FUSE', desc: "Women's Mortgage Network track", price: 0, ebPrice: null, included: [], perGuest: false, tiers: ['All'] },
+          { id: 'vva', name: 'Vetted VA', desc: 'VA loan training to better serve veteran borrowers', price: 0, ebPrice: null, included: [], perGuest: false, tiers: ['All'] },
+          { id: 'vipl', name: 'VIP Luncheon', desc: 'Networking lunch with AIME leadership & top originators', price: 0, ebPrice: null, included: [], perGuest: false, tiers: ['VIP'] },
         ],
-        guests: { on: true, max: 2, price: 349, ebPrice: 299 },
+        guests: { on: true, max: 3, price: 349, ebPrice: 299, included: { VIP: 1 } },
         fields: [
           { id: 'badge', label: 'Name for your badge', type: 'text', options: [], required: false, help: 'Leave blank to use your full name.' },
           { id: 'diet', label: 'Dietary restrictions', type: 'textarea', options: [], required: false, help: '' },
@@ -58,7 +64,7 @@
       'AIME Ascent 2027': {
         enabled: true, mode: 'rsvp', tiers: ['VIP'], capacity: 120, closes: 'Jan 15, 2027',
         earlyBird: { on: false, until: '' }, tickets: [], addons: [],
-        guests: { on: false, max: 0, price: 0, ebPrice: null },
+        guests: { on: false, max: 0, price: 0, ebPrice: null, included: {} },
         fields: [
           { id: 'shirt', label: 'Shirt size', type: 'select', options: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'], required: true, help: '' },
           { id: 'arrive', label: 'Which day are you planning to arrive?', type: 'select', options: ['Sunday, Feb 7', 'Monday, Feb 8', 'Tuesday, Feb 9'], required: true, help: '' },
@@ -70,7 +76,7 @@
       'Regional Mixer — Dallas': {
         enabled: true, mode: 'rsvp', tiers: ['All'], capacity: 120, closes: 'Aug 10, 2026',
         earlyBird: { on: false, until: '' }, tickets: [], addons: [],
-        guests: { on: true, max: 1, price: 0, ebPrice: null },
+        guests: { on: true, max: 1, price: 0, ebPrice: null, included: {} },
         fields: [
           { id: 'company', label: 'Company name', type: 'text', options: [], required: true, help: '' },
           { id: 'first', label: 'Is this your first AIME event?', type: 'yesno', options: [], required: false, help: '' },
@@ -90,10 +96,8 @@
     const day = 864e5;
     const person = (k) => { const fn = first[k % first.length], ln = last[(k * 7) % last.length]; return { name: `${fn} ${ln}`, email: `${fn.toLowerCase()}.${ln.toLowerCase()}@example-lending.com` }; };
 
-    // Kyle Lord (the example member) is registered for FUSE — matches the FUSE page.
-    regs.push({ id: 'REG-1001', event: 'FUSE 2026 — National Conference', name: 'Kyle Lord', email: 'kyle@aimegroup.com', phone: '(555) 014-2278',
-      tier: 'Elite', ticket: 'ga', addons: ['wmn', 'vva'], guests: [], answers: { badge: 'Kyle', diet: '' }, total: 0, earlyBird: true,
-      at: new Date(TODAY - 21 * day).toISOString() });
+    // The example member (Kyle Lord) starts unregistered everywhere, so the FUSE one-click claim shows.
+    const guest = () => { const fn = pick(first), ln = pick(last); return { name: `${fn} ${ln}`, email: `${fn.toLowerCase()}${Math.floor(rnd() * 90 + 10)}@guestmail.com`, phone: `(555) ${300 + Math.floor(rnd() * 600)}-${1000 + Math.floor(rnd() * 8999)}`, addons: [] }; };
 
     let n = 1002;
     const add = (event, count, make) => { for (let k = 0; k < count; k++) { const p = person(k + n); regs.push(Object.assign({ id: 'REG-' + n++, event, phone: `(555) ${200 + (n % 700)}-${String(1000 + n * 37).slice(-4)}` }, p, make(k))); } };
@@ -101,9 +105,11 @@
 
     add('FUSE 2026 — National Conference', 64, () => {
       const tier = tierMix(), daysAgo = Math.floor(rnd() * 60), eb = TODAY - daysAgo * day <= new Date('2026-07-08').getTime();
-      const ticket = tier === 'VIP' ? 'vip' : rnd() < 0.18 ? 'gaplus' : 'ga';
-      const addons = ['hoa', 'wmn', 'vva'].filter(() => rnd() < 0.35).concat(tier === 'VIP' && rnd() < 0.7 ? ['vipl'] : []);
-      const guests = rnd() < 0.2 ? Array.from({ length: rnd() < 0.7 ? 1 : 2 }, () => ({ name: pick(first) + ' ' + pick(last) })) : [];
+      const vip = tier === 'VIP', ticket = vip ? 'vip' : 'ga';
+      const addons = ['hoa', 'wmn', 'vva'].filter(() => rnd() < (vip ? 0.6 : 0.35)).concat(vip && rnd() < 0.7 ? ['vipl'] : []);
+      // VIPs usually bring their included guest; some members add paid guests
+      const nGuests = vip ? (rnd() < 0.7 ? (rnd() < 0.2 ? 2 : 1) : 0) : (rnd() < 0.15 ? 1 : 0);
+      const guests = Array.from({ length: nGuests }, () => { const g = guest(); if (rnd() < 0.5) g.addons = ['hoa']; return g; });
       const reg = { tier, ticket, addons, guests, answers: { badge: '', diet: rnd() < 0.15 ? pick(['Vegetarian', 'Gluten-free', 'No shellfish']) : '' }, earlyBird: eb, at: new Date(TODAY - daysAgo * day).toISOString() };
       reg.total = priceOf(setups['FUSE 2026 — National Conference'], reg, eb).total;
       return reg;
@@ -115,7 +121,7 @@
     }));
     add('Regional Mixer — Dallas', 41, () => ({
       tier: tierMix(), ticket: null, addons: [], total: 0, earlyBird: false,
-      guests: rnd() < 0.3 ? [{ name: pick(first) + ' ' + pick(last) }] : [],
+      guests: rnd() < 0.3 ? [guest()] : [],
       answers: { company: pick(last) + ' ' + pick(['Lending', 'Mortgage', 'Home Loans', 'Capital']), first: rnd() < 0.35 ? 'Yes' : 'No' },
       at: new Date(TODAY - Math.floor(rnd() * 25) * day).toISOString(),
     }));
@@ -130,6 +136,7 @@
     if (!eb || !eb.on || !eb.until) return false;
     return (when ? new Date(when) : TODAY) <= date(eb.until);
   }
+  const freeGuests = (setup, tier) => (setup.guests && setup.guests.included && +setup.guests.included[tier]) || 0;
   const unit = (item, eb) => (eb && item.ebPrice != null && item.ebPrice !== '' ? +item.ebPrice : +item.price || 0);
 
   // Price a (draft) registration. Returns line items + total.
@@ -142,12 +149,22 @@
         lines.push({ label: t.name, amount: incl ? 0 : unit(t, eb), note: incl ? `Included with ${reg.tier}` : (eb && t.ebPrice != null ? 'Early-bird' : '') });
       }
     }
+    const ebNote = (item) => (eb && item.ebPrice != null && item.ebPrice !== '' && +item.price ? 'Early-bird' : '');
     (reg.addons || []).forEach((id) => {
-      const a = setup.addons.find((x) => x.id === id);
-      if (a) lines.push({ label: a.name, amount: unit(a, eb), note: eb && a.ebPrice != null && +a.price ? 'Early-bird' : '' });
+      const a = setup.addons.find((x) => x.id === id); if (!a) return;
+      const incl = (a.included || []).includes(reg.tier);
+      lines.push({ label: a.name, amount: incl ? 0 : unit(a, eb), note: incl ? `Included with ${reg.tier}` : ebNote(a) });
     });
-    const g = (reg.guests || []).length;
-    if (g && setup.guests && setup.guests.on) lines.push({ label: `Guest ticket × ${g}`, amount: unit(setup.guests, eb) * g, note: eb && setup.guests.ebPrice != null && +setup.guests.price ? 'Early-bird' : '' });
+    const G = setup.guests || {}, free = freeGuests(setup, reg.tier);
+    if (G.on) (reg.guests || []).forEach((g, k) => {
+      const incl = k < free, who = `Guest ${k + 1}${g.name ? ' — ' + g.name : ''}`;
+      lines.push({ label: who, amount: incl ? 0 : unit(G, eb), note: incl ? `Included with ${reg.tier}` : ebNote(G), guest: true });
+      (g.addons || []).forEach((id) => {
+        const a = setup.addons.find((x) => x.id === id); if (!a || !a.perGuest) return;
+        const ai = incl && (a.included || []).includes(reg.tier);   // included add-ons cover included guests too
+        lines.push({ label: `${a.name} · guest ${k + 1}`, amount: ai ? 0 : unit(a, eb), note: ai ? 'Included' : ebNote(a), guest: true });
+      });
+    });
     return { lines, total: lines.reduce((s, l) => s + l.amount, 0) };
   }
 
@@ -163,8 +180,8 @@
   window.addEventListener('storage', (e) => { if (e.key === KEY) { load(); listeners.forEach((f) => f()); } });
   load();
 
-  const blank = () => ({ enabled: false, mode: 'rsvp', tiers: ['All'], capacity: null, closes: '', earlyBird: { on: false, until: '' },
-    tickets: [], addons: [], guests: { on: false, max: 1, price: 0, ebPrice: null }, fields: [] });
+  const blank = () => ({ enabled: false, mode: 'rsvp', quickClaim: false, tiers: ['All'], capacity: null, closes: '', earlyBird: { on: false, until: '' },
+    tickets: [], addons: [], guests: { on: false, max: 1, price: 0, ebPrice: null, included: {} }, fields: [] });
 
   window.AmpEventReg = {
     TIERS, TODAY,
@@ -175,7 +192,10 @@
     saveSetup(title, setup) { data.setups[title] = setup; changed(); },
     canRegister: (setup, tier) => allowed(setup.tiers, tier),
     itemAllowed: (item, tier) => allowed(item.tiers, tier),
-    isEarlyBird, priceOf, unit,
+    isEarlyBird, priceOf, unit, freeGuests,
+    // The ticket a tier gets for free (one-click claim), if any
+    includedTicket: (setup, tier) => (setup.tickets || []).find((t) => (t.included || []).includes(tier) && allowed(t.tiers, tier)) || null,
+    digits: (s) => String(s || '').replace(/\D/g, ''),
     regsFor: (title) => data.regs.filter((r) => r.event === title),
     find: (title, email) => data.regs.find((r) => r.event === title && r.email === email) || null,
     attendees: (title) => data.regs.filter((r) => r.event === title).reduce((s, r) => s + 1 + (r.guests || []).length, 0),

@@ -390,24 +390,25 @@ const delBtn = (msg) => `<button class="icon-act danger" data-toast="${msg}" tit
 /* ============================================================
    Render: tables
    ============================================================ */
+// NMLS IDs for the sample members (Kyle Lord's matches the member portal); new members get one in the editor.
+members.forEach((m, i) => { if(!m.nmls) m.nmls = m.email === 'kyle@aimegroup.com' ? '9158' : String(1043000 + i * 7919 % 900000); });
 function renderMembers(){
   const q = ($('member-search').value || '').toLowerCase();
   const plan = $('member-plan').value, status = $('member-status').value;
   const role = $('member-role').value, state = $('member-state').value;
   const lic = $('member-licensed').value, billing = $('member-billing').value;
   const rows = members.filter(m =>
-    (m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)) &&
+    (m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q) || String(m.nmls||'').includes(q)) &&
     (plan==='all' || m.plan===plan) && (status==='all' || m.status===status) &&
     (role==='all' || m.role===role) && (state==='all' || m.state===state) &&
     (lic==='all' || m.licensed.includes(lic)) && (billing==='all' || m.billing===billing));
   $('members-tbody').innerHTML = rows.map((m,i) => {
     const idx = members.indexOf(m);
-    const tot = planTotal[m.plan];
     return `<tr>
       <td><div class="t-id"><div class="t-avatar">${initials(m.name)}</div><div><div class="t-strong">${m.name}</div><div class="t-sub">${m.email} · ${m.state}</div></div></div></td>
-      <td>${m.role}</td>
       <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span><div class="t-sub" style="margin-top:3px">${m.billing}</div></td>
-      <td>${m.used} <span class="t-sub" style="display:inline">/ ${tot} used</span></td>
+      <td class="rq-ref">${m.nmls || '—'}</td>
+      <td><div class="lic-tags">${(m.licensed||[]).map(s=>`<span class="tag">${s}</span>`).join('') || '<span class="t-sub" style="display:inline">—</span>'}</div></td>
       <td><span class="dot-status dot-${m.status.toLowerCase()}">${m.status}</span></td>
       <td>${m.joined}</td>
       <td class="t-right"><div class="row-actions"><button class="link-act" data-edit="member:${idx}">Manage</button></div></td>
@@ -1178,7 +1179,8 @@ function openEdit(ref){
     body = `
       <div class="form-section-label" style="margin-top:0">Account</div>
       <div class="field-row">${field('Full name', m.name)}${field('Email', m.email)}</div>
-      <div class="field-row">${selectField('Role', ['Broker Owner','Loan Officer','Loan Officer Assistant','Processor'], m.role)}${field('Mailing state', m.state, 'placeholder="e.g. FL"')}</div>
+      <div class="field-row">${field('NMLS #', m.nmls || '', 'placeholder="e.g. 1043210"')}${selectField('Role', ['Broker Owner','Loan Officer','Loan Officer Assistant','Processor'], m.role)}</div>
+      ${field('Mailing state', m.state, 'placeholder="e.g. FL"')}
       ${field('Licensed states', (m.licensed||[]).join(', '), 'placeholder="e.g. FL, GA, NC"')}
       <div class="form-section-label">Subscription</div>
       <div class="field-row">${selectField('Plan', ['Premium','Elite','VIP'], m.plan)}${selectField('Billing period', ['Monthly','Annual'], m.billing)}</div>

@@ -29,7 +29,7 @@
   const escRow = (n) => () => document.querySelectorAll(`${ESC} .modal-body > .field-row`)[n];
 
   // Main sections (the dots). Chapters add sub-steps under one section.
-  const SECTIONS = 10;
+  const SECTIONS = 11;
 
   // target: CSS selector or function (desktop); mTarget: on phones (the sidebar is a hidden drawer there).
   // No target / not visible → the card is centered with no spotlight.
@@ -69,29 +69,35 @@
     { sec: 6, page: 'dashboard', target: '.nav-item[data-nav="brokersedge"]', title: 'Learning & hubs',
       body: 'Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN gather trainings, replays, events, and documents for each program.' },
 
+    // ---- Events & registration ----
+    { sec: 7, page: 'dashboard', target: '.nav-item[data-nav="events"]', mTarget: '.bottom-nav-item[data-nav="events"]', title: 'Events',
+      body: 'Webinars, trainings, and in-person events. Events you can sign up for show <strong>RSVP</strong> or <strong>Registration open</strong>; some are for specific membership tiers.' },
+    { sec: 7, chapter: 'Events', page: 'fuse', target: '#event-detail-body .er-panel', title: 'Claim your FUSE ticket in one click',
+      body: "Your FUSE 2026 ticket is included with your membership — the card shows which ticket you get. One click on <strong>Claim</strong> registers you; then pick sessions, the Hall of AIME, or add guests (each guest needs their own email and phone)." },
+
     // ---- chapter: My Requests ----
-    { sec: 7, page: 'dashboard', target: '.nav-item[data-nav="requests"]', mTarget: '.menu-btn', title: 'Track your requests',
+    { sec: 8, page: 'dashboard', target: '.nav-item[data-nav="requests"]', mTarget: '.menu-btn', title: 'Track your requests',
       body: "Every escalation, connection, AE change, and support ticket you submit is tracked in My Requests. Let's take a look.",
       mBody: "Every escalation, connection, AE change, and support ticket you submit is tracked in My Requests (in the menu). Let's take a look." },
-    { sec: 7, chapter: 'My Requests', page: 'requests', target: '#rq-stats', title: 'Everything in one place',
+    { sec: 8, chapter: 'My Requests', page: 'requests', target: '#rq-stats', title: 'Everything in one place',
       body: "These tiles count your open escalations, open support tickets, and new updates waiting for you. Tap one to filter the list." },
-    { sec: 7, chapter: 'My Requests', page: 'requests',
+    { sec: 8, chapter: 'My Requests', page: 'requests',
       target: () => { const f = document.querySelector('#rq-list .rq-row .rq-flag:not(.amber)'); return f ? f.closest('.rq-row') : document.querySelector('#rq-list .rq-row'); },
       title: 'New replies stand out', body: 'A <strong>New reply</strong> or <strong>New update</strong> badge means the AIME team or a lender has answered. Click any request to open it.' },
-    { sec: 7, chapter: 'My Requests', page: 'esc', target: '#rq-detail-body .rq-track', title: 'Status at a glance',
+    { sec: 8, chapter: 'My Requests', page: 'esc', target: '#rq-detail-body .rq-track', title: 'Status at a glance',
       body: 'Escalations move from <strong>Received</strong> to <strong>Responded</strong> to <strong>Resolved</strong>. The date under each step shows when it happened.' },
-    { sec: 7, chapter: 'My Requests', page: 'esc', target: () => [...document.querySelectorAll('#rq-detail-body .rq-ev.lender')].pop(), title: "Where the lender's reply shows",
+    { sec: 8, chapter: 'My Requests', page: 'esc', target: () => [...document.querySelectorAll('#rq-detail-body .rq-ev.lender')].pop(), title: "Where the lender's reply shows",
       body: "The lender's response lands in the activity log — whether they replied to the email, clicked a status button, or called our team." },
-    { sec: 7, chapter: 'My Requests', page: 'esc', target: '#rq-detail-body .rq-fu', title: 'Follow up or close it out',
+    { sec: 8, chapter: 'My Requests', page: 'esc', target: '#rq-detail-body .rq-fu', title: 'Follow up or close it out',
       body: 'No answer yet? <strong>Request a follow-up</strong> and the AIME membership team chases the lender for you. If the reply fixed it, mark it resolved.' },
-    { sec: 7, chapter: 'My Requests', page: 'tkt', target: '#rq-detail-body .rq-thread', title: 'Support is a conversation',
+    { sec: 8, chapter: 'My Requests', page: 'tkt', target: '#rq-detail-body .rq-thread', title: 'Support is a conversation',
       body: "Support tickets work like messages: our team's replies appear here, newest at the bottom." },
-    { sec: 7, chapter: 'My Requests', page: 'tkt', target: () => document.querySelector('#rq-detail-body .rq-composer, #rq-detail-body .rq-waiting'), title: 'Reply right here',
+    { sec: 8, chapter: 'My Requests', page: 'tkt', target: () => document.querySelector('#rq-detail-body .rq-composer, #rq-detail-body .rq-waiting'), title: 'Reply right here',
       body: 'Write back and send — the support team is notified. Replying to a resolved ticket reopens it.' },
 
-    { sec: 8, target: '.notif-wrap .icon-btn', title: 'Notifications',
+    { sec: 9, target: '.notif-wrap .icon-btn', title: 'Notifications',
       body: 'Replies to your requests, new partners, FUSE reminders, and new content show up here.' },
-    { sec: 9, target: '#help-btn', mTarget: '.menu-btn', title: 'Help is always here',
+    { sec: 10, target: '#help-btn', mTarget: '.menu-btn', title: 'Help is always here',
       body: 'Open the Help Center, contact support, or replay this walkthrough any time from the ? menu.',
       mBody: 'Open Help Center from the menu any time — step-by-step guides, contact support, or replay this walkthrough.' },
   ];
@@ -152,6 +158,12 @@
       lastFill = s.fill || 0;
     } else { closeTourModal(); lastFill = 0; }
     const active = (id) => document.getElementById('view-' + id)?.classList.contains('active');
+    if (s.page === 'fuse') {   // FUSE event page (registration panel) — opened, never claimed, by the tour
+      const i = events.findIndex((e) => e.title.startsWith('FUSE'));
+      const title = document.querySelector('#event-detail-body h1');
+      if (i > -1 && (!active('event-detail') || !title || !title.textContent.startsWith('FUSE'))) openEvent(i);
+      return;
+    }
     if (s.page === 'dashboard' && !active('dashboard')) navigate('dashboard');
     else if (s.page === 'requests' && !active('requests')) window.AmpMyRequests.showList('all');
     else if ((s.page === 'esc' || s.page === 'tkt')) {
