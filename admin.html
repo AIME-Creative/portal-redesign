@@ -129,11 +129,6 @@
         Team access
       </button>
 
-      <div class="nav-label">Events</div>
-      <button class="nav-item" data-nav="registrations">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4z"/><path d="M13 6v12" stroke-dasharray="2 2"/></svg>
-        Event registrations
-      </button>
     </nav>
 
     <div class="sidebar-foot">
@@ -319,8 +314,9 @@
 
       <!-- ============ EVENTS ============ -->
       <section class="view" id="view-events">
+        <div class="filters an-tabs" role="tablist"><button class="chip active" data-nav="events" role="tab">Events</button><button class="chip" data-nav="registrations" role="tab">Registrations</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Events</h1><p>Manage local, regional, and national events.</p></div>
+          <div class="page-head" style="margin:0"><h1>Events</h1><p>Manage local, regional, and national events. Turn on registration per event with <strong>Registration</strong>; see who signed up on the Registrations tab.</p></div>
           <button class="btn btn-primary" data-edit="event:new">+ Add event</button>
         </div>
         <div class="toolbar"><span class="count-note" id="event-count">—</span></div>
@@ -846,8 +842,9 @@
 
       <!-- ============ EVENT REGISTRATIONS (admin-event-reg.js) ============ -->
       <section class="view" id="view-registrations">
+        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="events" role="tab">Events</button><button class="chip active" data-nav="registrations" role="tab">Registrations</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Event registrations</h1><p id="ereg-info">—</p></div>
+          <div class="page-head" style="margin:0"><h1>Events</h1><p id="ereg-info">—</p></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
             <select class="select filter-select" id="ereg-event" style="min-width:260px"></select>
             <button class="btn btn-outline" data-ereg-settings>Registration settings</button>
@@ -976,7 +973,7 @@
   <button class="bottom-nav-item" data-nav="members"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg><span>Members</span></button>
   <button class="bottom-nav-item" data-nav="requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z"/></svg><span>Requests</span></button>
   <button class="bottom-nav-item" data-nav="lenders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg><span>Lenders</span></button>
-  <button class="bottom-nav-item" data-nav="registrations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4z"/><path d="M13 6v12" stroke-dasharray="2 2"/></svg><span>Events</span></button>
+  <button class="bottom-nav-item" data-nav="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4z"/><path d="M13 6v12" stroke-dasharray="2 2"/></svg><span>Events</span></button>
 </nav>
 
 <script src="requests-store.js"></script>

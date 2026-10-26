@@ -76,7 +76,7 @@
       body: 'Registration is set per event — click <strong>Registration</strong> on any event to turn it on: RSVP or ticketed, which tiers, early-bird pricing, ticket types, add-ons, guests, custom questions, and one-click claim (FUSE).',
       mBody: 'Registration is set per event — swipe an event\'s row to the end and tap <strong>Registration</strong> to turn it on: RSVP or ticketed, tiers, early-bird pricing, tickets, add-ons, guests, questions, and one-click claim (FUSE).' },
     { sec: 10, chapter: 'Events', page: 'registrations', target: () => [$('ereg-stats'), $('ereg-breakdowns')], mTarget: () => $('ereg-stats'), title: 'Event registrations',
-      body: 'Pick an event to see totals, breakdowns by tier, ticket, add-on, and question, and every registration — with each guest\'s contact details and add-ons. Export to CSV.' },
+      body: 'The <strong>Registrations</strong> tab on Events: pick an event to see totals, breakdowns by tier, ticket, add-on, and question, and every registration — with each guest\'s contact details and add-ons. Export to CSV.' },
     { sec: 11, page: 'team', target: '#view-team .table-wrap', title: 'Team access',
       body: 'Super Admins add admins, change roles, and remove access. Replay this walkthrough any time from the <strong>?</strong> menu in the top bar.' },
   ];

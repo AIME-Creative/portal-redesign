@@ -6,7 +6,7 @@
       close date, early-bird deadline, ticket types (price, early-
       bird price, included free for tiers, available to tiers),
       add-ons & sessions, guests, and custom fields.
-   2. Event registrations dashboard (sidebar → Events): pick an
+   2. Event registrations dashboard (Content → Events → Registrations tab): pick an
       event; totals across the top, breakdowns (tier, tickets,
       add-ons, answers to dropdown questions), and every
       registration with its tier, ticket, add-ons, guests, and
