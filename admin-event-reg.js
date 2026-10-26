@@ -241,8 +241,8 @@
 
     const tile = (cls, ico, val, lbl, sub) => `<div class="stat"><div class="s-ico ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ico}</svg></div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div>${sub ? `<div class="t-sub" style="margin-top:4px">${sub}</div>` : ''}</div>`;
     $('ereg-stats').innerHTML =
-      tile('i-pink', '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>', regs.length.toLocaleString(), ticketed ? 'Registrations' : 'RSVPs', `${week} in the last 7 days`) +
-      tile('i-cyan', '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87"/>', guests, 'Guests', s.guests && s.guests.on ? `Up to ${s.guests.max} per member` : 'Guests not allowed') +
+      tile('i-pink', '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0116 0v1"/>', regs.length.toLocaleString(), ticketed ? 'Registrations' : 'RSVPs', `${week} in the last 7 days`) +
+      tile('i-cyan', '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>', guests, 'Guests', s.guests && s.guests.on ? `Up to ${s.guests.max} per member` : 'Guests not allowed') +
       tile('i-navy', '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/>', attendees.toLocaleString(), 'Total attendees', s.capacity ? `${Math.round(attendees / s.capacity * 100)}% of ${s.capacity.toLocaleString()} capacity` : 'No capacity limit') +
       (ticketed ? tile('i-green', '<path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>', money(revenue), 'Revenue', `${regs.filter((r) => r.total).length} paid · ${regs.filter((r) => !r.total).length} included / free`)
         : tile('i-green', '<path d="M20 6L9 17l-5-5"/>', s.capacity ? Math.max(0, s.capacity - attendees) : '—', 'Spots left', s.closes ? `Closes ${esc(R.fmtDate(s.closes))}` : '')) +

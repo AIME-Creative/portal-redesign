@@ -51,7 +51,7 @@
     const y = ARTS.reduce((s, a) => s + a.helpful[0], 0), n = ARTS.reduce((s, a) => s + a.helpful[1], 0);
     const tile = (cls, ico, val, lbl) => `<div class="stat"><div class="s-ico ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ico}</svg></div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div></div>`;
     $('kb-stats').innerHTML =
-      tile('i-cyan', '<path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2z"/>', `${pub.length}<span style="font-size:14px;color:var(--muted);font-weight:600"> / ${ARTS.length}</span>`, 'Published guides') +
+      tile('i-cyan', '<path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/>', `${pub.length}<span style="font-size:14px;color:var(--muted);font-weight:600"> / ${ARTS.length}</span>`, 'Published guides') +
       tile('i-navy', '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>', views.toLocaleString(), 'Article views') +
       tile('i-green', '<path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.3a2 2 0 002-1.7l1.4-9A2 2 0 0019.7 9z"/>', pct(y, n), 'Found it helpful') +
       tile('i-pink', '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>', misses().reduce((s, m) => s + m.n, 0), 'Searches with no results');

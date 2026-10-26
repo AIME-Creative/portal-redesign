@@ -77,7 +77,7 @@
     const q = ($('grp-q') && $('grp-q').value || '').toLowerCase();
     const rows = groups.filter((g) => !q || `${g.buyer.name} ${g.buyer.email} ${g.company}`.toLowerCase().includes(q));
     const total = groups.reduce((a, g) => a + g.seats.length, 0), assigned = groups.reduce((a, g) => a + used(g), 0);
-    const tile = (cls, val, lbl) => `<div class="stat"><div class="s-ico ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div></div>`;
+    const tile = (cls, val, lbl) => `<div class="stat"><div class="s-ico ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div></div>`;
     $('grp-list').innerHTML = `
       <div class="adm-section-head">
         <div class="page-head" style="margin:0"><h1>Group memberships</h1><p>One person buys several memberships for other people. Assign each membership to someone, or transfer it to someone else. Admin only — buyers can't move memberships themselves.</p></div>

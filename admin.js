@@ -145,7 +145,7 @@ const reqTypeMeta = {
   "Lender connection": { ico:'<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/>', cls:"i-cyan" },
   "Change AE":         { ico:'<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/>', cls:"i-navy" },
   "Support":           { ico:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', cls:"i-cyan" },
-  "Bug":               { ico:'<rect x="8" y="6" width="8" height="13" rx="4"/><path d="M12 6V3M8 11H3M16 11h5"/>', cls:"i-pink" },
+  "Bug":               { ico:'<rect x="8" y="6" width="8" height="13" rx="4"/><path d="M12 6V3M9.5 4.5L8 3M14.5 4.5L16 3M8 11H3M8 15H4M8 18l-3 2M16 11h5M16 15h4M16 18l3 2"/>', cls:"i-pink" },
 };
 // Bug reports stay here (interface only). Escalations, connections, Change AE and
 // support tickets are tracked in requests-store.js and rendered by admin-requests.js.

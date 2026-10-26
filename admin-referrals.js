@@ -100,7 +100,7 @@
     $('rf-tiles').innerHTML =
       tile('i-navy', '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>', recent.length, 'Referrals sent, last 30 days') +
       tile('i-pink', '<path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/>', sum('vip'), 'Sent to VIP members') +
-      tile('i-cyan', '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>', sum('elite'), 'Sent to Elite members') +
+      tile('i-cyan', '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>', sum('elite'), 'Sent to Elite members') +
       tile('i-green', '<path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/>', recent.length ? Math.round((sum('vip') + sum('elite')) / recent.length) : '—', 'Average members reached per referral');
   }
   function fillFilters() {

@@ -122,7 +122,7 @@
     $('em-tiles').innerHTML =
       tile('i-navy', '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>', recent.length, 'Sent, last 30 days') +
       tile('i-green', '<path d="M20 6L9 17l-5-5"/>', recent.length ? Math.round((ok / recent.length) * 100) + '%' : '—', 'Delivered') +
-      tile('i-pink', '<path d="M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><path d="M12 9v4"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/>', recent.filter((e) => ['bounced', 'suppressed', 'complained'].includes(e.status)).length, 'Bounced or blocked') +
+      tile('i-pink', '<path d="M12 9v4M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/>', recent.filter((e) => ['bounced', 'suppressed', 'complained'].includes(e.status)).length, 'Bounced or blocked') +
       tile('i-cyan', '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>', recent.filter((e) => ['delayed', 'failed'].includes(e.status)).length, 'Delayed or failed');
   }
 

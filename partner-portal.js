@@ -33,7 +33,7 @@
     dash: '<rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>',
     eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
     mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>',
-    info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/>',
+    info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/>',
   };
   window.AMP_USER_NAME = U.first;
   document.body.classList.add('partner-mode', 'partner-' + TYPE);
@@ -178,7 +178,7 @@
       html += `<div class="stat-row pp-tiles">
           ${tile('i-navy', ICO.eye, tot.total.toLocaleString(), 'Market page views', `${tot.unique.toLocaleString()} unique members`)}
           ${tile('i-cyan', '<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/>', count('connection'), 'Connection requests', `${products.length} product${products.length === 1 ? '' : 's'}`)}
-          ${tile('i-pink', '<path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16"/>', products.length, 'Market listings', 'Listed for Premium, Elite & VIP')}
+          ${tile('i-pink', '<path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/>', products.length, 'Market listings', 'Listed for Premium, Elite & VIP')}
           ${tile('i-green', '<path d="M20 6L9 17l-5-5"/>', tot.total ? ((count('connection') / tot.unique) * 100).toFixed(1) + '%' : '—', 'Connection rate', 'Requests ÷ unique viewers')}
         </div>
         <div class="card card-pad"><div class="section-title"><h2 style="font-size:16px">${multi ? 'Page views by product' : 'Market page views'}</h2><span class="count-note">by the viewing member's tier</span></div>
@@ -207,8 +207,8 @@
       ${isLender ? `<div class="stat-row pp-tiles">
         ${tile('i-pink', '<path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>', reqs.filter((r) => r.type === 'escalation' && r.status !== 'Resolved').length, 'Open escalations')}
         ${tile('i-amber', '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>', reqs.filter((r) => r.followUp && r.followUp.status === 'open').length, 'Follow-ups requested', 'The member asked AIME to chase')}
-        ${tile('i-cyan', '<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/>', reqs.filter((r) => r.type === 'connection').length, 'Connection requests')}
-        ${tile('i-green', '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>', reqs.filter((r) => r.type === 'changeae').length, 'Change AE requests')}</div>` : ''}
+        ${tile('i-cyan', '<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/>', reqs.filter((r) => r.type === 'connection').length, 'Connection requests')}
+        ${tile('i-green', '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/>', reqs.filter((r) => r.type === 'changeae').length, 'Change AE requests')}</div>` : ''}
       <div class="filters">${chips.map(([k, l]) => `<button class="chip ${filter === k ? 'active' : ''}" data-pr-filter="${k}">${l}</button>`).join('')}
         ${productSel}<span class="count-note" style="${multi ? 'margin-left:12px' : 'margin-left:auto'};align-self:center">${rows.length} request${rows.length === 1 ? '' : 's'}</span></div>
       <div class="card">${rows.length ? `<div class="table-scroll"><table class="pp-table pp-click"><thead><tr><th>Ref</th><th>Request</th>${multi ? '<th>Product</th>' : ''}<th>Member</th><th>Sent to</th><th>Submitted</th><th>Status</th></tr></thead><tbody>
@@ -279,7 +279,7 @@
       if (r.followUp && r.followUp.status === 'open') items.push({ at: r.followUp.requestedAt, id: r.id, t: `${r.member} requested a follow-up`, s: `${r.id} · the AIME team is following up too`, warn: true });
     });
     list.innerHTML = items.sort((a, b) => (a.at < b.at ? 1 : -1)).slice(0, 6).map((n) =>
-      `<button class="notif-item ${Date.now() - new Date(n.at) < 3 * 864e5 ? 'unread' : ''}" data-partner-open="${n.id}"><span class="ni-ico ${n.warn ? 'i-amber' : 'i-pink'}">${svg(n.warn ? '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>' : '<path d="M22 12h-6l-2 3h-4l-2-3H2"/>')}</span>
+      `<button class="notif-item ${Date.now() - new Date(n.at) < 3 * 864e5 ? 'unread' : ''}" data-partner-open="${n.id}"><span class="ni-ico ${n.warn ? 'i-amber' : 'i-pink'}">${svg(n.warn ? '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>' : '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z"/>')}</span>
         <div class="ni-main"><div class="ni-t">${esc(n.t)}</div><div class="ni-s">${esc(n.s)} · ${fmt.ago(n.at)}</div></div></button>`).join('') || '<div class="empty" style="padding:20px"><p>No notifications yet.</p></div>';
   }
 
