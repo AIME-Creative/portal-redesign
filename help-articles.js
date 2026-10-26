@@ -86,16 +86,37 @@ window.HELP_ARTICLES = [
 
   { slug: 'mobile', audience: 'all', title: 'Using the portal on your phone', category: 'start',
     summary: 'Where the menu and main sections are on mobile.',
-    tags: ['mobile', 'phone', 'app', 'menu'], minutes: 1, updated: 'Oct 2, 2026', status: 'Published',
+    tags: ['mobile', 'phone', 'app', 'menu'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
     views: 402, helpful: [51, 4], actions: [],
     body: `
-      <p>The portal works in any mobile browser — there's nothing to install.</p>
+      <p>The portal works in any mobile browser, and you can also install it as an app.</p>
       <ol class="kb-steps">
-        <li>The <strong>bottom bar</strong> takes you to Home, Lenders, Market, Resources, and Events.</li>
-        <li>Tap the <strong>☰ menu</strong> (top left) for everything else: hubs, Documents, My Requests, Help Center, and Settings.</li>
-        <li>Your escalation count and notifications stay in the top bar.</li>
+        <li>The <strong>bottom bar</strong> takes you to the main sections (Home or your Dashboard, Lenders, Market, Resources, and Events).</li>
+        <li>Tap the <strong>☰ menu</strong> (top left) for everything else, including My Requests, Help Center, and Settings.</li>
+        <li>Your notifications stay in the top bar.</li>
       </ol>
-      <div class="kb-tip"><strong>Tip:</strong> Add the portal to your home screen from your browser's Share menu for one-tap access.</div>` },
+      <div class="kb-tip"><strong>Tip:</strong> Install AMP as an app for one-tap access and push notifications — see <em>Install the AMP app and turn on notifications</em>.</div>` },
+
+  { slug: 'install-app', audience: 'all', title: 'Install the AMP app and turn on notifications', category: 'start', popular: true,
+    summary: 'Add AMP to your phone or computer, and get notified when something needs you.',
+    tags: ['app', 'install', 'home screen', 'download', 'push', 'notifications', 'iphone', 'android', 'alerts'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    views: 0, helpful: [0, 0], actions: [{ label: 'Open notification settings', attr: 'data-nav="settings" data-tab="notifications"' }],
+    body: `
+      <p>AMP can live on your home screen like any other app — no app store needed — and send you push notifications, even when it's closed.</p>
+      <h3>Install it</h3>
+      <ol class="kb-steps">
+        <li><strong>iPhone or iPad:</strong> open AMP in Safari, tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>.</li>
+        <li><strong>Android:</strong> in Chrome, tap the menu <strong>⋮</strong>, then <strong>Install app</strong>.</li>
+        <li><strong>Computer:</strong> in Chrome or Edge, click the install icon in the address bar. In Safari on a Mac, choose <strong>File → Add to Dock</strong>.</li>
+      </ol>
+      <p>You may see a <strong>Get the AMP app</strong> card the first time you visit. Tap <strong>Not now</strong> or ✕ and it won't come back — you can always install from <strong>Settings → Notifications &amp; app</strong>.</p>
+      <h3>Turn on notifications</h3>
+      <ol class="kb-steps">
+        <li>Go to <strong>Settings → Notifications &amp; app</strong> and tap <strong>Turn on notifications</strong>, then <strong>Allow</strong>.</li>
+        <li>Choose what you want to hear about — for example, replies to your requests, lender replies, event reminders, or announcements.</li>
+        <li>Use <strong>Send a test notification</strong> to check it works.</li>
+      </ol>
+      <div class="kb-tip"><strong>iPhone:</strong> Apple only allows notifications for apps on your Home Screen, so install AMP first. Notifications are set per device — turn them on on each phone or computer you use. The bell in the top bar always shows everything either way.</div>` },
 
   /* ---------------- Escalations ---------------- */
   { slug: 'escalate-a-loan', title: 'How to escalate a loan', category: 'escalations', popular: true,

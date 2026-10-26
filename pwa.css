@@ -1,0 +1,43 @@
+/* ============================================================
+   Install-as-app banner + Settings → Notifications & app (pwa.js)
+   ============================================================ */
+.pwa-banner { position:fixed; right:24px; bottom:24px; z-index:10000;   /* above the prototype review pill */ width:400px; max-width:calc(100vw - 24px);
+  display:grid; grid-template-columns:auto 1fr; gap:4px 14px; align-items:start; padding:16px 40px 16px 16px;
+  background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow-lg); animation:pwaUp .3s ease; }
+@keyframes pwaUp { from { transform:translateY(16px); opacity:0; } to { transform:none; opacity:1; } }
+.pwa-app-ico { width:44px; height:44px; border-radius:11px; flex:0 0 44px; grid-row:span 2; }
+.pwa-bell { display:grid; place-items:center; background:var(--navy); font-size:22px; }
+.pwa-b-text strong { display:block; font-size:15px; color:var(--ink); }
+.pwa-b-text span { display:block; font-size:13px; color:var(--ink-soft); line-height:1.45; margin-top:2px; }
+.pwa-b-actions { grid-column:2; display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.pwa-x { position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
+  color:var(--muted); font-size:14px; background:transparent; }
+.pwa-x:hover { background:var(--surface-alt); color:var(--ink); }
+body.wt-open .pwa-banner { display:none; }
+@media (max-width:860px) {
+  .pwa-banner { left:12px; right:12px; width:auto; bottom:calc(76px + env(safe-area-inset-bottom)); }   /* above the bottom bar */
+}
+
+.pwa-steps { margin:0; padding-left:20px; display:grid; gap:10px; font-size:14.5px; line-height:1.5; color:var(--ink); }
+.pwa-ico { display:inline-block; padding:0 6px; border:1px solid var(--line); border-radius:6px; font-size:13px; }
+.pwa-note { margin:14px 0 0; padding:10px 12px; border-radius:10px; background:var(--surface-alt); color:var(--ink-soft); font-size:13px; }
+
+.pwa-row { display:flex; align-items:center; gap:14px; margin-bottom:8px; }
+.pwa-row .pwa-app-ico { grid-row:auto; }
+.pwa-row-text { flex:1 1 200px; min-width:0; }
+.pwa-sub { color:var(--ink-soft); font-size:13.5px; line-height:1.5; margin:3px 0 0; }
+.pwa-pill { display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:20px; margin-right:6px;
+  background:var(--surface-alt); color:var(--ink-soft); border:1px solid var(--line); }
+.pwa-pill.on { background:#e3f6ec; color:#137a45; border-color:#bfe8d1; }
+.pwa-pill.bad { background:#fdecea; color:#b3261e; border-color:#f6c9c4; }
+.pwa-topics { display:grid; gap:10px; }
+.pwa-check { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink); cursor:pointer; }
+.pwa-check input { width:18px; height:18px; accent-color:var(--pink); }
+@media (max-width:860px) {
+  /* four Settings tabs: scroll sideways instead of widening the page */
+  #settings-tabs { overflow-x:auto; flex-wrap:nowrap; scrollbar-width:none; max-width:100%; }
+  #settings-tabs::-webkit-scrollbar { display:none; }
+  #settings-tabs .tab { white-space:nowrap; flex:0 0 auto; }
+  .pwa-row { flex-wrap:wrap; }
+  .pwa-row .btn { margin-left:58px; }
+}

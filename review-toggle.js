@@ -18,6 +18,7 @@
       'padding:4px 5px 4px 9px;box-shadow:0 6px 22px rgba(2,22,73,.30);opacity:.72;transition:opacity .15s;' +
       'font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;}' +
     '.rev-toggle:hover{opacity:1;}' +
+    'body.wt-open .rev-toggle{display:none;}' +   // out of the way while a walkthrough is open
     '.rev-toggle .rev-tag{color:rgba(255,255,255,.5);font-size:9px;font-weight:700;letter-spacing:.14em;margin-right:5px;}' +
     '.rev-toggle .rev-opt{color:rgba(255,255,255,.72);text-decoration:none;font-size:12px;font-weight:600;' +
       'padding:5px 12px;border-radius:999px;transition:.15s;white-space:nowrap;cursor:pointer;}' +

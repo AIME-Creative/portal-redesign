@@ -6,9 +6,8 @@
    Lender / Vendor, and Company. The company list is Active
    lenders, or Active vendor companies (products grouped by
    their Company field). The new user gets an invite email to
-   set a password. Row actions: Edit, Resend invite, Deactivate /
-   Reactivate. Many users per company, all with identical access
-   (no per-user permissions). Escalation and "Sent to" contacts live on the
+   set a password. Row actions: Edit, Remove. Many users per
+   company, all with identical access (no per-user permissions). Escalation and "Sent to" contacts live on the
    lender / vendor listing, not here.
    Data: partner-store.js (AmpPartners, shared with the member app).
    Uses admin.js globals: lenders, vendors, navigate, openModal,
@@ -44,8 +43,7 @@
         <td>${esc(u.lastLogin || '—')}</td>
         <td class="t-right"><div class="row-actions pu-actions">
           <button class="link-act" data-partner-edit="${u.id}">Edit</button>
-          ${u.status === 'Invited' ? `<button class="link-act" data-partner-act="resend:${u.id}">Resend invite</button>` : ''}
-          ${u.status === 'Deactivated' ? `<button class="link-act" data-partner-act="reactivate:${u.id}">Reactivate</button>` : `<button class="link-act" data-partner-act="deactivate:${u.id}">Deactivate</button>`}
+          <button class="link-act danger" data-partner-act="remove:${u.id}">Remove</button>
         </div></td>
       </tr>`;
     }).join('') || `<tr><td colspan="6" class="t-sub" style="padding:24px;text-align:center">No partner users match.</td></tr>`;
@@ -98,9 +96,10 @@
   function act(action, id) {
     const u = P.users().find((x) => x.id === id); if (!u) return;
     const name = `${u.first} ${u.last}`;
-    if (action === 'resend') showToast(`Invite re-sent to ${u.email}.`);
-    if (action === 'deactivate') { P.updateUser(id, { status: 'Deactivated' }); showToast(`${name} can no longer sign in.`); }
-    if (action === 'reactivate') { P.updateUser(id, { status: u.lastLogin && u.lastLogin !== '—' ? 'Active' : 'Invited' }); showToast(`${name} reactivated.`); }
+    if (action === 'remove') {
+      if (!window.confirm(`Remove ${name}? They'll no longer be able to sign in. Everyone else at ${u.company} keeps their access.`)) return;
+      P.removeUser(id); showToast(`Removed ${name}.`);
+    }
     render();
   }
 

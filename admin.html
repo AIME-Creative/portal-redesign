@@ -42,18 +42,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
         Analytics
       </button>
-      <button class="nav-item" data-nav="engagement">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        Engagement
-      </button>
-      <button class="nav-item" data-nav="journeys">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M5 8v4a4 4 0 004 4h6"/><path d="M14 12l3-3-3-3"/></svg>
-        Member Journeys
-      </button>
-      <button class="nav-item" data-nav="vendorclicks">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/><circle cx="12" cy="12" r="1"/></svg>
-        Vendor Clicks
-      </button>
       <button class="nav-item" data-nav="reports">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg>
         Reports
@@ -70,10 +58,6 @@
       </button>
 
       <div class="nav-label">Billing</div>
-      <button class="nav-item" data-nav="subscriptions">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-        Subscriptions
-      </button>
       <button class="nav-item" data-nav="abandoned">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>
         Abandoned carts
@@ -87,6 +71,10 @@
       <button class="nav-item" data-nav="notifications">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
         Notifications
+      </button>
+      <button class="nav-item" data-nav="emails">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+        Email history
       </button>
 
       <div class="nav-label">Content</div>
@@ -200,7 +188,7 @@
           </button>
           <button class="stat" data-nav="market">
             <div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9"/></svg></div>
-            <div class="s-val" id="dash-vendors">0</div><div class="s-lbl">Market vendors</div>
+            <div class="s-val" id="dash-vendors">0</div><div class="s-lbl">Market products</div>
           </button>
           <button class="stat" data-nav="registrations">
             <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
@@ -208,7 +196,7 @@
           </button>
         </div>
 
-        <div class="section-title" style="margin:26px 0 14px"><h2 style="font-size:18px;font-weight:700">Revenue &amp; subscriptions</h2><a href="#" data-nav="subscriptions">View subscriptions <span>→</span></a></div>
+        <div class="section-title" style="margin:26px 0 14px"><h2 style="font-size:18px;font-weight:700">Revenue &amp; subscriptions</h2><a href="#" data-nav="members">View members <span>→</span></a></div>
         <div class="stat-row admin4">
           <div class="stat">
             <div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
@@ -222,7 +210,7 @@
             <div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
             <div class="s-val">2,710</div><div class="s-lbl">Active subscriptions</div>
           </div>
-          <button class="stat" data-nav="subscriptions">
+          <button class="stat" data-nav="members">
             <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><path d="M12 9v4"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></div>
             <div class="s-val" id="dash-pastdue">0</div><div class="s-lbl">Past due payments</div>
           </button>
@@ -251,8 +239,17 @@
       <!-- ============ MEMBERS ============ -->
       <section class="view" id="view-members">
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Members</h1><p>Search, view, and manage member accounts.</p></div>
-          <button class="btn btn-primary" data-edit="member:new">+ Add member</button>
+          <div class="page-head" style="margin:0"><h1>Members</h1><p>Member accounts and their billing — plan, status, and next payment, synced with Stripe.</p></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline" data-toast="Synced latest subscription data from Stripe.">Sync with Stripe</button>
+            <button class="btn btn-primary" data-edit="member:new">+ Add member</button>
+          </div>
+        </div>
+        <div class="stat-row admin4" style="margin-bottom:20px">
+          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="s-val">$84.2K</div><div class="s-lbl">Monthly recurring revenue</div></div>
+          <div class="stat"><div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="s-val" id="mem-active">0</div><div class="s-lbl">Active</div></div>
+          <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><path d="M12 9v4"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></div><div class="s-val" id="mem-pastdue">0</div><div class="s-lbl">Past due</div></div>
+          <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="s-val" id="mem-trialing">0</div><div class="s-lbl">Trialing</div></div>
         </div>
         <div class="toolbar">
           <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="member-search" placeholder="Search by name, email, or NMLS #…"></div>
@@ -261,12 +258,13 @@
           <select class="select filter-select" id="member-billing"><option value="all">Annual &amp; monthly</option><option>Annual</option><option>Monthly</option></select>
           <select class="select filter-select" id="member-state"><option value="all">All mailing states</option></select>
           <select class="select filter-select" id="member-licensed"><option value="all">All licensed states</option></select>
-          <select class="select filter-select" id="member-status"><option value="all">All statuses</option><option>Active</option><option>Paused</option></select>
+          <select class="select filter-select" id="member-status"><option value="all">All statuses</option><option>Active</option><option>Past due</option><option>Trialing</option><option>Canceled</option></select>
           <span class="spacer"></span>
           <span class="count-note" id="member-count">—</span>
+          <button class="btn btn-outline" data-toast="Exported members to CSV.">Export CSV</button>
         </div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Member</th><th>Plan</th><th>NMLS #</th><th>Licensed states</th><th>Status</th><th>Joined</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Member</th><th>Plan</th><th>NMLS #</th><th>Licensed states</th><th>Billing</th><th>Joined</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="members-tbody"></tbody>
         </table></div></div>
       </section>
@@ -287,12 +285,12 @@
       <!-- ============ MARKET ============ -->
       <section class="view" id="view-market">
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Market</h1><p>Manage vendor partners and member deals.</p></div>
-          <button class="btn btn-primary" data-edit="vendor:new">+ Add vendor</button>
+          <div class="page-head" style="margin:0"><h1>Market</h1><p>Products in the Market and their member deals. A company can have more than one product.</p></div>
+          <button class="btn btn-primary" data-edit="vendor:new">+ Add product</button>
         </div>
         <div class="toolbar"><span class="count-note" id="vendor-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Vendor</th><th>Category</th><th>Member offer</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Product</th><th>Company</th><th>Category</th><th>Member offer</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="vendors-tbody"></tbody>
         </table></div></div>
       </section>
@@ -440,8 +438,9 @@
 
       <!-- ============ ANALYTICS ============ -->
       <section class="view" id="view-analytics">
+        <div class="filters an-tabs" role="tablist"><button class="chip active" data-nav="analytics" role="tab">Overview</button><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button><button class="chip" data-nav="vendorclicks" role="tab">Vendor clickthroughs</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Trends across <span id="an-range-note">the last 30 days</span> — revenue, membership growth, conversion, and acquisition — the parts that don't fit the dashboard snapshot or content engagement.</p></div>
+          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Overview — trends across <span id="an-range-note">the last 30 days</span> — revenue, membership growth, conversion, and acquisition — the parts that don't fit the dashboard snapshot or content engagement.</p></div>
           <div class="date-range" id="analytics-range">
             <select class="select filter-select daterange-preset">
               <option value="7d">Last 7 days</option>
@@ -532,31 +531,6 @@
         <div class="table-wrap"><div class="table-scroll"><table class="adm" id="report-table"></table></div></div>
       </section>
 
-      <!-- ============ SUBSCRIPTIONS ============ -->
-      <section class="view" id="view-subscriptions">
-        <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Subscriptions</h1><p>Billing status across all members. Synced with Stripe.</p></div>
-          <button class="btn btn-outline" data-toast="Synced latest subscription data from Stripe.">Sync with Stripe</button>
-        </div>
-        <div class="stat-row admin4">
-          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="s-val">$84.2K</div><div class="s-lbl">Monthly recurring revenue</div></div>
-          <div class="stat"><div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="s-val" id="sub-active">0</div><div class="s-lbl">Active subscriptions</div></div>
-          <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><path d="M12 9v4"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></div><div class="s-val" id="sub-pastdue">0</div><div class="s-lbl">Past due</div></div>
-          <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="s-val" id="sub-trialing">0</div><div class="s-lbl">Trialing</div></div>
-        </div>
-        <div class="toolbar">
-          <select class="select filter-select" id="sub-status"><option value="all">All statuses</option><option>Active</option><option>Past due</option><option>Trialing</option><option>Canceled</option></select>
-          <select class="select filter-select" id="sub-billing"><option value="all">Annual &amp; monthly</option><option>Annual</option><option>Monthly</option></select>
-          <span class="spacer"></span>
-          <span class="count-note" id="sub-count">—</span>
-          <button class="btn btn-outline" data-toast="Exported subscriptions to CSV.">Export CSV</button>
-        </div>
-        <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Member</th><th>Plan</th><th>Billing</th><th>Amount</th><th>Status</th><th>Next billing</th><th class="t-right">Actions</th></tr></thead>
-          <tbody id="subs-tbody"></tbody>
-        </table></div></div>
-      </section>
-
       <!-- ============ ABANDONED CARTS ============ -->
       <section class="view" id="view-abandoned">
         <div class="page-head"><h1>Abandoned carts</h1><p>Leads who started signup but didn't finish paying. Contact details are captured before checkout, so these are recoverable.</p></div>
@@ -626,8 +600,9 @@
 
       <!-- ============ ENGAGEMENT ============ -->
       <section class="view" id="view-engagement">
+        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="analytics" role="tab">Overview</button><button class="chip active" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button><button class="chip" data-nav="vendorclicks" role="tab">Vendor clickthroughs</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>User engagement</h1><p>What members are engaging with across the portal — <span id="eng-range-note">last 30 days</span>.</p></div>
+          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Engagement — what members are engaging with across the portal — <span id="eng-range-note">last 30 days</span>.</p></div>
           <div class="date-range" id="engagement-range">
             <select class="select filter-select daterange-preset">
               <option value="7d">Last 7 days</option>
@@ -654,15 +629,16 @@
         <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
           <div class="card card-pad"><div class="section-title"><h2>Top resources</h2></div><div id="eng-resources"></div></div>
           <div class="card card-pad"><div class="section-title"><h2>Top lenders</h2></div><div id="eng-lenders"></div></div>
-          <div class="card card-pad"><div class="section-title"><h2>Top market vendors</h2></div><div id="eng-vendors"></div></div>
+          <div class="card card-pad"><div class="section-title"><h2>Top Market products</h2></div><div id="eng-vendors"></div></div>
           <div class="card card-pad"><div class="section-title"><h2>Escalations by lender</h2></div><div id="eng-escalations"></div></div>
         </div>
       </section>
 
       <!-- ============ MEMBER JOURNEYS (Mixpanel) ============ -->
       <section class="view" id="view-journeys">
+        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="analytics" role="tab">Overview</button><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip active" data-nav="journeys" role="tab">Member journeys</button><button class="chip" data-nav="vendorclicks" role="tab">Vendor clickthroughs</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Member Journeys</h1><p>How members move from signup to active — funnels, retention, and feature adoption for <span id="jr-range-note">the last 30 days</span>.</p></div>
+          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Member journeys — how members move from signup to active — funnels, retention, and feature adoption for <span id="jr-range-note">the last 30 days</span>.</p></div>
           <div class="date-range" id="journeys-range">
             <select class="select filter-select daterange-preset">
               <option value="7d">Last 7 days</option>
@@ -741,8 +717,9 @@
 
       <!-- ============ VENDOR CLICKTHROUGHS ============ -->
       <section class="view" id="view-vendorclicks">
+        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="analytics" role="tab">Overview</button><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button><button class="chip active" data-nav="vendorclicks" role="tab">Vendor clickthroughs</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Vendor clickthroughs</h1><p>How much attention each Market vendor gets — numbers your vendor team can share with partners.</p></div>
+          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Vendor clickthroughs — how much attention each Market product gets — numbers your vendor team can share with partners.</p></div>
           <div class="date-range" id="vendorclicks-range">
             <select class="select filter-select daterange-preset">
               <option value="7d">Last 7 days</option>
@@ -776,7 +753,7 @@
           <button class="btn btn-outline btn-sm" data-toast="Exported vendor clickthrough report to CSV.">Export CSV</button>
         </div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Vendor</th><th>Category</th><th>Impressions</th><th>Clicks</th><th>Premium</th><th>Elite</th><th>VIP</th><th>CTR</th><th>Connections</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Product</th><th>Category</th><th>Impressions</th><th>Clicks</th><th>Premium</th><th>Elite</th><th>VIP</th><th>CTR</th><th>Connections</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="vendorclicks-tbody"></tbody>
         </table></div></div>
         <p class="flow-caption"><strong>Impressions</strong> = times the vendor's Market card was seen · <strong>Clicks</strong> = members who opened it (broken out by membership tier) · <strong>CTR</strong> = clicks ÷ impressions · <strong>Connections</strong> = members who requested an intro. "Email vendor" sends that partner their own numbers.</p>
@@ -815,6 +792,25 @@
       </section>
 
       <!-- ============ FUSE ============ -->
+      <!-- ============ EMAIL HISTORY (admin-emails.js) ============ -->
+      <section class="view" id="view-emails">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Email history</h1><p>Every email the portal sends members — password resets, magic links, renewal reminders, failed payments, and more — with its delivery status from Resend. Open one to preview it, or resend it.</p></div>
+        </div>
+        <div class="stat-row admin4" style="margin-bottom:20px" id="em-tiles"></div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="em-q" placeholder="Search by name, email, or subject…"></div>
+          <select class="select filter-select" id="em-type"><option value="all">All email types</option></select>
+          <select class="select filter-select" id="em-status"><option value="all">All statuses</option></select>
+          <span class="spacer"></span><span class="count-note" id="em-count">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm em-table">
+          <thead><tr><th>Member</th><th>Email</th><th>Subject</th><th>Status</th><th>Sent</th><th class="t-right">Actions</th></tr></thead>
+          <tbody id="em-tbody"></tbody>
+        </table></div></div>
+        <p class="flow-caption">Statuses come from Resend. <strong>Bounced</strong> = the address rejected it · <strong>Delayed</strong> = still retrying · <strong>Suppressed</strong> = Resend won't send to that address after an earlier bounce or spam complaint. Previews are available for 30 days after sending.</p>
+      </section>
+
       <!-- ============ PARTNER USERS (admin-partners.js) ============ -->
       <section class="view" id="view-partners">
         <div class="adm-section-head">
@@ -824,7 +820,7 @@
         <div class="toolbar">
           <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="pu-q" placeholder="Search by name, email, or company…"></div>
           <select class="select filter-select" id="pu-type"><option value="all">Lenders &amp; vendors</option><option>Lender</option><option>Vendor</option></select>
-          <select class="select filter-select" id="pu-status"><option value="all">All statuses</option><option>Active</option><option>Invited</option><option>Deactivated</option></select>
+          <select class="select filter-select" id="pu-status"><option value="all">All statuses</option><option>Active</option><option>Invited</option></select>
           <span class="spacer"></span><span class="count-note" id="pu-count">—</span>
         </div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
@@ -877,6 +873,18 @@
       <button class="btn btn-outline" data-close>Cancel</button>
       <button class="btn btn-primary" id="edit-save" data-toast="Saved." data-close>Save</button>
     </div>
+  </div>
+</div>
+
+<!-- ===================== EMAIL PREVIEW (admin-emails.js) ===================== -->
+<div class="modal-overlay" id="modal-email">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-head">
+      <div><h2 id="em-m-title">Email</h2><p id="em-m-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="em-m-body"></div>
+    <div class="modal-foot"><span class="hint" id="em-m-note" style="margin:0 auto 0 0;max-width:360px"></span><button class="btn btn-outline" data-close>Close</button><button class="btn btn-primary" id="em-m-resend">Resend</button></div>
   </div>
 </div>
 
@@ -954,6 +962,7 @@
 <script src="admin-help.js"></script>
 <script src="admin-event-reg.js"></script>
 <script src="admin-partners.js"></script>
+<script src="admin-emails.js"></script>
 <!-- admin first-time walkthrough (separate from the member tour) -->
 <script src="tour-engine.js"></script>
 <script src="admin-walkthrough.js"></script>

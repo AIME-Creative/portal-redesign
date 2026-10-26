@@ -78,6 +78,21 @@ window.AmpTourEngine = function (cfg) {
     return el;
   }
 
+  // The sticky top bar and the phone bottom bar sit over the page — keep targets out from under them.
+  function insets() {
+    const vis = (e) => e && getComputedStyle(e).display !== 'none' && e.getBoundingClientRect().height > 0;
+    const tb = document.querySelector('.topbar'), bn = document.querySelector('.bottom-nav');
+    const top = vis(tb) && /sticky|fixed/.test(getComputedStyle(tb).position) ? Math.max(0, tb.getBoundingClientRect().bottom) : 0;
+    const bottom = vis(bn) ? Math.max(0, window.innerHeight - bn.getBoundingClientRect().top) : 0;
+    return { top, bottom };
+  }
+  function keepClearOfBars(el) {
+    if (el.closest && (el.closest('.topbar') || el.closest('.bottom-nav') || el.closest('.sidebar'))) return;   // the bars themselves
+    const r = rectOf(el), { top, bottom } = insets(), room = window.innerHeight - bottom;
+    if (r.bottom > room - 8 && r.height < room - top - 16) window.scrollBy(0, r.bottom - room + 16);
+    else if (r.top < top + 8) window.scrollBy(0, r.top - top - 16);
+  }
+
   /* ---------- render ---------- */
   function renderCentered(html) {
     cfg.cleanup && cfg.cleanup();
@@ -93,7 +108,9 @@ window.AmpTourEngine = function (cfg) {
     root.classList.toggle('centered', !el);
     if (el) {
       const first = Array.isArray(el) ? el[0] : el;
-      first.scrollIntoView({ block: Array.isArray(el) ? 'nearest' : first.closest('.sidebar') ? 'nearest' : 'center', inline: 'nearest' });
+      const tall = rectOf(el).height > window.innerHeight * 0.55;   // tall targets: show their top, not their middle
+      first.scrollIntoView({ block: Array.isArray(el) || first.closest('.sidebar') ? 'nearest' : tall ? 'start' : 'center', inline: 'nearest' });
+      keepClearOfBars(el);
     }
     const n = STEPS.length, sections = cfg.sections;
     const chap = s.chapter ? STEPS.filter((x) => x.chapter === s.chapter) : null;
@@ -122,20 +139,29 @@ window.AmpTourEngine = function (cfg) {
 
   function focusPrimary() { const b = card().querySelector('[data-wt="next"],[data-wt="done"]'); if (b) b.focus({ preventScroll: true }); }
 
-  // Spotlight the target and put the card beside it, clamped to the viewport.
+  // Spotlight the target and put the card beside it, clamped to the viewport. When there's no room beside
+  // it (tall targets, phones), dock the card to the screen edge away from the target and trim the
+  // spotlight so the card never covers it.
   function place() {
     if (!root) return;
     const spot = root.querySelector('.wt-spot'), c = card();
     const s = STEPS[i], el = s && targetOf(s);
     if (!el) { spot.style.display = 'none'; c.style.left = c.style.top = ''; return; }
-    const pad = 6, r = rectOf(el);
-    Object.assign(spot.style, { display: 'block', left: r.left - pad + 'px', top: r.top - pad + 'px', width: r.width + pad * 2 + 'px', height: r.height + pad * 2 + 'px' });
+    const pad = 6, edge = 4, r = rectOf(el);
     const cw = c.offsetWidth, ch = c.offsetHeight, vw = window.innerWidth, vh = window.innerHeight, gap = 16;
-    let left, top;
+    let left, top, minTop = edge, maxBottom = vh - edge;
     if (r.right + gap + cw <= vw - 12) { left = r.right + gap; top = r.top; }                       // right
     else if (r.bottom + gap + ch <= vh - 12) { left = r.left; top = r.bottom + gap; }                // below
     else if (r.top - gap - ch >= 12) { left = r.left; top = r.top - gap - ch; }                      // above
-    else { left = r.left - gap - cw; top = r.top; }                                                  // left
+    else if (r.left - gap - cw >= 12) { left = r.left - gap - cw; top = r.top; }                     // left
+    else {                                                                                           // dock
+      left = (vw - cw) / 2;
+      const mid = (Math.max(r.top, 0) + Math.min(r.bottom, vh)) / 2;
+      if (mid < vh / 2) { top = vh - ch - 12; maxBottom = top - 8; } else { top = 12; minTop = top + ch + 8; }
+    }
+    const sTop = Math.max(r.top - pad, minTop), sBottom = Math.min(r.bottom + pad, maxBottom);
+    const sLeft = Math.max(r.left - pad, edge), sRight = Math.min(r.right + pad, vw - edge);
+    Object.assign(spot.style, { display: 'block', left: sLeft + 'px', top: sTop + 'px', width: Math.max(0, sRight - sLeft) + 'px', height: Math.max(0, sBottom - sTop) + 'px' });
     c.style.left = Math.max(12, Math.min(left, vw - cw - 12)) + 'px';
     c.style.top = Math.max(12, Math.min(top, vh - ch - 12)) + 'px';
   }

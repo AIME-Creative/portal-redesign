@@ -56,3 +56,7 @@ body.partner-mode #tab-billing { display:none !important; }
 
 /* product tag — only rendered for vendor companies with more than one Market product */
 .pp-product { font-weight:600; color:var(--ink); }
+
+/* wide tables scroll inside their card on phones (the member app has no admin.css) */
+.table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%; }
+.pp-grid > * { min-width:0; }   /* let tables scroll instead of stretching the grid on phones */

@@ -20,7 +20,7 @@
    company_id; contacts on the listing; page views from Mixpanel.
    ============================================================ */
 (function () {
-  const KEY = 'amp-partners-v1';
+  const KEY = 'amp-partners-v2';   // v2: no Deactivated status (users are removed instead)
   const TIERS = ['Premium', 'Elite', 'VIP'];
   const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '');
 
@@ -72,7 +72,7 @@
     { id: 'PU-103', first: 'Marcus', last: 'Lee', email: 'marcus.lee@epm.net', phone: '(555) 302-7741', type: 'Lender', company: 'EPM', status: 'Invited', lastLogin: '—' },
     { id: 'PU-104', first: 'Morgan', last: 'Reyes', email: 'morgan.reyes@advantagepartners.com', phone: '(555) 619-4420', type: 'Vendor', company: 'Advantage Partners Solutions', status: 'Active', lastLogin: '5h ago' },
     { id: 'PU-105', first: 'Taylor', last: 'Brooks', email: 'taylor.brooks@arive.com', phone: '(555) 845-3307', type: 'Vendor', company: 'Arive', status: 'Active', lastLogin: '3d ago' },
-    { id: 'PU-106', first: 'Jamie', last: 'Lin', email: 'jamie.lin@xactus.com', phone: '(555) 527-6610', type: 'Vendor', company: 'Xactus', status: 'Deactivated', lastLogin: 'May 2, 2026' },
+    { id: 'PU-106', first: 'Jamie', last: 'Lin', email: 'jamie.lin@xactus.com', phone: '(555) 527-6610', type: 'Vendor', company: 'Xactus', status: 'Invited', lastLogin: '—' },
   ];
   let users;
   try { users = JSON.parse(localStorage.getItem(KEY)); } catch (e) { users = null; }
@@ -107,8 +107,9 @@
   window.AmpPartners = {
     TIERS, companyOf, contacts, member, views,
     users: () => users.slice(),
-    addUser(u) { const id = 'PU-' + (100 + users.length + 1); users.unshift(Object.assign({ id, status: 'Invited', lastLogin: '—' }, u)); save(); return id; },
+    addUser(u) { const id = 'PU-' + (Math.max(100, ...users.map((x) => +x.id.slice(3))) + 1); users.unshift(Object.assign({ id, status: 'Invited', lastLogin: '—' }, u)); save(); return id; },
     updateUser(id, patch) { const u = users.find((x) => x.id === id); if (u) { Object.assign(u, patch); save(); } },
+    removeUser(id) { users = users.filter((x) => x.id !== id); save(); },
     reset() { users = seedUsers(); save(); },
     // The sample partner the prototype signs in as (review pill → AS Lender / Vendor)
     sampleUser: (type) => users.find((u) => u.type === type && u.status === 'Active' && (type === 'Lender' ? u.company === 'United Wholesale Mortgage' : u.company === 'Advantage Partners Solutions')),

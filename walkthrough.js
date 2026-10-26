@@ -67,8 +67,9 @@
       body: 'Find any lender, vendor, resource, or event by name from any page.' },
     { sec: 5, page: 'dashboard', target: '.nav-item[data-nav="lenders"]', mTarget: '.bottom-nav-item[data-nav="lenders"]', title: 'Lenders',
       body: "Browse partner lenders by tier and product type. From a lender's page you can escalate a loan, connect, or change your AE." },
-    { sec: 6, page: 'dashboard', target: '.nav-item[data-nav="brokersedge"]', title: 'Learning & hubs',
-      body: 'Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN gather trainings, replays, events, and documents for each program.' },
+    { sec: 6, page: 'dashboard', target: '.nav-item[data-nav="brokersedge"]', mTarget: '.menu-btn', title: 'Learning & hubs',
+      body: 'Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN gather trainings, replays, events, and documents for each program.',
+      mBody: 'Open the ☰ menu for Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN — trainings, replays, events, and documents for each program.' },
 
     // ---- Events & registration ----
     { sec: 7, page: 'dashboard', target: '.nav-item[data-nav="events"]', mTarget: '.bottom-nav-item[data-nav="events"]', title: 'Events',
@@ -97,7 +98,7 @@
       body: 'Write back and send — the support team is notified. Replying to a resolved ticket reopens it.' },
 
     { sec: 9, target: '.notif-wrap .icon-btn', title: 'Notifications',
-      body: 'Replies to your requests, new partners, FUSE reminders, and new content show up here.' },
+      body: 'Replies to your requests, new partners, FUSE reminders, and new content show up here. Want them on your phone? Install the AMP app and turn on push notifications in Settings → Notifications &amp; app.' },
     { sec: 10, target: '#help-btn', mTarget: '.menu-btn', title: 'Help is always here',
       body: 'Open the Help Center, contact support, or replay this walkthrough any time from the ? menu.',
       mBody: 'Open Help Center from the menu any time — step-by-step guides, contact support, or replay this walkthrough.' },

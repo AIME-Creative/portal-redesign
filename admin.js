@@ -13,7 +13,7 @@ const taxonomies = {
 };
 const taxMeta = {
   lenderProducts:   { label:"Lender product types", sub:"Shown on lender cards and the product filter." },
-  vendorCategories: { label:"Market categories",     sub:"Group vendors in the Market." },
+  vendorCategories: { label:"Market categories",     sub:"Group products in the Market." },
   resourceTypes:    { label:"Resource types",        sub:"Used to label and filter resources." },
   resourceTopics:   { label:"Resource topics",        sub:"Topic tags members filter by on Resources (AI Strategy, Marketing, Sales…)." },
   eventTypes:       { label:"Event types",           sub:"Used to label and filter events." },
@@ -312,9 +312,16 @@ const subscriptions = [
   { member:"Beth Coleman", email:"beth@colemanloans.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Canceled", next:"—" },
   { member:"Ahmed Sayed", email:"ahmed@sayedhomeloans.com", plan:"VIP", billing:"Annual", amount:"$1,699/yr", status:"Active", next:"May 28, 2027" },
   { member:"Rachel Stone", email:"rachel@stonemortgage.com", plan:"Elite", billing:"Annual", amount:"$699/yr", status:"Past due", next:"May 24, 2026" },
-  { member:"Greg Mason", email:"greg@masonlending.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", status:"Trialing", next:"Trial ends Jul 2" },
-  { member:"Tina Alvarez", email:"tina@alvarezhomeloans.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Trialing", next:"Trial ends Jul 5" },
+  { member:"Greg Mason", email:"greg@masonlending.com", plan:"Elite", billing:"Monthly", amount:"$69.99/mo", status:"Trialing", next:"Trial ends Jul 2", role:"Loan Officer", state:"MN", licensed:["MN","WI"], joined:"Jun 25, 2026" },
+  { member:"Tina Alvarez", email:"tina@alvarezhomeloans.com", plan:"Premium", billing:"Monthly", amount:"$19.99/mo", status:"Trialing", next:"Trial ends Jul 5", role:"Loan Officer", state:"FL", licensed:["FL"], joined:"Jun 24, 2026" },
 ];
+/* Billing (synced from Stripe) is shown on the Members list — merge it onto each member:
+   status (Active / Past due / Trialing / Canceled), amount, and next billing date. */
+subscriptions.slice().reverse().forEach(s => {
+  const m = members.find(x => x.email === s.email);
+  if (m) Object.assign(m, { status:s.status, amount:s.amount, next:s.next });
+  else members.unshift({ name:s.member, email:s.email, plan:s.plan, billing:s.billing, role:s.role, state:s.state, licensed:s.licensed, used:0, status:s.status, amount:s.amount, next:s.next, joined:s.joined });
+});
 
 /* ---------- Abandoned carts (contact captured before checkout completed) ---------- */
 const abandonedCarts = [
@@ -407,15 +414,20 @@ function renderMembers(){
     const idx = members.indexOf(m);
     return `<tr>
       <td><div class="t-id"><div class="t-avatar">${initials(m.name)}</div><div><div class="t-strong">${m.name}</div><div class="t-sub">${m.email} · ${m.state}</div></div></div></td>
-      <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span><div class="t-sub" style="margin-top:3px">${m.billing}</div></td>
+      <td><span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span><div class="t-sub" style="margin-top:3px">${m.billing}</div><div class="t-sub">${m.amount || '—'}</div></td>
       <td class="rq-ref">${m.nmls || '—'}</td>
       <td><div class="lic-tags">${(m.licensed||[]).map(s=>`<span class="tag">${s}</span>`).join('') || '<span class="t-sub" style="display:inline">—</span>'}</div></td>
-      <td><span class="dot-status dot-${m.status.toLowerCase()}">${m.status}</span></td>
-      <td>${m.joined}</td>
-      <td class="t-right"><div class="row-actions"><button class="link-act" data-edit="member:${idx}">Manage</button></div></td>
+      <td>${subDot(m.status)}${m.next && m.next!=='—' ? `<div class="t-sub" style="margin-top:3px">${/^Trial/.test(m.next) ? m.next : 'Next: ' + m.next}</div>` : ''}</td>
+      <td style="white-space:nowrap">${m.joined}</td>
+      <td class="t-right"><div class="row-actions stack">${m.status==='Past due' ? `<button class="link-act" data-toast="Sent payment-update link to ${m.name}.">Send payment link</button>` : ''}<button class="link-act" data-edit="member:${idx}">Manage</button></div></td>
     </tr>`;
   }).join('');
   $('member-count').textContent = `${rows.length} of ${members.length} members`;
+  // billing summary tiles (Stripe)
+  const n = (st)=>members.filter(m=>m.status===st).length;
+  $('mem-active').textContent = n('Active').toLocaleString();
+  $('mem-pastdue').textContent = n('Past due').toLocaleString();
+  $('mem-trialing').textContent = n('Trialing').toLocaleString();
 }
 function fillMemberFilters(){
   const uniq = (arr) => [...new Set(arr)].sort();
@@ -435,14 +447,17 @@ function renderLenders(){
   $('lender-count').textContent = `${lenders.length} lenders`;
 }
 function renderVendors(){
+  // Company groups a vendor's products (e.g. both APS products) — from partner-store.js
+  const companyOf = (n) => window.AmpPartners ? AmpPartners.companyOf(n) : n;
   $('vendors-tbody').innerHTML = vendors.map((v,i)=>`<tr>
     <td><div class="t-id"><div class="t-logo">${v.short}</div><div class="t-strong">${v.name}</div></div></td>
+    <td>${companyOf(v.name)}</td>
     <td><span class="badge badge-navy">${v.cat}</span></td>
     <td>${v.offer}</td>
     <td><span class="dot-status dot-${v.status.toLowerCase()}">${v.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('vendor:'+i)}${delBtn('Removed '+v.name+'.')}</div></td>
   </tr>`).join('');
-  $('vendor-count').textContent = `${vendors.length} vendors`;
+  $('vendor-count').textContent = `${vendors.length} products from ${new Set(vendors.map(v=>companyOf(v.name))).size} companies`;
 }
 const collTag = (v) => (!v || v==='—') ? '<span class="t-sub" style="display:inline;color:var(--muted)">—</span>' : `<span class="badge badge-navy">${v}</span>`;
 function renderResources(){
@@ -825,7 +840,7 @@ function renderVendorClicks(){
       <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${v.name} their clickthrough report.">Email vendor</button></div></td>
     </tr>`;
   }).join('');
-  $('vendorclicks-count').textContent = `${scaled.length} vendors · ${ranges.vendorclicks.label}`;
+  $('vendorclicks-count').textContent = `${scaled.length} products · ${ranges.vendorclicks.label}`;
 }
 
 /* ============================================================
@@ -926,36 +941,6 @@ function renderAnalyticsCharts(){
   if($('an-range-note')) $('an-range-note').textContent = lbl;
 }
 
-/* ---------- Subscriptions ---------- */
-function renderSubscriptions(){
-  const planBadge = (p) => p==='VIP'?'badge-navy':p==='Elite'?'badge-pink':'badge-cyan';
-  const status = $('sub-status') ? $('sub-status').value : 'all';
-  const billing = $('sub-billing') ? $('sub-billing').value : 'all';
-  const rows = subscriptions.filter(s =>
-    (status==='all' || s.status===status) && (billing==='all' || s.billing===billing));
-  $('subs-tbody').innerHTML = rows.map(s=>{
-    const past = s.status==='Past due';
-    const action = past
-      ? `<button class="link-act" data-toast="Sent payment-update link to ${s.member}.">Send payment link</button>`
-      : `<button class="link-act" data-toast="Opening ${s.member}'s subscription…">Manage</button>`;
-    return `<tr>
-      <td><div class="t-id"><div class="t-avatar">${initials(s.member)}</div><div><div class="t-strong">${s.member}</div><div class="t-sub">${s.email}</div></div></div></td>
-      <td><span class="badge ${planBadge(s.plan)}">${s.plan}</span></td>
-      <td>${s.billing}</td>
-      <td>${s.amount}</td>
-      <td>${subDot(s.status)}</td>
-      <td>${s.next}</td>
-      <td class="t-right"><div class="row-actions">${action}</div></td>
-    </tr>`;
-  }).join('');
-  if($('sub-count')) $('sub-count').textContent = `${rows.length} of ${subscriptions.length} subscriptions`;
-  // summary tiles
-  const n = (st)=>subscriptions.filter(s=>s.status===st).length;
-  if($('sub-active')) $('sub-active').textContent = n('Active').toLocaleString();
-  if($('sub-pastdue')) $('sub-pastdue').textContent = n('Past due').toLocaleString();
-  if($('sub-trialing')) $('sub-trialing').textContent = n('Trialing').toLocaleString();
-}
-
 /* ---------- Abandoned carts ---------- */
 function renderAbandoned(){
   const planBadge = (p) => p==='VIP'?'badge-navy':p==='Elite'?'badge-pink':'badge-cyan';
@@ -1022,7 +1007,7 @@ function updateAudience(){
 function renderDashboard(){
   $('dash-lenders').textContent = lenders.length;
   $('dash-vendors').textContent = vendors.length;
-  if($('dash-pastdue')) $('dash-pastdue').textContent = subscriptions.filter(s=>s.status==='Past due').length;
+  if($('dash-pastdue')) $('dash-pastdue').textContent = members.filter(m=>m.status==='Past due').length;
   // newest members
   $('dash-members').innerHTML = members.slice(0,5).map(m=>`
     <div class="list-row"><div class="t-avatar">${initials(m.name)}</div>
@@ -1185,7 +1170,7 @@ function openEdit(ref){
       ${field('Licensed states', (m.licensed||[]).join(', '), 'placeholder="e.g. FL, GA, NC"')}
       <div class="form-section-label">Subscription</div>
       <div class="field-row">${selectField('Plan', ['Premium','Elite','VIP'], m.plan)}${selectField('Billing period', ['Monthly','Annual'], m.billing)}</div>
-      <div class="field-row">${selectField('Billing status', ['Active','Paused','Cancelled'], m.status)}${field('Next billing date', 'Jan 14, 2027')}</div>
+      <div class="field-row">${selectField('Billing status', ['Active','Past due','Trialing','Canceled'], m.status)}${field('Next billing date', m.next || '')}</div>
       <div class="field-row">${field('Escalations used this cycle', m.used, 'type="number"')}${field('Escalation allotment', planTotal[m.plan]+'/yr', 'disabled')}</div>
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p>Plan escalation allotments: Premium 1/mo · Elite 6/mo · VIP unlimited. Members can purchase additional escalations at $199 each.</p></div>
       ${isNew?'':`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><button class="btn btn-outline btn-sm" data-toast="Granted 1 complimentary escalation." data-close>+ Grant escalation</button><button class="btn btn-outline btn-sm" data-toast="Subscription paused." data-close>Pause subscription</button><button class="btn btn-outline btn-sm" data-toast="Sent password reset email." data-close>Reset password</button></div>`}`;
@@ -1208,9 +1193,9 @@ function openEdit(ref){
       <div class="field-row">${field('Change AE — name', c.changeae.name)}${field('Change AE — email', c.changeae.email)}</div>`; })()}`;
   } else if(type==='vendor'){
     const v = isNew ? {name:'',short:'',cat:taxonomies.vendorCategories[0],offer:'',status:'Active'} : vendors[idx];
-    title = isNew ? 'Add vendor' : 'Edit vendor'; sub = isNew?'Add a Market vendor partner.':v.name;
+    title = isNew ? 'Add product' : 'Edit product'; sub = isNew?'Add a product to the Market.':v.name;
     body = `
-      <div class="field-row">${field('Vendor name', v.name)}${field('Logo abbreviation', v.short)}</div>
+      <div class="field-row">${field('Product name', v.name)}${field('Logo abbreviation', v.short)}</div>
       <div class="field-row">${selectField('Category', taxonomies.vendorCategories, v.cat)}${selectField('Status', ['Active','Draft'], v.status)}</div>
       ${field('Member offer', v.offer)}
       ${(() => { const co = window.AmpPartners && !isNew ? AmpPartners.companyOf(v.name) : ''; const c = window.AmpPartners && co ? AmpPartners.contacts(co, 'vendor').connection : { name:'', email:'' };
@@ -1350,9 +1335,10 @@ function openRequest(idx){
    Navigation, modals, toast
    ============================================================ */
 function navigate(view){
+  if(view==='subscriptions') view = 'members';   // billing now lives on the Members list
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : view==='event-reg' ? 'events' : view;
+  const navView = view==='request-detail' ? 'requests' : view==='event-reg' ? 'events' : ['engagement','journeys','vendorclicks'].includes(view) ? 'analytics' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
@@ -1372,7 +1358,7 @@ renderResources(); renderEvents();
 renderHubs(); renderDocuments(); renderJourneys(); renderVendorClicks();
 renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
-renderSubscriptions(); renderAbandoned(); renderCoupons();
+renderAbandoned(); renderCoupons();
 renderSentNotifications(); updateAudience();
 setupRange('analytics', renderAnalyticsCharts);
 setupRange('engagement', renderEngagement);
@@ -1383,7 +1369,6 @@ setupRange('reports', renderReports, { allDays:36500 });
 /* ---------- Events ---------- */
 ['member-search','member-plan','member-status','member-role','member-state','member-licensed','member-billing']
   .forEach(id => $(id) && $(id).addEventListener(id==='member-search'?'input':'change', renderMembers));
-['sub-status','sub-billing'].forEach(id => $(id) && $(id).addEventListener('change', renderSubscriptions));
 $('cart-step') && $('cart-step').addEventListener('change', renderAbandoned);
 ['notif-tier','notif-role'].forEach(id => $(id) && $(id).addEventListener('change', updateAudience));
 

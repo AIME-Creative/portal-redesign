@@ -1,0 +1,17 @@
+{
+  "name": "AMP — AIME Member Portal",
+  "short_name": "AMP",
+  "description": "Lenders, the Market, resources, events, and your requests — the AIME Member Portal.",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#021649",
+  "theme_color": "#021649",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -21,7 +21,7 @@
   let sampleId = null;
 
   const STEPS = [
-    { sec: 0, page: 'partner', target: '.nav-item[data-nav="partner"]', mTarget: '.menu-btn', title: 'Your dashboard',
+    { sec: 0, page: 'partner', target: '.nav-item[data-nav="partner"]', mTarget: '.bottom-nav-item[data-nav="partner"]', title: 'Your dashboard',
       body: `Your home in AMP for ${PP.COMPANY}. Everyone at your company sees the same dashboard and requests.` },
     { sec: 1, page: 'partner', target: '#partner-body .pp-banner', title: 'Changes to your listing',
       body: 'Your company listing is managed by AIME. To request a change, email the address in this banner.' },
@@ -33,7 +33,8 @@
     { sec: 2, page: 'partner', target: () => (isLender ? cardTitled('partner-body', 'Recent requests')() : cardTitled('partner-body', 'Recent connection requests')()),
       title: isLender ? 'Recent requests' : 'Recent connection requests',
       body: 'The latest requests from AIME members, with who at your company each one was sent to. Click any row for the full details.' },
-    { sec: 3, page: 'requests', target: () => cards('partner-requests-body').pop(), title: 'Requests',
+    { sec: 3, page: 'requests', target: () => cards('partner-requests-body').pop(),
+      mTarget: () => [document.querySelector('#partner-requests-body .filters'), document.querySelector('#partner-requests-body .pp-table tbody tr')], title: 'Requests',
       body: isLender ? 'Every escalation, connection, and Change AE request sent to your company — plus your own support tickets. A "Member requested follow-up" flag means the member asked AIME to check in.'
         : PP.MULTI ? 'Every connection request sent to your company — the Product column and filter show which product each one is for — plus your own support tickets.'
         : 'Every connection request sent to your company, plus your own support tickets.' },
@@ -43,11 +44,13 @@
       title: isLender ? 'Reply to escalations' : 'Email the member',
       body: isLender ? 'Reply here to update the member, or reply and mark it resolved. You can also just reply to the escalation email — no login needed — and it lands here. For connections and Change AE, use "Email &lt;member&gt;".'
         : 'Use "Email &lt;member&gt;" to start an email to them directly from your own email app.' },
-    { sec: 5, page: 'partner', target: () => [document.querySelector('.nav-item[data-nav="lenders"]'), document.querySelector('.nav-item[data-nav="market"]')], mTarget: '.menu-btn',
+    { sec: 5, page: 'partner', target: () => [document.querySelector('.nav-item[data-nav="lenders"]'), document.querySelector('.nav-item[data-nav="market"]')],
+      mTarget: () => [document.querySelector('.bottom-nav-item[data-nav="lenders"]'), document.querySelector('.bottom-nav-item[data-nav="market"]')],
       title: 'Lenders & Market — view only',
       body: 'Browse the lender directory and Market like a member. Partner accounts can\'t submit escalations, connections, or AE requests, or use member discounts. Resources and Events are the same as for members.' },
     { sec: 6, page: 'partner', target: '#help-btn', mTarget: '.menu-btn', title: 'Help & support',
-      body: 'Partner guides are in the Help Center, and you can open a support ticket any time. Replay this walkthrough from the ? menu.' },
+      body: 'Partner guides are in the Help Center, and you can open a support ticket any time. To get notified about new requests, install the AMP app and turn on notifications in Settings. Replay this walkthrough from the ? menu.',
+      mBody: 'Open the ☰ menu for the Help Center (partner guides), Get Support, and Settings — where you can install the AMP app and turn on notifications for new requests.' },
   ];
 
   function steps() {

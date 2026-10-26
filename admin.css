@@ -227,3 +227,20 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 /* Partner users table (admin-partners.js) */
 #pu-tbody .link-act { white-space:nowrap; }
 #pu-tbody .pu-actions { flex-direction:column; align-items:flex-end; gap:4px; }
+.link-act.danger { color:var(--red); }
+.link-act.danger:hover { color:#a3221a; }
+.an-tabs { margin-bottom:18px; }
+
+/* Email history (admin-emails.js) */
+.em-table tbody tr { cursor:pointer; }
+.em-status { display:inline-block; font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; }
+.em-ok { background:#e3f6ec; color:#137a45; }
+.em-warn { background:#fff4dc; color:#946200; }
+.em-bad { background:#fdecea; color:#b3261e; }
+.em-meta { margin-bottom:16px; }
+.em-frame { width:100%; height:430px; border:1px solid var(--line); border-radius:12px; background:#f5f7fb; }
+.em-gone { padding:18px; border-radius:12px; background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-soft); font-size:14px; line-height:1.5; }
+.row-actions.stack { flex-direction:column; align-items:flex-end; gap:4px; }
+.row-actions.stack .link-act { white-space:nowrap; }
+#view-members table.adm th, #view-members table.adm td { padding-left:12px; padding-right:12px; }
+@media (max-width:860px){ .main .grid > * { min-width:0; } }   /* wide tables scroll inside their card instead of widening the page */
