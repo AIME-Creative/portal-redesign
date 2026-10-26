@@ -285,7 +285,7 @@
                 <span style="color:var(--muted)"><span data-tier-label="esc">5 of 6</span> this cycle</span>
               </div>
               <div style="height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:8px"><div style="width:83%;height:100%;background:var(--navy)" data-tier-label="esc-bar"></div></div>
-              <div style="font-size:12px;color:var(--ink-soft)">Running low? · <button class="link-pink" data-modal="escalations">Buy more</button></div>
+              <div class="esc-buy-line" style="font-size:12px;color:var(--ink-soft)">Running low? · <button class="link-pink" data-modal="escalations">Buy more</button></div>
 
               <button class="btn btn-outline btn-sm btn-block" style="margin-top:18px" data-nav="settings" data-tab="billing">Manage membership</button>
             </div>
@@ -493,8 +493,8 @@
             </div>
             <div class="card card-pad">
               <h3 style="font-size:16px;margin-bottom:14px">Escalations</h3>
-              <div style="font-size:30px;font-weight:700">5 <span style="font-size:15px;color:var(--muted);font-weight:500">of 6 remaining</span></div>
-              <div style="color:var(--muted);font-size:12.5px;margin:4px 0 14px">Resets each billing cycle</div>
+              <div style="font-size:30px;font-weight:700" id="set-esc-count">5 <span style="font-size:15px;color:var(--muted);font-weight:500">of 6 remaining</span></div>
+              <div style="color:var(--muted);font-size:12.5px;margin:4px 0 14px" id="set-esc-note">Resets each billing cycle</div>
               <button class="btn btn-primary btn-block" data-modal="escalations">Purchase additional</button>
             </div>
             <div class="card card-pad" style="grid-column:1/-1">

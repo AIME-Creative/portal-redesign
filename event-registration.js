@@ -218,7 +218,6 @@
       : (s.mode === 'rsvp' ? 'RSVP — ' : 'Register — ') + ev.title;
     $('er-sub').innerHTML = `${esc(ev.when)}${ev.loc ? ' · ' + esc(ev.loc) : ''}`;
     $('er-close').textContent = claimed ? "I'm all set — close" : 'Cancel';
-    const restricted = !(s.tiers || []).includes('All');
     let html = '';
     if (current.preview) html += `<div class="callout" style="margin-bottom:16px"><p><strong>Preview only.</strong> This event is for ${esc(s.tiers.join(' & '))} members — you can look through the form, but registering is disabled for your tier.</p></div>`;
     if (claimed) {
@@ -229,16 +228,12 @@
     if (eb && s.mode === 'ticketed') html += `<div class="er-eb-banner">Early-bird pricing ends ${esc(R.fmtDate(s.earlyBird.until))}</div>`;
 
     if (claimed) {
-      html += `<div class="er-whoami">Registered as <strong>${ME.first} ${ME.last}</strong> · ${ME.email} · ${esc(draft.phone)}</div>
+      html += `<div class="er-whoami">Registered as <strong>${ME.first} ${ME.last}</strong> · ${ME.email} · ${esc(ME.phone)}</div>
         <div class="form-section-label">Your ticket</div>
         <div class="addon-row er-ticket-fixed"><span class="er-tk-ico">🎟️</span><span class="ar-main"><span class="ar-t" style="display:block">${esc(t ? t.name : '')}</span><span class="ar-s" style="display:block">${esc(t ? t.desc || '' : '')}</span></span><span class="ar-price free">Included</span></div>`;
     } else {
-      html += `<div class="form-section-label">Your details</div>
-        <div class="field-row"><div class="field"><label>First name <span class="req">*</span></label><input class="input" value="${ME.first}" readonly></div>
-          <div class="field"><label>Last name <span class="req">*</span></label><input class="input" value="${ME.last}" readonly></div></div>
-        <div class="field-row"><div class="field"><label>Phone <span class="req">*</span></label><input class="input" data-er-phone value="${esc(draft.phone)}"></div>
-          <div class="field"><label>Email <span class="req">*</span></label><input class="input" value="${ME.email}" readonly>
-            ${restricted ? `<div class="er-help warn">This event is for ${esc(s.tiers.join(' & '))} members only — we use the email on your AMP login.</div>` : '<div class="er-help">From your AMP profile.</div>'}</div></div>`;
+      // Contact details come from the member's account — shown, not asked for.
+      html += `<div class="er-whoami">Registering as <strong>${ME.first} ${ME.last}</strong> · ${ME.email} · ${esc(ME.phone)}</div>`;
       if (s.mode === 'ticketed' && s.tickets.length) {
         html += `<div class="form-section-label">Ticket</div>` + s.tickets.map((tk) => {
           const locked = !R.itemAllowed(tk, ME.tier), included = (tk.included || []).includes(ME.tier);
@@ -364,7 +359,7 @@
       return;
     }
     const p = R.priceOf(s, Object.assign({ tier: ME.tier }, draft), eb);
-    R.register({ event: ev.title, name: `${ME.first} ${ME.last}`, email: ME.email, phone: draft.phone, tier: ME.tier,
+    R.register({ event: ev.title, name: `${ME.first} ${ME.last}`, email: ME.email, phone: ME.phone, tier: ME.tier,
       ticket: draft.ticket, addons: draft.addons, guests: draft.guests, answers: draft.answers, total: p.total, earlyBird: eb });
     closeModals();
     const due = Math.max(0, p.total - (current.paid || 0));

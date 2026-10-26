@@ -256,6 +256,21 @@ document.querySelectorAll('[data-tier-label]').forEach(el => {
 });
 const canSeeVIP = memberTier === 'VIP' && userType === 'member';
 
+// Settings → Escalations card, and VIP escalations are unlimited — nothing to buy.
+(function(){
+  const [n, of] = TIER_INFO[memberTier].esc.split(' of ');
+  const big = document.getElementById('set-esc-count'), note = document.getElementById('set-esc-note');
+  if(memberTier !== 'VIP'){ if(big) big.innerHTML = `${n} <span style="font-size:15px;color:var(--muted);font-weight:500">of ${of} remaining</span>`; return; }
+  if(big) big.textContent = 'Unlimited';
+  if(note) note.textContent = 'Included with VIP';
+  document.querySelectorAll('[data-modal="escalations"]').forEach(el => {
+    if(el.classList.contains('esc-pill')){
+      el.removeAttribute('data-modal'); el.title = 'Unlimited escalations with VIP'; el.style.cursor = 'default';
+      el.querySelector('.esc-plus')?.remove();
+    } else (el.closest('.esc-buy-line') || el).style.display = 'none';
+  });
+})();
+
 const hubs = {
   brokersedge: {
     name:"Brokers Edge", layout:"standard", vip:false, contentLabel:"Certifications",
@@ -711,7 +726,9 @@ function openEvent(i){
 }
 
 /* ---------- Modals ---------- */
-function openModal(id){ document.getElementById('modal-'+id)?.classList.add('open'); document.body.style.overflow='hidden'; }
+function openModal(id){
+  if(id === 'escalations' && memberTier === 'VIP'){ showToast('VIP includes unlimited escalations — nothing to buy.'); return; }
+  document.getElementById('modal-'+id)?.classList.add('open'); document.body.style.overflow='hidden'; }
 function closeModals(){
   document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));
   document.body.style.overflow = isAuthOpen() ? 'hidden' : '';

@@ -78,7 +78,7 @@ window.HELP_ARTICLES = [
         <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions.</li>
         <li><strong>The sidebar</strong> — Lenders, Market, Resources, Events, Documents, your learning hubs, and Support.</li>
         <li><strong>Search</strong> (top of every page) — find any lender, vendor, resource, or event by name.</li>
-        <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more.</li>
+        <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more (VIP is unlimited, so there's nothing to buy).</li>
         <li><strong>My Requests</strong> — every escalation, connection, AE change, and support ticket you've submitted, with its status.</li>
       </ul>
       <p>The guided walkthrough also shows you, step by step, how to fill in an escalation and where replies to your requests appear.</p>
@@ -166,7 +166,7 @@ window.HELP_ARTICLES = [
 
   { slug: 'escalation-allowance', title: 'Your escalation allowance and buying more', category: 'escalations',
     summary: 'How many escalations each plan includes, and add-ons at $199 each.',
-    tags: ['allowance', 'how many', 'buy', 'purchase', 'escalations left', 'premium', 'elite', 'vip'], minutes: 1, updated: 'Sep 30, 2026', status: 'Published',
+    tags: ['allowance', 'how many', 'buy', 'purchase', 'escalations left', 'premium', 'elite', 'vip', 'unlimited'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
     views: 954, helpful: [101, 7],
     actions: [{ label: 'Buy escalations', attr: 'data-modal="escalations"' }],
     body: `
@@ -175,7 +175,8 @@ window.HELP_ARTICLES = [
         <li><strong>Elite</strong> — 6 escalations per month</li>
         <li><strong>VIP</strong> — unlimited</li>
       </ul>
-      <p>Your remaining count is always in the top bar. Need more this cycle? Tap the <strong>+</strong> next to it (or <strong>Buy more</strong> in the escalation form) and choose a quantity — additional escalations are <strong>$199 each</strong>.</p>` },
+      <p>Your remaining count is always in the top bar. Need more this cycle? Tap the <strong>+</strong> next to it (or <strong>Buy more</strong> in the escalation form) and choose a quantity — additional escalations are <strong>$199 each</strong>.</p>
+      <p>VIP escalations are unlimited, so VIP members don't see the option to buy more.</p>` },
 
   /* ---------------- Lenders & connections ---------------- */
   { slug: 'connect-lender', title: 'Connecting with a lender partner', category: 'lenders', popular: true,
