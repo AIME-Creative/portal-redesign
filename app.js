@@ -233,14 +233,15 @@ document.getElementById('dash-events').innerHTML = events.slice(0,3).map((e,i)=>
    ===================================================================== */
 // The member's tier. Prototype only: the review toggle can switch it (localStorage amp-proto-tier); defaults to Elite.
 const memberTier = (() => { try { const t = localStorage.getItem('amp-proto-tier'); return ['Premium','Elite','VIP'].includes(t) ? t : 'Elite'; } catch(e){ return 'Elite'; } })();
-// Tier-specific labels in the page ([data-tier="name|price|esc|esc-count|esc-bar"])
+// Tier-specific labels in the page ([data-tier-label="name|price|esc|esc-count|esc-bar"]).
+// Not [data-tier] — lender cards and the tier filter chips already use that for Gold/Silver/Bronze.
 const TIER_INFO = {
   Premium: { price:'$199 / year',   esc:'1 of 1',    count:'1', bar:100 },
   Elite:   { price:'$699 / year',   esc:'5 of 6',    count:'5', bar:83 },
   VIP:     { price:'$1,699 / year', esc:'Unlimited', count:'∞', bar:100 },
 };
-document.querySelectorAll('[data-tier]').forEach(el => {
-  const k = el.dataset.tier, info = TIER_INFO[memberTier];
+document.querySelectorAll('[data-tier-label]').forEach(el => {
+  const k = el.dataset.tierLabel, info = TIER_INFO[memberTier];
   if(k==='name') el.textContent = memberTier;
   else if(k==='esc-bar') el.style.width = info.bar + '%';
   else if(k==='esc-count') el.textContent = info.count;
