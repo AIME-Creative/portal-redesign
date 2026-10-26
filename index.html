@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="requests.css">
 <link rel="stylesheet" href="help.css">
 <link rel="stylesheet" href="subscriptions.css">
+<link rel="stylesheet" href="event-registration.css">
 </head>
 <body>
 <div class="app">
@@ -665,6 +666,18 @@
   </div>
 </div>
 
+<!-- ===================== EVENT REGISTRATION (event-registration.js) ===================== -->
+<div class="modal-overlay" id="modal-event-reg">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-head">
+      <div><h2 id="er-title">Register</h2><p id="er-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="er-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="er-submit">Register</button></div>
+  </div>
+</div>
+
 <!-- ===================== CANCEL MEMBERSHIP (cancel-membership.js) ===================== -->
 <div class="modal-overlay" id="modal-cancel">
   <div class="modal" style="max-width:560px">
@@ -883,6 +896,8 @@
 <script src="help-articles.js"></script>
 <script src="help-center.js"></script>
 <script src="cancel-membership.js"></script>
+<script src="event-registration-store.js"></script>
+<script src="event-registration.js"></script>
 <!-- first-time walkthrough — replay from the ? menu, Help Center, or Settings -->
 <script src="tour-engine.js"></script>
 <script src="walkthrough.js"></script>

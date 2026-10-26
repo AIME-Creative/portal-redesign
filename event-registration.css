@@ -1,0 +1,92 @@
+/* ============================================================
+   Event registration — member form + panel (index.html) and the
+   admin setup page + registrations dashboard (admin.html).
+   Builds on styles.css (incl. .addon-row from the FUSE page).
+   ============================================================ */
+
+/* ---------- member: event cards ---------- */
+.er-card-badge { position:absolute; right:12px; top:12px; display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; background:var(--pink); color:#fff; letter-spacing:.01em; }
+.er-card-badge svg { width:12px; height:12px; }
+.er-card-badge.done { background:var(--green); }
+.er-card-badge.locked { background:rgba(255,255,255,.92); color:#9a6a05; }
+
+/* ---------- member: detail panel ---------- */
+.er-panel { margin-top:16px; padding-top:16px; border-top:1px solid var(--line-soft); }
+.er-meta { color:var(--muted); font-size:12.5px; line-height:1.5; }
+.er-price { font-weight:700; color:var(--navy); margin-top:8px; }
+.er-price.free { color:var(--green); }
+.er-eb { display:inline-block; margin-top:8px; font-size:12px; font-weight:700; color:#9a6a05; background:#fbf0d8; padding:3px 10px; border-radius:20px; }
+.er-note { color:var(--ink-soft); font-size:13.5px; line-height:1.55; margin:0 0 4px; }
+.er-registered, .er-locked { display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:12px; }
+.er-registered { background:var(--green-bg); color:#1b6e4d; }
+.er-locked { background:#fbf0d8; color:#7a5a12; }
+.er-registered svg, .er-locked svg { width:20px; height:20px; flex:0 0 20px; margin-top:1px; }
+.er-registered strong, .er-locked strong { color:var(--ink); }
+
+/* ---------- member: form ---------- */
+.er-eb-banner { background:linear-gradient(90deg,#fbf0d8,#fff7e8); color:#7a5a12; font-weight:700; font-size:13px; padding:10px 14px; border-radius:10px; margin-bottom:6px; }
+.er-help { color:var(--muted); font-size:12.5px; margin-top:6px; line-height:1.45; }
+.er-help.warn { color:var(--pink-600); font-weight:600; }
+.er-dim { color:var(--muted); font-weight:500; }
+.addon-row .ar-price s { color:var(--muted); font-weight:500; margin-right:4px; }
+.er-lock-pill { font-size:11.5px; font-weight:700; color:#9a6a05; background:#fbf0d8; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.addon-row input[type=radio] { accent-color:var(--pink); }
+.er-guests { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; margin-bottom:12px; }
+.er-check { display:flex; gap:12px; align-items:flex-start; font-size:13px; color:var(--ink-soft); line-height:1.5; margin:6px 0 14px; cursor:pointer; font-weight:500; }
+.er-check input { width:18px; height:18px; accent-color:var(--pink); flex:0 0 18px; margin-top:2px; }
+.er-summary { margin-top:18px; padding:16px; border-radius:12px; background:var(--surface-alt); border:1px solid var(--line); }
+.er-line { display:flex; justify-content:space-between; gap:12px; padding:6px 0; font-size:14px; color:var(--ink); }
+.er-line em { font-style:normal; font-size:11.5px; font-weight:700; color:#9a6a05; margin-left:4px; }
+.er-line.total { border-top:1px solid var(--line); margin-top:6px; padding-top:10px; font-weight:800; font-size:15.5px; }
+.er-error { margin-top:14px; padding:10px 14px; border-radius:10px; background:#fdecea; color:var(--red); font-size:13px; font-weight:600; }
+.field.er-bad .input, .field.er-bad .select { border-color:var(--red); }
+
+#er-submit:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* ---------- admin: registration setup ---------- */
+.ereg-grid { display:grid; grid-template-columns:1.3fr 1fr; gap:20px; align-items:start; }
+.card.dim, .ereg-section.dim { opacity:.5; }
+.ereg-section { margin-top:18px; }
+.ereg-h { font-size:15px; margin-bottom:10px; }
+.ereg-switch { display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px; color:var(--ink); margin:0; }
+.ereg-switch input { position:absolute; opacity:0; pointer-events:none; }
+.ereg-switch .sw { width:40px; height:23px; border-radius:20px; background:var(--line); position:relative; flex:0 0 40px; transition:.15s; }
+.ereg-switch .sw::after { content:''; position:absolute; left:3px; top:3px; width:17px; height:17px; border-radius:50%; background:#fff; box-shadow:var(--shadow-sm); transition:.15s; }
+.ereg-switch input:checked + .sw { background:var(--pink); }
+.ereg-switch input:checked + .sw::after { left:20px; }
+.ereg-switch input:focus-visible + .sw { box-shadow:0 0 0 3px #fde4ee; }
+.ereg-seg { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ereg-seg label { display:block; padding:12px 14px; border:1.5px solid var(--line); border-radius:12px; cursor:pointer; margin:0; }
+.ereg-seg label.on { border-color:var(--navy); background:#f4f6fc; }
+.ereg-seg input { position:absolute; opacity:0; pointer-events:none; }
+.ereg-seg strong { display:block; font-size:14px; color:var(--ink); }
+.ereg-seg span { display:block; font-size:12px; color:var(--muted); margin-top:2px; font-weight:500; }
+.ereg-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.ereg-chip { padding:6px 12px; border-radius:20px; border:1px solid var(--line); background:#fff; font-size:12.5px; font-weight:600; color:var(--ink-soft); }
+.ereg-chip:hover { border-color:var(--cyan); }
+.ereg-chip.on { background:var(--navy); border-color:var(--navy); color:#fff; }
+.ereg-item { position:relative; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:12px; background:var(--surface-alt); }
+.ereg-item .field { margin-bottom:12px; }
+.ereg-item-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; }
+.ereg-item-grid.fields { grid-template-columns:2fr 1.2fr auto; align-items:end; }
+.ereg-req { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink-soft); margin:0 0 12px; white-space:nowrap; }
+.ereg-req input { width:17px; height:17px; accent-color:var(--pink); }
+.ereg-del { position:absolute; right:16px; bottom:14px; }
+.ereg-item-actions { display:flex; gap:6px; align-items:center; justify-content:flex-end; }
+.ereg-item-actions .icon-act[disabled] { opacity:.35; pointer-events:none; }
+
+/* ---------- admin: registrations dashboard ---------- */
+.ereg-breakdowns { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+.ereg-bar { display:flex; align-items:center; gap:10px; font-size:13px; padding:5px 0; }
+.ereg-bar .eb-l { width:120px; flex:0 0 120px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ereg-bar .eb-b { flex:1; height:9px; border-radius:6px; background:var(--line-soft); overflow:hidden; }
+.ereg-bar .eb-b i { display:block; height:100%; border-radius:6px; background:var(--cyan); }
+.ereg-bar .eb-n { width:34px; text-align:right; font-weight:700; color:var(--ink); }
+.ereg-bar .eb-x { width:74px; text-align:right; color:var(--muted); font-size:12px; white-space:nowrap; }
+
+@media (max-width:1080px){ .ereg-grid { grid-template-columns:1fr; } }
+@media (max-width:640px){
+  .ereg-item-grid, .ereg-item-grid.fields, .ereg-seg { grid-template-columns:1fr; }
+  .ereg-del { position:static; margin-top:4px; }
+  .er-guests { flex-direction:column; align-items:flex-start; }
+}

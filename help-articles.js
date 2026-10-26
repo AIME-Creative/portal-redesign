@@ -202,11 +202,26 @@ window.HELP_ARTICLES = [
     body: `
       <p>FUSE 2026 is at the JW Marriott Downtown Austin, TX, September 24–26.</p>
       <ol class="kb-steps">
-        <li>Click <strong>FUSE 2026</strong> at the bottom of the sidebar (or the "Claim your ticket" banner).</li>
-        <li>Your ticket is claimed when you open the page. Choose your add-ons — Hall of AIME, WMN at FUSE, Vetted VA, and more.</li>
-        <li>Add guest passes if you're bringing anyone, then click <strong>Update registration</strong>.</li>
+        <li>Click the <strong>"Claim your ticket"</strong> banner, or open FUSE 2026 on the Events page and click <strong>Register</strong>.</li>
+        <li>General Admission is included with Premium and Elite (VIP members get the VIP Experience). Choose your add-ons — Hall of AIME, WMN at FUSE, Vetted VA, and more.</li>
+        <li>Add guests if you're bringing anyone, then register. Early-bird prices apply through July 8.</li>
       </ol>
+      <p>To change add-ons later, open FUSE 2026 on the Events page and click <strong>View / edit registration</strong>.</p>
       <div class="kb-tip">Need your invoice for an expense report? Use <strong>Email my confirmation</strong> on the same page.</div>` },
+
+  { slug: 'event-registration', title: 'Registering or RSVPing for an event', category: 'events', popular: false,
+    summary: 'Which events need registration, tickets and add-ons, guests, and changing your registration.',
+    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'early-bird', 'ascent', 'cancel registration'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
+    body: `
+      <p>Events that take registrations show <strong>RSVP</strong> or <strong>Registration open</strong> on their card. Others don't need one — just add them to your calendar.</p>
+      <ol class="kb-steps">
+        <li>Open the event and click <strong>Register</strong> (or <strong>RSVP</strong> for free events).</li>
+        <li>Your name, email, and phone come from your profile. Pick a ticket and any add-ons — prices show early-bird discounts while they last, and some tickets are included with your membership.</li>
+        <li>Add guests if the event allows them, answer any questions, and submit. Paid registrations go through secure checkout.</li>
+      </ol>
+      <p>Some events are for specific membership tiers — you'll see who they're for on the event page. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
 
   { slug: 'events-calendar', title: 'Viewing events as a calendar', category: 'events',
     summary: 'Switch the Events page between cards and a month calendar.',

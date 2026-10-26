@@ -72,10 +72,11 @@ const events = [
   { title:"AIME Accelerate — Run Toward It", date:"Jun 22, 2026", type:"Virtual", hub:"—", regs:615, status:"Active" },
   { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", hub:"Mortgage Mornings", regs:412, status:"Active" },
   { title:"AIME Accelerate — Compound", date:"Jun 29, 2026", type:"Training", hub:"—", regs:308, status:"Active" },
-  { title:"FUSE 2026 — National Conference", date:"Sep 14, 2026", type:"In person", hub:"—", regs:1204, status:"Active" },
+  { title:"FUSE 2026 — National Conference", date:"Sep 24, 2026", type:"In person", hub:"—", regs:1204, status:"Active" },
   { title:"VIP Quarterly Mastermind", date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
   { title:"WMN Monthly Meetup", date:"Jul 9, 2026", type:"Virtual", hub:"WMN", regs:138, status:"Active" },
   { title:"Regional Mixer — Dallas", date:"Aug 12, 2026", type:"In person", hub:"—", regs:86, status:"Active" },
+  { title:"AIME Ascent 2027", date:"Feb 8, 2027", type:"In person", hub:"Ascent", regs:0, status:"Active" },
 ];
 
 /* ---------- Resource hubs + documents (member-side Hubs & Documents) ---------- */
@@ -239,20 +240,7 @@ function allSubscriptionEvents(){
 }
 
 /* ---------- FUSE registrations ---------- */
-const fuseTicketTypes = ["General Admission","GA Plus","VIP"];
-const fuseAddons = ["Hall of AIME","WMN at FUSE","Vetted VA","VIP Luncheon"];
-const fuseRegs = [
-  { member:"Kyle Lord", email:"kyle@aimegroup.com", tier:"Elite", claimed:true, ticket:"General Admission", addons:["WMN at FUSE","Vetted VA"], guest:"—", status:"Confirmed" },
-  { member:"Maria Chen", email:"maria.chen@brightpathmtg.com", tier:"VIP", claimed:true, ticket:"VIP", addons:["Hall of AIME","VIP Luncheon"], guest:"1 guest", status:"Confirmed" },
-  { member:"Alicia Gomez", email:"alicia.gomez@lendwell.com", tier:"VIP", claimed:true, ticket:"VIP", addons:["Hall of AIME"], guest:"1 guest", status:"Confirmed" },
-  { member:"Ahmed Sayed", email:"ahmed@sayedhomeloans.com", tier:"VIP", claimed:true, ticket:"VIP", addons:["Hall of AIME","WMN at FUSE","VIP Luncheon"], guest:"2 guests", status:"Confirmed" },
-  { member:"Priya Nair", email:"priya@nairhomeloans.com", tier:"Elite", claimed:true, ticket:"GA Plus", addons:["WMN at FUSE"], guest:"—", status:"Confirmed" },
-  { member:"Carlos Diaz", email:"carlos@diazcapital.com", tier:"Elite", claimed:true, ticket:"General Admission", addons:["Vetted VA"], guest:"—", status:"Confirmed" },
-  { member:"Sam Whitfield", email:"sam@whitfieldmortgage.com", tier:"Elite", claimed:false, ticket:"—", addons:[], guest:"—", status:"Not claimed" },
-  { member:"Janet Park", email:"jpark@parklending.com", tier:"Premium", claimed:true, ticket:"General Admission", addons:["Hall of AIME"], guest:"1 guest", status:"Confirmed" },
-  { member:"Rachel Stone", email:"rachel@stonemortgage.com", tier:"Elite", claimed:false, ticket:"—", addons:[], guest:"—", status:"Not claimed" },
-  { member:"Darnell Ross", email:"dross@summitlending.com", tier:"Premium", claimed:true, ticket:"GA Plus", addons:["WMN at FUSE","Vetted VA"], guest:"—", status:"Confirmed" },
-];
+// FUSE registrations now live in event-registration-store.js (Event registrations page).
 
 /* ---------- Featured (curated for the member home screen) ---------- */
 let featuredItems = [
@@ -468,15 +456,26 @@ function renderResources(){
   $('resource-count').textContent = `${resources.length} resources`;
 }
 function renderEvents(){
+  const R = window.AmpEventReg;
+  // Registration setup lives in event-registration-store.js; "Registration" opens it (admin-event-reg.js).
+  const regCell = (e) => {
+    const s = R && R.active(e.title);
+    if(!s) return '<span class="t-sub" style="display:inline">Off</span>';
+    return `<span class="badge ${s.mode==='rsvp'?'badge-cyan':'badge-pink'}">${s.mode==='rsvp'?'RSVP':'Ticketed'}</span>
+      <div class="t-sub">${R.tierText(s.tiers)}${s.earlyBird && s.earlyBird.on ? ' · early-bird' : ''}</div>`;
+  };
+  const regCount = (e) => R && (R.active(e.title) || R.regsFor(e.title).length) ? R.regsFor(e.title).length : e.regs;
   $('events-tbody').innerHTML = events.map((e,i)=>`<tr>
     <td class="t-strong">${e.title}</td>
     <td>${e.date}</td>
     <td><span class="badge badge-amber">${e.type}</span></td>
     <td>${collTag(e.hub)}</td>
-    <td>${e.regs.toLocaleString()}</td>
+    <td>${regCell(e)}</td>
+    <td>${regCount(e).toLocaleString()}</td>
     <td><span class="dot-status dot-${e.status.toLowerCase()}">${e.status}</span></td>
-    <td class="t-right"><div class="row-actions">${editBtn('event:'+i)}${delBtn('Removed event.')}</div></td>
+    <td class="t-right"><div class="row-actions"><button class="link-act" data-ereg="${i}">Registration</button>${editBtn('event:'+i)}${delBtn('Removed event.')}</div></td>
   </tr>`).join('');
+  if($('dash-eventregs') && R) $('dash-eventregs').textContent = events.reduce((n,e)=>n + (R.active(e.title) ? R.regsFor(e.title).length : 0), 0).toLocaleString();
   $('event-count').textContent = `${events.length} events`;
 }
 const accessBadge = (a) => a==='VIP only'
@@ -517,29 +516,6 @@ function renderDocuments(){
   </tr>`).join('');
   $('document-count').textContent = `${rows.length} of ${documents.length} documents`;
 }
-function renderFuse(){
-  const q = ($('fuse-search')?.value || '').toLowerCase();
-  const tk = $('fuse-ticket') ? $('fuse-ticket').value : 'all';
-  const ad = $('fuse-addon') ? $('fuse-addon').value : 'all';
-  const tr = $('fuse-tier') ? $('fuse-tier').value : 'all';
-  const tierBadge = (t) => t==='VIP'?'badge-navy':t==='Elite'?'badge-pink':'badge-cyan';
-  const rows = fuseRegs.filter(f =>
-    (f.member.toLowerCase().includes(q) || (f.email||'').toLowerCase().includes(q)) &&
-    (tk==='all' || f.ticket===tk) &&
-    (ad==='all' || f.addons.includes(ad)) &&
-    (tr==='all' || f.tier===tr));
-  $('fuse-tbody').innerHTML = rows.map(f=>`<tr>
-    <td><div class="t-id"><div class="t-avatar">${initials(f.member)}</div><div><div class="t-strong">${f.member}</div><div class="t-sub">${f.email||''}</div></div></div></td>
-    <td><span class="badge ${tierBadge(f.tier)}">${f.tier}</span></td>
-    <td>${f.ticket==='—' ? '<span class="t-sub" style="display:inline">—</span>' : f.ticket}</td>
-    <td>${f.addons.length? f.addons.join(', ') : '<span class="t-sub" style="display:inline">None</span>'}</td>
-    <td>${f.guest}</td>
-    <td>${statusPill(f.status)}</td>
-    <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Opening ${f.member}'s registration…">View</button></div></td>
-  </tr>`).join('');
-  if($('fuse-count')) $('fuse-count').textContent = `${rows.length} of ${fuseRegs.length} attendees`;
-}
-
 /* ---------- Featured ---------- */
 function renderFeatured(){
   $('featured-tbody').innerHTML = featuredItems.map((f,i)=>`<tr>
@@ -1363,7 +1339,7 @@ function openRequest(idx){
 function navigate(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : view;
+  const navView = view==='request-detail' ? 'requests' : view==='event-reg' ? 'events' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
@@ -1379,7 +1355,7 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
    ============================================================ */
 fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
-renderResources(); renderEvents(); renderFuse();
+renderResources(); renderEvents();
 renderHubs(); renderDocuments(); renderJourneys(); renderVendorClicks();
 renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
@@ -1397,12 +1373,7 @@ setupRange('reports', renderReports, { allDays:36500 });
 ['sub-status','sub-billing'].forEach(id => $(id) && $(id).addEventListener('change', renderSubscriptions));
 $('cart-step') && $('cart-step').addEventListener('change', renderAbandoned);
 ['notif-tier','notif-role'].forEach(id => $(id) && $(id).addEventListener('change', updateAudience));
-['fuse-search','fuse-ticket','fuse-addon','fuse-tier']
-  .forEach(id => $(id) && $(id).addEventListener(id==='fuse-search'?'input':'change', renderFuse));
-$('fuse-export') && $('fuse-export').addEventListener('click', ()=>{
-  const n = document.querySelectorAll('#fuse-tbody tr').length;
-  showToast(`Exported ${n} attendee${n===1?'':'s'} to CSV.`);
-});
+
 
 $('document-filters') && $('document-filters').addEventListener('click', e=>{
   const chip = e.target.closest('.chip'); if(!chip) return;

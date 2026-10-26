@@ -66,7 +66,7 @@
     var parsed = events.map(function (e, idx) {
       var parts = (e.date || '').split(' ');
       return { idx: idx, m: MON.indexOf((parts[0] || '').toUpperCase()),
-               d: parseInt(parts[1], 10), y: 2026, e: e };
+               d: parseInt(parts[1], 10), y: e.year || 2026, e: e };
     }).filter(function (o) { return o.m >= 0 && o.d; });
 
     /* ---------- inject the toggle + calendar container ---------- */

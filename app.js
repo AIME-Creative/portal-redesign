@@ -63,9 +63,10 @@ const events = [
   { title:"AIME Accelerate — Run Toward It",  date:"JUN 22", when:"Mon · 1:00 PM ET", type:"Virtual",   g:["#5b2a86","#dd1969"] },
   { title:"Mortgage Mornings — Live",         date:"JUL 1",  when:"Wed · 10:00 AM ET",type:"Virtual",   g:["#0b2a5b","#e0463c"] },
   { title:"AIME Accelerate — Compound",       date:"JUN 29", when:"Mon · 1:00 PM ET", type:"Training",  g:["#1b1b3a","#1893b1"] },
-  { title:"FUSE 2026 — National Conference",  date:"SEP 14", when:"Austin, TX",       type:"In person", loc:"JW Marriott Downtown Austin, TX", g:["#021649","#dd1969"] },
+  { title:"FUSE 2026 — National Conference",  date:"SEP 24", when:"Sep 24–26 · Austin, TX", type:"In person", loc:"JW Marriott Downtown Austin, TX", g:["#021649","#dd1969"] },
   { title:"AIME Accelerate — Mindset",        date:"JUL 6",  when:"Mon · 1:00 PM ET", type:"Training",  g:["#1b1b3a","#7a3fb0"] },
   { title:"Regional Mixer — Dallas",          date:"AUG 12", when:"Tue · 6:00 PM CT", type:"In person", loc:"Downtown Dallas, TX", g:["#0b2a5b","#20adce"] },
+  { title:"AIME Ascent 2027",                 date:"FEB 8", year:2027, when:"Feb 8–10, 2027 · VIP retreat", type:"In person", loc:"Venue details sent to registered VIP members", g:["#3a1d5c","#c9851f"] },
 ];
 
 const backArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
@@ -673,7 +674,7 @@ function openEvent(i){
       </div>
       <div class="card card-pad summary-card">
         <h3 style="font-size:16px;margin-bottom:14px">Event details</h3>
-        <div class="detail-meta-row"><span>📅</span> ${ev.date}, 2026</div>
+        <div class="detail-meta-row"><span>📅</span> ${ev.date}, ${ev.year || 2026}</div>
         <div class="detail-meta-row"><span>⏰</span> ${ev.when}</div>
         <div class="detail-meta-row"><span>📍</span> ${ev.loc || (ev.type==='In person'?'In person — venue TBA':'Online — link sent after registering')}</div>
         <button class="btn btn-primary btn-block" style="margin-top:16px" data-toast="Registered for ${ev.title}!">Register now</button>
