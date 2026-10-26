@@ -109,9 +109,14 @@
   }
   const ownTickets = () => S.all().filter((r) => r.type === 'support' && r.email === U.email);
   const sentTo = (r) => { const c = contact[r.type] || contact.connection; return c ? `${c.name} — ${c.email}` : '—'; };
+  const sentToCell = (r) => { const c = contact[r.type] || contact.connection; return c ? `${esc(c.name)}<div class="pp-dim">${esc(c.email)}</div>` : '—'; };
   const needsYou = (r) => r.type === 'escalation' && r.status === 'Received';
   const memberOf = (r) => P.member(r.email);
   const product = (r) => (r.fields || {}).Vendor || r.partner;
+  // Product is only called out when the vendor company has more than one Market product.
+  const multi = products.length > 1;
+  // Multi-product vendors get a Product column, so the row title drops the repeated product name.
+  const rowTitle = (r) => (multi && r.type === 'connection' ? 'Connection request' : r.title);
 
   /* ---------- range ---------- */
   let days = 30;
@@ -176,13 +181,13 @@
           ${tile('i-pink', '<path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16"/>', products.length, 'Market listings', 'Listed for Premium, Elite & VIP')}
           ${tile('i-green', '<path d="M20 6L9 17l-5-5"/>', tot.total ? ((count('connection') / tot.unique) * 100).toFixed(1) + '%' : '—', 'Connection rate', 'Requests ÷ unique viewers')}
         </div>
-        <div class="card card-pad"><div class="section-title"><h2 style="font-size:16px">Page views by product</h2><span class="count-note">by the viewing member's tier</span></div>
+        <div class="card card-pad"><div class="section-title"><h2 style="font-size:16px">${multi ? 'Page views by product' : 'Market page views'}</h2><span class="count-note">by the viewing member's tier</span></div>
           <div class="table-scroll"><table class="pp-table"><thead><tr><th>Product</th><th>Premium</th><th>Elite</th><th>VIP</th><th>Total</th><th>Unique</th></tr></thead><tbody>
             ${rows.map((r) => `<tr><td><strong>${esc(r.name)}</strong></td>${P.TIERS.map((t) => `<td>${r[t].toLocaleString()}</td>`).join('')}<td><strong>${r.total.toLocaleString()}</strong></td><td>${r.unique.toLocaleString()}</td></tr>`).join('')}
-            <tr class="pp-total"><td>All products</td>${P.TIERS.map((t) => `<td>${tot[t].toLocaleString()}</td>`).join('')}<td>${tot.total.toLocaleString()}</td><td>${tot.unique.toLocaleString()}</td></tr>
+            ${!multi ? '' : `<tr class="pp-total"><td>All products</td>${P.TIERS.map((t) => `<td>${tot[t].toLocaleString()}</td>`).join('')}<td>${tot.total.toLocaleString()}</td><td>${tot.unique.toLocaleString()}</td></tr>`}
           </tbody></table></div></div>
         <div class="card card-pad" style="margin-top:20px"><div class="section-title"><h2 style="font-size:16px">Recent connection requests</h2><a href="#" data-nav="partner-requests">View all <span>→</span></a></div>
-          ${reqTable(recent.slice(0, 8), ['Member', 'Product', 'Submitted', 'Sent to', 'Status'])}</div>`;
+          ${reqTable(recent.slice(0, 8), ['Member', ...(multi ? ['Product'] : []), 'Submitted', 'Sent to', 'Status'])}</div>`;
     }
     box.innerHTML = html;
   }
@@ -190,12 +195,14 @@
   /* ============================================================
      Requests (partner My Requests)
      ============================================================ */
-  let filter = 'all';
+  let filter = 'all', productFilter = 'all';
   function renderRequests() {
     const box = $('partner-requests-body'); if (!box) return;
     const reqs = companyRequests(), mine = ownTickets(), all = [...reqs, ...mine].sort((a, b) => (S.lastActivity(b) > S.lastActivity(a) ? 1 : -1));
     const chips = [['all', 'All'], ...KINDS.map((k) => [k, k === 'changeae' ? 'Change AE' : TYPES[k].label + 's']), ['support', 'My support tickets']];
-    const rows = all.filter((r) => filter === 'all' || r.type === filter);
+    const rows = all.filter((r) => (filter === 'all' || r.type === filter) &&
+      (productFilter === 'all' || (r.type !== 'support' && product(r) === productFilter)));
+    const productSel = multi ? `<select class="select filter-select" id="pp-product" style="width:auto;margin-left:auto">${[['all', 'All products'], ...products.map((p) => [p, p])].map(([v, l]) => `<option value="${esc(v)}" ${v === productFilter ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>` : '';
     box.innerHTML = `<div class="page-head"><h1>Requests</h1><p>${isLender ? 'Escalations, connections, and Change AE requests' : 'Connection requests'} sent to ${esc(COMPANY)} by AIME members — plus your own support tickets.</p></div>
       ${isLender ? `<div class="stat-row pp-tiles">
         ${tile('i-pink', '<path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>', reqs.filter((r) => r.type === 'escalation' && r.status !== 'Resolved').length, 'Open escalations')}
@@ -203,12 +210,13 @@
         ${tile('i-cyan', '<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/>', reqs.filter((r) => r.type === 'connection').length, 'Connection requests')}
         ${tile('i-green', '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>', reqs.filter((r) => r.type === 'changeae').length, 'Change AE requests')}</div>` : ''}
       <div class="filters">${chips.map(([k, l]) => `<button class="chip ${filter === k ? 'active' : ''}" data-pr-filter="${k}">${l}</button>`).join('')}
-        <span class="count-note" style="margin-left:auto;align-self:center">${rows.length} request${rows.length === 1 ? '' : 's'}</span></div>
-      <div class="card">${rows.length ? `<div class="table-scroll"><table class="pp-table pp-click"><thead><tr><th>Ref</th><th>Request</th><th>Member</th><th>Sent to</th><th>Submitted</th><th>Status</th></tr></thead><tbody>
+        ${productSel}<span class="count-note" style="${multi ? 'margin-left:12px' : 'margin-left:auto'};align-self:center">${rows.length} request${rows.length === 1 ? '' : 's'}</span></div>
+      <div class="card">${rows.length ? `<div class="table-scroll"><table class="pp-table pp-click"><thead><tr><th>Ref</th><th>Request</th>${multi ? '<th>Product</th>' : ''}<th>Member</th><th>Sent to</th><th>Submitted</th><th>Status</th></tr></thead><tbody>
         ${rows.map((r) => `<tr data-partner-open="${r.id}"><td class="rq-ref">${r.id}</td>
-          <td><div class="t-id">${S.icon(r.type, true)}<div><strong>${esc(r.title)}</strong><div class="pp-dim">${r.type === 'support' ? 'Your ticket' : TYPES[r.type].label}${r.followUp && r.followUp.status === 'open' ? ' · <span class="rq-flag amber">Member requested follow-up</span>' : ''}</div></div></div></td>
+          <td><div class="t-id">${S.icon(r.type, true)}<div><strong>${esc(rowTitle(r))}</strong><div class="pp-dim">${r.type === 'support' ? 'Your ticket' : rowTitle(r) === r.title ? TYPES[r.type].label : ''}${r.followUp && r.followUp.status === 'open' ? ' · <span class="rq-flag amber">Member requested follow-up</span>' : ''}</div></div></div></td>
+          ${multi ? `<td>${r.type === 'support' ? '<span class="pp-dim">—</span>' : `<span class="pp-product">${esc(product(r))}</span>`}</td>` : ''}
           <td>${r.type === 'support' ? '—' : `<strong>${esc(r.member)}</strong><div class="pp-dim">${esc(r.email)}</div>`}</td>
-          <td class="pp-dim">${r.type === 'support' ? 'AIME support' : esc(sentTo(r))}</td>
+          <td>${r.type === 'support' ? '<span class="pp-dim">AIME support</span>' : sentToCell(r)}</td>
           <td>${fmt.date(r.createdAt)}</td><td>${statusBadge(r.status)}</td></tr>`).join('')}
         </tbody></table></div>` : '<div class="empty"><h4>No requests yet</h4><p>Requests members send to your company will appear here.</p></div>'}</div>`;
     const badge = $('pr-nav-count'); if (badge) badge.textContent = reqs.filter(needsYou).length || '';
@@ -220,7 +228,8 @@
     if (r.type === 'support') { box.innerHTML = ''; return; }
     const m = memberOf(r), first = r.member.split(' ')[0];
     const kv = (k, v) => `<div class="rq-kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
-    const fields = Object.entries(r.fields || {}).filter(([k]) => !/^Shared with/.test(k)).map(([k, v]) => `<div class="rq-kv ${String(v).length > 40 ? 'block' : ''}"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join('');
+    // Vendor connections store the Market listing as "Vendor"; to the vendor company that's their product.
+    const fields = Object.entries(r.fields || {}).filter(([k]) => !/^Shared with/.test(k)).map(([k, v]) => [k === 'Vendor' ? 'Product' : k, v]).map(([k, v]) => `<div class="rq-kv ${String(v).length > 40 ? 'block' : ''}"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join('');
     const subject = encodeURIComponent(`Your AIME ${r.type === 'changeae' ? 'Change AE' : 'connection'} request — ${isLender ? COMPANY : product(r)}`);
     const bodyTxt = encodeURIComponent(`Hi ${first},\n\nThanks for your ${r.type === 'changeae' ? 'request to change your account executive' : 'connection request through AIME'}. `);
     let action;
@@ -240,7 +249,7 @@
       <div class="card card-pad"><div class="rq-head">${S.icon(r.type)}<div style="flex:1;min-width:0">
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="badge badge-navy">${TYPES[r.type].label}</span>${statusBadge(r.status)}${r.followUp && r.followUp.status === 'open' ? '<span class="rq-flag amber">Member requested follow-up</span>' : ''}</div>
         <h1 style="margin-top:10px">${esc(r.title)}</h1>
-        <div class="rq-head-meta"><span>Ref <strong>${r.id}</strong></span><span>Member <strong>${esc(r.member)}</strong></span><span>Submitted <strong>${fmt.dateTime(r.createdAt)}</strong></span>${!isLender ? `<span>Product <strong>${esc(product(r))}</strong></span>` : ''}</div>
+        <div class="rq-head-meta"><span>Ref <strong>${r.id}</strong></span><span>Member <strong>${esc(r.member)}</strong></span><span>Submitted <strong>${fmt.dateTime(r.createdAt)}</strong></span>${multi ? `<span>Product <strong>${esc(product(r))}</strong></span>` : ''}</div>
       </div></div>${S.trackerHTML(r)}</div>
       <div class="grid rq-detail-grid" style="grid-template-columns:1.6fr 1fr;align-items:start;margin-top:20px">
         <div><div class="card card-pad">${action}</div>
@@ -288,7 +297,10 @@
       showToast(m.dataset.ppReply === 'resolve' ? `Reply sent and ${r.id} marked resolved — ${r.member} has been notified.` : `Reply sent — ${r.member} has been notified.`);
     }
   });
-  document.addEventListener('change', (e) => { if (e.target.id === 'pp-range') { days = +e.target.value; renderDashboard(); } });
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'pp-range') { days = +e.target.value; renderDashboard(); }
+    if (e.target.id === 'pp-product') { productFilter = e.target.value; renderRequests(); }
+  });
 
   function renderAll() {
     renderDashboard(); renderRequests(); renderNotifs();
@@ -297,7 +309,7 @@
   S.onChange(renderAll);
   renderAll();
 
-  window.AmpPartnerPortal = { openRequest, companyRequests, COMPANY, TYPE };
+  window.AmpPartnerPortal = { openRequest, companyRequests, COMPANY, TYPE, MULTI: multi };
 
   // Partners land on their Dashboard (unless a deep link says otherwise)
   const h = (location.hash || '').replace('#', '');

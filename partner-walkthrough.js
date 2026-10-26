@@ -26,14 +26,16 @@
     { sec: 1, page: 'partner', target: '#partner-body .pp-banner', title: 'Changes to your listing',
       body: 'Your company listing is managed by AIME. To request a change, email the address in this banner.' },
     { sec: 2, page: 'partner', target: () => (isLender ? cardTitled('partner-body', 'Lender page views by member tier')() : cards('partner-body')[0]),
-      title: isLender ? 'Lender page views by tier' : 'Page views by product',
+      title: isLender ? 'Lender page views by tier' : PP.MULTI ? 'Page views by product' : 'Market page views',
       body: isLender ? 'How many members viewed your lender page — broken out by Premium, Elite, and VIP, with the total and unique members. Change the period at the top right.'
-        : 'Views of each of your Market products, broken out by the viewing member\'s tier, with a total across all your products.' },
+        : PP.MULTI ? 'Views of each of your Market products, broken out by the viewing member\'s tier, with a total across all your products.'
+        : 'How many members viewed your Market listing, broken out by the viewing member\'s tier. Change the period at the top right.' },
     { sec: 2, page: 'partner', target: () => (isLender ? cardTitled('partner-body', 'Recent requests')() : cardTitled('partner-body', 'Recent connection requests')()),
       title: isLender ? 'Recent requests' : 'Recent connection requests',
       body: 'The latest requests from AIME members, with who at your company each one was sent to. Click any row for the full details.' },
     { sec: 3, page: 'requests', target: () => cards('partner-requests-body').pop(), title: 'Requests',
       body: isLender ? 'Every escalation, connection, and Change AE request sent to your company — plus your own support tickets. A "Member requested follow-up" flag means the member asked AIME to check in.'
+        : PP.MULTI ? 'Every connection request sent to your company — the Product column and filter show which product each one is for — plus your own support tickets.'
         : 'Every connection request sent to your company, plus your own support tickets.' },
     { sec: 4, chapter: 'A request', page: 'detail', target: cardTitled('partner-request-body', 'Member'), title: 'Full member details',
       body: 'Name, email, phone, NMLS #, company, licensed states, and tier — the same details as the email — plus what they submitted and who it was sent to.' },

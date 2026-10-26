@@ -36,18 +36,19 @@ window.HELP_ARTICLES = [
       <p>Your <strong>Dashboard</strong> is your home page in AMP. Everyone at your company sees the same numbers.</p>
       <ul>
         <li><strong>Lenders</strong> — views of your lender page, broken out by the viewing member's tier (Premium, Elite, VIP) plus the total and unique members, and counts of escalations, connections, and Change AE requests.</li>
-        <li><strong>Vendors</strong> — views of each of your Market products by member tier, with a total across all your products, plus your connection requests.</li>
+        <li><strong>Vendors</strong> — views of your Market listing by member tier, plus your connection requests. If your company has more than one product, each product gets its own row with a total across all of them.</li>
       </ul>
       <p>Use the date range at the top right to change the period. The <strong>Recent requests</strong> list links to the full details.</p>` },
   { slug: 'partner-requests', audience: 'partner', title: 'Requests sent to your company', category: 'partners', popular: true,
     summary: 'See full member details, reply to escalations, and email members who asked to connect.',
-    tags: ['requests', 'escalation', 'reply', 'connection', 'change ae', 'email', 'sent to', 'partner'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['requests', 'escalation', 'reply', 'connection', 'change ae', 'email', 'sent to', 'partner', 'product'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
     views: 0, helpful: [0, 0], actions: [{ label: 'Open requests', attr: 'data-nav="partner-requests"' }],
     body: `
       <p><strong>Requests</strong> lists every request AIME members send to your company, with the member's name, email, phone, NMLS #, company, and licensed states — the same details as the email — and <strong>Sent to</strong>, the person at your company it was emailed to.</p>
       <ol class="kb-steps">
         <li><strong>Escalations (lenders):</strong> open one and use <strong>Reply</strong> to update the member, or <strong>Reply &amp; mark resolved</strong> when it's fixed. You can also simply reply to the escalation email — no login needed — and it lands here.</li>
-        <li><strong>Connections and Change AE:</strong> use <strong>Email &lt;member&gt;</strong> to start an email to them directly.</li>
+        <li><strong>Connections and Change AE:</strong> use <strong>Email &lt;member&gt;</strong> to start an email to them directly. Each vendor connection shows the <strong>Product</strong> the member asked about.</li>
+        <li><strong>More than one product (vendors):</strong> Requests adds a <strong>Product</strong> column and a product filter so you can see which product each connection is for.</li>
         <li>A <strong>Member requested follow-up</strong> flag means the member asked AIME to check in — the AIME team may contact you too.</li>
       </ol>
       <div class="kb-tip">Who requests are sent to is set on your company listing. To change it, email AIME (lenders@aimegroup.com or vendors@aimegroup.com).</div>` },

@@ -53,3 +53,6 @@ body.partner-mode #tab-billing { display:none !important; }
 
 /* date range sits beside the dashboard title */
 #pp-range { width:auto; min-width:170px; }
+
+/* product tag — only rendered for vendor companies with more than one Market product */
+.pp-product { font-weight:600; color:var(--ink); }
