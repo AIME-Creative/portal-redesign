@@ -293,3 +293,14 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .pwa-check input { width:18px; height:18px; accent-color:var(--pink); }
 #ent-detail .rq-kv { gap:12px; } #ent-detail .rq-kv .k { flex:1 1 auto; min-width:0; } #ent-detail .rq-kv .v { flex:0 0 auto; text-align:right; }
 @media (max-width:860px){ .ent-tiles { grid-template-columns:1fr 1fr; gap:10px; } .ent-tile { padding:14px; } .ent-tv { font-size:22px; } }
+
+/* Loan referrals (admin-referrals.js) */
+.rf-card { max-width:760px; }
+.rf-radios { display:flex; gap:22px; flex-wrap:wrap; padding-top:2px; }
+.rf-radios label { display:flex; align-items:center; gap:8px; font-weight:500; font-size:14.5px; color:var(--ink); cursor:pointer; margin:0; }
+.rf-radios input { width:17px; height:17px; accent-color:var(--pink); margin:0; }
+.rf-foot { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:6px; }
+.rf-reach { margin:0; flex:1 1 280px; font-size:13.5px; color:var(--ink-soft); line-height:1.5; }
+.rf-type { display:inline-block; font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-soft); }
+.rf-table th.t-num, .rf-table td.t-num { text-align:right; font-variant-numeric:tabular-nums; }
+@media (max-width:860px) { .rf-foot .btn { width:100%; justify-content:center; } }

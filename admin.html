@@ -84,6 +84,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
         Email history
       </button>
+      <button class="nav-item" data-nav="referrals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+        Loan referrals
+      </button>
 
       <div class="nav-label">Content</div>
       <button class="nav-item" data-nav="featured">
@@ -816,6 +820,47 @@
         <p class="flow-caption">Statuses come from Resend. <strong>Bounced</strong> = the address rejected it · <strong>Delayed</strong> = still retrying · <strong>Suppressed</strong> = Resend won't send to that address after an earlier bounce or spam complaint. Previews are available for 30 days after sending.</p>
       </section>
 
+      <!-- ============ LOAN REFERRALS (admin-referrals.js) ============ -->
+      <section class="view" id="view-referrals">
+        <div class="page-head"><h1>Loan referrals</h1><p>Submit a loan referral. Opted-in VIP members matching the type and state are notified first; Elite members follow after a short delay.</p></div>
+        <div class="filters an-tabs" role="tablist"><button class="chip active" data-nav="referrals" role="tab">Send referral</button><button class="chip" data-nav="referral-history" role="tab">Sent referrals</button></div>
+        <form class="card card-pad rf-card" id="rf-form" onsubmit="return false" novalidate>
+          <div class="field"><label>Referral type <span class="req">*</span></label>
+            <div class="rf-radios"><label><input type="radio" name="rf-type" value="Broker"> Broker</label><label><input type="radio" name="rf-type" value="Processor"> Processor</label></div></div>
+          <div class="field-row">
+            <div class="field"><label for="rf-first">First name <span class="req">*</span></label><input class="input" id="rf-first" autocomplete="off"></div>
+            <div class="field"><label for="rf-last">Last name <span class="req">*</span></label><input class="input" id="rf-last" autocomplete="off"></div></div>
+          <div class="field-row">
+            <div class="field"><label for="rf-email">Email <span class="req">*</span></label><input class="input" id="rf-email" type="email" placeholder="name@example.com" autocomplete="off"></div>
+            <div class="field"><label for="rf-state">State of referral <span class="req">*</span></label><select class="select" id="rf-state"></select></div></div>
+          <div class="field-row">
+            <div class="field"><label for="rf-lang">Languages spoken</label><select class="select" id="rf-lang"></select></div>
+            <div class="field"><label for="rf-program">Loan program</label><input class="input" id="rf-program" placeholder="e.g. FHA, Conventional"></div></div>
+          <div class="field-row">
+            <div class="field"><label for="rf-amount">Loan amount</label><input class="input" id="rf-amount" inputmode="decimal" placeholder="$ 0.00"></div>
+            <div class="field"><label for="rf-fb">Facebook post URL</label><input class="input" id="rf-fb" type="url" placeholder="https://"></div></div>
+          <div class="field"><label for="rf-details">Loan details <span class="req">*</span></label><textarea class="input" id="rf-details" rows="4" placeholder="Please explain in as much detail as possible the issue you need resolved."></textarea></div>
+          <div class="rf-foot"><p class="rf-reach" id="rf-reach"></p>
+            <button type="button" class="btn btn-primary" id="rf-submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg> Submit referral</button></div>
+        </form>
+      </section>
+      <section class="view" id="view-referral-history">
+        <div class="page-head"><h1>Loan referrals</h1><p>Every referral sent, how many VIP and Elite members it went to, and the email they got.</p></div>
+        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="referrals" role="tab">Send referral</button><button class="chip active" data-nav="referral-history" role="tab">Sent referrals</button></div>
+        <div class="stat-row admin4" style="margin-bottom:20px" id="rf-tiles"></div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="rf-q" placeholder="Search by name or email…"></div>
+          <select class="select filter-select" id="rf-ftype"><option value="all">All types</option><option>Broker</option><option>Processor</option></select>
+          <select class="select filter-select" id="rf-fstate"></select>
+          <span class="spacer"></span><span class="count-note" id="rf-count">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm em-table rf-table">
+          <thead><tr><th>First name</th><th>Last name</th><th>Email</th><th>Referral type</th><th>State</th><th class="t-num">VIPs sent to</th><th class="t-num">Elites sent to</th><th>Sent</th><th class="t-right">Email</th></tr></thead>
+          <tbody id="rf-tbody"></tbody>
+        </table></div></div>
+        <p class="flow-caption">Referrals go to members who opted in to referrals for that type and state — VIP members first, then Elite members after a short delay. Each member gets their own copy of the email.</p>
+      </section>
+
       <!-- ============ GROUP + ENTERPRISE MEMBERSHIPS (admin-memberships.js) ============ -->
       <section class="view" id="view-groups"><div id="grp-list"></div></section>
       <section class="view" id="view-group-detail"><div id="grp-detail"></div></section>
@@ -897,6 +942,18 @@
     </div>
     <div class="modal-body" id="em-m-body"></div>
     <div class="modal-foot"><span class="hint" id="em-m-note" style="margin:0 auto 0 0;max-width:360px"></span><button class="btn btn-outline" data-close>Close</button><button class="btn btn-primary" id="em-m-resend">Resend</button></div>
+  </div>
+</div>
+
+<!-- ===================== REFERRAL EMAIL PREVIEW (admin-referrals.js) ===================== -->
+<div class="modal-overlay" id="modal-referral">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-head">
+      <div><h2 id="rf-m-title">Referral</h2><p id="rf-m-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="rf-m-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Close</button></div>
   </div>
 </div>
 
@@ -987,6 +1044,7 @@
 <script src="admin-event-reg.js"></script>
 <script src="admin-partners.js"></script>
 <script src="admin-emails.js"></script>
+<script src="admin-referrals.js"></script>
 <script src="admin-memberships.js"></script>
 <!-- admin first-time walkthrough (separate from the member tour) -->
 <script src="tour-engine.js"></script>

@@ -1341,7 +1341,7 @@ function navigate(view){
   if(view==='subscriptions') view = 'members';   // billing now lives on the Members list
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','journeys','vendorclicks'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view;
+  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','journeys','vendorclicks'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
