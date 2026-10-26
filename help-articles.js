@@ -196,7 +196,7 @@ window.HELP_ARTICLES = [
   /* ---------------- Events & FUSE ---------------- */
   { slug: 'fuse-ticket', title: 'Claiming your FUSE 2026 ticket, add-ons, and guests', category: 'events', popular: true,
     summary: 'One click claims your included ticket — then add sessions, the Hall of AIME, and guests.',
-    tags: ['fuse', 'ticket', 'claim', 'conference', 'add-ons', 'guest', 'hall of aime', 'vip', 'austin'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['fuse', 'ticket', 'claim', 'conference', 'add-ons', 'guest', 'free guest', 'vip guest', 'hall of aime', 'vip', 'austin'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
     views: 2210, helpful: [251, 11],
     actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
     body: `
@@ -210,8 +210,10 @@ window.HELP_ARTICLES = [
         <li>Click <strong>Claim my … ticket</strong>. That's it — you're registered.</li>
         <li>A window opens where you can pick sessions (WMN at FUSE, Vetted VA, the Hall of AIME) and add guests, with an order summary. Choose what you want and click <strong>Update registration</strong> — or just close it if you don't need anything else.</li>
       </ol>
-      <div class="kb-tip"><strong>Included add-ons still need to be selected</strong> (like the Hall of AIME for VIP members) so we save your seat.</div>
-      <p><strong>Bringing a guest?</strong> Each guest needs their own name, email, and phone — they can't match yours. VIP members: if you're bringing your included guest, check <strong>I'm bringing my included guest</strong> and fill in their details. Additional guests are $299 early-bird ($349 after July 8).</p>
+      <div class="kb-tip"><strong>Free doesn't mean automatic.</strong> Free extras — like the Hall of AIME for VIP members and their guest — are marked <strong>"Free — select to claim"</strong>. Your seat is only reserved once you select it and click <strong>Update registration</strong>. Anything you haven't claimed yet is listed at the top of the window.</div>
+      <p><strong>VIP free guest ticket:</strong> check <strong>Claim your free VIP guest ticket</strong> and enter your guest's name, email, phone, and gender. The guest ticket is only issued once all four are filled in — the guest card shows "Details needed" until then.</p>
+      <p><strong>Other guests:</strong> each guest needs their own name, email, phone, and gender — email and phone can't match yours. Additional guests are $299 early-bird ($349 after July 8).</p>
+      <p><strong>Guest sessions:</strong> guests can join any add-on you've selected for yourself. <strong>WMN at FUSE</strong> is for women — a woman guest can attend WMN even if you don't.</p>
       <p>To change add-ons or guests later, open FUSE 2026 on the Events page and click <strong>Manage add-ons &amp; guests</strong>. You'll only pay for anything new.</p>` },
 
   { slug: 'event-registration', title: 'Registering or RSVPing for an event', category: 'events', popular: false,
@@ -226,7 +228,7 @@ window.HELP_ARTICLES = [
         <li>Your name, email, and phone come from your profile. Pick a ticket and any add-ons — prices show early-bird discounts while they last, and some tickets are included with your membership.</li>
         <li>Add guests if the event allows them, answer any questions, and submit. Paid registrations go through secure checkout.</li>
       </ol>
-      <div class="kb-tip"><strong>Guests:</strong> each guest needs their own name, email, and phone number — they can't be the same as yours. Some memberships include a free guest; if you're bringing them, their details are required.</div>
+      <div class="kb-tip"><strong>Guests:</strong> each guest needs their own name, email, phone number, and gender — email and phone can't be the same as yours. Guests can join add-ons you've selected (some, like women-only sessions, have their own rules). Some memberships include a free guest; if you're bringing them, their details are required.</div>
       <p>Some events are for specific membership tiers — you'll see who they're for on the event page. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
 
   { slug: 'events-calendar', title: 'Viewing events as a calendar', category: 'events',

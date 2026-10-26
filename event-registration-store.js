@@ -15,13 +15,15 @@
                   (registers instantly, then offers add-ons / guests) — FUSE
      tickets[]    { id, name, desc, price, ebPrice, included:[tiers], tiers:[...] }
                   "included" = free for those tiers (e.g. FUSE GA for Premium/Elite)
-     addons[]     { id, name, desc, price, ebPrice, included:[tiers], perGuest, tiers:[...] }
-                  included = free for those tiers AND their included (free) guests;
-                  perGuest = guests can be signed up for it too
+     addons[]     { id, name, desc, price, ebPrice, included:[tiers], perGuest, guestSolo, womenOnly, tiers:[...] }
+                  included  = free for those tiers AND their included (free) guests
+                  perGuest  = guests can add it — but only if the member selected it too…
+                  guestSolo = …unless this is set: guests can attend without the member (WMN)
+                  womenOnly = only women can attend (member's profile gender / guest's gender)
      guests       { on, max, price, ebPrice, included:{tier: n} }
                   included = free guests per tier (FUSE: VIP gets 1); the rest pay
-                  Each guest: { name, email, phone, addons[] } — email/phone must
-                  differ from the member's
+                  Each guest: { name, email, phone, gender, addons[] } — email/phone
+                  must differ from the member's
      fields[]     custom fields { id, label, type, options[], required, help }
                   type: text | textarea | select | yesno | checkbox
    Registration
@@ -34,7 +36,7 @@
    event_registrations) + Stripe Checkout for anything with a cost.
    ============================================================ */
 (function () {
-  const KEY = 'amp-event-reg-v2';   // bump when the seed shape changes
+  const KEY = 'amp-event-reg-v3';   // bump when the seed shape changes
   const TIERS = ['Premium', 'Elite', 'VIP'];
   // The prototype's "today" — matches the admin console (June 2026) so early-bird windows read correctly.
   const TODAY = new Date('2026-06-25T12:00:00');
@@ -51,9 +53,9 @@
         ],
         addons: [
           { id: 'hoa', name: 'Hall of AIME', desc: 'Awards dinner celebrating the year’s top brokers.', price: 249, ebPrice: 199, included: ['VIP'], perGuest: true, tiers: ['All'] },
-          { id: 'wmn', name: 'WMN at FUSE', desc: "Women's Mortgage Network track", price: 0, ebPrice: null, included: [], perGuest: false, tiers: ['All'] },
-          { id: 'vva', name: 'Vetted VA', desc: 'VA loan training to better serve veteran borrowers', price: 0, ebPrice: null, included: [], perGuest: false, tiers: ['All'] },
-          { id: 'vipl', name: 'VIP Luncheon', desc: 'Networking lunch with AIME leadership & top originators', price: 0, ebPrice: null, included: [], perGuest: false, tiers: ['VIP'] },
+          { id: 'wmn', name: 'WMN at FUSE', desc: "Women's Mortgage Network track — for women.", price: 0, ebPrice: null, included: [], perGuest: true, guestSolo: true, womenOnly: true, tiers: ['All'] },
+          { id: 'vva', name: 'Vetted VA', desc: 'VA loan training to better serve veteran borrowers', price: 0, ebPrice: null, included: [], perGuest: true, tiers: ['All'] },
+          { id: 'vipl', name: 'VIP Luncheon', desc: 'Networking lunch with AIME leadership & top originators', price: 0, ebPrice: null, included: [], perGuest: true, tiers: ['VIP'] },
         ],
         guests: { on: true, max: 3, price: 349, ebPrice: 299, included: { VIP: 1 } },
         fields: [
@@ -97,7 +99,12 @@
     const person = (k) => { const fn = first[k % first.length], ln = last[(k * 7) % last.length]; return { name: `${fn} ${ln}`, email: `${fn.toLowerCase()}.${ln.toLowerCase()}@example-lending.com` }; };
 
     // The example member (Kyle Lord) starts unregistered everywhere, so the FUSE one-click claim shows.
-    const guest = () => { const fn = pick(first), ln = pick(last); return { name: `${fn} ${ln}`, email: `${fn.toLowerCase()}${Math.floor(rnd() * 90 + 10)}@guestmail.com`, phone: `(555) ${300 + Math.floor(rnd() * 600)}-${1000 + Math.floor(rnd() * 8999)}`, addons: [] }; };
+    const womenNames = ['Maria', 'Priya', 'Janet', 'Alicia', 'Rachel', 'Monica', 'Hannah', 'Teresa', 'Keisha', 'Lauren', 'Grace', 'Nina', 'Paula'];
+    const menNames = ['Carlos', 'Sam', 'Darnell', 'Ahmed', 'Tom', 'Derek', 'Marcus', 'Brandon', 'Victor', 'Omar', 'Wesley', 'Calvin'];
+    const guest = () => {
+      const gender = rnd() < 0.55 ? 'Woman' : 'Man', fn = pick(gender === 'Woman' ? womenNames : menNames), ln = pick(last);
+      return { name: `${fn} ${ln}`, email: `${fn.toLowerCase()}${Math.floor(rnd() * 90 + 10)}@guestmail.com`, phone: `(555) ${300 + Math.floor(rnd() * 600)}-${1000 + Math.floor(rnd() * 8999)}`, gender, addons: [] };
+    };
 
     let n = 1002;
     const add = (event, count, make) => { for (let k = 0; k < count; k++) { const p = person(k + n); regs.push(Object.assign({ id: 'REG-' + n++, event, phone: `(555) ${200 + (n % 700)}-${String(1000 + n * 37).slice(-4)}` }, p, make(k))); } };
@@ -106,10 +113,12 @@
     add('FUSE 2026 — National Conference', 64, () => {
       const tier = tierMix(), daysAgo = Math.floor(rnd() * 60), eb = TODAY - daysAgo * day <= new Date('2026-07-08').getTime();
       const vip = tier === 'VIP', ticket = vip ? 'vip' : 'ga';
-      const addons = ['hoa', 'wmn', 'vva'].filter(() => rnd() < (vip ? 0.6 : 0.35)).concat(vip && rnd() < 0.7 ? ['vipl'] : []);
+      const woman = rnd() < 0.45;
+      const addons = ['hoa', 'vva'].filter(() => rnd() < (vip ? 0.6 : 0.35)).concat(woman && rnd() < 0.6 ? ['wmn'] : [], vip && rnd() < 0.7 ? ['vipl'] : []);
       // VIPs usually bring their included guest; some members add paid guests
       const nGuests = vip ? (rnd() < 0.7 ? (rnd() < 0.2 ? 2 : 1) : 0) : (rnd() < 0.15 ? 1 : 0);
-      const guests = Array.from({ length: nGuests }, () => { const g = guest(); if (rnd() < 0.5) g.addons = ['hoa']; return g; });
+      // guests can join sessions the member picked; women guests can also do WMN on their own
+      const guests = Array.from({ length: nGuests }, () => { const g = guest(); g.addons = addons.filter((id) => id !== 'wmn' && rnd() < 0.6).concat(g.gender === 'Woman' && rnd() < 0.5 ? ['wmn'] : []); return g; });
       const reg = { tier, ticket, addons, guests, answers: { badge: '', diet: rnd() < 0.15 ? pick(['Vegetarian', 'Gluten-free', 'No shellfish']) : '' }, earlyBird: eb, at: new Date(TODAY - daysAgo * day).toISOString() };
       reg.total = priceOf(setups['FUSE 2026 — National Conference'], reg, eb).total;
       return reg;
@@ -153,7 +162,7 @@
     (reg.addons || []).forEach((id) => {
       const a = setup.addons.find((x) => x.id === id); if (!a) return;
       const incl = (a.included || []).includes(reg.tier);
-      lines.push({ label: a.name, amount: incl ? 0 : unit(a, eb), note: incl ? `Included with ${reg.tier}` : ebNote(a) });
+      lines.push({ label: a.name, amount: incl ? 0 : unit(a, eb), note: incl ? `Free with ${reg.tier} · claimed` : ebNote(a) });
     });
     const G = setup.guests || {}, free = freeGuests(setup, reg.tier);
     if (G.on) (reg.guests || []).forEach((g, k) => {
@@ -162,7 +171,7 @@
       (g.addons || []).forEach((id) => {
         const a = setup.addons.find((x) => x.id === id); if (!a || !a.perGuest) return;
         const ai = incl && (a.included || []).includes(reg.tier);   // included add-ons cover included guests too
-        lines.push({ label: `${a.name} · guest ${k + 1}`, amount: ai ? 0 : unit(a, eb), note: ai ? 'Included' : ebNote(a), guest: true });
+        lines.push({ label: `${a.name} · guest ${k + 1}`, amount: ai ? 0 : unit(a, eb), note: ai ? `Free with ${reg.tier}` : ebNote(a), guest: true });
       });
     });
     return { lines, total: lines.reduce((s, l) => s + l.amount, 0) };
@@ -193,6 +202,13 @@
     canRegister: (setup, tier) => allowed(setup.tiers, tier),
     itemAllowed: (item, tier) => allowed(item.tiers, tier),
     isEarlyBird, priceOf, unit, freeGuests,
+    // Can this guest be added to add-on `a`? → { ok, why }
+    guestCanAdd(a, memberAddons, guest) {
+      if (!a.perGuest) return { ok: false, why: 'Members only' };
+      if (a.womenOnly && (guest || {}).gender !== 'Woman') return { ok: false, why: 'Women only' };
+      if (!a.guestSolo && !(memberAddons || []).includes(a.id)) return { ok: false, why: 'Select it for yourself first' };
+      return { ok: true, why: '' };
+    },
     // The ticket a tier gets for free (one-click claim), if any
     includedTicket: (setup, tier) => (setup.tickets || []).find((t) => (t.included || []).includes(tier) && allowed(t.tiers, tier)) || null,
     digits: (s) => String(s || '').replace(/\D/g, ''),

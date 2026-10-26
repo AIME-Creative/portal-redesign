@@ -73,7 +73,7 @@
     { sec: 7, page: 'dashboard', target: '.nav-item[data-nav="events"]', mTarget: '.bottom-nav-item[data-nav="events"]', title: 'Events',
       body: 'Webinars, trainings, and in-person events. Events you can sign up for show <strong>RSVP</strong> or <strong>Registration open</strong>; some are for specific membership tiers.' },
     { sec: 7, chapter: 'Events', page: 'fuse', target: '#event-detail-body .er-panel', title: 'Claim your FUSE ticket in one click',
-      body: "Your FUSE 2026 ticket is included with your membership — the card shows which ticket you get. One click on <strong>Claim</strong> registers you; then pick sessions, the Hall of AIME, or add guests (each guest needs their own email and phone)." },
+      body: "Your FUSE 2026 ticket is included with your membership — the card shows which ticket you get. One click on <strong>Claim</strong> registers you. Free extras (like a VIP guest ticket or Hall of AIME seat) still have to be <strong>selected to claim</strong>, and guests need their own name, email, and phone." },
 
     // ---- chapter: My Requests ----
     { sec: 8, page: 'dashboard', target: '.nav-item[data-nav="requests"]', mTarget: '.menu-btn', title: 'Track your requests',

@@ -48,7 +48,23 @@
 .er-guest-card .field { margin-bottom:12px; }
 .er-gaddon { align-items:center; margin:2px 0 12px; }
 .er-gaddon span:first-of-type { flex:1; }
+.er-gaddons-h { font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin:2px 0 8px; }
+.er-gaddons-h span { text-transform:none; letter-spacing:0; font-weight:500; }
+.er-gaddon.disabled { opacity:.6; cursor:default; }
 .er-line.sub { padding-left:12px; font-size:13px; color:var(--ink-soft); }
+
+/* ---------- member: free items that still have to be claimed ---------- */
+.er-claim-tag { font-size:12px; font-weight:700; color:#9a6a05; background:#fbf0d8; border:1px solid #f0d79a; padding:4px 10px; border-radius:20px; white-space:nowrap; }
+.er-claim-tag.done { color:var(--green); background:var(--green-bg); border-color:#bfe7d0; }
+.addon-row.er-needs-claim, .er-check.er-needs-claim { border:1.5px dashed #e3b44c; background:#fffaf0; }
+.er-check.er-needs-claim { padding:10px 12px; border-radius:10px; }
+.er-claim-note { display:block; margin-top:4px; font-size:12.5px; font-weight:700; color:#9a6a05; }
+.er-guest-req { font-size:13px; color:#7a5a12; background:#fff7e0; border:1px solid #f0dc9c; border-radius:10px; padding:9px 12px; margin:0 0 12px; }
+.er-g-status { font-size:12px; font-weight:700; color:#9a6a05; background:#fbf0d8; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.er-g-status.done { color:var(--green); background:var(--green-bg); }
+.er-todo { margin:0 0 14px; padding:12px 16px; border-radius:12px; background:#fff7e0; border:1px solid #f0dc9c; color:#7a5a12; font-size:13px; line-height:1.5; }
+.er-todo ul { margin:6px 0; padding-left:18px; }
+.er-todo li { margin:2px 0; }
 
 /* ---------- member: form ---------- */
 .er-eb-banner { background:linear-gradient(90deg,#fbf0d8,#fff7e8); color:#7a5a12; font-weight:700; font-size:13px; padding:10px 14px; border-radius:10px; margin-bottom:6px; }
@@ -98,6 +114,8 @@
 .ereg-item-grid.fields { grid-template-columns:2fr 1.2fr auto; align-items:end; }
 .ereg-req { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink-soft); margin:0 0 12px; white-space:nowrap; }
 .ereg-req input { width:17px; height:17px; accent-color:var(--pink); }
+.ereg-addon-rules { display:flex; flex-wrap:wrap; gap:4px 20px; margin-bottom:8px; }
+.ereg-addon-rules .ereg-req { margin:0 0 6px; }
 .ereg-del { position:absolute; right:16px; bottom:14px; }
 .ereg-item-actions { display:flex; gap:6px; align-items:center; justify-content:flex-end; }
 .ereg-item-actions .icon-act[disabled] { opacity:.35; pointer-events:none; }

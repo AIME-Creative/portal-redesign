@@ -29,7 +29,10 @@
   if (!R || typeof events === 'undefined' || !document.getElementById('modal-event-reg')) return;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const ME = { first: 'Kyle', last: 'Lord', email: 'kyle@aimegroup.com', phone: '(555) 014-2278', tier: memberTier };
+  // gender comes from the member's profile (Settings → Profile); used for women-only sessions like WMN
+  const ME = { first: 'Kyle', last: 'Lord', email: 'kyle@aimegroup.com', phone: '(555) 014-2278', tier: memberTier, gender: 'Man' };
+  const GENDERS = ['Woman', 'Man', 'Prefer not to say'];
+  const GUEST_FIELDS = ['name', 'email', 'phone', 'gender'];
   const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const money = R.money;
   const lockIco = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
@@ -91,7 +94,7 @@
       return tiersLine + `<div class="er-claim" id="er-claim">
           <div class="er-claim-k">Your ticket</div>
           <div class="er-claim-t">🎟️ ${esc(claimT.name)} <span>Included with ${ME.tier}</span></div>
-          <div class="er-meta">${esc(claimT.desc || '')}${fg ? ` Includes ${fg} free guest${fg > 1 ? 's' : ''}.` : ''}</div>
+          <div class="er-meta">${esc(claimT.desc || '')}${fg ? ` Includes ${fg} free guest ticket${fg > 1 ? 's' : ''} — claim it after you register by adding your guest's details.` : ''}</div>
         </div>
         <button class="btn btn-primary btn-block" style="margin-top:12px" data-er-claim>Claim my ${esc(claimT.name)} ticket</button>
         <div class="er-meta" style="text-align:center;margin-top:8px">One click registers you — add-ons and guests are optional.</div>`;
@@ -133,7 +136,11 @@
   }
 
   /* ---------- the form ---------- */
-  const blankGuest = () => ({ name: '', email: '', phone: '', addons: [] });
+  const blankGuest = () => ({ name: '', email: '', phone: '', gender: '', addons: [] });
+  // Drop guest add-ons that are no longer allowed (member unselected it, or gender changed)
+  function pruneGuestAddons(d) {
+    d.guests.forEach((g) => { g.addons = (g.addons || []).filter((id) => { const a = current.setup.addons.find((x) => x.id === id); return a && R.guestCanAdd(a, d.addons, g).ok; }); });
+  }
   function openForm(i, preview, opts) {
     const ev = events[i], st = status(ev), s = st.setup; if (!s) return;
     const r = st.reg;
@@ -168,21 +175,34 @@
     return `<div class="field" data-field="${f.id}"><label for="${id}">${esc(f.label)}${req}</label>${input}${f.type !== 'textarea' ? help : ''}</div>`;
   }
 
+  // Free-but-must-be-claimed items: make it obvious they're not reserved until selected.
+  const claimTag = (done, doneText) => done ? `<span class="er-claim-tag done">✓ ${doneText || 'Claimed · Free'}</span>` : '<span class="er-claim-tag">Free — select to claim</span>';
+  const guestDone = (g) => GUEST_FIELDS.every((k) => String((g || {})[k] || '').trim());
+  const guestFilled = (g) => GUEST_FIELDS.filter((k) => String((g || {})[k] || '').trim()).length;
+  const guestStatus = (g) => guestDone(g) ? '<span class="er-g-status done">✓ Ready — guest ticket will be issued</span>'
+    : `<span class="er-g-status">Details needed (${guestFilled(g)} of ${GUEST_FIELDS.length})</span>`;
+
   // One guest's details (+ any add-ons guests can join)
   function guestCard(x, k, free) {
     const { setup: s, eb } = current, incl = k < free;
-    const gAddons = s.addons.filter((a) => a.perGuest && R.itemAllowed(a, ME.tier));
+    const gAddons = s.addons.filter((a) => a.perGuest && (R.itemAllowed(a, ME.tier) || a.guestSolo));
     const f = (key, label, type, ph) => `<div class="field" data-field="g${k}-${key}"><label>${label} <span class="req">*</span></label>
       <input class="input" ${type ? `type="${type}"` : ''} data-er-g="${k}.${key}" value="${esc(x[key] || '')}" placeholder="${ph}"></div>`;
     return `<div class="er-guest-card ${incl ? 'incl' : ''}">
-      <div class="er-guest-h"><strong>${incl ? 'Your included guest' : `Guest ${k + 1}`}</strong>${incl ? `<span class="ar-price free">Included with ${ME.tier}</span>` : priceTag(s.guests)}</div>
-      ${incl ? `<div class="er-help warn" style="margin:0 0 10px">Bringing a guest? Their name, email, and phone are required.</div>` : ''}
-      ${f('name', 'Full name', '', 'Guest’s full name')}
+      <div class="er-guest-h"><strong>${incl ? `Free ${ME.tier} guest ticket` : `Guest ${k + 1}`}</strong>${incl ? `<span data-gstatus="${k}">${guestStatus(x)}</span>` : priceTag(s.guests)}</div>
+      ${incl ? `<div class="er-guest-req">Required to receive your free guest ticket — your guest's <strong>name, email, phone, and gender</strong>. The ticket isn't issued until all four are filled in.</div>` : ''}
+      <div class="field-row">${f('name', 'Full name', '', 'Guest’s full name')}
+        <div class="field" data-field="g${k}-gender"><label>Gender <span class="req">*</span></label><select class="select" data-er-g="${k}.gender">
+          <option value="">— select —</option>${GENDERS.map((o) => `<option ${x.gender === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div></div>
       <div class="field-row">${f('email', 'Email', 'email', 'guest@email.com')}${f('phone', 'Phone', 'tel', '(555) 555-5555')}</div>
+      ${gAddons.length ? `<div class="er-gaddons-h">Sessions for this guest <span>— guests can join add-ons you've selected${gAddons.some((a) => a.guestSolo) ? `, plus ${gAddons.filter((a) => a.guestSolo).map((a) => esc(a.name)).join(', ')} on their own` : ''}</span></div>` : ''}
       ${gAddons.map((a) => {
         const ai = incl && (a.included || []).includes(ME.tier);
-        return `<label class="er-check er-gaddon"><input type="checkbox" data-er-gaddon="${k}:${a.id}" ${(x.addons || []).includes(a.id) ? 'checked' : ''}>
-          <span>Add <strong>${esc(a.name)}</strong> for this guest</span>${ai ? '<span class="ar-price free">Included</span>' : priceTag(a)}</label>`;
+        const on = (x.addons || []).includes(a.id), can = R.guestCanAdd(a, current.draft.addons, x);
+        if (!can.ok && !on) return `<label class="er-check er-gaddon disabled"><input type="checkbox" disabled>
+          <span>${esc(a.name)}</span><span class="er-lock-pill">${can.why}</span></label>`;
+        return `<label class="er-check er-gaddon ${ai && !on ? 'er-needs-claim' : ''}"><input type="checkbox" data-er-gaddon="${k}:${a.id}" ${on ? 'checked' : ''} ${ai ? 'data-er-free' : ''}>
+          <span>Add <strong>${esc(a.name)}</strong> for this guest${ai ? ' — free with your guest ticket, but only if you select it' : a.guestSolo && !current.draft.addons.includes(a.id) ? ' — they can attend without you' : ''}</span>${ai ? claimTag(on) : priceTag(a)}</label>`;
       }).join('')}
     </div>`;
   }
@@ -199,7 +219,8 @@
     if (current.preview) html += `<div class="callout" style="margin-bottom:16px"><p><strong>Preview only.</strong> This event is for ${esc(s.tiers.join(' & '))} members — you can look through the form, but registering is disabled for your tier.</p></div>`;
     if (claimed) {
       html += `<div class="er-success">${checkIco}<div><strong>${current.justClaimed ? `You're registered! Your ${esc(t ? t.name : '')} ticket is confirmed.` : `You're registered — ${esc(t ? t.name : '')} ticket.`}</strong>
-        <div>${current.justClaimed ? 'You can close this window now — nothing else is required. ' : ''}Want sessions, the Hall of AIME, or to bring a guest? Choose them below and click <strong>Update registration</strong>.</div></div></div>`;
+        <div>${current.justClaimed ? 'You can close this window now — your ticket doesn\'t need anything else. ' : ''}Want sessions, the Hall of AIME, or to bring a guest? Choose them below and click <strong>Update registration</strong>.</div></div></div>
+        <div id="er-todo"></div>`;
     }
     if (eb && s.mode === 'ticketed') html += `<div class="er-eb-banner">Early-bird pricing ends ${esc(R.fmtDate(s.earlyBird.until))}</div>`;
 
@@ -225,10 +246,12 @@
     }
     if (s.addons.length) {
       html += `<div class="form-section-label">Add-ons &amp; sessions</div>` + s.addons.map((a) => {
-        const locked = !R.itemAllowed(a, ME.tier), included = (a.included || []).includes(ME.tier);
-        return `<label class="addon-row ${locked ? 'locked' : ''}"><input type="checkbox" data-er-addon="${a.id}" ${draft.addons.includes(a.id) ? 'checked' : ''} ${locked ? 'disabled' : ''}>
-          <span class="ar-main"><span class="ar-t" style="display:block">${esc(a.name)}</span><span class="ar-s" style="display:block">${esc(a.desc || '')}${included ? ` · <strong>Free for ${ME.tier} — select it to save your seat.</strong>` : ''}</span></span>
-          ${priceTag(a, { locked, included, label: included ? 'Included' : '' })}</label>`;
+        const womenLock = a.womenOnly && ME.gender !== 'Woman';
+        const locked = !R.itemAllowed(a, ME.tier) || womenLock, included = (a.included || []).includes(ME.tier) && !locked, on = draft.addons.includes(a.id);
+        return `<label class="addon-row ${locked ? 'locked' : ''} ${included && !on ? 'er-needs-claim' : ''}"><input type="checkbox" data-er-addon="${a.id}" ${on ? 'checked' : ''} ${locked ? 'disabled' : ''} ${included ? 'data-er-free' : ''}>
+          <span class="ar-main"><span class="ar-t" style="display:block">${esc(a.name)}</span><span class="ar-s" style="display:block">${esc(a.desc || '')}</span>
+            ${included ? `<span class="er-claim-note">Free with your ${ME.tier} membership — but your seat isn't reserved until you select it.</span>` : ''}</span>
+          ${included ? claimTag(on) : womenLock ? `<span class="er-lock-pill">Women only${a.guestSolo ? ' · guests can attend' : ''}</span>` : priceTag(a, { locked })}</label>`;
       }).join('');
     }
     if (s.guests && s.guests.on) {
@@ -237,9 +260,11 @@
       html += `<div class="form-section-label">Guests</div>
         <div class="er-guest-note">Guests need their <strong>own</strong> email and phone number — they can't be the same as yours.</div>`;
       if (free) {
-        html += `<label class="addon-row er-incl-guest"><input type="checkbox" data-er-incl-guest ${n ? 'checked' : ''}>
-            <span class="ar-main"><span class="ar-t" style="display:block">I'm bringing my included guest</span><span class="ar-s" style="display:block">Your ${ME.tier} ticket includes ${free} guest${free > 1 ? 's' : ''} at no cost.</span></span>
-            <span class="ar-price free">Included</span></label>`;
+        html += `<label class="addon-row er-incl-guest ${n ? '' : 'er-needs-claim'}"><input type="checkbox" data-er-incl-guest ${n ? 'checked' : ''}>
+            <span class="ar-main"><span class="ar-t" style="display:block">Claim your free ${ME.tier} guest ticket</span>
+              <span class="ar-s" style="display:block">Your ${ME.tier} membership includes ${free} guest ticket${free > 1 ? 's' : ''} at no cost.</span>
+              <span class="er-claim-note">To receive it, check this box and enter your guest's name, email, and phone below.</span></span>
+            ${n ? (guestDone(draft.guests[0]) ? claimTag(true, 'Ready · Free') : '<span class="er-claim-tag">Details needed</span>') : claimTag(false)}</label>`;
         html += draft.guests.slice(0, free).map((x, k) => guestCard(x, k, free)).join('');
         if (n >= free && G.max > free) html += `<div class="er-guests"><div><strong>Additional guests</strong><div class="er-help">Up to ${G.max - free} more · ${each}</div></div>
             <div class="qty-stepper"><button type="button" class="qty-btn" data-er-guest="-1" aria-label="Fewer guests">−</button><span class="qty-val">${extra}</span><button type="button" class="qty-btn" data-er-guest="1" aria-label="More guests">+</button></div></div>`;
@@ -263,6 +288,14 @@
     const { setup: s, draft, eb } = current;
     const p = R.priceOf(s, Object.assign({ tier: ME.tier }, draft), eb);
     const paid = current.paid || 0, due = Math.max(0, p.total - paid);
+    const free = R.freeGuests(s, ME.tier);
+    // An included guest without complete details isn't a ticket yet — say so in the summary
+    draft.guests.forEach((g, k) => {
+      if (k >= free || guestDone(g)) return;
+      const l = p.lines.find((x) => x.guest && (x.label === `Guest ${k + 1}` || x.label.startsWith(`Guest ${k + 1} — `)));
+      if (l) l.note = 'Details needed to issue';
+    });
+    renderTodo();
     const box = $('er-summary');
     if (s.mode === 'ticketed' || p.total) {
       box.hidden = false;
@@ -280,6 +313,24 @@
       : current.claimed ? 'Update registration' : current.editing ? 'Save changes' : s.mode === 'rsvp' ? 'RSVP' : 'Register';
   }
 
+  // Claimed (one-click) registrations: list the free extras the member hasn't claimed yet
+  function renderTodo() {
+    const box = $('er-todo'); if (!box || !current.claimed) return;
+    const { setup: s, draft } = current, items = [];
+    s.addons.filter((a) => (a.included || []).includes(ME.tier) && R.itemAllowed(a, ME.tier) && !draft.addons.includes(a.id))
+      .forEach((a) => items.push(`Your <strong>${esc(a.name)}</strong> seat — select it under Add-ons`));
+    const free = R.freeGuests(s, ME.tier);
+    for (let k = 0; k < free; k++) {
+      const g = draft.guests[k];
+      if (!g) items.push(`Your free ${ME.tier} <strong>guest ticket</strong> — check “Claim your free ${ME.tier} guest ticket” and add their details`);
+      else if (!guestDone(g)) items.push(`Your free ${ME.tier} <strong>guest ticket</strong> — finish your guest's name, email, phone, and gender`);
+      else s.addons.filter((a) => a.perGuest && (a.included || []).includes(ME.tier) && !(g.addons || []).includes(a.id))
+        .forEach((a) => items.push(`<strong>${esc(a.name)}</strong> for your guest — select it on their ticket`));
+    }
+    box.innerHTML = items.length ? `<div class="er-todo"><strong>Free with ${ME.tier} — not claimed yet:</strong><ul>${items.map((x) => `<li>${x}</li>`).join('')}</ul>
+      <span>These are only reserved once you select them and click <strong>Update registration</strong>.</span></div>` : '';
+  }
+
   function submit() {
     const { ev, setup: s, draft, eb } = current;
     const missing = [], problems = [], bad = [];
@@ -289,7 +340,8 @@
     const seenE = {}, seenP = {};
     draft.guests.forEach((g, k) => {
       const who = k < R.freeGuests(s, ME.tier) ? 'your included guest' : `guest ${k + 1}`;
-      ['name', 'email', 'phone'].forEach((key) => { if (!String(g[key] || '').trim()) { missing.push(`${who}’s ${key}`); bad.push(`g${k}-${key}`); } });
+      GUEST_FIELDS.forEach((key) => { if (!String(g[key] || '').trim()) { missing.push(`${who}’s ${key}`); bad.push(`g${k}-${key}`); } });
+      (g.addons || []).forEach((id) => { const a = s.addons.find((x) => x.id === id); const c = a && R.guestCanAdd(a, draft.addons, g); if (c && !c.ok) problems.push(`${who} can't join ${a.name} (${c.why.toLowerCase()})`); });
       const e = String(g.email || '').trim().toLowerCase(), ph = R.digits(g.phone);
       if (e && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { problems.push(`${who}’s email doesn't look right`); bad.push(`g${k}-email`); }
       if (e && e === meEmail) { problems.push(`${who}’s email can't be the same as yours`); bad.push(`g${k}-email`); }
@@ -322,10 +374,18 @@
   modal.addEventListener('change', (e) => {
     const t = e.target, d = current && current.draft; if (!d) return;
     if (t.name === 'er-ticket') d.ticket = t.value;
-    else if (t.dataset.erAddon) d.addons = t.checked ? [...new Set([...d.addons, t.dataset.erAddon])] : d.addons.filter((x) => x !== t.dataset.erAddon);
-    else if (t.dataset.erGaddon) {
+    else if (t.dataset.erAddon) {
+      d.addons = t.checked ? [...new Set([...d.addons, t.dataset.erAddon])] : d.addons.filter((x) => x !== t.dataset.erAddon);
+      pruneGuestAddons(d);
+      // re-render: "select to claim" → "Claimed", and which sessions guests can join
+      if (t.hasAttribute('data-er-free') || d.guests.length) { rerender(); return; }
+    }
+    else if (t.dataset.erG && t.dataset.erG.endsWith('.gender')) {
+      d.guests[+t.dataset.erG.split('.')[0]].gender = t.value; pruneGuestAddons(d); rerender(); return;
+    } else if (t.dataset.erGaddon) {
       const [k, id] = t.dataset.erGaddon.split(':'), g = d.guests[+k];
       g.addons = t.checked ? [...new Set([...(g.addons || []), id])] : (g.addons || []).filter((x) => x !== id);
+      if (t.hasAttribute('data-er-free')) { rerender(); return; }
     } else if (t.hasAttribute('data-er-incl-guest')) {
       if (t.checked && !d.guests.length) d.guests.push(blankGuest());
       if (!t.checked) d.guests = [];
@@ -336,7 +396,13 @@
   modal.addEventListener('input', (e) => {
     const t = e.target, d = current && current.draft; if (!d) return;
     if (t.dataset.erf && t.type !== 'checkbox') d.answers[t.dataset.erf] = t.value;
-    else if (t.dataset.erG) { const [k, key] = t.dataset.erG.split('.'); d.guests[+k][key] = t.value; if (key === 'name') renderSummary(); }
+    else if (t.dataset.erG) {
+      const [k, key] = t.dataset.erG.split('.'); d.guests[+k][key] = t.value;
+      const st = document.querySelector(`#er-body [data-gstatus="${k}"]`); if (st) st.innerHTML = guestStatus(d.guests[+k]);
+      const tog = document.querySelector('#er-body .er-incl-guest .er-claim-tag');
+      if (tog && +k === 0) tog.outerHTML = guestDone(d.guests[0]) ? claimTag(true, 'Ready · Free') : '<span class="er-claim-tag">Details needed</span>';
+      renderSummary();
+    }
     else if (t.hasAttribute('data-er-phone')) d.phone = t.value;
   });
   modal.addEventListener('click', (e) => {

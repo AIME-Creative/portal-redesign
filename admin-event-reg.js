@@ -53,7 +53,7 @@
     // normalise dates for <input type=date>
     draft.closes = toISO(draft.closes); draft.earlyBird.until = toISO(draft.earlyBird.until);
     draft.guests.included = draft.guests.included || {};
-    draft.addons.forEach((a) => { a.included = a.included || []; a.perGuest = !!a.perGuest; });
+    draft.addons.forEach((a) => { a.included = a.included || []; a.perGuest = !!a.perGuest; a.guestSolo = !!a.guestSolo; a.womenOnly = !!a.womenOnly; });
     const ticketed = draft.mode === 'ticketed', on = draft.enabled;
     const itemRow = (kind, it, k) => `<div class="ereg-item">
         <div class="ereg-item-grid">
@@ -65,7 +65,11 @@
         <div class="field"><label>Included free for</label>${chips(`${kind}.${k}.included`, R.TIERS)}<div class="er-help">${kind === 'tickets'
           ? 'e.g. FUSE General Admission is included with Premium and Elite; the VIP ticket with VIP.'
           : 'Free for these tiers — and for their included guests (e.g. Hall of AIME for VIP + their free guest). Members still select it.'}</div></div>
-        ${kind === 'addons' ? `<label class="ereg-req" style="margin:0 0 12px"><input type="checkbox" data-k="addons.${k}.perGuest" data-t="bool" ${it.perGuest ? 'checked' : ''}> Guests can be added to this too</label>` : ''}
+        ${kind === 'addons' ? `<div class="ereg-addon-rules">
+            <label class="ereg-req"><input type="checkbox" data-k="addons.${k}.perGuest" data-t="bool" ${it.perGuest ? 'checked' : ''}> Guests can join — if the member selects it too</label>
+            <label class="ereg-req"><input type="checkbox" data-k="addons.${k}.guestSolo" data-t="bool" ${it.guestSolo ? 'checked' : ''}> Guests can join without the member</label>
+            <label class="ereg-req"><input type="checkbox" data-k="addons.${k}.womenOnly" data-t="bool" ${it.womenOnly ? 'checked' : ''}> Women only <span class="er-dim">(checked against profile / guest gender)</span></label>
+          </div>` : ''}
         <div class="field"><label>Available to</label>${chips(`${kind}.${k}.tiers`, ['All', ...R.TIERS])}</div>
         <button type="button" class="link-muted ereg-del" data-del="${kind}.${k}">Remove</button>
       </div>`;
@@ -304,7 +308,7 @@
     $('reg-detail-body').innerHTML =
       kv('Email', esc(r.email)) + kv('Phone', esc(r.phone || '—')) + kv('Tier', tierBadge(r.tier)) +
       (s.mode === 'ticketed' ? kv('Ticket', t ? esc(t.name) : '—') + kv('Add-ons', (r.addons || []).map((id) => esc((s.addons.find((a) => a.id === id) || {}).name || id)).join(', ') || 'None') : kv('Type', 'RSVP')) +
-      kv('Guests', (r.guests || []).length ? r.guests.map((g, k) => `<div style="margin-bottom:6px"><strong>${esc(g.name)}</strong>${k < R.freeGuests(s, r.tier) ? ' <span class="badge badge-green">Included</span>' : ''}<br><span class="t-sub" style="display:inline">${esc(g.email || '—')} · ${esc(g.phone || '—')}${(g.addons || []).length ? ' · ' + g.addons.map((id) => esc((s.addons.find((a) => a.id === id) || {}).name || id)).join(', ') : ''}</span></div>`).join('') : 'None') +
+      kv('Guests', (r.guests || []).length ? r.guests.map((g, k) => `<div style="margin-bottom:6px"><strong>${esc(g.name)}</strong>${k < R.freeGuests(s, r.tier) ? ' <span class="badge badge-green">Included</span>' : ''}<br><span class="t-sub" style="display:inline">${esc(g.email || '—')} · ${esc(g.phone || '—')} · ${esc(g.gender || '—')}${(g.addons || []).length ? ' · ' + g.addons.map((id) => esc((s.addons.find((a) => a.id === id) || {}).name || id)).join(', ') : ''}</span></div>`).join('') : 'None') +
       s.fields.map((f) => { const v = (r.answers || {})[f.id]; return kv(f.type === 'checkbox' ? (f.label.length > 40 ? 'Marketing consent' : f.label) : f.label, f.type === 'checkbox' ? (v ? 'Yes' : 'No') : v ? esc(v) : '—'); }).join('') +
       (s.mode === 'ticketed' ? kv('Paid', `${money(r.total)}${r.earlyBird ? ' · early-bird' : ''}`) + `<div class="er-help" style="margin-top:8px">${p.lines.map((l) => `${esc(l.label)}: ${l.amount ? money(l.amount) : 'free'}${l.note ? ' (' + esc(l.note) + ')' : ''}`).join(' · ')}</div>` : '') +
       kv('Registered', new Date(r.at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }));
