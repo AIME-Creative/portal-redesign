@@ -344,17 +344,18 @@ window.HELP_ARTICLES = [
     body: `<p>Go to <strong>Settings → Profile</strong> (or click your name). Update your personal details and <strong>Company Information</strong>, then <strong>Save changes</strong>. Lender connection forms use these details, so keep your NMLS # and licensed states current.</p>` },
 
   { slug: 'loan-referrals', audience: 'member', title: 'Getting loan referrals from AIME', category: 'account',
-    summary: 'Join or leave loan referrals, and choose the referral types and states you get.',
+    summary: 'Opt in or out of loan referrals by email — matched to your role and licensed states.',
     tags: ['referral', 'referrals', 'loan referral', 'leads', 'broker', 'processor', 'states', 'opt in', 'opt out', 'elite', 'vip'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Open referral settings', attr: 'data-nav="settings" data-tab="notifications"' }],
     body: `
       <p>AIME emails loan referrals to <strong>Elite and VIP members</strong> who opt in. <strong>VIP members get each referral first</strong>; Elite members get it shortly after. Each referral includes the person's contact details so you can reach out directly.</p>
-      <ol class="kb-steps">
+      <ul>
         <li>The first time you sign in, we'll ask if you want referrals — choose <strong>Join referrals</strong> or <strong>No thanks</strong>.</li>
-        <li>Pick the <strong>referral types</strong> (Broker, Processor) and the <strong>states</strong> you want. States start with the licenses on your profile.</li>
-        <li>Change your mind any time in <strong>Settings → Notifications &amp; app → Loan referrals</strong> — join, change your types and states, or stop getting them.</li>
-      </ol>
+        <li><strong>Which referrals:</strong> processors get processor referrals; everyone else gets broker referrals. It's based on the <strong>Role type</strong> on your profile.</li>
+        <li><strong>Which states:</strong> the <strong>State licenses</strong> on your profile. Keep them current in <strong>Settings → Profile</strong>.</li>
+        <li>Opt in or out any time in <strong>Settings → Notifications &amp; app → Loan referrals</strong>.</li>
+      </ul>
       <div class="kb-tip"><strong>On Premium?</strong> Loan referrals are included with Elite and VIP. See <strong>Settings → Membership &amp; Billing</strong> to upgrade.</div>` },
 
   { slug: 'reset-password', audience: 'all', title: 'Changing your email or password', category: 'account',

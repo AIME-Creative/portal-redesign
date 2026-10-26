@@ -3,8 +3,9 @@
    ------------------------------------------------------------
    Sidebar → Communications → Loan referrals. Two tabs:
    - Send referral: the referral form. It's emailed to opted-in
-     members whose referral settings match its type (Broker /
-     Processor) and state — VIP members first, Elite members after
+     members whose role matches its type (Processor role → processor;
+     any other role → broker) and who are licensed in its state —
+     VIP members first, Elite members after
      a short delay. A live line under the form says how many of each.
    - Sent referrals: every referral sent, with how many VIP and
      Elite members it went to, and a preview of the email.
@@ -58,7 +59,7 @@
     const t = typeVal(), s = $('rf-state').value, el = $('rf-reach');
     if (!t || !s) { el.innerHTML = 'Choose a referral type and state to see who it goes to.'; return; }
     const a = audience(s, t);
-    el.innerHTML = `Goes to <strong>${a.vip} VIP member${a.vip === 1 ? '' : 's'}</strong> first, then <strong>${a.elite} Elite member${a.elite === 1 ? '' : 's'}</strong> after a short delay — opted-in ${t.toLowerCase()}s in ${s}.`;
+    el.innerHTML = `Goes to <strong>${a.vip} VIP member${a.vip === 1 ? '' : 's'}</strong> first, then <strong>${a.elite} Elite member${a.elite === 1 ? '' : 's'}</strong> after a short delay — opted-in ${t.toLowerCase()}s licensed in ${s}.`;
   }
   function submit() {
     const v = (id) => $(id).value.trim();
@@ -124,13 +125,13 @@
       .foot{font-size:12.5px;color:#6b7590;border-top:1px solid #eef1f7;padding:16px 26px}
     </style></head><body><div class="wrap"><div class="top">AMP <span>·</span> AIME Member Portal</div><div class="in">
       <p>Hi {first name},</p>
-      <p>A new <strong>${r.type.toLowerCase()} referral</strong> in <strong>${r.state}</strong> matches your referral settings. Reach out to ${esc(r.first)} directly.</p>
+      <p>A new <strong>${r.type.toLowerCase()} referral</strong> in <strong>${r.state}</strong> matches your role and licensed states. Reach out to ${esc(r.first)} directly.</p>
       <table>${row('Name', esc(r.first + ' ' + r.last))}${row('Email', esc(r.email))}${row('State', r.state)}${row('Language', esc(r.lang))}
         ${row('Loan program', esc(r.program))}${row('Loan amount', r.amount ? money(r.amount) : '')}${row('Facebook post', r.fb ? `<a href="#">${esc(r.fb)}</a>` : '')}</table>
       <div class="det"><strong>Loan details</strong><br>${esc(r.details)}</div>
       <a class="btn" href="#">Email ${esc(r.first)}</a>
       <p style="font-size:13px;color:#6b7590">— The AIME Membership Team</p></div>
-      <div class="foot">You're receiving this because you opted in to loan referrals for ${r.type.toLowerCase()}s in ${r.state}. Change your referral settings in AMP → Settings.<br>AIME · aimegroup.com</div></div></body></html>`;
+      <div class="foot">You're receiving this because you opted in to AIME loan referrals and you're a ${r.type.toLowerCase()} licensed in ${r.state}. Opt out any time in AMP → Settings → Notifications &amp; app.<br>AIME · aimegroup.com</div></div></body></html>`;
   }
   function open(id) {
     const r = referrals.find((x) => x.id === id); if (!r) return;

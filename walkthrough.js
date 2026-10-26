@@ -98,7 +98,7 @@
       body: 'Write back and send — the support team is notified. Replying to a resolved ticket reopens it.' },
 
     { sec: 9, target: '.notif-wrap .icon-btn', title: 'Notifications',
-      body: 'Replies to your requests, new partners, FUSE reminders, and new content show up here. Want them on your phone? Install the AMP app and turn on push notifications in Settings → Notifications &amp; app.' + (memberTier === 'VIP' || memberTier === 'Elite' ? ' Loan referrals by email are there too — join, change, or stop them any time.' : '') },
+      body: 'Replies to your requests, new partners, FUSE reminders, and new content show up here. Want them on your phone? Install the AMP app and turn on push notifications in Settings → Notifications &amp; app.' + (memberTier === 'VIP' || memberTier === 'Elite' ? ' Opt in or out of loan referrals by email there too.' : '') },
     { sec: 10, target: '#help-btn', mTarget: '.menu-btn', title: 'Help is always here',
       body: 'Open the Help Center, contact support, or replay this walkthrough any time from the ? menu.',
       mBody: 'Open Help Center from the menu any time — step-by-step guides, contact support, or replay this walkthrough.' },

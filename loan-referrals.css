@@ -2,16 +2,6 @@
    Loan referrals opt-in (loan-referrals.js) — member app
    ============================================================ */
 .lr-note { padding:10px 12px; border-radius:10px; background:var(--surface-alt); color:var(--ink-soft); font-size:13.5px; line-height:1.5; margin-bottom:4px; }
-.lr-types { display:grid; gap:10px; }
-.lr-type { display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border:1px solid var(--line); border-radius:12px; cursor:pointer; }
-.lr-type:has(input:checked) { border-color:var(--pink); background:#fdf2f7; }
-.lr-type input { width:18px; height:18px; margin-top:2px; accent-color:var(--pink); flex:0 0 auto; }
-.lr-type strong { display:block; font-size:14.5px; color:var(--ink); }
-.lr-type span span { display:block; font-size:13px; color:var(--ink-soft); margin-top:2px; }
-.lr-help { color:var(--muted); font-size:12.5px; margin:-4px 0 8px; }
-.lr-states { display:flex; flex-wrap:wrap; gap:8px; }
-.lr-state { display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:20px; font-size:13px; font-weight:700;
-  background:var(--navy); color:#fff; border:0; cursor:pointer; }
-.lr-state span { font-size:10px; opacity:.75; }
+.lr-help { color:var(--muted); font-size:12.5px; margin:8px 0 0; line-height:1.5; }
 .lr-summary { display:grid; gap:6px; font-size:14px; color:var(--ink); }
 .lr-summary .k { display:inline-block; width:64px; color:var(--muted); font-weight:600; font-size:13px; }
