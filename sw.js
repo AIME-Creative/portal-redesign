@@ -2,7 +2,9 @@
    AMP — service worker (installable app + push notifications)
    ------------------------------------------------------------
    - Network first, cache as fallback: always the latest portal
-     when online, and the last-seen pages when offline.
+     when online, and the last-seen pages when offline. Requests
+     revalidate with the server (cache: 'no-cache') so a switch
+     never mixes a fresh page with a stale browser-cached script.
    - push: shows the notification the server sends
      ({ title, body, url, tag }).
    - notificationclick: opens / focuses AMP at the item's page.
@@ -10,7 +12,7 @@
      show a notification itself (prototype test notifications).
    Registered by pwa.js. Bump CACHE when the shell changes.
    ============================================================ */
-const CACHE = 'amp-shell-v1';
+const CACHE = 'amp-shell-v2';
 const SHELL = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './assets/AMP-Logo.png', './assets/icons/icon-192.png', './assets/icons/icon-512.png'];
 
@@ -25,7 +27,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-  e.respondWith(fetch(req).then((res) => {
+  e.respondWith(fetch(req, { cache: 'no-cache' }).then((res) => {
     if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
     return res;
   }).catch(() => caches.match(req).then((hit) => hit || (req.mode === 'navigate' ? caches.match('./index.html') : undefined))));
