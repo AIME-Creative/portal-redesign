@@ -16,8 +16,10 @@
    showToast, navigate. Loaded after pwa.js (its settings tab).
    ============================================================ */
 (function () {
-  if (typeof userType === 'undefined' || userType !== 'member') return;
   const KEY = 'amp-referrals-v1';
+  // Prototype helper (any view): forget the choice so the one-time prompt shows again.
+  window.AmpReferrals = { reset() { try { localStorage.removeItem(KEY); } catch (e) { /* private mode */ } } };
+  if (typeof userType === 'undefined' || userType !== 'member') return;
   const $ = (id) => document.getElementById(id);
   const eligible = memberTier === 'VIP' || memberTier === 'Elite';
   const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
@@ -142,5 +144,5 @@
   });
 
   addSettings(); renderSettings();
-  window.AmpReferrals = { open, read, reset() { localStorage.removeItem(KEY); renderSettings(); } };
+  window.AmpReferrals = { open, read, reset() { try { localStorage.removeItem(KEY); } catch (e) { /* private mode */ } renderSettings(); setTimeout(() => maybePrompt(0), 500); } };
 })();
