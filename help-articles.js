@@ -109,7 +109,7 @@ window.HELP_ARTICLES = [
         <li><strong>Android:</strong> in Chrome, tap the menu <strong>⋮</strong>, then <strong>Install app</strong>.</li>
         <li><strong>Computer:</strong> in Chrome or Edge, click the install icon in the address bar. In Safari on a Mac, choose <strong>File → Add to Dock</strong>.</li>
       </ol>
-      <p>You may see a <strong>Get the AMP app</strong> card the first time you visit. Tap <strong>Not now</strong> or ✕ and it won't come back — you can always install from <strong>Settings → Notifications &amp; app</strong>.</p>
+      <p>On your phone or tablet, you may see a <strong>Get the AMP app</strong> card the first time you visit. Tap <strong>Not now</strong> or ✕ and it won't come back — you can always install from <strong>Settings → Notifications &amp; app</strong>.</p>
       <h3>Turn on notifications</h3>
       <ol class="kb-steps">
         <li>Go to <strong>Settings → Notifications &amp; app</strong> and tap <strong>Turn on notifications</strong>, then <strong>Allow</strong>.</li>

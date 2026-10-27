@@ -3,7 +3,8 @@
    ------------------------------------------------------------
    1. Registers sw.js (needs https or localhost — opening the
       prototype straight from a file skips it quietly).
-   2. Install banner: a small card offering "Get the AMP app".
+   2. Install banner (phones and tablets only — never on a computer):
+      a small card offering "Get the AMP app".
       - Chrome / Edge / Android: Install opens the browser's own
         install prompt.
       - iPhone / iPad (Safari) and others: "How to install" shows
@@ -32,6 +33,7 @@
   const ua = navigator.userAgent;
   const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const isAndroid = /Android/.test(ua);
+  const isMobile = isIOS || isAndroid || /Mobi|Tablet/i.test(ua);   // the install card is for phones / tablets only
   const standalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   const pushSupported = () => 'Notification' in window && 'serviceWorker' in navigator;
 
@@ -115,7 +117,7 @@
       return;
     }
     const s = read(KEY_INSTALL);
-    if (!s.dismissed && !s.installed) showBanner('install');
+    if (isMobile && !s.dismissed && !s.installed) showBanner('install');
   }
   setTimeout(maybeBanner, 2500);
 
