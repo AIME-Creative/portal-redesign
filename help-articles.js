@@ -113,7 +113,7 @@ window.HELP_ARTICLES = [
 
   { slug: 'install-app', audience: 'all', title: 'Install the AMP app and turn on notifications', category: 'start', popular: true,
     summary: 'Add AMP to your phone or computer, and get notified when something needs you.',
-    tags: ['app', 'install', 'home screen', 'download', 'push', 'notifications', 'iphone', 'android', 'alerts'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['app', 'install', 'home screen', 'download', 'push', 'notifications', 'iphone', 'android', 'alerts', 'bell', 'mark all read'], minutes: 2, updated: 'Oct 27, 2026', status: 'Published',
     views: 0, helpful: [0, 0], actions: [{ label: 'Open notification settings', attr: 'data-nav="settings" data-tab="notifications"' }],
     body: `
       <p>AMP can live on your home screen like any other app — no app store needed — and send you push notifications, even when it's closed.</p>
@@ -130,6 +130,7 @@ window.HELP_ARTICLES = [
         <li>Choose what you want to hear about — for example, replies to your requests, lender replies, event reminders, or announcements.</li>
         <li>Use <strong>Send a test notification</strong> to check it works.</li>
       </ol>
+      <p>Tap any notification — in the bell or on your phone — to go straight to what it's about: the exact request with the lender's reply, the new lender, resource, or event.</p>
       <div class="kb-tip"><strong>iPhone:</strong> Apple only allows notifications for apps on your Home Screen, so install AMP first. Notifications are set per device — turn them on on each phone or computer you use. The bell in the top bar always shows everything either way.</div>` },
 
   /* ---------------- Escalations ---------------- */

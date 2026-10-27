@@ -262,7 +262,8 @@
   }
   function openRequest(id) {
     const r = S.get(id); if (!r) return;
-    if (r.type === 'support') { window.AmpMyRequests && AmpMyRequests.preview(id); return; }   // own tickets: the member ticket view
+    if (r.type === 'support') { if (S.mine().some((x) => x.id === id)) window.AmpMyRequests && AmpMyRequests.preview(id); return; }   // own tickets: the member ticket view
+    if (!companyRequests().some((x) => x.id === id)) { navigate('partner-requests'); return; }   // only ever their own company's requests
     currentId = id; $('view-partner-request').dataset.id = id; renderDetail(); navigate('partner-request');
   }
 
@@ -310,4 +311,5 @@
   // Partners land on their Dashboard (unless a deep link says otherwise)
   const h = (location.hash || '').replace('#', '');
   if (!h || h === 'dashboard') navigate('partner');
+  else if (h.startsWith('partner-request=')) openRequest(h.slice(16));   // e.g. from a push notification
 })();

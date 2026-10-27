@@ -184,6 +184,14 @@
       </div>`;
   }
 
+  // The test notification opens the exact request it mentions, like a real one would.
+  function testNotification() {
+    let title = 'Test notification', body = 'United Wholesale Mortgage replied to your escalation ESC-1042.', url = './index.html#request=ESC-1042';
+    const con = partner && window.AmpPartnerPortal && AmpPartnerPortal.companyRequests().find((r) => r.type === 'connection');
+    if (partner) { body = con ? `${con.member} sent ${AmpPartnerPortal.COMPANY} a connection request (${con.id}).` : 'A member sent your company a request.'; url = con ? `./index.html#partner-request=${con.id}` : './index.html#partner-requests'; }
+    return notify(title, body, url);
+  }
+
   /* ---------- how-to modal ---------- */
   document.body.insertAdjacentHTML('beforeend', `
     <div class="modal-overlay" id="modal-pwa-how"><div class="modal" style="max-width:460px">
@@ -201,7 +209,7 @@
     else if (a === 'later') { write(b.dataset.kind === 'push' ? KEY_PUSH : KEY_INSTALL, { dismissed: true, at: new Date().toISOString() }); hideBanner(); showToast(b.dataset.kind === 'push' ? 'You can turn on notifications any time in Settings.' : 'You can install the app any time from Settings → Notifications & app.'); }
     else if (a === 'push-on') pushOn();
     else if (a === 'push-off') pushOff();
-    else if (a === 'test') notify('Test notification', partner ? 'A member sent United Wholesale Mortgage a connection request.' : 'United Wholesale Mortgage replied to your escalation ESC-1042.', './index.html#requests').then((ok) => showToast(ok ? 'Test notification sent.' : "Couldn't show a notification here."));
+    else if (a === 'test') testNotification().then((ok) => showToast(ok ? 'Test notification sent.' : "Couldn't show a notification here."));
   });
   document.addEventListener('change', (e) => {
     const k = e.target.dataset && e.target.dataset.pwaTopic; if (!k) return;
