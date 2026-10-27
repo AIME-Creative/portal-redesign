@@ -98,7 +98,7 @@
   function views(key, days) {
     const s = series(key, days);
     const sum = (t) => s.reduce((n, d) => n + d[t], 0);
-    const r = { Premium: sum('Premium'), Elite: sum('Elite'), VIP: sum('VIP'), daily: s.map((d) => d.Premium + d.Elite + d.VIP) };
+    const r = { Premium: sum('Premium'), Elite: sum('Elite'), VIP: sum('VIP') };
     r.total = r.Premium + r.Elite + r.VIP;
     r.unique = Math.round(r.total * 0.62);
     return r;

@@ -23,15 +23,13 @@ body.partner-mode #tab-billing { display:none !important; }
 
 /* ---------- dashboard ---------- */
 .pp-tiles { margin-bottom:20px; }
-.pp-tier { display:grid; grid-template-columns:70px 1fr 64px 92px; align-items:center; gap:10px; padding:7px 0; font-size:13.5px; }
+.pp-tier { display:grid; grid-template-columns:62px minmax(24px,1fr) auto minmax(36px,auto); align-items:center; gap:10px; padding:7px 0; font-size:13.5px; }   /* bar column gives way first in a narrow card */
 .pp-tier-l { font-weight:600; color:var(--ink); }
 .pp-bar { height:10px; border-radius:6px; background:var(--line-soft); overflow:hidden; }
 .pp-bar i { display:block; height:100%; border-radius:6px; background:var(--cyan); }
 .pp-tier-n { text-align:right; font-weight:700; color:var(--ink); }
 .pp-tier-p { text-align:right; color:var(--muted); font-size:12.5px; }
 .pp-tier.total { border-top:1px solid var(--line); margin-top:4px; padding-top:10px; font-weight:700; }
-.pp-spark { display:flex; align-items:flex-end; gap:2px; height:56px; margin-top:16px; }
-.pp-spark i { flex:1; background:linear-gradient(180deg,var(--cyan),#a9def0); border-radius:2px 2px 0 0; min-width:2px; }
 
 /* ---------- tables ---------- */
 .pp-table { width:100%; border-collapse:collapse; font-size:13.5px; }
@@ -48,7 +46,6 @@ body.partner-mode #tab-billing { display:none !important; }
 
 @media (max-width:860px){
   .pp-grid { grid-template-columns:1fr !important; }
-  .pp-tier { grid-template-columns:62px 1fr 52px 72px; }
 }
 
 /* date range sits beside the dashboard title */

@@ -131,10 +131,6 @@
     return P.TIERS.map((t) => `<div class="pp-tier"><span class="pp-tier-l">${t}</span><span class="pp-bar"><i style="width:${pct(v[t], v.total)}"></i></span><span class="pp-tier-n">${v[t].toLocaleString()}</span><span class="pp-tier-p">${pct(v[t], v.total)}</span></div>`).join('') +
       `<div class="pp-tier total"><span class="pp-tier-l">Total</span><span></span><span class="pp-tier-n">${v.total.toLocaleString()}</span><span class="pp-tier-p">${v.unique.toLocaleString()} unique</span></div>`;
   }
-  function spark(daily) {
-    const max = Math.max(1, ...daily);
-    return `<div class="pp-spark" title="Daily page views">${daily.map((n) => `<i style="height:${Math.max(4, (n / max) * 100)}%"></i>`).join('')}</div>`;
-  }
   function reqTable(rows, cols) {
     if (!rows.length) return '<div class="empty" style="padding:24px"><p>No requests in this period.</p></div>';
     return `<div class="table-scroll"><table class="pp-table"><thead><tr>${cols.map((c) => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => {
@@ -167,8 +163,8 @@
           ${tile('i-green', '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/>', count('changeae'), 'Change AE requests')}
         </div>
         <div class="grid pp-grid" style="grid-template-columns:1fr 1.7fr;align-items:start">
-          <div class="card card-pad"><div class="section-title"><h2 style="font-size:16px">Lender page views by member tier</h2></div>${tierRows(v)}${spark(v.daily)}
-            <p class="pp-dim" style="margin-top:8px">Views of your lender page in the Market's Lenders directory, by the viewing member's tier.</p></div>
+          <div class="card card-pad"><div class="section-title"><h2 style="font-size:16px">Lender page views by member tier</h2></div>${tierRows(v)}
+            <p class="pp-dim" style="margin-top:8px">Views of your lender page in AMP's Lenders directory, by the viewing member's tier.</p></div>
           <div class="card card-pad"><div class="section-title"><h2 style="font-size:16px">Recent requests</h2><a href="#" data-nav="partner-requests">View all <span>→</span></a></div>
             ${reqTable(recent.slice(0, 7), ['Type', 'Member', 'Submitted', 'Sent to', 'Status'])}</div>
         </div>`;
