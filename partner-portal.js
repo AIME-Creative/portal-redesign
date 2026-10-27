@@ -267,7 +267,7 @@
   function openRequest(id) {
     const r = S.get(id); if (!r) return;
     if (r.type === 'support') { window.AmpMyRequests && AmpMyRequests.preview(id); return; }   // own tickets: the member ticket view
-    currentId = id; renderDetail(); navigate('partner-request');
+    currentId = id; $('view-partner-request').dataset.id = id; renderDetail(); navigate('partner-request');
   }
 
   /* ---------- notifications (company requests) ---------- */

@@ -196,6 +196,7 @@
   // `preview` (used by the walkthrough) shows a request without marking its updates as read.
   function openDetail(id, preview) {
     currentId = id;
+    document.getElementById('view-request-detail').dataset.id = id;   // lets the review pill return here after a tier switch
     if (!preview) S.markSeen(id, 'member');
     renderDetail();
     navigate('request-detail');

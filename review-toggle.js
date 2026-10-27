@@ -3,7 +3,9 @@
    Self-contained: injects its own button + styles, no deps.
    On the member side it also switches who you're viewing as: a member
    tier (Premium / Elite / VIP) or a partner user (Lender / Vendor) →
-   localStorage amp-proto-tier, read by app.js.
+   localStorage amp-proto-tier, read by app.js. Switching reloads the
+   page and brings you back to the page you were on (open lender /
+   event / request / guide, Settings tab, scroll position).
    Included by both index.html and admin.html.
    ============================================================ */
 (function () {
@@ -60,11 +62,55 @@
       el.addEventListener('click', function (e) {
         var b = e.target.closest('[data-rev-tier]');
         if (!b || b.classList.contains('on')) return;
-        try { localStorage.setItem('amp-proto-tier', b.getAttribute('data-rev-tier')); } catch (err) { return; }
+        var to = b.getAttribute('data-rev-tier');
+        try { localStorage.setItem('amp-proto-tier', to); } catch (err) { return; }
+        rememberPage(to);
         location.reload();
       });
+      returnToPage();
     }
     document.body.appendChild(el);
+  }
+
+  /* ---------- stay on the same page across a tier switch ---------- */
+  var RETURN_KEY = 'amp-proto-return';
+  var PARTNER_VIEWS = ['partner', 'partner-requests', 'partner-request', 'lenders', 'market', 'resources', 'events', 'help',
+    'help-article', 'settings', 'support', 'lender-detail', 'market-detail', 'resource-detail', 'event-detail'];
+  var lastOpen = null;   // the lender / product / resource / event on screen: 'lender:3'
+  if (!isAdmin) ['Lender:lender', 'Vendor:market', 'Resource:resource', 'Event:event'].forEach(function (p) {
+    var name = 'open' + p.split(':')[0], type = p.split(':')[1], fn = window[name];
+    if (typeof fn !== 'function') return;
+    window[name] = function (i) { lastOpen = type + ':' + i; return fn.apply(this, arguments); };
+  });
+
+  function rememberPage(to) {
+    var view = document.querySelector('.view.active'), id = view ? view.id.replace('view-', '') : 'dashboard';
+    var partner = to === 'Lender' || to === 'Vendor', hash = id, extra = {};
+    if (/-detail$/.test(id) && id !== 'request-detail' && id !== 'hub-detail' && lastOpen) hash = 'open=' + lastOpen;
+    else if (id === 'hub-detail') hash = typeof currentHub !== 'undefined' && currentHub ? currentHub : 'dashboard';
+    else if (id === 'request-detail' && view.dataset.id) hash = 'request=' + view.dataset.id;
+    else if (id === 'help-article' && view.dataset.slug) hash = 'article=' + view.dataset.slug;
+    else if (id === 'partner-request' && view.dataset.id) { hash = 'partner-requests'; extra.partnerRequest = view.dataset.id; }
+    else if (id === 'settings') { var tab = document.querySelector('#settings-tabs .tab.active'); extra.tab = tab && tab.dataset.tab; }
+    // Members and partner users have different home and request pages.
+    if (partner) {
+      if (id === 'dashboard') hash = 'partner';
+      else if (id === 'requests' || id === 'request-detail') hash = 'partner-requests';
+      else if (PARTNER_VIEWS.indexOf(id) < 0) hash = 'partner';
+    } else if (id === 'partner') hash = 'dashboard';
+    else if (id === 'partner-requests' || id === 'partner-request') { hash = 'requests'; extra = {}; }
+    extra.scroll = id === hash || hash.indexOf('open=') === 0 || hash.indexOf('=') > 0 ? window.scrollY : 0;
+    try { sessionStorage.setItem(RETURN_KEY, JSON.stringify(extra)); } catch (err) { /* private mode */ }
+    history.replaceState(null, '', location.pathname + location.search + (hash === 'dashboard' ? '' : '#' + hash));
+  }
+  function returnToPage() {
+    var s = null;
+    try { s = JSON.parse(sessionStorage.getItem(RETURN_KEY)); sessionStorage.removeItem(RETURN_KEY); } catch (err) { /* private mode */ }
+    if (!s) return;
+    if (s.tab && typeof setTab === 'function') setTab(s.tab);
+    if (s.partnerRequest && window.AmpPartnerPortal) AmpPartnerPortal.openRequest(s.partnerRequest);
+    setTimeout(function () { if (s.scroll) window.scrollTo(0, s.scroll); }, 50);
+    history.replaceState(null, '', location.pathname + location.search);   // the hash was only for the reload
   }
 
   if (document.readyState === 'loading') {

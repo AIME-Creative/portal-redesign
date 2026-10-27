@@ -151,6 +151,7 @@
 
   function openArticle(slug) {
     const a = bySlug(slug); if (!a) return;
+    $('view-help-article').dataset.slug = slug;   // lets the review pill return here after a tier switch
     renderArticle(a);
     navigate('help-article');
   }
