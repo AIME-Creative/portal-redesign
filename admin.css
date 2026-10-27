@@ -304,3 +304,11 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .rf-type { display:inline-block; font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-soft); }
 .rf-table th.t-num, .rf-table td.t-num { text-align:right; font-variant-numeric:tabular-nums; }
 @media (max-width:860px) { .rf-foot .btn { width:100%; justify-content:center; } }
+
+/* Activity log (admin-activity.js) */
+.act-table { min-width:860px; }   /* scrolls sideways rather than squeezing the Action column */
+.act-table td:nth-child(3) { min-width:220px; }
+.act-table tbody tr { cursor:pointer; }
+.act-area { display:inline-block; font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; background:var(--surface-alt); border:1px solid var(--line); color:var(--ink-soft); white-space:nowrap; }
+.act-changes { font-size:13px; color:var(--ink-soft); max-width:360px; }
+.act-diff { margin-top:4px; font-size:13.5px; }

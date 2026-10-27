@@ -67,6 +67,20 @@ window.HELP_ARTICLES = [
       <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are free and created by AIME — ask us to add a teammate.</p>` },
 
   /* ---------------- Getting started ---------------- */
+  { slug: 'search', audience: 'member', title: 'Searching the portal', category: 'start',
+    summary: 'One search box for lenders, the Market, resources, events, documents, help guides, and your requests.',
+    tags: ['search', 'find', 'look up', 'locked', 'lock', 'vip only', 'upgrade', 'keyboard'], minutes: 1, updated: 'Oct 27, 2026', status: 'Published',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'Open Settings', attr: 'data-nav="settings"' }],
+    body: `
+      <p>The search box at the top of every page searches the whole portal. Results are grouped by type — <strong>Pages &amp; settings</strong>, <strong>Lenders</strong>, <strong>Market</strong>, <strong>Resources</strong>, <strong>Events</strong>, <strong>Hubs</strong>, <strong>Documents</strong>, <strong>My requests</strong>, and <strong>Help guides</strong> — with the best matches first.</p>
+      <ul>
+        <li>Search by name, product type (like FHA or DSCR), topic, request number, or what you want to do (like "billing").</li>
+        <li>Use <strong>↑ ↓</strong> and <strong>Enter</strong> to open a result, or click it. <strong>Show all</strong> lists every match in a group.</li>
+        <li>Press <strong>/</strong> from anywhere to jump to the search box.</li>
+      </ul>
+      <div class="kb-tip"><strong>Locked results:</strong> things that come with a higher membership — like the VIP and Ascent hubs — still show up, marked with a lock and the membership they need. They can't be opened on your current plan; <strong>Compare plans</strong> at the bottom of the results shows your options.</div>` },
+
   { slug: 'portal-tour', title: 'A quick tour of the member portal', category: 'start', popular: true,
     summary: 'What lives where — the sidebar, search, your escalation count, and quick actions.',
     tags: ['tour', 'walkthrough', 'navigation', 'new member', 'dashboard'], minutes: 2, updated: 'Oct 20, 2026', status: 'Published',
@@ -77,7 +91,7 @@ window.HELP_ARTICLES = [
       <ul>
         <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions.</li>
         <li><strong>The sidebar</strong> — Lenders, Market, Resources, Events, Documents, your learning hubs, and Support.</li>
-        <li><strong>Search</strong> (top of every page) — find any lender, vendor, resource, or event by name.</li>
+        <li><strong>Search</strong> (top of every page) — search everything: lenders, the Market, resources, events, hubs, documents, help guides, and your requests.</li>
         <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more (VIP is unlimited, so there's nothing to buy).</li>
         <li><strong>My Requests</strong> — every escalation, connection, AE change, and support ticket you've submitted, with its status.</li>
       </ul>

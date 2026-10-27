@@ -132,6 +132,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M16 11l2 2 4-4"/></svg>
         Team access
       </button>
+      <button class="nav-item" data-nav="activity">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Activity log
+      </button>
 
     </nav>
 
@@ -794,6 +798,26 @@
         </table></div></div>
       </section>
 
+      <!-- ============ ACTIVITY LOG (admin-activity.js) ============ -->
+      <section class="view" id="view-activity">
+        <div class="adm-section-head">
+          <div class="page-head" style="margin:0"><h1>Activity log</h1><p>Every change made in the admin console — who did it, when, and what changed. Entries can't be edited or deleted.</p></div>
+          <button class="btn btn-outline" id="act-export">Export CSV</button>
+        </div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="act-q" placeholder="Search by admin, action, member, or record…"></div>
+          <select class="select filter-select" id="act-who"></select>
+          <select class="select filter-select" id="act-area"></select>
+          <select class="select filter-select" id="act-range"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="0">All time</option></select>
+          <span class="spacer"></span><span class="count-note" id="act-count">—</span>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm act-table">
+          <thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Area</th><th>What changed</th></tr></thead>
+          <tbody id="act-tbody"></tbody>
+        </table></div></div>
+        <p class="flow-caption">Click an entry for the full detail — the record, every field's before and after value, any note, and where it was made from.</p>
+      </section>
+
       <!-- ============ CATEGORIES & TAGS ============ -->
       <section class="view" id="view-taxonomy">
         <div class="page-head"><h1>Categories &amp; tags</h1><p>Add and manage the categories and tags used across Lenders, Market, Resources, and Events. New entries become selectable when creating content.</p></div>
@@ -945,6 +969,18 @@
   </div>
 </div>
 
+<!-- ===================== ACTIVITY ENTRY (admin-activity.js) ===================== -->
+<div class="modal-overlay" id="modal-activity">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head">
+      <div><h2 id="act-m-title">Activity</h2><p id="act-m-sub"></p></div>
+      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="act-m-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline" data-close>Close</button></div>
+  </div>
+</div>
+
 <!-- ===================== REFERRAL EMAIL PREVIEW (admin-referrals.js) ===================== -->
 <div class="modal-overlay" id="modal-referral">
   <div class="modal" style="max-width:680px">
@@ -1045,6 +1081,7 @@
 <script src="admin-partners.js"></script>
 <script src="admin-emails.js"></script>
 <script src="admin-referrals.js"></script>
+<script src="admin-activity.js"></script>
 <script src="admin-memberships.js"></script>
 <!-- admin first-time walkthrough (separate from the member tour) -->
 <script src="tour-engine.js"></script>

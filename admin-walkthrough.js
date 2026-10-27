@@ -81,7 +81,10 @@
     { sec: 10, chapter: 'Events', page: 'registrations', target: () => [$('ereg-stats'), $('ereg-breakdowns')], mTarget: () => $('ereg-stats'), title: 'Event registrations',
       body: 'The <strong>Registrations</strong> tab on Events: pick an event to see totals, breakdowns by tier, ticket, add-on, and question, and every registration — with each guest\'s contact details and add-ons. Export to CSV.' },
     { sec: 11, page: 'team', target: '#view-team .table-wrap', title: 'Team access',
-      body: 'Super Admins add admins, change roles, and remove access. Replay this walkthrough any time from the <strong>?</strong> menu in the top bar.' },
+      body: 'Super Admins add admins, change roles, and remove access.' },
+    { sec: 11, page: 'activity', target: () => [document.querySelector('#view-activity .toolbar'), document.querySelector('#act-tbody tr')], title: 'Activity log',
+      mTarget: () => document.querySelector('#act-tbody tr'),
+      body: 'Every change made in admin — who did it, when, and what changed. Filter by admin, area, or date, click an entry for the before and after, or export it. Entries can\'t be edited or deleted. Replay this walkthrough any time from the <strong>?</strong> menu in the top bar.' },
   ];
 
   // Example requests for the queue chapter (prefer ones that show the most).
