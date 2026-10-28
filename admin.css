@@ -335,3 +335,18 @@ table.adm tbody tr:hover td { background:#fafbfe; }
   .ce-row .ce-name { grid-area:name; } .ce-row .ce-email { grid-area:email; } .ce-row .ce-remove { grid-area:rm; height:auto; }
   .ce-row + .ce-row { padding-top:8px; border-top:1px dashed var(--line); }
 }
+
+/* ---------- Collapsible sidebar groups (admin-nav-groups.js) ---------- */
+#sidebar .nav-group-head { display:flex; align-items:center; gap:8px; width:100%; text-align:left; cursor:pointer;
+  border-radius:8px; transition:color .15s; }
+#sidebar .nav-group-head:hover, #sidebar .nav-group-head:focus-visible { color:rgba(255,255,255,.85); }
+#sidebar .nav-group-head > span:first-child { flex:1; min-width:0; }
+#sidebar .ng-chev { width:15px; height:15px; flex:none; transition:transform .2s; }
+#sidebar .nav-group.collapsed .ng-chev { transform:rotate(-90deg); }
+#sidebar .ng-count { background:var(--pink); color:#fff; font-size:10.5px; font-weight:700; letter-spacing:0;
+  padding:1px 7px; border-radius:20px; line-height:1.5; }
+#sidebar .nav-group-body { display:grid; grid-template-rows:1fr; transition:grid-template-rows .22s ease; }
+#sidebar .nav-group.collapsed .nav-group-body { grid-template-rows:0fr; }
+/* Room on the left so the active item's pink marker isn't clipped. */
+#sidebar .nav-group-inner { min-height:0; overflow:hidden; margin-left:-16px; padding-left:16px; }
+#sidebar .nav-group.collapsed .nav-group-inner { visibility:hidden; transition:visibility 0s .22s; }

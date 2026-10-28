@@ -24,7 +24,7 @@
   // page: an admin view id ('dashboard', 'requests', 'members'…) or 'esc' / 'tkt' (example request detail).
   const ALL_STEPS = [
     { sec: 0, page: 'dashboard', target: '#sidebar .nav', mTarget: '.menu-btn', title: 'Your admin console',
-      body: 'Everything is grouped in the sidebar — Overview, Members, Billing, Communications, Content, Access, and Events.',
+      body: 'Everything is grouped in the sidebar — Overview, Members, Billing, Communications, Content, Access, and Events. Click a section heading\'s arrow to collapse or expand it.',
       mBody: 'Tap the menu for every admin section — Overview, Members, Billing, Communications, Content, Access, and Events.' },
     { sec: 1, page: 'dashboard', target: '#view-dashboard .stat-row.admin5', title: 'The dashboard',
       body: 'A snapshot of the whole portal: members, pending requests, partners, and revenue. Click any tile to jump to that section.' },
