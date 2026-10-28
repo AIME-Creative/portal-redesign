@@ -28,29 +28,44 @@
   const PRODUCT_COMPANY = { 'APS Verification Services': 'Advantage Partners Solutions' };
   const companyOf = (product) => PRODUCT_COMPANY[product] || product;
 
-  // Who each request type is sent to, per company (set on the lender / vendor listing)
+  // Who each request type is sent to, per company (set on the lender / vendor listing). Each type is a list —
+  // every contact on it gets the email. Lenders: escalations, connections, Change AE; vendors: connections.
+  // Often the same people handle all three. Admin edits are saved in localStorage amp-contacts-v1.
   const CONTACTS = {
     'United Wholesale Mortgage': {
-      escalation: { name: 'Dana Whitaker', email: 'escalations@uwm.com' },
-      connection: { name: 'Chris Morales', email: 'chris.morales@uwm.com' },
-      changeae:   { name: 'Tasha Greene',  email: 'tasha.greene@uwm.com' },
+      escalation: [{ name: 'Escalation desk', email: 'escalations@uwm.com' }, { name: 'Dana Whitaker', email: 'dana.whitaker@uwm.com' }],
+      connection: [{ name: 'Chris Morales', email: 'chris.morales@uwm.com' }],
+      changeae:   [{ name: 'Tasha Greene', email: 'tasha.greene@uwm.com' }, { name: 'Chris Morales', email: 'chris.morales@uwm.com' }],
     },
     'EPM': {
-      escalation: { name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' },
-      connection: { name: 'Marcus Lee', email: 'marcus.lee@epm.net' },
-      changeae:   { name: 'Rita Gomez', email: 'rita.gomez@epm.net' },
+      escalation: [{ name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' }],
+      connection: [{ name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' }],
+      changeae:   [{ name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' }],
     },
-    'Advantage Partners Solutions': { connection: { name: 'Morgan Reyes', email: 'morgan.reyes@advantagepartners.com' } },
+    'Newrez Wholesale': { escalation: [{ name: 'TPO escalations', email: 'tpo.escalations@newrez.com' }] },
+    'Newrez': { escalation: [{ name: 'TPO escalations', email: 'tpo.escalations@newrez.com' }] },
+    'Windsor Mortgage': { escalation: [{ name: 'Escalations', email: 'escalate@windsormortgage.com' }, { name: 'Priya Shah', email: 'priya.shah@windsormortgage.com' }] },
+    'Advantage Partners Solutions': { connection: [{ name: 'Morgan Reyes', email: 'morgan.reyes@advantagepartners.com' }] },
   };
+  const CONTACTS_KEY = 'amp-contacts-v1';
+  const saved = () => { try { return JSON.parse(localStorage.getItem(CONTACTS_KEY)) || {}; } catch (e) { return {}; } };
+  const copy = (list) => list.map((x) => ({ name: x.name, email: x.email }));
   function contacts(company, kind) {
-    const c = CONTACTS[company] || {}, d = slug(company).slice(0, 14) || 'partner';
-    if (kind === 'vendor') return { connection: c.connection || { name: `${company} Partnerships`, email: `partnerships@${d}.com` } };
+    const c = Object.assign({}, CONTACTS[company] || {}, saved()[company] || {}), d = slug(company).slice(0, 14) || 'partner';
+    const pick = (t, name, email) => copy(c[t] && c[t].length ? c[t] : [{ name, email }]);
+    if (kind === 'vendor') return { connection: pick('connection', `${company} Partnerships`, `partnerships@${d}.com`) };
     return {
-      escalation: c.escalation || { name: 'Escalation desk', email: `escalations@${d}.com` },
-      connection: c.connection || { name: 'Broker partner team', email: `partners@${d}.com` },
-      changeae: c.changeae || { name: 'AE support', email: `aesupport@${d}.com` },
+      escalation: pick('escalation', 'Escalation desk', `escalations@${d}.com`),
+      connection: pick('connection', 'Broker partner team', `partners@${d}.com`),
+      changeae: pick('changeae', 'AE support', `aesupport@${d}.com`),
     };
   }
+  function setContacts(company, lists) {
+    const all = saved(); all[company] = lists;
+    try { localStorage.setItem(CONTACTS_KEY, JSON.stringify(all)); } catch (e) { /* in-memory */ }
+  }
+  // "Name — email" lines, or just the email when the contact has no name.
+  const contactLabel = (x) => (x.name ? `${x.name} — ${x.email}` : x.email);
 
   // Member details shown to partners on requests (production: the member profile)
   const MEMBERS = {
@@ -105,7 +120,7 @@
   }
 
   window.AmpPartners = {
-    TIERS, companyOf, contacts, member, views,
+    TIERS, companyOf, contacts, setContacts, contactLabel, member, views,
     users: () => users.slice(),
     addUser(u) { const id = 'PU-' + (Math.max(100, ...users.map((x) => +x.id.slice(3))) + 1); users.unshift(Object.assign({ id, status: 'Invited', lastLogin: '—' }, u)); save(); return id; },
     updateUser(id, patch) { const u = users.find((x) => x.id === id); if (u) { Object.assign(u, patch); save(); } },

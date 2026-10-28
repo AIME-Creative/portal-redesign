@@ -108,8 +108,11 @@
       (isLender ? r.partner === COMPANY && !(r.fields || {}).Vendor : !!(r.fields || {}).Vendor && P.companyOf(r.partner) === COMPANY));
   }
   const ownTickets = () => S.all().filter((r) => r.type === 'support' && r.email === U.email);
-  const sentTo = (r) => { const c = contact[r.type] || contact.connection; return c ? `${c.name} — ${c.email}` : '—'; };
-  const sentToCell = (r) => { const c = contact[r.type] || contact.connection; return c ? `${esc(c.name)}<div class="pp-dim">${esc(c.email)}</div>` : '—'; };
+  // Every contact on the listing for that request type gets the email.
+  const sentList = (r) => contact[r.type] || contact.connection || [];
+  const sentTo = (r) => sentList(r).map(P.contactLabel).join(', ') || '—';
+  const sentToCell = (r) => { const l = sentList(r); if (!l.length) return '—';
+    return `${esc(l[0].name || l[0].email)}<div class="pp-dim">${l.length > 1 ? `+ ${l.length - 1} more` : esc(l[0].email)}</div>`; };
   const needsYou = (r) => r.type === 'escalation' && r.status === 'Received';
   const memberOf = (r) => P.member(r.email);
   const product = (r) => (r.fields || {}).Vendor || r.partner;
@@ -140,7 +143,7 @@
         Member: `<strong>${esc(r.member)}</strong><div class="pp-dim">${esc(r.email)} · ${esc(m.phone)}</div>`,
         Product: esc(product(r)),
         Submitted: fmt.date(r.createdAt),
-        'Sent to': `<span class="pp-dim">${esc(sentTo(r))}</span>`,
+        'Sent to': `<span class="pp-dim">${esc(sentList(r).map((x) => x.name || x.email).join(', '))}</span>`,
         Status: statusBadge(r.status) + (r.followUp && r.followUp.status === 'open' ? ' <span class="rq-flag amber">Follow-up</span>' : ''),
       };
       return `<tr data-partner-open="${r.id}">${cols.map((c) => `<td>${cells[c]}</td>`).join('')}</tr>`;
@@ -255,7 +258,7 @@
             ${kv('Name', esc(r.member))}${kv('Email', `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`)}${kv('Phone', esc(m.phone))}${kv('NMLS #', esc(m.nmls))}
             ${kv('Company', esc(m.company))}${kv('Licensed in', esc((m.licensed || []).join(', ') || '—'))}${kv('AIME tier', esc(r.tier))}</div>
           <div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Submitted details</h3>${fields || '<p class="pp-dim">—</p>'}</div>
-          <div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Sent to</h3><p style="margin:0;font-size:14px">${esc(sentTo(r))}</p>
+          <div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Sent to</h3>${sentList(r).map((x) => `<p style="margin:0 0 2px;font-size:14px">${esc(P.contactLabel(x))}</p>`).join('')}
             <p class="pp-dim" style="margin:6px 0 0">Set on your company listing — email ${LISTING_EMAIL} to change it.</p></div>
         </div>
       </div>`;

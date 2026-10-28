@@ -2,7 +2,7 @@
    Lender-facing escalation pages (prototype)
    ------------------------------------------------------------
    Lenders never log in to AMP. They get the escalation by email
-   at their existing escalation inbox and can respond either way:
+   by every escalation contact on the lender listing and can respond either way:
      • reply to the email (reply address is unique per escalation)
      • click "We're on it" / "Resolved" → lender-respond.html
    lender-email.html  — preview of that email (+ simulate a reply)

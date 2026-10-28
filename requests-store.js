@@ -29,14 +29,11 @@
   };
   const TEAM = ['AIME Team', 'Jordan Blake', 'Sofia Marin', 'Wes Carter'];
 
-  // Where each lender's escalations are emailed. Lenders never log in: they reply to that
-  // email or click a one-click status link in it. Admin-editable per lender in production.
+  // Fallback escalation inboxes when partner-store.js isn't loaded. Lenders never log in: they reply to
+  // the email or click a one-click status link in it. The real lists are on the lender listing (partner-store.js).
   const LENDER_CONTACTS = {
-    'United Wholesale Mortgage': { inbox: 'escalations@uwm.com', backup: 'Dana Whitaker — escalation desk lead' },
-    'EPM':                       { inbox: 'wholesale.escalations@epm.net', backup: 'Marcus Lee — wholesale ops' },
-    'Newrez Wholesale':          { inbox: 'tpo.escalations@newrez.com', backup: '' },
-    'Newrez':                    { inbox: 'tpo.escalations@newrez.com', backup: '' },
-    'Windsor Mortgage':          { inbox: 'escalate@windsormortgage.com', backup: 'Priya Shah — VP operations' },
+    'United Wholesale Mortgage': 'escalations@uwm.com', 'EPM': 'wholesale.escalations@epm.net',
+    'Newrez Wholesale': 'tpo.escalations@newrez.com', 'Newrez': 'tpo.escalations@newrez.com', 'Windsor Mortgage': 'escalate@windsormortgage.com',
   };
   const REMINDER_DAYS = 2;   // business days without a lender response before an automatic reminder
 
@@ -328,8 +325,12 @@
       r.memberSeenAt = nowISO();
       changed();
     },
-    lenderContact: (name) => Object.assign({ reminderDays: REMINDER_DAYS },
-      LENDER_CONTACTS[name] || { inbox: 'escalations@' + name.toLowerCase().split(' ')[0].replace(/[^a-z]/g, '') + '.com', backup: '' }),
+    // Escalation contacts come from the lender listing (partner-store.js) — every one gets the email.
+    lenderContact(name) {
+      const list = window.AmpPartners ? AmpPartners.contacts(name, 'lender').escalation
+        : [{ name: '', email: LENDER_CONTACTS[name] || 'escalations@' + name.toLowerCase().split(' ')[0].replace(/[^a-z]/g, '') + '.com' }];
+      return { reminderDays: REMINDER_DAYS, contacts: list, inbox: list.map((x) => x.email).join(', ') };
+    },
     replyAddress: (id) => id.toLowerCase() + '@replies.aimegroup.com',
     // Prototype link. Production: a signed, expiring token scoped to this one escalation.
     lenderLink: (id, action) => `lender-respond.html?esc=${encodeURIComponent(id)}&action=${action}`,

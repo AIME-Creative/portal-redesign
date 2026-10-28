@@ -5,7 +5,7 @@
    its own "seen" memory (localStorage amp-admin-tour-v1), and it
    never leaves the admin console. Hands-on chapter:
      • Working the request queue — switches to Requests, then opens
-       an example escalation (status, follow-up, lender contact,
+       an example escalation (status, follow-up, lender contacts,
        composer) and support ticket (conversation, assignee)
    Starts automatically the first time an admin opens the console;
    replay from the ? menu in the top bar ([data-admin-tour-start])
@@ -40,8 +40,8 @@
       body: 'Escalations move Received → Responded → Resolved. The member sees every change on their side.' },
     { sec: 2, chapter: 'Request queue', page: 'esc', target: () => document.querySelector('#arq-detail-body .rq-fu.pending') || detailCard('Follow-ups')(), title: 'Member follow-ups',
       body: "When a member clicks <strong>Request a follow-up</strong>, it's flagged here. Contact the lender's escalation desk, then post what you hear back." },
-    { sec: 2, chapter: 'Request queue', page: 'esc', target: detailCard('Lender contact'), title: 'Lender contact',
-      body: "Where this escalation was emailed. Lenders reply to the email or click a status button — no login. Preview the email or send a reminder from here." },
+    { sec: 2, chapter: 'Request queue', page: 'esc', target: detailCard('Lender contacts'), title: 'Lender contacts',
+      body: "Everyone this escalation was emailed to — the escalation contacts on the lender listing. Any of them can reply or click a status button — no login. Preview the email or send a reminder from here." },
     { sec: 2, chapter: 'Request queue', page: 'esc', target: '#arq-detail-body .rq-composer', title: 'Update the member',
       body: 'Post a follow-up update, log a lender response that came by phone, or add an <strong>internal note</strong> — notes are never shown to the member.' },
     { sec: 2, chapter: 'Request queue', page: 'tkt', target: '#arq-detail-body .rq-thread', title: 'Support tickets are conversations',
@@ -68,7 +68,7 @@
       mTarget: () => [document.querySelector('#rf-form .rf-radios').closest('.field'), $('rf-first').closest('.field')], title: 'Loan referrals',
       body: 'Fill in a referral and submit it — opted-in VIP members matching its type and state get it first, Elite members after a short delay. <strong>Sent referrals</strong> lists each one with how many VIP and Elite members it went to, and a preview of the email.' },
     { sec: 6, page: 'notifications', target: navItems('featured', 'lenders', 'market', 'resources', 'events', 'hubs', 'documents', 'taxonomy'), mTarget: '.menu-btn', title: 'Content',
-      body: 'Everything members browse — Featured on their home screen, lenders, Market products, resources, events, hubs, documents, and the categories behind them.' },
+      body: 'Everything members browse — Featured on their home screen, lenders, Market products, resources, events, hubs, documents, and the categories behind them. Each lender and Market listing also sets <strong>who requests go to</strong> — one or more people for escalations, connections, and Change AE.' },
     { sec: 7, page: 'help', target: () => [$('kb-stats'), document.querySelector('#view-help .toolbar')], title: 'Help Center',
       body: "Write and edit the guides members see in their Help Center, see searches that found nothing, and how the member walkthrough is doing." },
     { sec: 8, page: 'reports', target: () => [$('report-tabs'), document.querySelector('#view-reports .toolbar')], title: 'Reports',

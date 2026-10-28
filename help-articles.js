@@ -41,17 +41,17 @@ window.HELP_ARTICLES = [
       <p>Use the date range at the top right to change the period. The <strong>Recent requests</strong> list links to the full details.</p>` },
   { slug: 'partner-requests', audience: 'partner', title: 'Requests sent to your company', category: 'partners', popular: true,
     summary: 'See full member details, reply to escalations, and email members who asked to connect.',
-    tags: ['requests', 'escalation', 'reply', 'connection', 'change ae', 'email', 'sent to', 'partner', 'product'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['requests', 'escalation', 'reply', 'connection', 'change ae', 'email', 'sent to', 'partner', 'product'], minutes: 2, updated: 'Oct 28, 2026', status: 'Published',
     views: 0, helpful: [0, 0], actions: [{ label: 'Open requests', attr: 'data-nav="partner-requests"' }],
     body: `
-      <p><strong>Requests</strong> lists every request AIME members send to your company, with the member's name, email, phone, NMLS #, company, and licensed states — the same details as the email — and <strong>Sent to</strong>, the person at your company it was emailed to.</p>
+      <p><strong>Requests</strong> lists every request AIME members send to your company, with the member's name, email, phone, NMLS #, company, and licensed states — the same details as the email — and <strong>Sent to</strong>, the people at your company it was emailed to. A request can go to more than one person — everyone listed gets the email.</p>
       <ol class="kb-steps">
         <li><strong>Escalations (lenders):</strong> open one and use <strong>Reply</strong> to update the member, or <strong>Reply &amp; mark resolved</strong> when it's fixed. You can also simply reply to the escalation email — no login needed — and it lands here.</li>
         <li><strong>Connections and Change AE:</strong> use <strong>Email &lt;member&gt;</strong> to start an email to them directly. Each vendor connection shows the <strong>Product</strong> the member asked about.</li>
         <li><strong>More than one product (vendors):</strong> Requests adds a <strong>Product</strong> column and a product filter so you can see which product each connection is for.</li>
         <li>A <strong>Member requested follow-up</strong> flag means the member asked AIME to check in — the AIME team may contact you too.</li>
       </ol>
-      <div class="kb-tip">Who requests are sent to is set on your company listing. To change it, email AIME (lenders@aimegroup.com or vendors@aimegroup.com).</div>` },
+      <div class="kb-tip">Who requests are sent to is set on your company listing — escalations, connections, and Change AE can each go to one or more people. To change it, email AIME (lenders@aimegroup.com or vendors@aimegroup.com).</div>` },
   { slug: 'partner-access', audience: 'partner', title: 'What partner accounts can and can’t do', category: 'partners',
     summary: 'View-only Lenders and Market, full resources and events, support, and listing changes.',
     tags: ['access', 'view only', 'partner account', 'listing', 'change listing', 'market', 'lenders', 'resources', 'team', 'teammate', 'add user', 'permissions'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',

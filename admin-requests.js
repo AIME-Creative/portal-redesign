@@ -191,13 +191,12 @@
       const sends = r.activity.filter((a) => a.kind === 'delivered' || a.kind === 'lender-reminder');
       const lastSend = sends.length ? sends.sort(S.byAt)[sends.length - 1].at : r.createdAt;
       const heard = r.activity.some((a) => a.kind === 'lender-response');
-      lenderCard = `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Lender contact</h3>
-        <div class="rq-kv"><span class="k">Escalation inbox</span><span class="v">${esc(c.inbox)}</span></div>
-        ${c.backup ? `<div class="rq-kv"><span class="k">Backup</span><span class="v">${esc(c.backup)}</span></div>` : ''}
+      lenderCard = `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Lender contacts</h3>
+        <div class="rq-kv"><span class="k">Sent to</span><span class="v">${c.contacts.map((x) => `<div style="margin-bottom:4px">${x.name ? `${esc(x.name)}<div class="t-sub">${esc(x.email)}</div>` : esc(x.email)}</div>`).join('')}</span></div>
         <div class="rq-kv"><span class="k">Reply address</span><span class="v rq-ref">${esc(S.replyAddress(r.id))}</span></div>
         <div class="rq-kv"><span class="k">Emails sent</span><span class="v">${sends.length} · last ${fmt.ago(lastSend).toLowerCase()}</span></div>
         <div class="rq-kv"><span class="k">Lender has responded</span><span class="v">${heard ? 'Yes' : 'Not yet'}</span></div>
-        <p class="t-sub" style="margin:10px 0 12px">Lenders reply to the email or click a status button — no login. Auto-reminder after ${c.reminderDays} business days without a response.</p>
+        <p class="t-sub" style="margin:10px 0 12px">Every escalation contact on the lender listing gets the email. Any of them can reply or click a status button — no login. Auto-reminder after ${c.reminderDays} business days without a response.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <a class="btn btn-outline btn-sm" href="lender-email.html?esc=${encodeURIComponent(r.id)}" target="_blank" rel="noopener">Preview email</a>
           ${r.status !== 'Resolved' ? '<button class="btn btn-outline btn-sm" data-arq-remind>Send reminder now</button>' : ''}

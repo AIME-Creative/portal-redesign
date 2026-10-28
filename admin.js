@@ -1184,16 +1184,10 @@ function openEdit(ref){
       <div class="field-row">${field('Lender name', l.name)}${field('Logo abbreviation', l.short)}</div>
       <div class="field-row">${selectField('Tier', ['Gold','Silver','Bronze'], l.tier)}${selectField('Status', ['Active','Draft'], l.status)}</div>
       ${tagPicker('Product types', taxonomies.lenderProducts, l.products)}
-      <div class="form-section-label" style="margin-top:18px">Escalation contact</div>
-      <p style="color:var(--muted);font-size:12.5px;margin:-4px 0 12px">Escalations are emailed here. The lender replies to the email or clicks a status button — no portal login.</p>
-      ${(() => { const c = (window.AmpRequests && !isNew) ? AmpRequests.lenderContact(l.name) : { inbox:'', backup:'', reminderDays:2 };
-        return `<div class="field-row">${field('Escalation inbox', c.inbox, 'placeholder="escalations@lender.com"')}${field('Backup contact', c.backup, 'placeholder="Name — role (optional)"')}</div>
-      ${selectField('Remind the lender if no response after', ['1 business day','2 business days','3 business days','Never'], c.reminderDays + ' business days')}`; })()}
-      <div class="form-section-label" style="margin-top:18px">Who other requests go to</div>
-      <p style="color:var(--muted);font-size:12.5px;margin:-4px 0 12px">Shown to this lender's partner users as "Sent to". Partner users themselves are managed under Members → Partner users.</p>
-      ${(() => { const c = window.AmpPartners && !isNew ? AmpPartners.contacts(l.name, 'lender') : { connection:{name:'',email:''}, changeae:{name:'',email:''} };
-        return `<div class="field-row">${field('Connections — name', c.connection.name)}${field('Connections — email', c.connection.email)}</div>
-      <div class="field-row">${field('Change AE — name', c.changeae.name)}${field('Change AE — email', c.changeae.email)}</div>`; })()}`;
+      <div class="form-section-label" style="margin-top:18px">Who requests go to</div>
+      ${window.AmpContactsEditor ? AmpContactsEditor.html(l.name, 'lender', isNew) : ''}
+      ${(() => { const c = (window.AmpRequests && !isNew) ? AmpRequests.lenderContact(l.name) : { reminderDays:2 };
+        return selectField('Remind escalation contacts if no response after', ['1 business day','2 business days','3 business days','Never'], c.reminderDays + ' business days'); })()}`;
   } else if(type==='vendor'){
     const v = isNew ? {name:'',short:'',cat:taxonomies.vendorCategories[0],offer:'',status:'Active'} : vendors[idx];
     title = isNew ? 'Add product' : 'Edit product'; sub = isNew?'Add a product to the Market.':v.name;
@@ -1201,11 +1195,11 @@ function openEdit(ref){
       <div class="field-row">${field('Product name', v.name)}${field('Logo abbreviation', v.short)}</div>
       <div class="field-row">${selectField('Category', taxonomies.vendorCategories, v.cat)}${selectField('Status', ['Active','Draft'], v.status)}</div>
       ${field('Member offer', v.offer)}
-      ${(() => { const co = window.AmpPartners && !isNew ? AmpPartners.companyOf(v.name) : ''; const c = window.AmpPartners && co ? AmpPartners.contacts(co, 'vendor').connection : { name:'', email:'' };
+      ${(() => { const co = window.AmpPartners && !isNew ? AmpPartners.companyOf(v.name) : '';
         return `${field('Company', co, 'placeholder="Company that owns this product"')}
-      <div class="hint" style="margin:-6px 0 14px">Products with the same company roll up together — on that company's partner dashboard and in the Partner users company list.</div>
-      <div class="form-section-label">Connection requests go to</div>
-      <div class="field-row">${field('Name', c.name)}${field('Email', c.email)}</div>`; })()}`;
+      <div class="hint" style="margin:-6px 0 14px">Products with the same company roll up together — on that company's partner dashboard, in the Partner users company list, and for who connection requests go to.</div>
+      <div class="form-section-label">Who connection requests go to</div>
+      ${window.AmpContactsEditor ? AmpContactsEditor.html(co || v.name, 'vendor', isNew) : ''}`; })()}`;
   } else if(type==='resource'){
     const r = isNew ? {title:'',type:taxonomies.resourceTypes[0],dur:'',collection:'—',topic:'—',status:'Draft'} : resources[idx];
     title = isNew ? 'Add resource' : 'Edit resource'; sub = isNew?'Add a webinar, podcast, training, recording, or certification.':r.title;
@@ -1418,8 +1412,9 @@ document.addEventListener('click', e=>{
   if((m = t.closest('[data-feat-remove]')))  { e.preventDefault(); removeFeatured(+m.dataset.featRemove); return; }
   if((m = t.closest('[data-tax-add]')))      { e.preventDefault(); addTax(m.dataset.taxAdd); return; }
   if((m = t.closest('[data-tax-remove]')))   { e.preventDefault(); const [k,v]=m.dataset.taxRemove.split('::'); removeTax(k,v); return; }
-  if((m = t.closest('[data-close]')))        { e.preventDefault(); closeModals(); return; }
+  // Toast first: a Save button with both data-toast and data-close confirms, then closes.
   if((m = t.closest('[data-toast]')))        { e.preventDefault(); if(m.hasAttribute('data-close')) closeModals(); showToast(m.dataset.toast); return; }
+  if((m = t.closest('[data-close]')))        { e.preventDefault(); closeModals(); return; }
   if((m = t.closest('[data-action]')))       { e.preventDefault(); if(m.dataset.action==='menu') $('sidebar')?.classList.toggle('open'); return; }
   if((m = t.closest('[data-nav]')))          { e.preventDefault(); navigate(m.dataset.nav); return; }
 });
