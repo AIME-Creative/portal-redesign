@@ -89,7 +89,7 @@ window.HELP_ARTICLES = [
     body: `
       <p>The portal is built around a few places you'll use every week:</p>
       <ul>
-        <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions and <strong>Trending</strong>: the most-viewed pages across the portal in the last 7 days. Click one to open it.</li>
+        <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions and <strong>Trending</strong>: the most-viewed pages across the portal — last 7 days by default; pick 30 or 90 days, year to date, or all time. Click one to open it.</li>
         <li><strong>The sidebar</strong> — Lenders, Market, Resources, Events, Documents, your learning hubs, and Support.</li>
         <li><strong>Search</strong> (top of every page) — search everything: lenders, the Market, resources, events, hubs, documents, help guides, and your requests.</li>
         <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more (VIP is unlimited, so there's nothing to buy).</li>
