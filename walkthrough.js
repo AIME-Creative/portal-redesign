@@ -44,6 +44,8 @@
       mTarget: '#view-dashboard .stat-row', title: "What's new this week",
       body: 'Home opens with what was added this week. The tiles under the banner count the new lenders, Market deals, resources, and events — click one to jump straight there.',
       mBody: 'These tiles count what was added this week — new lenders, Market deals, resources, and events. Tap one to jump straight there.' },
+    { sec: 1, page: 'dashboard', target: '#trending-card', title: 'Trending',
+      body: "The most-viewed pages across the portal in the last 7 days — lenders, Market products, resources, events, and hubs. Click one to open it." },
     { sec: 2, page: 'dashboard', target: '.qa-grid', title: 'Quick actions',
       body: "The things members do most — change your AE, connect with a lender, or escalate a loan. Let's escalate a loan together: click Next to open the form." },
 
