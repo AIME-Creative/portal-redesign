@@ -58,7 +58,7 @@
   ];
 
   /* ---------- live entries: any confirmed admin action ---------- */
-  const NOT_ACTIONS = /^(fill in|enter a|pick|choose|can't|couldn't|no |nothing|exported|copied|preview|loading|searching)/i;
+  const NOT_ACTIONS = /^(fill in|enter a|pick|choose|can't|couldn't|no |nothing|exported|copied|preview|loading|searching|opened)/i;
   const origToast = window.showToast;
   window.showToast = function (msg) {
     origToast.apply(this, arguments);

@@ -31,6 +31,7 @@
 .sr-n { width:34px; text-align:right; font-weight:700; color:var(--ink); }
 .sr-pct { width:42px; text-align:right; color:var(--muted); }
 .sub-show { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); font-weight:600; }
+.sub-show[hidden] { display:none; }
 
 /* ---------- member: cancel form ---------- */
 .cancel-reasons { display:grid; gap:8px; margin:6px 0 4px; }

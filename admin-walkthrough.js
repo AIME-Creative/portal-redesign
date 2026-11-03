@@ -72,7 +72,7 @@
     { sec: 7, page: 'help', target: () => [$('kb-stats'), document.querySelector('#view-help .toolbar')], title: 'Help Center',
       body: "Write and edit the guides members see in their Help Center, see searches that found nothing, and how the member walkthrough is doing." },
     { sec: 8, page: 'reports', target: () => [$('report-tabs'), document.querySelector('#view-reports .toolbar')], title: 'Reports',
-      body: 'Escalation, connection, and Change AE reports for partners, plus subscription upgrades, downgrades, and cancellations with reasons. Export any of them to CSV.' },
+      body: 'Escalation, connection, and Change AE reports for partners, subscription upgrades, downgrades, and cancellations with reasons, and <strong>Retention</strong> — how many cancelling members the team saved, who saved them, and returning members. Export any of them to CSV.' },
     { sec: 9, page: 'analytics', target: () => document.querySelector('#view-analytics .an-tabs'), title: 'Analytics',
       body: 'One place for the numbers, in four tabs: <strong>Overview</strong> (revenue and growth), <strong>Engagement</strong> (what members use), <strong>Member journeys</strong> (sign-up to active), and <strong>Vendor clickthroughs</strong> per Market product.' },
     { sec: 10, page: 'events', target: () => document.querySelector('#events-tbody [data-ereg]'), mTarget: () => document.querySelector('#events-tbody [data-ereg]')?.closest('tr'), title: 'Event registration',

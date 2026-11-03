@@ -350,3 +350,48 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 /* Room on the left so the active item's pink marker isn't clipped. */
 #sidebar .nav-group-inner { min-height:0; overflow:hidden; margin-left:-16px; padding-left:16px; }
 #sidebar .nav-group.collapsed .nav-group-inner { visibility:hidden; transition:visibility 0s .22s; }
+
+/* ---------- Reports → Retention (admin-retention.js) ---------- */
+.ret-note { display:flex; gap:12px; align-items:flex-start; background:#f1f8fb; border:1px solid #cfe9f1; border-radius:12px; padding:12px 14px; margin-bottom:18px; }
+.ret-note svg { width:18px; height:18px; flex:none; color:var(--cyan-600); margin-top:1px; }
+.ret-note p { margin:0; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+.ret-tiles { display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+.ret-tile { text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:var(--radius); padding:14px 16px; transition:.15s; }
+.ret-tile[data-ret-outcome] { cursor:pointer; }
+.ret-tile[data-ret-outcome]:hover { border-color:#c9cfdd; }
+.ret-tile:not([data-ret-outcome]) { cursor:default; }
+.ret-tile.active { border-color:var(--navy); box-shadow:0 0 0 3px rgba(2,22,73,.08); }
+.ret-tile .rt-lbl { font-size:12.5px; font-weight:600; color:var(--muted); }
+.ret-tile .rt-val { font-size:24px; font-weight:800; color:var(--ink); margin:2px 0; }
+.ret-tile .rt-sub { font-size:12px; color:var(--muted); line-height:1.35; }
+.ret-tile.saved .rt-val { color:#15803d; }
+.ret-tile.returning .rt-val { color:var(--cyan-600); }
+.ret-cards { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:18px; margin-bottom:22px; }
+.ret-mini th, .ret-mini td { padding:9px 10px; font-size:13px; }
+.ret-reason { display:flex; align-items:center; gap:10px; padding:6px 0; font-size:13px; }
+.ret-reason .rr-lbl { flex:1.4; min-width:0; color:var(--ink-soft); }
+.ret-reason .rr-bar { flex:1; height:8px; border-radius:6px; background:var(--line); overflow:hidden; }
+.ret-reason .rr-bar i { display:block; height:100%; background:#16a34a; border-radius:6px; }
+.ret-reason .rr-n { width:52px; text-align:right; color:var(--muted); font-size:12.5px; white-space:nowrap; }
+.ret-row { cursor:pointer; }
+.ret-pill { display:inline-block; font-size:12px; font-weight:700; padding:2px 10px; border-radius:20px; white-space:nowrap; }
+.ret-pill.open { background:#fff4e0; color:#a16207; }
+.ret-pill.saved { background:#e7f7ee; color:#15803d; }
+.ret-pill.lost { background:#f1f2f6; color:#5b6478; }
+/* Returning members look clearly different from saves: a win-back after the cancellation went through. */
+.ret-pill.returning { background:#e6f6fa; color:var(--cyan-600); border:1px dashed var(--cyan); }
+.ret-timeline { list-style:none; margin:0; padding:0 0 0 18px; border-left:2px solid var(--line); }
+.ret-timeline li { position:relative; padding:0 0 14px 6px; }
+.ret-timeline li::before { content:""; position:absolute; left:-25px; top:4px; width:12px; height:12px; border-radius:50%; background:#fff; border:2px solid #c9cfdd; }
+.ret-timeline li.req::before { border-color:#d97706; }
+.ret-timeline li.contact::before { border-color:var(--navy); }
+.ret-timeline li.saved::before { border-color:#16a34a; background:#16a34a; }
+.ret-timeline li.lost::before { border-color:#9aa3b5; background:#9aa3b5; }
+.ret-timeline li.returning::before { border-color:var(--cyan); background:var(--cyan); }
+.ret-timeline .rt-t { font-weight:600; font-size:13.5px; color:var(--ink); }
+.ret-timeline .rt-s { font-size:13px; color:var(--ink-soft); margin-top:1px; }
+.ret-timeline .rt-at { font-size:12px; color:var(--muted); margin-top:2px; }
+@media (max-width:1100px) { .ret-tiles { grid-template-columns:repeat(3, minmax(0,1fr)); } .ret-cards { grid-template-columns:1fr; } }
+@media (max-width:600px) { .ret-tiles { grid-template-columns:1fr 1fr; } }
+/* Retention table scrolls sideways instead of squeezing its columns. */
+#ret-report:not([hidden]) ~ .table-wrap #report-table { min-width:980px; }
