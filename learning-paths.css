@@ -17,6 +17,9 @@
 .lp-next svg { width:14px; height:14px; flex:none; margin-top:1px; }
 .lp-next.done { color:#15803d; }
 .lp-next.locked { color:#6a4ce0; }
+.lp-card.lp-gated { cursor:not-allowed; background:var(--surface-alt); box-shadow:none; }
+.lp-card.lp-gated:hover { transform:none; border-color:var(--line); box-shadow:none; }
+.lp-card.lp-gated .lp-title, .lp-card.lp-gated .lp-desc { color:var(--muted); }
 
 /* Side panel */
 .lp-drawer-wrap { position:fixed; inset:0; z-index:10001; }   /* above the install card and review pill */

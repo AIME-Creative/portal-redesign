@@ -269,7 +269,7 @@
         </div>
         <div class="toolbar"><span class="count-note" id="lender-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Lender</th><th>Tier</th><th>Products</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Lender</th><th>Tier</th><th>Products</th><th>Who can see</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="lenders-tbody"></tbody>
         </table></div></div>
       </section>
@@ -282,7 +282,7 @@
         </div>
         <div class="toolbar"><span class="count-note" id="vendor-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Product</th><th>Company</th><th>Category</th><th>Member offer</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Product</th><th>Company</th><th>Category</th><th>Member offer</th><th>Who can see</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="vendors-tbody"></tbody>
         </table></div></div>
       </section>
@@ -295,7 +295,7 @@
         </div>
         <div class="toolbar"><span class="count-note" id="resource-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Title</th><th>Type</th><th>Hub</th><th>Duration</th><th>Published</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Title</th><th>Type</th><th>Hub</th><th>Who can see</th><th>Duration</th><th>Published</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="resources-tbody"></tbody>
         </table></div></div>
       </section>
@@ -309,7 +309,7 @@
         </div>
         <div class="toolbar"><span class="count-note" id="event-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Event</th><th>Date</th><th>Type</th><th>Hub</th><th>Registration</th><th>Registrations</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Event</th><th>Date</th><th>Type</th><th>Hub</th><th>Who can see</th><th>Registration</th><th>Registrations</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="events-tbody"></tbody>
         </table></div></div>
       </section>
@@ -330,7 +330,7 @@
         </div>
         <div class="toolbar"><span class="count-note" id="hub-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Hub</th><th>Layout</th><th>Access</th><th>Content</th><th>Documents</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Hub</th><th>Layout</th><th>Who can see</th><th>Content</th><th>Documents</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="hubs-tbody"></tbody>
         </table></div></div>
         <p class="hint" style="margin-top:12px">Add content to a hub from <a href="#" data-nav="resources">Resources</a>, <a href="#" data-nav="events">Events</a>, and <a href="#" data-nav="documents">Documents</a> — set each item’s hub/collection to the one you want.</p>
@@ -351,23 +351,21 @@
         </div>
         <div class="toolbar"><span class="count-note" id="document-count">—</span></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Document</th><th>Source</th><th>Access</th><th>Added</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Document</th><th>Source</th><th>Who can see</th><th>Added</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="documents-tbody"></tbody>
         </table></div></div>
       </section>
 
       <!-- ============ REQUESTS (rendered by admin-requests.js) ============ -->
       <section class="view" id="view-requests">
-        <div class="page-head"><h1>Requests &amp; submissions</h1><p>Track every member escalation, connection, AE change, and support ticket — plus bug reports.</p></div>
+        <div class="page-head"><h1>Requests &amp; submissions</h1><p>Track every member escalation, connection, AE change, and support ticket. Bug reports arrive as support tickets.</p></div>
         <div class="stat-row admin4" id="arq-stats"></div>
         <div class="filters" id="request-filters">
           <button class="chip active" data-filter="all">All</button>
           <button class="chip" data-filter="escalation">Escalations</button>
-          <button class="chip" data-filter="support">Support tickets</button>
+          <button class="chip" data-filter="support">Support &amp; bugs</button>
           <button class="chip" data-filter="connection">Connections</button>
           <button class="chip" data-filter="changeae">Change AE</button>
-          <button class="chip" data-filter="bug">Bugs</button>
-          <button class="chip attn" id="arq-attn" title="Follow-ups requested and tickets waiting on a reply">⚑ Needs attention</button>
         </div>
         <div class="toolbar">
           <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="arq-search" placeholder="Search by member, lender, ref, or subject…"></div>
@@ -924,7 +922,7 @@
   </div>
 </div>
 
-<!-- ===================== EMAIL PREVIEW (admin-emails.js) ===================== -->
+<!-- ===================== EMAIL PREVIEW — shared lightbox (admin-email-preview.js) ===================== -->
 <div class="modal-overlay" id="modal-email">
   <div class="modal" style="max-width:680px">
     <div class="modal-head">
@@ -932,7 +930,7 @@
       <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body" id="em-m-body"></div>
-    <div class="modal-foot"><span class="hint" id="em-m-note" style="margin:0 auto 0 0;max-width:360px"></span><button class="btn btn-outline" data-close>Close</button><button class="btn btn-primary" id="em-m-resend">Resend</button></div>
+    <div class="modal-foot"><span class="hint" id="em-m-note" style="margin:0 auto 0 0;max-width:360px"></span><button class="btn btn-outline" data-close>Close</button><button class="btn btn-primary" id="em-m-primary">Resend</button></div>
   </div>
 </div>
 
@@ -944,18 +942,6 @@
       <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body" id="act-m-body"></div>
-    <div class="modal-foot"><button class="btn btn-outline" data-close>Close</button></div>
-  </div>
-</div>
-
-<!-- ===================== REFERRAL EMAIL PREVIEW (admin-referrals.js) ===================== -->
-<div class="modal-overlay" id="modal-referral">
-  <div class="modal" style="max-width:680px">
-    <div class="modal-head">
-      <div><h2 id="rf-m-title">Referral</h2><p id="rf-m-sub"></p></div>
-      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    </div>
-    <div class="modal-body" id="rf-m-body"></div>
     <div class="modal-foot"><button class="btn btn-outline" data-close>Close</button></div>
   </div>
 </div>
@@ -1008,22 +994,6 @@
   </div>
 </div>
 
-<!-- ===================== REQUEST DETAIL MODAL ===================== -->
-<div class="modal-overlay" id="modal-request">
-  <div class="modal">
-    <div class="modal-head">
-      <div><h2 id="req-title">Request</h2><p id="req-sub"></p></div>
-      <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    </div>
-    <div class="modal-body" id="req-body"></div>
-    <div class="modal-foot">
-      <button class="btn btn-outline" data-close>Close</button>
-      <button class="btn btn-navy" data-toast="Marked as in progress." data-close>Mark in progress</button>
-      <button class="btn btn-primary" data-toast="Request resolved." data-close>Resolve</button>
-    </div>
-  </div>
-</div>
-
 <!-- Toast -->
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
 
@@ -1041,6 +1011,7 @@
 <script src="event-registration-store.js"></script>
 <script src="subscriptions-shared.js"></script>
 <script src="admin.js"></script>
+<script src="admin-email-preview.js"></script>
 <script src="admin-requests.js"></script>
 <script src="help-articles.js"></script>
 <script src="admin-help.js"></script>

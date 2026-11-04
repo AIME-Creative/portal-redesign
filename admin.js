@@ -7,6 +7,7 @@
 const taxonomies = {
   lenderProducts:    ["Conventional","FHA","VA","Jumbo","Non-QM","USDA","DSCR","Bank Stmt","Renovation","Reverse","Fix & Flip","Bridge"],
   vendorCategories:  ["Core Partner","Origination","Coaching","Marketing"],
+  vendorProducts:    ["AI","Ads","Analytics","Appraisal","Automation","CRM","Coaching","Credit","Data","Funnels","Guidelines","LOS","Leads","Ops","POS","Presentations","Savings","Scaling","Scenarios","Staffing","VOE","Verifications"],
   resourceTypes:     ["Podcast","Webinar","Training","Recording","Certification"],
   resourceTopics:    ["AI & Technology","AIME Community","Business Planning & Numbers","Compliance & Ethics","Leadership & Team","Leads & Referral Partners","Loan Products & Guidelines","Marketing & Personal Brand","Mindset & Habits","Operations & Systems","Sales & Conversations"],
   learningGoals:     ["Start Here","Get More Business","Close More Loans","Run & Grow Your Business","Mindset & Habits"],
@@ -16,6 +17,7 @@ const taxonomies = {
 const taxMeta = {
   lenderProducts:   { label:"Lender product types", sub:"Shown on lender cards and the product filter." },
   vendorCategories: { label:"Market categories",     sub:"Group products in the Market." },
+  vendorProducts:   { label:"Market product types",  sub:"Tags on Market products (Credit, CRM, POS…) — shown on the card and product page." },
   resourceTypes:    { label:"Resource types",        sub:"Used to label and filter resources." },
   resourceTopics:   { label:"Vault topics", sub:"Topics members filter The Vault's full library by." },
   learningGoals:    { label:"Vault goals",  sub:"The goal tiles at the top of The Vault (Start Here, Get More Business…)." },
@@ -26,35 +28,35 @@ const taxMeta = {
 /* ---------- Content data ---------- */
 const tierBadge = { Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze" };
 const lenders = [
-  { name:"United Wholesale Mortgage", short:"UWM", tier:"Gold", color:"#0b1f5b", products:["Conventional","FHA","VA","Jumbo","Non-QM"], status:"Active" },
-  { name:"EPM", short:"EPM", tier:"Gold", color:"#1b7a4a", products:["Conventional","FHA","VA","USDA"], status:"Active" },
-  { name:"Windsor Mortgage", short:"WM", tier:"Gold", color:"#3a3a3a", products:["Non-QM","Jumbo","DSCR"], status:"Active" },
-  { name:"Newrez Wholesale", short:"NRZ", tier:"Gold", color:"#e0463c", products:["Conventional","FHA","VA","Renovation"], status:"Active" },
-  { name:"Newfi Wholesale", short:"NF", tier:"Silver", color:"#163a85", products:["Non-QM","Bank Stmt","DSCR"], status:"Active" },
-  { name:"Cake Mortgage", short:"CK", tier:"Silver", color:"#2bb673", products:["Conventional","Non-QM","Jumbo"], status:"Active" },
-  { name:"eLEND", short:"eL", tier:"Silver", color:"#1893b1", products:["FHA","VA","USDA","Conventional"], status:"Active" },
-  { name:"RCN Capital", short:"RCN", tier:"Bronze", color:"#0b2a5b", products:["Fix & Flip","Bridge","DSCR"], status:"Active" },
-  { name:"Kind Lending", short:"KIND", tier:"Gold", color:"#e0982a", products:["Conventional","FHA","VA","Non-QM"], status:"Active" },
-  { name:"Rocket Pro TPO", short:"RKT", tier:"Gold", color:"#d6322e", products:["Conventional","FHA","VA","Jumbo"], status:"Active" },
-  { name:"Plaza Home Mortgage", short:"PLZ", tier:"Silver", color:"#15467e", products:["Renovation","Jumbo","Reverse","FHA"], status:"Active" },
-  { name:"Home Point", short:"HP", tier:"Silver", color:"#1b9d6b", products:["Conventional","FHA","USDA"], status:"Draft" },
-  { name:"Angel Oak", short:"AO", tier:"Bronze", color:"#3a6b35", products:["Non-QM","Bank Stmt","DSCR"], status:"Active" },
-  { name:"Quontic Wholesale", short:"QW", tier:"Bronze", color:"#0b2a5b", products:["Non-QM","Bank Stmt"], status:"Active" },
+  { name:"United Wholesale Mortgage", bio:"The #1 wholesale lender in the nation, delivering state-of-the-art technology and unrivaled client service to independent mortgage brokers.", short:"UWM", tier:"Gold", color:"#0b1f5b", products:["Conventional","FHA","VA","Jumbo","Non-QM"], status:"Active" },
+  { name:"EPM", bio:"Equity Prime Mortgage \u2014 fast, broker-first wholesale lending with a full product menu and dedicated support.", short:"EPM", tier:"Gold", color:"#1b7a4a", products:["Conventional","FHA","VA","USDA"], status:"Active" },
+  { name:"Windsor Mortgage", bio:"Boutique wholesale lender specializing in non-QM and jumbo products for independent brokers.", short:"WM", tier:"Gold", color:"#3a3a3a", products:["Non-QM","Jumbo","DSCR"], status:"Active" },
+  { name:"Newrez Wholesale", bio:"A leading national lender offering a broad product suite and dedicated broker support.", short:"NRZ", tier:"Gold", color:"#e0463c", products:["Conventional","FHA","VA","Renovation"], status:"Active" },
+  { name:"Newfi Wholesale", bio:"Tech-forward lender focused on non-QM, bank-statement, and investor loans.", short:"NF", tier:"Silver", color:"#163a85", products:["Non-QM","Bank Stmt","DSCR"], status:"Active" },
+  { name:"Cake Mortgage", bio:"Modern wholesale platform with a slice of every product and a fast, digital process.", short:"CK", tier:"Silver", color:"#2bb673", products:["Conventional","Non-QM","Jumbo"], status:"Active" },
+  { name:"eLEND", bio:"Diverse loan options with a focus on first-time and government-backed buyers.", short:"eL", tier:"Silver", color:"#1893b1", products:["FHA","VA","USDA","Conventional"], status:"Active" },
+  { name:"RCN Capital", bio:"Nationwide private lender for real estate investors \u2014 fix & flip, bridge, and rental loans.", short:"RCN", tier:"Bronze", color:"#0b2a5b", products:["Fix & Flip","Bridge","DSCR"], status:"Active" },
+  { name:"Kind Lending", bio:"Broker-focused lender with a kind, tech-enabled experience across agency and non-QM products.", short:"KIND", tier:"Gold", color:"#e0982a", products:["Conventional","FHA","VA","Non-QM"], status:"Active" },
+  { name:"Rocket Pro TPO", bio:"High-volume national lender with deep technology and marketing support for brokers.", short:"RKT", tier:"Gold", color:"#d6322e", products:["Conventional","FHA","VA","Jumbo"], status:"Active" },
+  { name:"Plaza Home Mortgage", bio:"Full-service wholesale lender known for its renovation and reverse mortgage programs.", short:"PLZ", tier:"Silver", color:"#15467e", products:["Renovation","Jumbo","Reverse","FHA"], status:"Active" },
+  { name:"Home Point", bio:"Relationship-driven lender with competitive agency and government pricing.", short:"HP", tier:"Silver", color:"#1b9d6b", products:["Conventional","FHA","USDA"], status:"Draft" },
+  { name:"Angel Oak", bio:"The leader in non-QM lending \u2014 bank statement, DSCR, and asset-qualifier loans.", short:"AO", tier:"Bronze", color:"#3a6b35", products:["Non-QM","Bank Stmt","DSCR"], status:"Active" },
+  { name:"Quontic Wholesale", bio:"Digital bank offering common-sense non-QM and bank-statement loans.", short:"QW", tier:"Bronze", color:"#0b2a5b", products:["Non-QM","Bank Stmt"], status:"Active" },
 ];
 const vendors = [
-  { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", offer:"Up to 20% off credit reports", status:"Active" },
-  { name:"APS Verification Services", short:"APS", cat:"Core Partner", offer:"Member pricing on VOE / VOI bundles", status:"Active" },
-  { name:"Ask Mindy", short:"AM", cat:"Origination", offer:"Free for AIME members", status:"Active" },
-  { name:"Waive Inspection Fee", short:"WIF", cat:"Origination", offer:"$0 inspection fee on qualifying loans", status:"Active" },
-  { name:"Arive", short:"AR", cat:"Origination", offer:"Member pricing on Pro plans", status:"Active" },
-  { name:"BrokerVA", short:"BVA", cat:"Coaching", offer:"Waived placement fee", status:"Active" },
-  { name:"Cotality", short:"CO", cat:"Origination", offer:"Member-only data bundles", status:"Active" },
-  { name:"Direct Authority AI", short:"DAi", cat:"Marketing", offer:"First month free", status:"Active" },
-  { name:"Lead Hackers", short:"LH", cat:"Marketing", offer:"Discounted setup", status:"Active" },
-  { name:"Xactus", short:"XAC", cat:"Core Partner", offer:"Member pricing on verifications", status:"Active" },
-  { name:"The CORE Training", short:"CORE", cat:"Coaching", offer:"Discounted enrollment", status:"Active" },
-  { name:"Mortgage Coach", short:"MC", cat:"Coaching", offer:"Free trial + member rate", status:"Draft" },
-  { name:"Surefire CRM", short:"SF", cat:"Marketing", offer:"Setup fee waived", status:"Active" },
+  { name:"Advantage Partners Solutions", bio:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit", "Verifications"], short:"APS", cat:"Core Partner", offer:"Up to 20% off credit reports", status:"Active" },
+  { name:"APS Verification Services", bio:"Employment, income, and asset verifications from Advantage Partners Solutions.", tags:["Verifications", "VOE"], short:"APS", cat:"Core Partner", offer:"Member pricing on VOE / VOI bundles", status:"Active" },
+  { name:"Ask Mindy", bio:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios", "Guidelines"], short:"AM", cat:"Origination", offer:"Free for AIME members", status:"Active" },
+  { name:"Waive Inspection Fee", bio:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal", "Savings"], short:"WIF", cat:"Origination", offer:"$0 inspection fee on qualifying loans", status:"Active" },
+  { name:"Arive", bio:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS", "LOS"], short:"AR", cat:"Origination", offer:"Member pricing on Pro plans", status:"Active" },
+  { name:"BrokerVA", bio:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing", "Ops"], short:"BVA", cat:"Coaching", offer:"Waived placement fee", status:"Active" },
+  { name:"Cotality", bio:"Property data, analytics, and verification tools for brokers.", tags:["Data", "Analytics"], short:"CO", cat:"Origination", offer:"Member-only data bundles", status:"Active" },
+  { name:"Direct Authority AI", bio:"AI-powered lead generation and nurture built for loan officers.", tags:["AI", "Leads"], short:"DAi", cat:"Marketing", offer:"First month free", status:"Active" },
+  { name:"Lead Hackers", bio:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads", "Funnels"], short:"LH", cat:"Marketing", offer:"Discounted setup", status:"Active" },
+  { name:"Xactus", bio:"Verification and credit solutions trusted across the mortgage industry.", tags:["Credit", "Verifications"], short:"XAC", cat:"Core Partner", offer:"Member pricing on verifications", status:"Active" },
+  { name:"The CORE Training", bio:"Performance coaching program for top-producing originators and teams.", tags:["Coaching", "Scaling"], short:"CORE", cat:"Coaching", offer:"Discounted enrollment", status:"Active" },
+  { name:"Mortgage Coach", bio:"Interactive presentations that help borrowers understand their options.", tags:["Presentations", "Coaching"], short:"MC", cat:"Coaching", offer:"Free trial + member rate", status:"Draft" },
+  { name:"Surefire CRM", bio:"Mortgage CRM and marketing automation built for loan officers.", tags:["CRM", "Automation"], short:"SF", cat:"Marketing", offer:"Setup fee waived", status:"Active" },
 ];
 // `collection` assigns a resource to a hub (— = none); `topic` is an optional topic tag.
 const resources = [
@@ -64,7 +66,7 @@ const resources = [
   { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", pub:"Jun 17, 2026", collection:"—", topic:"—", status:"Active" },
   { title:"Women's Mortgage Network Podcast", type:"Podcast", dur:"33 min", pub:"Jun 12, 2026", collection:"WMN", topic:"—", status:"Active" },
   { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"—", status:"Active" },
-  { title:"Ascent — Leading at Scale", type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
+  { title:"Ascent — Leading at Scale", access:["VIP"], type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
   { title:"Scaling Past $1M in Volume", type:"Training", dur:"47 min", pub:"Jun 2, 2026", collection:"—", topic:"Sales", status:"Active" },
   { title:"Using AI to Pre-Qualify Borrowers", type:"Webinar", dur:"39 min", pub:"Jun 5, 2026", collection:"—", topic:"AI Strategy", status:"Active" },
   { title:"Compliance Corner — Q3 Update", type:"Webinar", dur:"38 min", pub:"Jun 24, 2026", collection:"—", topic:"—", status:"Draft" },
@@ -78,7 +80,7 @@ const events = [
   { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", hub:"—", regs:412, status:"Active" },
   { title:"AIME Accelerate — Compound", date:"Jun 29, 2026", type:"Training", hub:"—", regs:308, status:"Active" },
   { title:"FUSE 2026 — National Conference", date:"Sep 24, 2026", type:"In person", hub:"—", regs:1204, status:"Active" },
-  { title:"VIP Quarterly Mastermind", date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
+  { title:"VIP Quarterly Mastermind", access:["VIP"], date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
   { title:"WMN Monthly Meetup", date:"Jul 9, 2026", type:"Virtual", hub:"WMN", regs:138, status:"Active" },
   { title:"Regional Mixer — Dallas", date:"Aug 12, 2026", type:"In person", hub:"—", regs:86, status:"Active" },
   { title:"AIME Ascent 2027", date:"Feb 8, 2027", type:"In person", hub:"Ascent", regs:0, status:"Active" },
@@ -97,23 +99,23 @@ const hubs = [
 const exchangeUrl = "http://theaimeexchange.com/";
 // source = "General" or a hub name; access controls tier-gating on the member Documents page.
 const documents = [
-  { title:"AIME Member Handbook",            source:"General",           access:"All members", added:"Jun 1, 2026",  status:"Active" },
-  { title:"Loan Escalation Guide",           source:"General",           access:"All members", added:"May 12, 2026", status:"Active" },
-  { title:"AIME Brand & Logo Kit",           source:"General",           access:"All members", added:"Apr 2, 2026",  status:"Active" },
-  { title:"2026 Membership Agreement",       source:"General",           access:"All members", added:"Jan 1, 2026",  status:"Active" },
-  { title:"Brokers Edge Curriculum Guide",   source:"General", access:"All members", added:"Jun 10, 2026", status:"Active" },
-  { title:"Certification Completion Checklist", source:"General", access:"All members", added:"Jun 10, 2026", status:"Active" },
-  { title:"Continuing Education Credit Form",source:"General", access:"All members", added:"Jun 10, 2026", status:"Active" },
-  { title:"Rate Sheet Roundup — This Week",  source:"General", access:"All members", added:"Jun 24, 2026", status:"Active" },
-  { title:"Show Notes Archive (2026)",       source:"General", access:"All members", added:"Jun 1, 2026",  status:"Active" },
-  { title:"Accelerate Live — Session Workbook", source:"General", access:"All members", added:"Jun 20, 2026", status:"Active" },
-  { title:"Weekly Action Plan Template",     source:"General",   access:"All members", added:"Jun 20, 2026", status:"Active" },
-  { title:"WMN Mentorship Program Overview", source:"WMN",               access:"All members", added:"Jun 9, 2026",  status:"Active" },
-  { title:"WMN Community Guidelines",        source:"WMN",               access:"All members", added:"May 1, 2026",  status:"Active" },
-  { title:"Ascent Workbook — Q3 Cohort",     source:"Ascent",            access:"VIP only",    added:"Jun 8, 2026",  status:"Active" },
-  { title:"90-Day Growth Plan Template",     source:"Ascent",            access:"VIP only",    added:"Jun 8, 2026",  status:"Active" },
-  { title:"VIP Benefits Guide",              source:"VIP",               access:"VIP only",    added:"Jun 1, 2026",  status:"Active" },
-  { title:"Speaking & Feature Opportunities",source:"VIP",               access:"VIP only",    added:"Jun 1, 2026",  status:"Active" },
+  { title:"AIME Member Handbook",            source:"General",           access:["All Members"], added:"Jun 1, 2026",  status:"Active" },
+  { title:"Loan Escalation Guide",           source:"General",           access:["All Members"], added:"May 12, 2026", status:"Active" },
+  { title:"AIME Brand & Logo Kit",           source:"General",           access:["All Members"], added:"Apr 2, 2026",  status:"Active" },
+  { title:"2026 Membership Agreement",       source:"General",           access:["All Members"], added:"Jan 1, 2026",  status:"Active" },
+  { title:"Brokers Edge Curriculum Guide",   source:"General", access:["All Members"], added:"Jun 10, 2026", status:"Active" },
+  { title:"Certification Completion Checklist", source:"General", access:["All Members"], added:"Jun 10, 2026", status:"Active" },
+  { title:"Continuing Education Credit Form",source:"General", access:["All Members"], added:"Jun 10, 2026", status:"Active" },
+  { title:"Rate Sheet Roundup — This Week",  source:"General", access:["All Members"], added:"Jun 24, 2026", status:"Active" },
+  { title:"Show Notes Archive (2026)",       source:"General", access:["All Members"], added:"Jun 1, 2026",  status:"Active" },
+  { title:"Accelerate Live — Session Workbook", source:"General", access:["All Members"], added:"Jun 20, 2026", status:"Active" },
+  { title:"Weekly Action Plan Template",     source:"General",   access:["All Members"], added:"Jun 20, 2026", status:"Active" },
+  { title:"WMN Mentorship Program Overview", source:"WMN",               access:["All Members"], added:"Jun 9, 2026",  status:"Active" },
+  { title:"WMN Community Guidelines",        source:"WMN",               access:["All Members"], added:"May 1, 2026",  status:"Active" },
+  { title:"Ascent Workbook — Q3 Cohort",     source:"Ascent",            access:["VIP"],         added:"Jun 8, 2026",  status:"Active" },
+  { title:"90-Day Growth Plan Template",     source:"Ascent",            access:["VIP"],         added:"Jun 8, 2026",  status:"Active" },
+  { title:"VIP Benefits Guide",              source:"VIP",               access:["VIP"],         added:"Jun 1, 2026",  status:"Active" },
+  { title:"Speaking & Feature Opportunities",source:"VIP",               access:["VIP"],         added:"Jun 1, 2026",  status:"Active" },
 ];
 const hubNames = () => hubs.map(h=>h.name);
 
@@ -146,14 +148,7 @@ const reqTypeMeta = {
   "Lender connection": { ico:'<path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/>', cls:"i-cyan" },
   "Change AE":         { ico:'<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/>', cls:"i-navy" },
   "Support":           { ico:'<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', cls:"i-cyan" },
-  "Bug":               { ico:'<rect x="8" y="6" width="8" height="13" rx="4"/><path d="M12 6V3M9.5 4.5L8 3M14.5 4.5L16 3M8 11H3M8 15H4M8 18l-3 2M16 11h5M16 15h4M16 18l3 2"/>', cls:"i-pink" },
 };
-// Bug reports stay here (interface only). Escalations, connections, Change AE and
-// support tickets are tracked in requests-store.js and rendered by admin-requests.js.
-const requests = [
-  { type:"Bug", member:"Priya Nair", detail:"Market filter not updating on Safari", date:"5h ago", status:"New" },
-  { type:"Bug", member:"Rachel Stone", detail:"Logo overlaps banner on mobile", date:"4d ago", status:"In progress" },
-];
 
 /* ---------- Analytics records ---------- */
 const escalationRecords = [
@@ -441,9 +436,10 @@ function fillMemberFilters(){
 }
 function renderLenders(){
   $('lenders-tbody').innerHTML = lenders.map((l,i)=>`<tr>
-    <td><div class="t-id"><div class="t-logo" style="color:${l.color}">${l.short}</div><div class="t-strong">${l.name}</div></div></td>
+    <td><div class="t-id">${logoTile(l)}<div class="t-strong">${l.name}</div></div></td>
     <td><span class="badge ${tierBadge[l.tier]}">${l.tier}</span></td>
     <td><span class="t-sub" style="display:inline;color:var(--ink-soft)">${l.products.join(', ')}</span></td>
+    <td>${accessTags(accessOf(l))}</td>
     <td><span class="dot-status dot-${l.status.toLowerCase()}">${l.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('lender:'+i)}${delBtn('Removed '+l.name+'.')}</div></td>
   </tr>`).join('');
@@ -453,10 +449,11 @@ function renderVendors(){
   // Company groups a vendor's products (e.g. both APS products) — from partner-store.js
   const companyOf = (n) => window.AmpPartners ? AmpPartners.companyOf(n) : n;
   $('vendors-tbody').innerHTML = vendors.map((v,i)=>`<tr>
-    <td><div class="t-id"><div class="t-logo">${v.short}</div><div class="t-strong">${v.name}</div></div></td>
+    <td><div class="t-id">${logoTile(v)}<div><div class="t-strong">${v.name}</div>${(v.tags&&v.tags.length)?`<div class="t-sub">${v.tags.join(' · ')}</div>`:''}</div></div></td>
     <td>${companyOf(v.name)}</td>
     <td><span class="badge badge-navy">${v.cat}</span></td>
     <td>${v.offer}</td>
+    <td>${accessTags(accessOf(v))}</td>
     <td><span class="dot-status dot-${v.status.toLowerCase()}">${v.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('vendor:'+i)}${delBtn('Removed '+v.name+'.')}</div></td>
   </tr>`).join('');
@@ -468,6 +465,7 @@ function renderResources(){
     <td class="t-strong">${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</td>
     <td><span class="badge badge-cyan">${r.type}</span></td>
     <td>${collTag(r.collection)}</td>
+    <td>${accessTags(accessOf(r))}</td>
     <td>${r.dur}</td>
     <td>${r.pub}</td>
     <td><span class="dot-status dot-${r.status.toLowerCase()}">${r.status}</span></td>
@@ -490,6 +488,7 @@ function renderEvents(){
     <td>${e.date}</td>
     <td><span class="badge badge-amber">${e.type}</span></td>
     <td>${collTag(e.hub)}</td>
+    <td>${accessTags(accessOf(e))}</td>
     <td>${regCell(e)}</td>
     <td>${regCount(e).toLocaleString()}</td>
     <td><span class="dot-status dot-${e.status.toLowerCase()}">${e.status}</span></td>
@@ -498,9 +497,6 @@ function renderEvents(){
   if($('dash-eventregs') && R) $('dash-eventregs').textContent = events.reduce((n,e)=>n + (R.active(e.title) ? R.regsFor(e.title).length : 0), 0).toLocaleString();
   $('event-count').textContent = `${events.length} events`;
 }
-const accessBadge = (a) => a==='VIP only'
-  ? `<span class="badge" style="background:#fbf0d8;color:#9a6a05">VIP only</span>`
-  : `<span class="badge badge-navy">All members</span>`;
 // Hubs use an array of tiers (or ["All Members"]). Render one badge per audience.
 function accessTags(access){
   const arr = Array.isArray(access) ? access : [access];
@@ -529,7 +525,7 @@ function renderDocuments(){
   $('documents-tbody').innerHTML = rows.map(({d,i})=>`<tr>
     <td class="t-strong">${d.title}</td>
     <td>${d.source==='General' ? '<span class="t-sub" style="display:inline;color:var(--ink-soft)">General</span>' : `<span class="badge badge-navy">${d.source}</span>`}</td>
-    <td>${accessBadge(d.access)}</td>
+    <td>${accessTags(accessOf(d))}</td>
     <td>${d.added}</td>
     <td><span class="dot-status dot-${d.status.toLowerCase()}">${d.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('document:'+i)}${delBtn('Removed document.')}</div></td>
@@ -1116,10 +1112,29 @@ function field(label, value, opts){ return `<div class="field"><label>${label}</
 function selectField(label, options, selected){
   return `<div class="field"><label>${label}</label><select class="select">${options.map(o=>`<option ${o===selected?'selected':''}>${o}</option>`).join('')}</select></div>`;
 }
+let editing = null;
+// Saving an editor with "Who can see this" keeps the choice (prototype: in memory).
+const ACCESS_LISTS = { lender:()=>lenders, vendor:()=>vendors, resource:()=>resources, event:()=>events, hub:()=>hubs, document:()=>documents };
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('#edit-save') || !document.querySelector('#modal-edit #access-picker') || !editing || !ACCESS_LISTS[editing.type] || editing.idx < 0) return;
+  const item = ACCESS_LISTS[editing.type]()[editing.idx];
+  item.access = readAccess();
+  if(editing.type==='lender' || editing.type==='vendor'){
+    const url = $('ed-signup') ? $('ed-signup').value.trim() : '';
+    if(url && !/^https?:\/\/\S+\.\S+/.test(url)){ e.preventDefault(); e.stopImmediatePropagation(); showToast('Add a full sign-up link, starting with https://'); $('ed-signup').focus(); return; }
+    item.logo = $('img-up-val').value || '';
+    item.bio = $('ed-bio').value.trim();
+    const tags = [...document.querySelectorAll('#ed-tags input:checked')].map(i=>i.parentElement.textContent.trim());
+    if(editing.type==='lender') item.products = tags;
+    else { item.tags = tags; item.cat = $('ed-cat').value; item.signup = url; }
+  }
+  setTimeout(() => { renderLenders(); renderVendors(); renderResources(); renderEvents(); renderHubs(); renderDocuments(); });
+}, true);
 function openEdit(ref){
   const [type, idStr] = ref.split(':');
   const isNew = idStr === 'new';
   const idx = isNew ? -1 : +idStr;
+  editing = { type, idx };
   let title='', sub='', body='';
   if(type==='member'){
     const m = isNew ? {name:'',email:'',plan:'Premium',billing:'Monthly',role:'Loan Officer',state:'',licensed:[],used:0,status:'Active'} : members[idx];
@@ -1138,23 +1153,31 @@ function openEdit(ref){
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p>Plan escalation allotments: Premium 1/mo · Elite 6/mo · VIP unlimited. Members can purchase additional escalations at $199 each.</p></div>
       ${isNew?'':`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><button class="btn btn-outline btn-sm" data-toast="Granted 1 complimentary escalation." data-close>+ Grant escalation</button><button class="btn btn-outline btn-sm" data-toast="Subscription paused." data-close>Pause subscription</button><button class="btn btn-outline btn-sm" data-toast="Sent password reset email." data-close>Reset password</button></div>`}`;
   } else if(type==='lender'){
-    const l = isNew ? {name:'',short:'',tier:'Gold',products:[],status:'Active'} : lenders[idx];
+    const l = isNew ? {name:'',short:'',tier:'Gold',products:[],bio:'',status:'Active'} : lenders[idx];
     title = isNew ? 'Add lender' : 'Edit lender'; sub = isNew?'Add a wholesale lender partner.':l.name;
     body = `
       <div class="field-row">${field('Lender name', l.name)}${field('Logo abbreviation', l.short)}</div>
+      ${imageUpload('Logo', l, 'PNG, SVG, or JPG, up to 2 MB. Square works best (at least 400 × 400) on a transparent or white background. Without one, the abbreviation is shown.')}
+      ${bioField(l.bio, 'Shown on the lender\'s page and card in the portal.')}
       <div class="field-row">${selectField('Tier', ['Gold','Silver','Bronze'], l.tier)}${selectField('Status', ['Active','Draft'], l.status)}</div>
-      ${tagPicker('Product types', taxonomies.lenderProducts, l.products)}
+      ${tagPicker('Product types', taxonomies.lenderProducts, l.products, 'ed-tags')}
+      ${accessPicker(accessOf(l))}
       <div class="form-section-label" style="margin-top:18px">Who requests go to</div>
       ${window.AmpContactsEditor ? AmpContactsEditor.html(l.name, 'lender', isNew) : ''}
       ${(() => { const c = (window.AmpRequests && !isNew) ? AmpRequests.lenderContact(l.name) : { reminderDays:2 };
         return selectField('Remind escalation contacts if no response after', ['1 business day','2 business days','3 business days','Never'], c.reminderDays + ' business days'); })()}`;
   } else if(type==='vendor'){
-    const v = isNew ? {name:'',short:'',cat:taxonomies.vendorCategories[0],offer:'',status:'Active'} : vendors[idx];
+    const v = isNew ? {name:'',short:'',cat:taxonomies.vendorCategories[0],tags:[],offer:'',signup:'',bio:'',status:'Active'} : vendors[idx];
     title = isNew ? 'Add product' : 'Edit product'; sub = isNew?'Add a product to the Market.':v.name;
     body = `
       <div class="field-row">${field('Product name', v.name)}${field('Logo abbreviation', v.short)}</div>
-      <div class="field-row">${selectField('Category', taxonomies.vendorCategories, v.cat)}${selectField('Status', ['Active','Draft'], v.status)}</div>
+      ${imageUpload('Logo or graphic', v, 'PNG, SVG, or JPG, up to 2 MB. Shown on the Market card and the product page. Square logos or wide graphics (1200 × 630) both work. Without one, the abbreviation is shown.')}
+      ${bioField(v.bio, 'Shown on the product\'s page and card in the Market.')}
+      <div class="field-row"><div class="field"><label>Category</label><select class="select" id="ed-cat">${taxonomies.vendorCategories.map(o=>`<option ${o===v.cat?'selected':''}>${o}</option>`).join('')}</select><div class="hint">Which Market group it's listed under.</div></div>${selectField('Status', ['Active','Draft'], v.status)}</div>
+      ${tagPicker('Product types', taxonomies.vendorProducts, v.tags, 'ed-tags')}
       ${field('Member offer', v.offer)}
+      <div class="field"><label>Sign-up link</label><input class="input" id="ed-signup" type="url" value="${v.signup||''}" placeholder="https://… — where members go to sign up or claim the offer"><div class="hint">Opens from the product page's website button. Use the partner's AIME-specific link if they have one.</div></div>
+      ${accessPicker(accessOf(v))}
       ${(() => { const co = window.AmpPartners && !isNew ? AmpPartners.companyOf(v.name) : '';
         return `${field('Company', co, 'placeholder="Company that owns this product"')}
       <div class="hint" style="margin:-6px 0 14px">Products with the same company roll up together — on that company's partner dashboard, in the Partner users company list, and for who connection requests go to.</div>
@@ -1169,6 +1192,7 @@ function openEdit(ref){
       <div class="field-row">${selectField('Goal', ['—', ...taxonomies.learningGoals], r.goal || '—')}${selectField('Topic', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
       <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}</div>
       ${field('Content link', '', 'placeholder="Video / audio URL"')}
+      ${accessPicker(accessOf(r))}
       ${selectField('Status', ['Active','Draft'], r.status)}
       <div class="hint"><strong>Goal</strong>, <strong>Topic</strong>, and <strong>Show</strong> decide where this appears in The Vault (goal tiles, library filters, the Shows row). Assigning a <strong>hub</strong> also puts it inside that hub.</div>`;
   } else if(type==='event'){
@@ -1178,6 +1202,7 @@ function openEdit(ref){
       ${field('Event title', e.title)}
       <div class="field-row">${field('Date', e.date)}${selectField('Type', taxonomies.eventTypes, e.type)}</div>
       ${selectField('Hub / collection', ['—', ...hubNames()], e.hub)}
+      ${accessPicker(accessOf(e), '<strong>All Members</strong> includes everyone. Pick tiers to limit it — other members still see the event, with an upgrade prompt instead of registration.')}
       ${selectField('Status', ['Active','Draft'], e.status)}
       <div class="hint">Assign a hub to surface this event inside a member hub (e.g. VIP, WMN). Leave as “—” for a general event — it still shows on the Events page &amp; calendar.</div>`;
   } else if(type==='hub'){
@@ -1186,20 +1211,21 @@ function openEdit(ref){
     body = `
       ${field('Hub name', h.name)}
       ${selectField('Layout', ['Standard','Mixed'], h.kind)}
-      ${accessPicker(h.access)}
+      ${accessPicker(h.access, '<strong>All Members</strong> includes everyone. Pick tiers to limit it — the hub is hidden from other members.')}
       <div class="field"><label>Description</label><textarea class="input" placeholder="Short description shown at the top of the hub page…" style="min-height:70px"></textarea></div>
       ${selectField('Status', ['Active','Draft'], h.status)}
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p><strong>Standard</strong> = a videos/recordings grid + a Documents tab. <strong>Mixed</strong> = videos, events &amp; documents in one hub (VIP, WMN). Use <strong>Access</strong> to gate the hub — pick the tiers that can see it, or All Members for everyone. Add content from Resources, Events &amp; Documents by setting their hub to this one.</p></div>`;
   } else if(type==='document'){
-    const d = isNew ? {title:'',source:'General',access:'All members',status:'Active'} : documents[idx];
+    const d = isNew ? {title:'',source:'General',access:['All Members'],status:'Active'} : documents[idx];
     title = isNew ? 'Add document' : 'Edit document'; sub = isNew?'Upload a document for the Documents page or a hub.':d.title;
     body = `
       ${field('Title', d.title)}
       ${field('Description', d.desc, 'placeholder="One line shown under the title"')}
-      <div class="field-row">${selectField('Source', ['General', ...hubNames()], d.source)}${selectField('Access', ['All members','VIP only'], d.access)}</div>
+      ${selectField('Source', ['General', ...hubNames()], d.source)}
+      ${accessPicker(accessOf(d), '<strong>All Members</strong> includes everyone. Pick tiers to limit it — the document is hidden from other members everywhere.')}
       <div class="field"><label>File</label><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><p>Drag a PDF here or <strong>browse</strong> to upload. (Interface only in this prototype.)</p></div></div>
       ${selectField('Status', ['Active','Draft'], d.status)}
-      <div class="hint"><strong>Source “General”</strong> lists the doc on the main Documents page only; choosing a hub also adds it to that hub’s Documents tab. <strong>VIP only</strong> documents are hidden from non-VIP members everywhere.</div>`;
+      <div class="hint"><strong>Source “General”</strong> lists the doc on the main Documents page only; choosing a hub also adds it to that hub’s Documents tab. </div>`;
   } else if(type==='featured'){
     title='Add featured item'; sub='Feature a lender, resource, market deal, or event on the member home screen.';
     body = `
@@ -1236,28 +1262,64 @@ function openEdit(ref){
     : `${title.replace('Add ','')} created.`;
   openModal('edit');
 }
-function tagPicker(label, all, selected){
+function tagPicker(label, all, selected, id){
   selected = selected || [];
   return `<div class="field"><label>${label}</label>
-    <div class="tax-chips" style="margin:6px 0 0">
+    <div class="tax-chips" ${id?`id="${id}"`:''} style="margin:6px 0 0">
       ${all.map(t=>`<label class="tax-chip" style="cursor:pointer;${selected.includes(t)?'border-color:var(--pink);background:#fef4f8':''}"><input type="checkbox" ${selected.includes(t)?'checked':''} style="margin-right:6px;accent-color:var(--pink)">${t}</label>`).join('')}
     </div>
     <div class="hint">Manage the full list under Categories &amp; tags.</div></div>`;
 }
-// Multi-select hub access: "All Members" (everyone) OR one or more tiers.
-function accessPicker(selected){
+// Logo / graphic upload with a live preview (prototype: kept in memory as a data URL).
+const logoTile = (x, cls) => x.logo
+  ? `<div class="${cls||'t-logo'} has-img"><img src="${x.logo}" alt=""></div>`
+  : `<div class="${cls||'t-logo'}" style="${x.color?`color:${x.color}`:''}">${x.short||''}</div>`;
+function imageUpload(label, x, hint){
+  return `<div class="field"><label>${label}</label>
+    <div class="img-up" id="img-up">
+      <div class="img-up-prev" id="img-up-prev">${x.logo ? `<img src="${x.logo}" alt="">` : `<span>${x.short || 'Logo'}</span>`}</div>
+      <div class="img-up-main">
+        <div class="img-up-btns"><label class="btn btn-outline btn-sm" style="cursor:pointer">${x.logo?'Replace':'Upload'} image<input type="file" id="img-up-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
+          <button type="button" class="btn btn-outline btn-sm" id="img-up-clear" ${x.logo?'':'hidden'}>Remove</button></div>
+        <div class="hint" style="margin:6px 0 0">${hint}</div>
+      </div>
+    </div><input type="hidden" id="img-up-val" value="${x.logo||''}"></div>`;
+}
+document.addEventListener('change', (e) => {
+  if(e.target.id !== 'img-up-file' || !e.target.files[0]) return;
+  const f = e.target.files[0];
+  if(f.size > 2*1024*1024){ showToast('That image is over 2 MB — pick a smaller one.'); e.target.value=''; return; }
+  const rd = new FileReader();
+  rd.onload = () => { $('img-up-val').value = rd.result; $('img-up-prev').innerHTML = `<img src="${rd.result}" alt="">`; $('img-up-clear').hidden = false; };
+  rd.readAsDataURL(f);
+});
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('#img-up-clear')) return;
+  e.preventDefault(); $('img-up-val').value=''; $('img-up-prev').innerHTML='<span>Logo</span>'; $('img-up-clear').hidden = true; $('img-up-file').value='';
+});
+function bioField(value, hint){
+  return `<div class="field"><label>Bio</label><textarea class="input" id="ed-bio" maxlength="600" style="min-height:96px" placeholder="A few sentences about them — shown on their page in the portal">${value||''}</textarea>
+    <div class="hint">${hint}</div></div>`;
+}
+// "Who can see this" — used by every content editor (lenders, Market products, The Vault, events, hubs,
+// documents; learning paths reuse it). "All Members" (everyone) OR one or more tiers.
+const accessOf = (x) => (x && Array.isArray(x.access) && x.access.length) ? x.access : ['All Members'];
+function accessPicker(selected, hint){
   selected = (selected && selected.length) ? selected : ['All Members'];
-  return `<div class="field"><label>Access</label>
+  return `<div class="field"><label>Who can see this</label>
     <div class="tax-chips" id="access-picker" style="margin:6px 0 0">
       ${accessOptions.map(o=>{
         const on = selected.includes(o);
         return `<label class="tax-chip access-opt${on?' on':''}" data-access-opt="${o}" style="cursor:pointer"><input type="checkbox" ${on?'checked':''} tabindex="-1" style="margin-right:6px;accent-color:var(--pink)">${o}</label>`;
       }).join('')}
     </div>
-    <div class="hint"><strong>All Members</strong> includes everyone. Or select specific tiers (Premium, Elite, VIP) to gate this hub.</div></div>`;
+    <div class="hint">${hint || '<strong>All Members</strong> includes everyone. Pick tiers to limit it — other members see it locked, with the membership it needs.'}</div></div>`;
 }
+// The picker in the open modal (an earlier editor's markup can still be in the page).
+const activePicker = () => document.querySelector('.modal-overlay.open #access-picker') || $('access-picker');
+const readAccess = () => { const p = activePicker(); const sel = p ? [...p.querySelectorAll('.access-opt.on')].map(c=>c.dataset.accessOpt) : []; return sel.length ? sel : ['All Members']; };
 function toggleAccess(opt){
-  const picker = $('access-picker'); if(!picker) return;
+  const picker = activePicker(); if(!picker) return;
   let sel = [...picker.querySelectorAll('.access-opt.on')].map(c=>c.dataset.accessOpt);
   const isOn = sel.includes(opt);
   if(opt==='All Members'){
@@ -1274,20 +1336,6 @@ function toggleAccess(opt){
   });
 }
 
-/* ---------- Request detail modal ---------- */
-function openRequest(idx){
-  const r = requests[idx];
-  $('req-title').textContent = r.type;
-  $('req-sub').textContent = `Submitted by ${r.member} · ${r.date}`;
-  $('req-body').innerHTML = `
-    <div class="kv"><div class="k">Type</div><div class="v">${r.type}</div></div>
-    <div class="kv"><div class="k">Member</div><div class="v">${r.member}</div></div>
-    <div class="kv"><div class="k">Details</div><div class="v">${r.detail}</div></div>
-    <div class="kv"><div class="k">Submitted</div><div class="v">${r.date}</div></div>
-    <div class="kv"><div class="k">Status</div><div class="v">${statusPill(r.status)}</div></div>
-    <div class="field" style="margin-top:18px"><label>Internal note</label><textarea class="input" placeholder="Add a note for the team…"></textarea></div>`;
-  openModal('request');
-}
 
 /* ============================================================
    Navigation, modals, toast
@@ -1368,7 +1416,6 @@ document.addEventListener('click', e=>{
   let m;
   if((m = t.closest('[data-access-opt]')))  { e.preventDefault(); toggleAccess(m.dataset.accessOpt); return; }
   if((m = t.closest('[data-edit]')))        { e.preventDefault(); openEdit(m.dataset.edit); return; }
-  if((m = t.closest('[data-request]')))      { e.preventDefault(); openRequest(+m.dataset.request); return; }
   if((m = t.closest('[data-feat-move]')))    { e.preventDefault(); const [i,d]=m.dataset.featMove.split(':').map(Number); moveFeatured(i,d); return; }
   if((m = t.closest('[data-feat-remove]')))  { e.preventDefault(); removeFeatured(+m.dataset.featRemove); return; }
   if((m = t.closest('[data-tax-add]')))      { e.preventDefault(); addTax(m.dataset.taxAdd); return; }

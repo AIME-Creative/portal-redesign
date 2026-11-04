@@ -17,7 +17,7 @@
      Connection / Change AE : Delivered
    ============================================================ */
 (function () {
-  const KEY = 'amp-requests-v3';   // bump when the seed shape changes
+  const KEY = 'amp-requests-v4';   // bump when the seed shape changes
   // Example member; tier follows the prototype's tier switch (review toggle) if set
   const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: (() => { try { const t = localStorage.getItem('amp-proto-tier'); return ['Premium', 'Elite', 'VIP'].includes(t) ? t : 'Elite'; } catch (e) { return 'Elite'; } })() };
 
@@ -170,6 +170,15 @@
       activity: [{ at: t(3 * D), kind: 'message', by: 'member', author: 'Alicia Gomez', text: 'Is there really no cap on escalations for VIP?' },
         { at: t(3 * D - 2 * H), kind: 'message', by: 'team', author: 'Jordan Blake', text: 'Correct — VIP members have unlimited escalations each cycle.' },
         { at: t(3 * D - 2 * H), kind: 'status', by: 'team', author: 'Jordan Blake', text: 'Resolved' }] });
+    other({ id: 'TKT-2205', type: 'support', member: 'Priya Nair', email: 'priya@nairhomeloans.com', tier: 'Elite',
+      partner: 'Bug report', title: 'Market filter not updating on Safari', status: 'Received', createdAt: t(5 * H),
+      fields: { Category: 'Bug report', 'Type of issue': 'A button or link doesn\'t work', Page: 'Market', Screenshot: 'Attached', Browser: 'Safari 17 · macOS' },
+      activity: [{ at: t(5 * H), kind: 'message', by: 'member', author: 'Priya Nair', text: 'Picking a category in the Market filter does nothing on Safari. Works in Chrome.' }] });
+    other({ id: 'TKT-2204', type: 'support', member: 'Rachel Stone', email: 'rachel@stonemortgage.com', tier: 'Premium',
+      partner: 'Bug report', title: 'Logo overlaps banner on mobile', status: 'In progress', createdAt: t(4 * D),
+      fields: { Category: 'Bug report', 'Type of issue': 'Visual / layout glitch', Page: 'Home', Screenshot: 'Attached', Browser: 'Chrome · Android' },
+      activity: [{ at: t(4 * D), kind: 'message', by: 'member', author: 'Rachel Stone', text: 'On my phone the AMP logo sits on top of the welcome banner.' },
+        { at: t(4 * D), kind: 'status', by: 'team', author: 'AIME Team', text: 'In progress' }] });
     other({ id: 'CON-3318', type: 'connection', member: 'Darnell Ross', email: 'darnell@rossmortgage.com', tier: 'Premium',
       partner: 'EPM', title: 'Connection request — EPM', status: 'Delivered', createdAt: t(4 * H),
       fields: { Lender: 'EPM' },
@@ -248,7 +257,7 @@
     publicActivity: (r) => r.activity.filter((a) => a.kind !== 'note').sort(byAt),
 
     // Unread flags
-    memberUnread: (r) => r.activity.some((a) => a.at > r.memberSeenAt && a.by !== 'member' && a.kind !== 'note' && a.kind !== 'delivered'),
+    memberUnread: (r) => r.activity.some((a) => a.at > r.memberSeenAt && a.by !== 'member' && a.kind !== 'note' && a.kind !== 'delivered' && a.kind !== 'resent'),
     adminNeedsAttention: (r) =>
       (r.followUp && r.followUp.status === 'open') ||
       (r.type === 'support' && (r.status === 'Received' || r.status === 'In progress') && lastMsgBy(r) === 'member'),
@@ -322,6 +331,22 @@
       log(r, { kind: 'lender-reminder', by: 'system', text: `Reminder sent to ${r.partner}'s escalation team (follow-up requested).` });
       r.memberSeenAt = nowISO();
       changed();
+    },
+    // Team re-sends the original email (escalation, connection, or Change AE) to the partner's contacts.
+    resendEmail(id, author) {
+      const r = find(id); if (!r || r.type === 'support') return;
+      const to = r.type === 'changeae' ? `${r.partner} and the AIME membership team` : `${r.partner}'s ${r.type === 'escalation' ? 'escalation' : r.fields.Vendor ? '' : 'partner '}team`.replace('  ', ' ');
+      log(r, { kind: 'resent', by: 'team', author, text: `Email resent to ${to}${author ? ` by ${author}` : ''}.` });
+      changed();
+    },
+    // Who gets a request's email — from the lender / vendor listing (partner-store.js).
+    recipients(r) {
+      if (r.type === 'escalation') return window.AmpRequests.lenderContact(r.partner).contacts;
+      const kind = r.fields.Vendor ? 'vendor' : 'lender';
+      const c = window.AmpPartners ? AmpPartners.contacts(r.partner, kind) : {};
+      if (r.type === 'connection') return c.connection || [{ name: '', email: 'partners@' + r.partner.toLowerCase().replace(/[^a-z]/g, '').slice(0, 14) + '.com' }];
+      if (r.type === 'changeae') return (c.changeae || []).concat([{ name: 'AIME membership team', email: 'brokermembership@aimegroup.com' }]);
+      return [];
     },
     // Escalation contacts come from the lender listing (partner-store.js) — every one gets the email.
     lenderContact(name) {
@@ -419,7 +444,7 @@
         case 'delivered': ico = ICON.check; title = esc(a.text); text = ''; break;
         case 'status': cls = 'minor'; title = `Status changed to <strong>${esc(a.text)}</strong>` + (a.author ? ` by ${you(a) ? 'you' : esc(a.author)}` : ''); text = ''; break;
         case 'lender-response': cls = 'lender'; ico = ICON.reply; title = `Response from ${esc(a.author)}` + (a.via ? ` <span style="font-weight:500;color:var(--muted)">· via ${esc(a.via)}</span>` : ''); break;
-        case 'lender-reminder': cls = 'minor'; ico = ICON.send; title = esc(a.text); text = ''; break;
+        case 'lender-reminder': case 'resent': cls = 'minor'; ico = ICON.send; title = esc(a.text); text = ''; break;
         case 'followup-request': cls = 'followup'; ico = ICON.flag; title = you(a) ? 'You requested a follow-up' : `${esc(a.author)} requested a follow-up`; break;
         case 'followup-update': cls = 'team'; ico = ICON.reply; title = `AIME membership team followed up — ${esc(a.author)}`; break;
         case 'message': cls = a.by === 'team' ? 'team' : ''; ico = ICON.support; title = a.by === 'team' ? `${esc(a.author)} (AIME team) replied` : you(a) ? 'You replied' : `${esc(a.author)} replied`; break;

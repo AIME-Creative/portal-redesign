@@ -294,6 +294,26 @@
     }
   });
 
+  /* ---------- "Report a bug" (index.html modal) files a support ticket ---------- */
+  const bugModal = $('modal-bug');
+  const bugSend = bugModal && bugModal.querySelector('.modal-foot .btn-primary');
+  if (bugSend) {
+    bugSend.dataset.toast = 'Bug report sent — follow it in My Requests.';
+    bugSend.addEventListener('click', (e) => {
+      const msg = bugModal.querySelector('textarea'), kind = bugModal.querySelector('.modal-body select');
+      if (!msg.value.trim()) { e.preventDefault(); e.stopImmediatePropagation(); msg.focus(); showToast('Tell us what happened first.'); return; }
+      const shot = bugModal.querySelector('.bug-inc input');
+      const page = ((document.querySelector('.nav-item.active') || document.querySelector('.view.active h1') || {}).textContent || 'Home').replace(/\s+\d+$/, '');
+      const pu = window.AMP_PARTNER_USER;
+      const text = msg.value.trim();
+      S.create('support', Object.assign({ partner: 'Bug report', title: text.length > 60 ? text.slice(0, 57) + '…' : text,
+        fields: { Category: 'Bug report', 'Type of issue': kind ? kind.value : 'Other', Page: page.trim(), Screenshot: shot && shot.checked ? 'Attached' : 'Not included' },
+        message: text },
+        pu ? { member: `${pu.first} ${pu.last}`, email: pu.email, tier: `${pu.type} partner` } : {}));
+      msg.value = '';
+    }, true);
+  }
+
   S.onChange(renderAll);
   renderAll();
 

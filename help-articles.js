@@ -96,6 +96,7 @@ window.HELP_ARTICLES = [
         <li>Open a card to see every step in order. Tap a step to open it — it's marked done once you open it.</li>
         <li>While you're on a step, a bar at the top shows where you are in the path. Tap <strong>Next</strong> to go straight to the next step, or <strong>All steps</strong> to see the whole list again.</li>
         <li>Steps from VIP-only hubs show to every member, marked <strong>Requires VIP membership</strong>; only VIP members can open them.</li>
+        <li>Some paths are for certain memberships only. You'll still see them, marked with the membership they need (for example <strong>Requires Elite or VIP membership</strong>), but you can't open them.</li>
         <li><strong>Start over</strong> at the bottom of a path clears your progress on it.</li>
       </ul>` },
   { slug: 'my-library', audience: 'all', title: 'Saving things to My Library', category: 'start',
@@ -437,8 +438,9 @@ window.HELP_ARTICLES = [
 
   { slug: 'report-bug', audience: 'all', title: 'Reporting a bug', category: 'account',
     summary: 'Spotted something broken? Send us a screenshot and details.',
-    tags: ['bug', 'broken', 'error', 'not working', 'screenshot'], minutes: 1, updated: 'Jul 30, 2026', status: 'Draft',
+    tags: ['bug', 'broken', 'error', 'not working', 'screenshot', 'support', 'my requests'], minutes: 1, updated: 'Nov 4, 2026', status: 'Draft',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Report a bug', attr: 'data-modal="bug"' }],
-    body: `<p>Click <strong>Report a bug</strong> (bottom right of every page). We capture a screenshot you can annotate — add what you expected to happen and submit.</p>` },
+    body: `<p>Click <strong>Report a bug</strong> (bottom right of every page). We capture a screenshot you can annotate — add what you expected to happen and submit.</p>
+      <p>Your report becomes a <strong>support ticket</strong> in <strong>My Requests</strong>, so you can see its status and reply when our team writes back.</p>` },
 ];

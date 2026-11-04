@@ -62,11 +62,18 @@
       <p class="lp-intro">Sessions put in order so you know what to watch first and what comes next.</p>
       <div class="lp-grid" id="lp-grid"></div></div>`);
   function render() {
-    const list = P.all().filter((p) => p.status === 'Published' && p.steps.length);
+    // Paths limited to other tiers show locked (not openable); Lender / Vendor users only see All Members paths.
+    const list = P.all().filter((p) => p.status === 'Published' && p.steps.length && (userType === 'member' || P.canSee(p, '')));
     const sec = document.getElementById('learning-paths');
     sec.hidden = !list.length;
     document.getElementById('lp-grid').innerHTML = list.map((p) => {
       const st = state(p), vip = P.includesVIP(p);
+      if (!P.canSee(p, memberTier)) return `<div class="lp-card lp-gated" aria-disabled="true">
+          <span class="lp-meta">${p.steps.length} step${p.steps.length === 1 ? '' : 's'}</span>
+          <span class="lp-title">${esc(p.title)}</span>
+          <span class="lp-desc">${esc(p.desc)}</span>
+          <span class="lp-next locked">${svg(ICO.lock)} Requires ${esc(P.accessLabel(p))} membership</span>
+        </div>`;
       const nextLine = st.complete ? `<span class="lp-next done">${svg(ICO.check)} Completed — open to watch again</span>`
         : st.next ? `<span class="lp-next">${st.doneCount ? 'Continue with' : 'Start with'}: ${esc(st.next.s.t)}</span>`
         : `<span class="lp-next locked">${svg(ICO.lock)} ${st.doneCount ? 'The rest requires' : 'Requires'} VIP membership</span>`;
@@ -106,6 +113,8 @@
       ${st.doneCount ? '<button type="button" class="link-muted lp-reset" data-lp-reset>Start over</button>' : ''}`;
   }
   function openDrawer(id) {
+    const gp = P.get(id);
+    if (gp && !P.canSee(gp, memberTier)) { showToast(`${gp.title} needs a ${P.accessLabel(gp)} membership.`); return; }
     openId = id; renderDrawer();
     const d = document.getElementById('lp-drawer'); d.hidden = false;
     requestAnimationFrame(() => d.classList.add('open'));

@@ -42,7 +42,7 @@
       </div>
       <div class="callout" style="max-width:900px">${svg('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/>')}<p>Members see <strong>Published</strong> paths in this order. A step from a VIP-only hub shows to other tiers locked, with the membership it needs. A step counts as done once the member opens it.</p></div>
       <div class="table-wrap" style="max-width:900px"><div class="table-scroll"><table class="adm lpa-table">
-        <thead><tr><th>Order</th><th>Learning path</th><th>Steps</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+        <thead><tr><th>Order</th><th>Learning path</th><th>Steps</th><th>Who can see</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
         <tbody id="lpa-tbody"></tbody>
       </table></div></div>
       <div class="count-note" id="lpa-count" style="margin-top:10px"></div>
@@ -68,9 +68,10 @@
         <td><div class="lpa-order"><button class="icon-act" data-lpa-move="${p.id}:-1" title="Move up" ${i ? '' : 'disabled'}>${svg(ICO.up)}</button><button class="icon-act" data-lpa-move="${p.id}:1" title="Move down" ${i < list.length - 1 ? '' : 'disabled'}>${svg(ICO.down)}</button></div></td>
         <td style="min-width:260px"><div class="t-strong">${esc(p.title)}${P.includesVIP(p) ? ' <span class="lpa-vip">Includes VIP</span>' : ''}</div><div class="t-sub">${esc(p.desc)}</div>${p.for ? `<div class="t-sub">For: ${esc(p.for)}</div>` : ''}</td>
         <td>${p.steps.length}</td>
+        <td>${accessTags(P.access(p))}</td>
         <td><span class="badge ${p.status === 'Published' ? 'badge-green' : 'badge-amber'}">${p.status}</span></td>
         <td class="t-right"><div class="row-actions"><button class="icon-act" data-lpa-edit="${p.id}" title="Edit">${svg(ICO.edit)}</button><button class="icon-act danger" data-lpa-del="${p.id}" title="Delete">${svg(ICO.del)}</button></div></td>
-      </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No learning paths yet — add one.</td></tr>';
+      </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No learning paths yet — add one.</td></tr>';
     const pub = list.filter((p) => p.status === 'Published').length;
     $('lpa-count').textContent = `${list.length} learning path${list.length === 1 ? '' : 's'} · ${pub} published · ${list.length - pub} draft`;
   }
@@ -79,7 +80,7 @@
   let draft = null;
   function openEditor(id) {
     const p = id === 'new' ? null : P.get(id);
-    draft = p ? JSON.parse(JSON.stringify(p)) : { title: '', desc: '', for: '', status: 'Draft', steps: [] };
+    draft = p ? JSON.parse(JSON.stringify(p)) : { title: '', desc: '', for: '', status: 'Draft', access: ['All Members'], steps: [] };
     draft.isNew = !p;
     $('lpa-m-title').textContent = p ? 'Edit learning path' : 'Add learning path';
     $('lpa-m-sub').textContent = p ? p.title : 'Put sessions in order so members know what to watch first.';
@@ -90,6 +91,7 @@
         <div class="field"><label>Who it's for</label><input class="input" id="lpa-for" value="${esc(draft.for || '')}" placeholder="e.g. New members (optional)"></div>
         <div class="field"><label>Status</label><select class="select" id="lpa-status"><option ${draft.status === 'Published' ? 'selected' : ''}>Published</option><option ${draft.status === 'Draft' ? 'selected' : ''}>Draft</option></select></div>
       </div>
+      ${accessPicker(P.access(draft), '<strong>All Members</strong> includes everyone. Pick tiers to limit it — other members see the path locked, with the membership it needs. VIP-only steps stay locked for non-VIP members either way.')}
       <div class="form-section-label">Steps <span class="req">*</span></div>
       <p class="hint" style="margin:-4px 0 10px">In the order members should take them.</p>
       <ol class="lpa-steps" id="lpa-steps"></ol>
@@ -125,7 +127,7 @@
   }
   function save() {
     draft.title = $('lpa-title').value.trim(); draft.desc = $('lpa-desc').value.trim();
-    draft.for = $('lpa-for').value.trim(); draft.status = $('lpa-status').value;
+    draft.for = $('lpa-for').value.trim(); draft.status = $('lpa-status').value; draft.access = readAccess();
     const missing = [!draft.title && 'a title', !draft.desc && 'a description', !draft.steps.length && 'at least one step'].filter(Boolean);
     const err = $('lpa-err');
     if (missing.length) { err.hidden = false; err.textContent = `Add ${missing.join(', ').replace(/, ([^,]*)$/, ' and $1')}.`; return; }

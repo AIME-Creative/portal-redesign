@@ -2,14 +2,14 @@
    AMP Admin — Request tracking
    ------------------------------------------------------------
    Admin side of the member request history (requests-store.js):
-     • Queue with type chips, status filter, search,
-       and a "Needs attention" view (follow-ups requested,
-       unanswered tickets)
+     • Queue with type chips, status filter, search. Summary tiles
+       jump to follow-ups requested / tickets awaiting a reply.
      • Detail page per request: status control,
        support replies, logging the lender's response on an
        escalation, closing out a member follow-up, internal notes
-   Bug reports still use admin.js's `requests` array + modal.
-   Uses admin.js globals: navigate, showToast, openRequest,
+   Bug reports from the member app arrive as support tickets
+   (Category: Bug report).
+   Uses admin.js globals: navigate, showToast,
    statusPill, reqTypeMeta.
    ============================================================ */
 (function () {
@@ -20,11 +20,10 @@
   const $ = (id) => document.getElementById(id);
   const ME = 'AIME Team';                       // signed-in admin (sidebar profile)
 
-  let typeFilter = 'all', attnOnly = false;
+  let typeFilter = 'all', attnOnly = false;   // attnOnly is set only by the Follow-ups / Tickets tiles
   let currentId = null, mode = null;
 
   const isOpen = (r) => r.status !== 'Resolved' && r.status !== 'Delivered';
-  const bugs = () => requests.map((r, i) => Object.assign({ i }, r));   // admin.js bug reports
 
   function lastLabel(r) {
     const acts = r.activity.slice().sort(S.byAt);
@@ -69,18 +68,14 @@
     const q = ($('arq-search').value || '').trim().toLowerCase();
     const st = $('arq-status').value;
     document.querySelectorAll('#request-filters .chip[data-filter]').forEach((c) => c.classList.toggle('active', c.dataset.filter === typeFilter));
-    $('arq-attn').classList.toggle('active', attnOnly);
 
-    let rows = [];
-    if (typeFilter !== 'bug') {
-      rows = S.all().filter((r) =>
-        (typeFilter === 'all' || r.type === typeFilter) &&
-        (!attnOnly || S.adminNeedsAttention(r)) &&
-        (st === 'all' || (st === 'open' ? isOpen(r) : r.status === st)) &&
-        (!q || [r.id, r.member, r.partner, r.title, r.email].join(' ').toLowerCase().includes(q)));
-      // needs-attention first, then most recent activity
-      rows.sort((a, b) => (S.adminNeedsAttention(b) - S.adminNeedsAttention(a)) || (S.lastActivity(b) > S.lastActivity(a) ? 1 : -1));
-    }
+    const rows = S.all().filter((r) =>
+      (typeFilter === 'all' || r.type === typeFilter) &&
+      (!attnOnly || S.adminNeedsAttention(r)) &&
+      (st === 'all' || (st === 'open' ? isOpen(r) : r.status === st)) &&
+      (!q || [r.id, r.member, r.partner, r.title, r.email].join(' ').toLowerCase().includes(q)));
+    // follow-ups and unanswered tickets first, then most recent activity
+    rows.sort((a, b) => (S.adminNeedsAttention(b) - S.adminNeedsAttention(a)) || (S.lastActivity(b) > S.lastActivity(a) ? 1 : -1));
     let html = rows.map((r) => `
       <tr class="${S.adminNeedsAttention(r) ? 'rq-attn' : ''}" style="cursor:pointer" data-arq-open="${r.id}">
         <td><span class="rq-ref">${r.id}</span></td>
@@ -92,35 +87,17 @@
         <td class="t-right"><div class="row-actions"><button class="link-act" data-arq-open="${r.id}">Open</button></div></td>
       </tr>`).join('');
 
-    // Bug reports (interface only) — shown under All / Bugs
-    const showBugs = (typeFilter === 'all' || typeFilter === 'bug') && !attnOnly;
-    const bugRows = showBugs ? bugs().filter((b) =>
-      (st === 'all' || (st === 'open' ? b.status !== 'Resolved' : b.status === st)) &&
-      (!q || [b.member, b.detail].join(' ').toLowerCase().includes(q))) : [];
-    const m = reqTypeMeta.Bug;
-    html += bugRows.map((b) => `
-      <tr style="cursor:pointer" data-request="${b.i}">
-        <td><span class="rq-ref">BUG</span></td>
-        <td><div class="t-id"><span class="rq-ico sm" style="background:#fde4ee;color:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${m.ico}</svg></span>
-          <div><div class="t-strong">${esc(b.detail)}</div><div class="t-sub">Bug report</div></div></div></td>
-        <td class="t-strong">${esc(b.member)}</td>
-        <td><div class="t-sub">${b.date}</div></td><td>${statusPill(b.status)}</td>
-        <td class="t-right"><div class="row-actions"><button class="link-act" data-request="${b.i}">Review</button></div></td>
-      </tr>`).join('');
-
-    const total = rows.length + bugRows.length;
+    const total = rows.length;
     $('requests-tbody').innerHTML = total ? html
       : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">No requests match these filters.</td></tr>';
-    const attn = S.all().filter(S.adminNeedsAttention).length;
-    $('request-count').textContent = `${total} shown · ${attn} need${attn === 1 ? 's' : ''} attention`;
+    $('request-count').textContent = `${total} shown`;
   }
 
   /* ---------- dashboard + nav badge ---------- */
   function renderDashboard() {
     const open = S.all().filter(isOpen);
-    const openBugs = bugs().filter((b) => b.status !== 'Resolved');
-    if ($('dash-pending')) $('dash-pending').textContent = open.length + openBugs.length;
-    $('nav-req-count').textContent = S.all().filter(S.adminNeedsAttention).length + bugs().filter((b) => b.status === 'New').length;
+    if ($('dash-pending')) $('dash-pending').textContent = open.length;
+    $('nav-req-count').textContent = S.all().filter(S.adminNeedsAttention).length;
     const top = open.sort((a, b) => (S.adminNeedsAttention(b) - S.adminNeedsAttention(a)) || (S.lastActivity(b) > S.lastActivity(a) ? 1 : -1)).slice(0, 5);
     $('dash-requests').innerHTML = '<thead><tr><th>Request</th><th>Member</th><th>Last activity</th><th>Status</th></tr></thead><tbody>' +
       top.map((r) => `<tr style="cursor:pointer" data-arq-open="${r.id}" class="${S.adminNeedsAttention(r) ? 'rq-attn' : ''}">
@@ -192,8 +169,22 @@
         <div class="rq-kv"><span class="k">Lender has responded</span><span class="v">${heard ? 'Yes' : 'Not yet'}</span></div>
         <p class="t-sub" style="margin:10px 0 12px">Every escalation contact on the lender listing gets the email. Any of them can reply or click a status button — no login. Auto-reminder after ${c.reminderDays} business days without a response.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a class="btn btn-outline btn-sm" href="lender-email.html?esc=${encodeURIComponent(r.id)}" target="_blank" rel="noopener">Preview email</a>
+          <button class="btn btn-outline btn-sm" data-arq-preview>Preview email</button>
+          <button class="btn btn-outline btn-sm" data-arq-resend>Resend email</button>
           ${r.status !== 'Resolved' ? '<button class="btn btn-outline btn-sm" data-arq-remind>Send reminder now</button>' : ''}
+        </div></div>`;
+    } else if (r.type === 'connection' || r.type === 'changeae') {
+      const to = S.recipients(r);
+      const sends = r.activity.filter((a) => a.kind === 'delivered' || a.kind === 'resent');
+      const lastSend = sends.length ? sends.sort(S.byAt)[sends.length - 1].at : r.createdAt;
+      const who = r.type === 'changeae' ? 'Lender + AIME' : r.fields.Vendor ? 'Vendor contacts' : 'Lender contacts';
+      lenderCard = `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">${who}</h3>
+        <div class="rq-kv"><span class="k">Sent to</span><span class="v">${to.map((x) => `<div style="margin-bottom:4px">${x.name ? `${esc(x.name)}<div class="t-sub">${esc(x.email)}</div>` : esc(x.email)}</div>`).join('')}</span></div>
+        <div class="rq-kv"><span class="k">Emails sent</span><span class="v">${sends.length} · last ${fmt.ago(lastSend).toLowerCase()}</span></div>
+        <p class="t-sub" style="margin:10px 0 12px">${r.type === 'changeae' ? 'Every Change AE contact on the lender listing and the AIME membership team get the email.' : 'Every connection contact on the listing gets the email with the member\'s details.'} Resending goes to the contacts on the listing now.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" data-arq-preview>Preview email</button>
+          <button class="btn btn-outline btn-sm" data-arq-resend>Resend email</button>
         </div></div>`;
     }
 
@@ -267,14 +258,54 @@
     if ($('arq-text')) $('arq-text').value = '';
   }
 
+  /* ---------- email preview + resend (escalation, connection, Change AE) ---------- */
+  function emailOf(r) {
+    const f = r.fields, PM = window.AmpPartners && AmpPartners.member ? AmpPartners.member(r.email) : null;
+    const rows = (list) => list.map(([k, v]) => [esc(k), v ? esc(v) : '']);
+    if (r.type === 'escalation') return {
+      subject: `AIME escalation ${r.id}: ${r.title}`,
+      paragraphs: [`Hi ${esc(r.partner)} team,`, 'An AIME member needs help with a loan. Reply to this email or use a button below — no login needed.'],
+      rows: rows([['Broker', `${r.member} · ${r.email}`], ['AIME membership', r.tier], ['Escalation', r.id], ...Object.entries(f)]),
+      ctas: ["We're on it", 'Resolved'], foot: `Replies go to ${esc(S.replyAddress(r.id))} and are added to the escalation.` };
+    if (r.type === 'connection') return {
+      subject: `New AIME member connection: ${r.member}`,
+      paragraphs: [`Hi ${esc(r.partner)} team,`, 'An AIME member asked to connect with you through the AIME Member Portal. Please reach out to them directly.'],
+      rows: rows([['Member', r.member], ['Email', r.email], ['Phone', PM && PM.phone !== '—' && PM.phone], ['NMLS #', PM && PM.nmls !== '—' && PM.nmls],
+        ['Licensed states', PM && PM.licensed.join(', ')], ['AIME membership', r.tier], ['Request', r.id]]),
+      ctas: [], foot: 'You are receiving this because you are a connection contact on your AMP listing.' };
+    return {
+      subject: `Change AE request from an AIME member: ${r.member}`,
+      paragraphs: [`Hi ${esc(r.partner)} team,`, 'An AIME member asked to be assigned a new account executive. The AIME membership team is copied.'],
+      rows: rows([['Member', `${r.member} · ${r.email}`], ['AIME membership', r.tier], ['Request', r.id], ...Object.entries(f).filter(([k]) => k !== 'Lender')]),
+      ctas: [], foot: 'You are receiving this because you are a Change AE contact on your AMP listing.' };
+  }
+  function previewEmail(r) {
+    if (!r || r.type === 'support') return;
+    const to = S.recipients(r), e = emailOf(r);
+    AmpEmailPreview.open({
+      title: e.subject,
+      sub: `To ${esc(to.map((x) => x.email).join(', '))} · ${fmt.dateTime(r.createdAt)}`,
+      meta: [['Type', TYPES[r.type].label + ' email'], ...(r.type === 'escalation' ? [['Reply-to', esc(S.replyAddress(r.id))]] : [])],
+      html: AmpEmailPreview.doc(e),
+      note: 'Resending goes to the contacts on the listing now.',
+      primary: { label: 'Resend', onClick: () => resendEmail(r) },
+    });
+  }
+  function resendEmail(r) {
+    if (!r || r.type === 'support') return;
+    const to = S.recipients(r);
+    S.resendEmail(r.id, ME);
+    if (document.querySelector('#modal-email.open')) closeModals();
+    showToast(`Resent ${r.id} to ${to.length === 1 ? to[0].email : to.length + ' contacts'}.`);
+  }
+
   /* ---------- events ---------- */
   ['arq-search', 'arq-status'].forEach((id) => $(id).addEventListener(id === 'arq-search' ? 'input' : 'change', renderQueue));
   $('arq-reset').addEventListener('click', () => { S.reset(); showToast('Sample request data restored.'); });
 
   document.addEventListener('click', (e) => {
     let m;
-    if ((m = e.target.closest('#request-filters .chip[data-filter]'))) { typeFilter = m.dataset.filter; renderQueue(); return; }
-    if (e.target.closest('#arq-attn')) { attnOnly = !attnOnly; renderQueue(); return; }
+    if ((m = e.target.closest('#request-filters .chip[data-filter]'))) { typeFilter = m.dataset.filter; attnOnly = false; renderQueue(); return; }
     if ((m = e.target.closest('[data-arq-stat]'))) {
       const k = m.dataset.arqStat;
       typeFilter = k === 'esc' || k === 'fu' ? 'escalation' : k === 'tk' ? 'support' : 'all';
@@ -298,6 +329,8 @@
       showToast(`Reminder emailed to ${S.lenderContact(r.partner).inbox}.`);
       return;
     }
+    if (e.target.closest('[data-arq-preview]')) { e.preventDefault(); previewEmail(S.get(currentId)); return; }
+    if (e.target.closest('[data-arq-resend]')) { e.preventDefault(); resendEmail(S.get(currentId)); return; }
     if ((m = e.target.closest('[data-arq-status]'))) {
       e.preventDefault();
       const r = S.get(currentId), s = m.dataset.arqStatus;

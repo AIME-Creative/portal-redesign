@@ -81,9 +81,11 @@
       });
       generalDocuments.forEach((d) => add('doc', d.title, 'Document', d.desc, () => { navigate('documents'); filterDocuments('general'); }));
       // Learning paths (published) — under The Vault; opens the path's side panel there.
-      (window.AmpPaths ? AmpPaths.all() : []).filter((p) => p.status === 'Published' && p.steps.length).forEach((p) =>
+      // Paths limited to other tiers show locked with the lowest tier that can see them; partners only see All Members paths.
+      (window.AmpPaths ? AmpPaths.all() : []).filter((p) => p.status === 'Published' && p.steps.length && (!partner || AmpPaths.canSee(p, ''))).forEach((p) =>
         add('resource', p.title, `Learning path · ${p.steps.length} steps`, `learning path ${p.desc} ${p.steps.map((s) => s.t).join(' ')}`,
-          () => { navigate('resources'); if (window.AmpLearningPaths) AmpLearningPaths.open(p.id); }));
+          () => { navigate('resources'); if (window.AmpLearningPaths) AmpLearningPaths.open(p.id); },
+          AmpPaths.canSee(p, memberTier) ? null : ['Premium', 'Elite', 'VIP'].find((t) => AmpPaths.access(p).includes(t))));
     }
 
     const R = window.AmpRequests;

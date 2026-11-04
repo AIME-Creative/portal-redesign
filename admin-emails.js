@@ -128,36 +128,22 @@
 
   /* ---------- preview ---------- */
   function emailHTML(e) {
-    const t = TYPES[e.type], m = e.who;
-    return `<!doctype html><html><head><meta charset="utf-8"><style>
-      body{margin:0;background:#f5f7fb;font-family:'Hanken Grotesk',Arial,sans-serif;color:#1d2433}
-      .wrap{max-width:520px;margin:24px auto;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e3e8f2}
-      .top{background:#021649;padding:18px 26px;color:#fff;font-weight:800;letter-spacing:.06em}
-      .top span{color:#20adce}
-      .in{padding:26px} p{font-size:15px;line-height:1.55;margin:0 0 14px}
-      .btn{display:inline-block;background:#dd1969;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px;margin:6px 0 16px}
-      .foot{font-size:12.5px;color:#6b7590;border-top:1px solid #eef1f7;padding:16px 26px}
-    </style></head><body><div class="wrap"><div class="top">AMP <span>·</span> AIME Member Portal</div><div class="in">
-      ${t.body(m).map((p) => `<p>${p}</p>`).join('')}<a class="btn" href="#">${t.cta}</a>
-      <p style="font-size:13px;color:#6b7590">— The AIME Membership Team</p></div>
-      <div class="foot">${t.foot ? t.foot + '<br>' : ''}AIME · aimegroup.com · You're receiving this because you have an AMP account.</div></div></body></html>`;
+    const t = TYPES[e.type];
+    return AmpEmailPreview.doc({ paragraphs: t.body(e.who), ctas: [t.cta],
+      foot: `${t.foot ? t.foot + '<br>' : ''}You're receiving this because you have an AMP account.` });
   }
-  let current = null;
   function open(id) {
     const e = emails.find((x) => x.id === id); if (!e) return;
-    current = e;
     const t = TYPES[e.type], expired = ageDays(e) > RETENTION_DAYS;
-    $('em-m-title').textContent = subject(e);
-    $('em-m-sub').innerHTML = `To ${esc(e.who.name)} &lt;${esc(e.who.email)}&gt; · ${fmt(e.at)}`;
-    const kv = (k, v) => `<div class="rq-kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
-    $('em-m-body').innerHTML = `
-      <div class="em-meta">${kv('From', 'AIME Group &lt;noreply@notifications.aimegroup.com&gt;')}${kv('Type', t.label)}${kv('Status', badge(e.status))}</div>
-      ${expired
-        ? `<div class="em-gone"><strong>Preview no longer available.</strong> Resend keeps sent emails for ${RETENTION_DAYS} days. You can still resend it.</div>`
-        : `<iframe class="em-frame" title="Email preview" sandbox="" srcdoc="${esc(emailHTML(e))}"></iframe>`}`;
-    $('em-m-note').textContent = resendNote(e);
-    $('em-m-resend').disabled = e.status === 'suppressed';
-    openModal('email');
+    AmpEmailPreview.open({
+      title: subject(e),
+      sub: `To ${esc(e.who.name)} &lt;${esc(e.who.email)}&gt; · ${fmt(e.at)}`,
+      meta: [['Type', t.label], ['Status', badge(e.status)]],
+      html: emailHTML(e),
+      gone: expired ? `<strong>Preview no longer available.</strong> Resend keeps sent emails for ${RETENTION_DAYS} days. You can still resend it.` : '',
+      note: resendNote(e),
+      primary: { label: 'Resend', disabled: e.status === 'suppressed', onClick: () => resend(e.id) },
+    });
   }
   function resendNote(e) {
     if (e.status === 'suppressed') return "Resend won't deliver to this address after an earlier bounce or spam complaint. Fix the email on the member's profile first.";
@@ -179,7 +165,6 @@
   document.addEventListener('click', (ev) => {
     const r = ev.target.closest('[data-em-resend]');
     if (r) { ev.preventDefault(); ev.stopPropagation(); resend(r.dataset.emResend); return; }
-    if (ev.target.closest('#em-m-resend')) { ev.preventDefault(); if (current) resend(current.id); return; }
     const o = ev.target.closest('[data-em-open]');
     if (o) { ev.preventDefault(); open(o.dataset.emOpen); }
   });

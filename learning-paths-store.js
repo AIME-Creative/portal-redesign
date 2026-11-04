@@ -105,7 +105,7 @@ window.AmpPaths = (function () {
     { id: 'lp-acc', title: 'Accelerate: Identity Reset to Compound', for: 'Accelerate Live members', status: 'Published',
       desc: 'The four Accelerate Live sessions in order, with the workbook to follow along.',
       steps: [S('doc', 'Accelerate Live — Session Workbook'), S('hub', 'Accelerate Live — Identity Reset'), S('hub', 'Accelerate Live — Win the Day'), S('hub', 'Accelerate Live — Run Toward It'), S('hub', 'Accelerate Live — Compound')] },
-    { id: 'lp-scale', title: 'Scale & Lead a Team', for: 'Growing brokerages', status: 'Published',
+    { id: 'lp-scale', title: 'Scale & Lead a Team', for: 'Growing brokerages', status: 'Published', access: ['Elite', 'VIP'],
       desc: 'Getting past $1M, then the Ascent sessions on building and leading a team.',
       steps: [S('resource', 'Scaling Past $1M in Volume'), S('hub', 'Ascent — Building a $100M Team'), S('hub', 'Ascent — Leading at Scale'), S('doc', '90-Day Growth Plan Template')] },
     { id: 'lp-mm', title: 'Catch Up on Mortgage Mornings', for: 'Every member', status: 'Published',
@@ -119,6 +119,9 @@ window.AmpPaths = (function () {
   let paths;
   try { paths = JSON.parse(localStorage.getItem(KEY)); } catch (e) { paths = null; }
   if (!Array.isArray(paths)) { paths = seed(); save(); }
+  // Paths saved before tier access existed: take the sample's setting, else All Members.
+  const seeded = seed();
+  paths.forEach((p) => { if (!Array.isArray(p.access) || !p.access.length) p.access = ((seeded.find((x) => x.id === p.id) || {}).access) || ['All Members']; });
   function save() { try { localStorage.setItem(KEY, JSON.stringify(paths)); } catch (e) { /* in-memory */ } }
   const listeners = [];
   const changed = () => { save(); listeners.forEach((f) => f()); };
@@ -136,6 +139,10 @@ window.AmpPaths = (function () {
     all: () => paths.map((p) => Object.assign({}, p, { steps: p.steps.slice() })),
     get: (id) => paths.find((p) => p.id === id) || null,
     includesVIP: (p) => p.steps.some((s) => (info(s) || {}).v),
+    // Who can see a path: ["All Members"] or specific tiers. Lender / Vendor users only see All Members paths.
+    access: (p) => (Array.isArray(p.access) && p.access.length ? p.access : ['All Members']),
+    canSee(p, tier) { const a = this.access(p); return a.includes('All Members') || a.includes(tier); },
+    accessLabel(p) { const a = this.access(p); return a.includes('All Members') ? 'All members' : a.join(', ').replace(/, ([^,]*)$/, ' or $1'); },
     save(p) {
       const i = paths.findIndex((x) => x.id === p.id);
       if (i > -1) paths[i] = p; else paths.push(Object.assign({ id: 'lp-' + Date.now().toString(36) }, p));

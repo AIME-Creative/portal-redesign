@@ -111,39 +111,23 @@
   /* ---------- email preview ---------- */
   const subject = (r) => `New ${r.type.toLowerCase()} referral in ${r.state}${r.program ? ' — ' + r.program : ''}`;
   function emailHTML(r) {
-    const row = (k, v) => v ? `<tr><td class="k">${k}</td><td>${v}</td></tr>` : '';
-    return `<!doctype html><html><head><meta charset="utf-8"><style>
-      body{margin:0;background:#f5f7fb;font-family:'Hanken Grotesk',Arial,sans-serif;color:#1d2433}
-      .wrap{max-width:520px;margin:24px auto;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e3e8f2}
-      .top{background:#021649;padding:18px 26px;color:#fff;font-weight:800;letter-spacing:.06em}
-      .top span{color:#20adce}
-      .in{padding:26px} p{font-size:15px;line-height:1.55;margin:0 0 14px}
-      table{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0 16px} td{padding:8px 0;border-bottom:1px solid #eef1f7;vertical-align:top}
-      td.k{color:#6b7590;width:130px;font-weight:600}
-      .det{background:#f5f7fb;border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.5;margin:0 0 16px}
-      .btn{display:inline-block;background:#dd1969;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px;margin:6px 0 16px}
-      .foot{font-size:12.5px;color:#6b7590;border-top:1px solid #eef1f7;padding:16px 26px}
-    </style></head><body><div class="wrap"><div class="top">AMP <span>·</span> AIME Member Portal</div><div class="in">
-      <p>Hi {first name},</p>
-      <p>A new <strong>${r.type.toLowerCase()} referral</strong> in <strong>${r.state}</strong> matches your role and licensed states. Reach out to ${esc(r.first)} directly.</p>
-      <table>${row('Name', esc(r.first + ' ' + r.last))}${row('Email', esc(r.email))}${row('State', r.state)}${row('Language', esc(r.lang))}
-        ${row('Loan program', esc(r.program))}${row('Loan amount', r.amount ? money(r.amount) : '')}${row('Facebook post', r.fb ? `<a href="#">${esc(r.fb)}</a>` : '')}</table>
-      <div class="det"><strong>Loan details</strong><br>${esc(r.details)}</div>
-      <a class="btn" href="#">Email ${esc(r.first)}</a>
-      <p style="font-size:13px;color:#6b7590">— The AIME Membership Team</p></div>
-      <div class="foot">You're receiving this because you opted in to AIME loan referrals and you're a ${r.type.toLowerCase()} licensed in ${r.state}. Opt out any time in AMP → Settings → Notifications &amp; app.<br>AIME · aimegroup.com</div></div></body></html>`;
+    return AmpEmailPreview.doc({
+      paragraphs: ['Hi {first name},', `A new <strong>${r.type.toLowerCase()} referral</strong> in <strong>${r.state}</strong> matches your role and licensed states. Reach out to ${esc(r.first)} directly.`],
+      rows: [['Name', esc(r.first + ' ' + r.last)], ['Email', esc(r.email)], ['State', r.state], ['Language', esc(r.lang)],
+        ['Loan program', esc(r.program)], ['Loan amount', r.amount ? money(r.amount) : ''], ['Facebook post', r.fb ? `<a href="#">${esc(r.fb)}</a>` : '']],
+      block: `<div class="det"><strong>Loan details</strong><br>${esc(r.details)}</div>`,
+      ctas: [`Email ${esc(r.first)}`],
+      foot: `You're receiving this because you opted in to AIME loan referrals and you're a ${r.type.toLowerCase()} licensed in ${r.state}. Opt out any time in AMP → Settings → Notifications &amp; app.`,
+    });
   }
   function open(id) {
     const r = referrals.find((x) => x.id === id); if (!r) return;
-    $('rf-m-title').textContent = subject(r);
-    $('rf-m-sub').textContent = `Sent ${fmt(r.at)} by ${r.by}`;
-    const kv = (k, v) => `<div class="rq-kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
-    $('rf-m-body').innerHTML = `<div class="em-meta">
-        ${kv('From', 'AIME Group &lt;noreply@notifications.aimegroup.com&gt;')}
-        ${kv('Sent to', `<strong>${r.vip} VIP</strong> members first, then <strong>${r.elite} Elite</strong> members — each gets their own copy`)}
-        ${kv('Matched on', `${r.type} · ${r.state}`)}</div>
-      <iframe class="em-frame" title="Referral email preview" sandbox="" srcdoc="${esc(emailHTML(r))}"></iframe>`;
-    openModal('referral');
+    AmpEmailPreview.open({
+      title: subject(r),
+      sub: `Sent ${fmt(r.at)} by ${esc(r.by)}`,
+      meta: [['Sent to', `<strong>${r.vip} VIP</strong> members first, then <strong>${r.elite} Elite</strong> members — each gets their own copy`], ['Matched on', `${r.type} · ${r.state}`]],
+      html: emailHTML(r),
+    });
   }
 
   /* ---------- wiring ---------- */
