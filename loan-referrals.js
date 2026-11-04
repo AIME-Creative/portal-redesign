@@ -10,9 +10,14 @@
    1. One-time prompt on the dashboard: Join referrals or No thanks.
       Waits until no walkthrough, other window, or install card is
       showing. Closing it without choosing asks again next visit.
-   2. Settings → Notifications & app → Loan referrals: opt in or out
-      any time.
+   2. Settings → Notifications & app → Subscriptions → Loan referrals:
+      opt in or out any time.
    Saved in localStorage amp-referrals-v1 { status: joined|declined, at }.
+   The same Subscriptions card holds the free Scotsman Guide
+   subscription (every member tier; on unless the member opts out —
+   it's ticked by default at sign-up). localStorage amp-scotsman-v1
+   { status: in|out, at }. Production: the profile's Scotsman Guide
+   field, synced to GoHighLevel as Opt-in / Opt-out with the date.
    Uses app.js globals: memberTier, userType, openModal, closeModals,
    showToast, navigate, setTab. Loaded after pwa.js (its settings tab).
    ============================================================ */
@@ -25,6 +30,9 @@
   const eligible = memberTier === 'VIP' || memberTier === 'Elite';
   const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
   const write = (status) => { try { localStorage.setItem(KEY, JSON.stringify({ status, at: new Date().toISOString() })); } catch (e) { /* private mode */ } };
+  const SG_KEY = 'amp-scotsman-v1';
+  const sgIn = () => { try { return (JSON.parse(localStorage.getItem(SG_KEY)) || {}).status !== 'out'; } catch (e) { return true; } };
+  const sgSet = (on) => { try { localStorage.setItem(SG_KEY, JSON.stringify({ status: on ? 'in' : 'out', at: new Date().toISOString() })); } catch (e) { /* private mode */ } };
 
   /* ---------- from the member's profile ---------- */
   const STATES = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
@@ -82,7 +90,13 @@
       : `<p class="pwa-sub" style="margin-bottom:12px"><span class="pwa-pill ${joined ? 'on' : ''}">${joined ? 'Opted in' : 'Opted out'}</span> ${joined ? 'Referrals come to your email.' : 'Get loan referrals by email.'} ${timing()}</p>
         ${summary()}
         <button class="btn ${joined ? 'btn-outline' : 'btn-primary'} btn-sm" data-lr="${joined ? 'decline' : 'join'}" style="margin-top:14px">${joined ? 'Opt out' : 'Opt in'}</button>`;
-    box.innerHTML = `<div class="card card-pad" style="max-width:560px"><div class="form-section-label" style="margin-top:0">Loan referrals</div>${inner}</div>`;
+    const sg = sgIn();
+    box.innerHTML = `<div class="card card-pad" style="max-width:560px">
+      <h3 style="font-size:16px;margin-bottom:4px">Subscriptions</h3>
+      <div class="form-section-label" style="margin-top:12px">Scotsman Guide</div>
+      <p class="pwa-sub" style="margin-bottom:12px"><span class="pwa-pill ${sg ? 'on' : ''}">${sg ? 'Subscribed' : 'Not subscribed'}</span> Your FREE subscription to Scotsman Guide, included with your membership.</p>
+      <button class="btn ${sg ? 'btn-outline' : 'btn-primary'} btn-sm" data-sg="${sg ? 'out' : 'in'}">${sg ? 'Unsubscribe' : 'Subscribe'}</button>
+      <div class="form-section-label" style="margin-top:22px">Loan referrals</div>${inner}</div>`;
   }
 
   function busy() {
@@ -98,6 +112,12 @@
 
   /* ---------- wiring ---------- */
   document.addEventListener('click', (e) => {
+    const sg = e.target.closest('[data-sg]');
+    if (sg) {
+      e.preventDefault(); sgSet(sg.dataset.sg === 'in'); renderSettings();
+      showToast(sg.dataset.sg === 'in' ? "You're subscribed to Scotsman Guide." : "You're unsubscribed from Scotsman Guide.");
+      return;
+    }
     if (e.target.closest('[data-lr-profile]')) { e.preventDefault(); closeModals(); navigate('settings'); setTab('profile'); return; }
     const b = e.target.closest('[data-lr]'); if (!b) return;
     e.preventDefault();
@@ -105,5 +125,5 @@
   });
 
   addSettings(); renderSettings();
-  window.AmpReferrals = { open: openPrompt, read, reset() { try { localStorage.removeItem(KEY); } catch (e) { /* private mode */ } renderSettings(); setTimeout(() => maybePrompt(0), 500); } };
+  window.AmpReferrals = { open: openPrompt, read, scotsman: sgIn, reset() { try { localStorage.removeItem(KEY); localStorage.removeItem(SG_KEY); } catch (e) { /* private mode */ } renderSettings(); setTimeout(() => maybePrompt(0), 500); } };
 })();

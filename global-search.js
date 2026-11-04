@@ -57,7 +57,7 @@
          ['My Library', 'library'], ['My Requests', 'requests'], ['FUSE 2026 registration', 'fuse'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']];
     pages.forEach(([t, v]) => add('page', t, 'Page', v, () => navigate(v)));
     const tabs = [['Profile', 'profile', 'name phone address licenses nmls company role'], ['Email & Password', 'security', 'login password email'],
-      ['Notifications & app', 'notifications', 'push install app alerts loan referrals opt in out']];
+      ['Notifications & app', 'notifications', 'push install app alerts subscriptions scotsman guide loan referrals opt in out subscribe unsubscribe']];
     if (!partner) tabs.splice(2, 0, ['Membership & Billing', 'billing', 'plan upgrade payment card invoice cancel escalations']);
     tabs.forEach(([t, k, words]) => add('page', t, 'Settings', words, () => { navigate('settings'); setTab(k); }));
 

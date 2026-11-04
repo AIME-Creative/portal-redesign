@@ -373,6 +373,16 @@ window.HELP_ARTICLES = [
     actions: [{ label: 'Open Settings', attr: 'data-nav="settings"' }],
     body: `<p>Go to <strong>Settings → Profile</strong> (or click your name). Update your personal details and <strong>Company Information</strong>, then <strong>Save changes</strong>. Lender connection forms use these details, so keep your NMLS # and licensed states current.</p>` },
 
+  { slug: 'scotsman-guide', audience: 'member', title: 'Your free Scotsman Guide subscription', category: 'account',
+    summary: 'Every membership includes a free Scotsman Guide subscription — subscribe or unsubscribe any time.',
+    tags: ['scotsman', 'scotsman guide', 'magazine', 'subscription', 'subscribe', 'unsubscribe', 'opt in', 'opt out'], minutes: 1, updated: 'Nov 4, 2026', status: 'Published',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'Open subscriptions', attr: 'data-nav="settings" data-tab="notifications"' }],
+    body: `<p>Your AIME membership includes a <strong>FREE subscription to Scotsman Guide</strong>. You're subscribed when you join, unless you unticked it at sign-up.</p>
+      <ul>
+        <li>To change it, go to <strong>Settings → Notifications &amp; app → Subscriptions</strong> and tap <strong>Unsubscribe</strong> or <strong>Subscribe</strong>.</li>
+        <li>Keep your address current in <strong>Settings → Profile</strong> so it reaches you.</li>
+      </ul>` },
   { slug: 'loan-referrals', audience: 'member', title: 'Getting loan referrals from AIME', category: 'account',
     summary: 'Opt in or out of loan referrals by email — matched to your role and licensed states.',
     tags: ['referral', 'referrals', 'loan referral', 'leads', 'broker', 'processor', 'states', 'opt in', 'opt out', 'elite', 'vip'], minutes: 1, updated: 'Oct 26, 2026', status: 'Published',
@@ -384,7 +394,7 @@ window.HELP_ARTICLES = [
         <li>The first time you sign in, we'll ask if you want referrals — choose <strong>Join referrals</strong> or <strong>No thanks</strong>.</li>
         <li><strong>Which referrals:</strong> processors get processor referrals; everyone else gets broker referrals. It's based on the <strong>Role type</strong> on your profile.</li>
         <li><strong>Which states:</strong> the <strong>State licenses</strong> on your profile. Keep them current in <strong>Settings → Profile</strong>.</li>
-        <li>Opt in or out any time in <strong>Settings → Notifications &amp; app → Loan referrals</strong>.</li>
+        <li>Opt in or out any time in <strong>Settings → Notifications &amp; app → Subscriptions</strong>, under Loan referrals.</li>
       </ul>
       <div class="kb-tip"><strong>On Premium?</strong> Loan referrals are included with Elite and VIP. See <strong>Settings → Membership &amp; Billing</strong> to upgrade.</div>` },
 
