@@ -451,3 +451,15 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .img-up-btns { display:flex; gap:8px; flex-wrap:wrap; }
 @media (max-width:600px) { .img-up { align-items:flex-start; } .img-up-prev { width:64px; height:64px; } }
 @media (max-width:600px) { .img-up.wide .img-up-prev { width:112px; height:63px; } }
+
+/* Checkbox row in editors (e.g. "Only in this hub") */
+.ed-check { display:flex; gap:10px; align-items:flex-start; margin:-4px 0 16px; font-size:13.5px; color:var(--ink-soft); line-height:1.45; cursor:pointer; }
+.ed-check input { margin-top:3px; accent-color:var(--pink); flex:none; }
+.ed-check.dim { opacity:.5; cursor:not-allowed; }
+
+/* Linked documents picker (lender, Market, Vault, event editors) */
+.ld-list { display:grid; gap:6px; margin:6px 0 8px; }
+.ld-list:empty { display:none; }
+.ld-item { display:flex; align-items:center; gap:10px; justify-content:space-between; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--surface-alt); font-size:13.5px; }
+.ld-item span { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.ld-item .icon-act { width:28px; height:28px; font-size:18px; line-height:1; flex:none; }

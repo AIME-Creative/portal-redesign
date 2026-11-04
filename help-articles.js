@@ -80,6 +80,7 @@ window.HELP_ARTICLES = [
         <li><strong>Coming up</strong> shows the next live events. <strong>Learning paths</strong> put sessions in order. <strong>New this month</strong> has the latest additions.</li>
         <li><strong>Shows</strong> are weekly series — pick one to see every episode. <strong>Replays</strong> are recordings of live sessions. <strong>Tools you can use today</strong> are guides, checklists, and templates to download.</li>
         <li>The <strong>Full library</strong> filters by goal, topic, format (Watch, Listen, Download), or show, and sorts by newest, oldest, or A to Z.</li>
+        <li>A few sessions live only in their hub (for example, some Ascent trainings). Find them on the hub's page, or search for them.</li>
         <li>Tap the <strong>heart</strong> to save something — it shows under <strong>Your saved</strong> and in My Library.</li>
         <li>Content from VIP-only hubs is marked <strong>Requires VIP membership</strong>.</li>
       </ul>
@@ -307,11 +308,12 @@ window.HELP_ARTICLES = [
 
   { slug: 'documents', title: 'Finding and downloading documents', category: 'learning',
     summary: 'Templates, checklists, and guides from every hub in one list.',
-    tags: ['documents', 'download', 'pdf', 'template', 'checklist'], minutes: 1, updated: 'Sep 22, 2026', status: 'Published',
+    tags: ['documents', 'download', 'pdf', 'template', 'checklist', 'workbook', 'lender', 'event', 'related'], minutes: 1, updated: 'Nov 4, 2026', status: 'Published',
     views: 498, helpful: [55, 2],
     actions: [{ label: 'Open Documents', attr: 'data-nav="documents"' }],
     body: `
-      <p><strong>Documents</strong> in the sidebar lists every document you have access to. Use the source chips to filter by hub, then click <strong>Download</strong>. Hub pages also show their own documents under the <strong>Documents</strong> tab.</p>` },
+      <p><strong>Documents</strong> in the sidebar lists every document you have access to. Use the source chips to filter by hub, then click <strong>Download</strong>. Hub pages also show their own documents under the <strong>Documents</strong> tab.</p>
+      <p>Lender pages, Market products, Vault sessions, and events can have a <strong>Documents</strong> section too — the workbook for a session, or a guide for a lender. A document your membership doesn't include shows locked with the membership it needs.</p>` },
 
   /* ---------------- Events & FUSE ---------------- */
   { slug: 'fuse-ticket', title: 'Claiming your FUSE 2026 ticket, add-ons, and guests', category: 'events', popular: true,

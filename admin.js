@@ -66,7 +66,7 @@ const resources = [
   { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", pub:"Jun 17, 2026", collection:"—", topic:"—", status:"Active" },
   { title:"Women's Mortgage Network Podcast", type:"Podcast", dur:"33 min", pub:"Jun 12, 2026", collection:"WMN", topic:"—", status:"Active" },
   { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"—", status:"Active" },
-  { title:"Ascent — Leading at Scale", access:["VIP"], type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
+  { title:"Ascent — Leading at Scale", access:["VIP"], hubOnly:true, type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
   { title:"Scaling Past $1M in Volume", type:"Training", dur:"47 min", pub:"Jun 2, 2026", collection:"—", topic:"Sales", status:"Active" },
   { title:"Using AI to Pre-Qualify Borrowers", type:"Webinar", dur:"39 min", pub:"Jun 5, 2026", collection:"—", topic:"AI Strategy", status:"Active" },
   { title:"Compliance Corner — Q3 Update", type:"Webinar", dur:"38 min", pub:"Jun 24, 2026", collection:"—", topic:"—", status:"Draft" },
@@ -464,7 +464,7 @@ function renderResources(){
   $('resources-tbody').innerHTML = resources.map((r,i)=>`<tr>
     <td class="t-strong">${r.graphic?`<img class="t-thumb" src="${r.graphic}" alt="">`:''}${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</td>
     <td><span class="badge badge-cyan">${r.type}</span></td>
-    <td>${collTag(r.collection)}</td>
+    <td>${collTag(r.collection)}${r.hubOnly?'<div class="t-sub">Hub only — not in The Vault</div>':''}</td>
     <td>${accessTags(accessOf(r))}</td>
     <td>${r.dur}</td>
     <td>${r.pub}</td>
@@ -1119,8 +1119,16 @@ document.addEventListener('click', (e) => {
   if(!e.target.closest('#edit-save') || !document.querySelector('#modal-edit #access-picker') || !editing || !ACCESS_LISTS[editing.type] || editing.idx < 0) return;
   const item = ACCESS_LISTS[editing.type]()[editing.idx];
   item.access = readAccess();
+  if($('ed-docs') && window.AmpDocLinks){
+    const kind = editing.type==='vendor' ? 'market' : editing.type;
+    AmpDocLinks.set(kind, item.name || item.title, [...$('ed-docs').querySelectorAll('.ld-item')].map(n=>n.dataset.doc));
+  }
   const url = $('ed-signup') ? $('ed-signup').value.trim() : '';
   if(url && !/^https?:\/\/\S+\.\S+/.test(url)){ e.preventDefault(); e.stopImmediatePropagation(); showToast('Add a full sign-up link, starting with https://'); $('ed-signup').focus(); return; }
+  if(editing.type==='resource'){
+    item.collection = $('ed-hub').value;
+    item.hubOnly = item.collection !== '—' && $('ed-hubonly').checked;
+  }
   if(editing.type==='resource' || editing.type==='event'){
     item.graphic = $('img-up-val').value || '';
     if(editing.type==='event') item.signup = url;
@@ -1165,6 +1173,7 @@ function openEdit(ref){
       ${bioField(l.bio, 'Shown on the lender\'s page and card in the portal.')}
       <div class="field-row">${selectField('Tier', ['Gold','Silver','Bronze'], l.tier)}${selectField('Status', ['Active','Draft'], l.status)}</div>
       ${tagPicker('Product types', taxonomies.lenderProducts, l.products, 'ed-tags')}
+      ${docsPicker('lender', l.name)}
       ${accessPicker(accessOf(l))}
       <div class="form-section-label" style="margin-top:18px">Who requests go to</div>
       ${window.AmpContactsEditor ? AmpContactsEditor.html(l.name, 'lender', isNew) : ''}
@@ -1180,6 +1189,7 @@ function openEdit(ref){
       <div class="field-row"><div class="field"><label>Category</label><select class="select" id="ed-cat">${taxonomies.vendorCategories.map(o=>`<option ${o===v.cat?'selected':''}>${o}</option>`).join('')}</select><div class="hint">Which Market group it's listed under.</div></div>${selectField('Status', ['Active','Draft'], v.status)}</div>
       ${tagPicker('Product types', taxonomies.vendorProducts, v.tags, 'ed-tags')}
       ${field('Member offer', v.offer)}
+      ${docsPicker('market', v.name)}
       <div class="field"><label>Sign-up link</label><input class="input" id="ed-signup" type="url" value="${v.signup||''}" placeholder="https://… — where members go to sign up or claim the offer"><div class="hint">Opens from the product page's website button. Use the partner's AIME-specific link if they have one.</div></div>
       ${accessPicker(accessOf(v))}
       ${(() => { const co = window.AmpPartners && !isNew ? AmpPartners.companyOf(v.name) : '';
@@ -1194,12 +1204,15 @@ function openEdit(ref){
       ${field('Title', r.title)}
       <div class="field-row">${selectField('Type', taxonomies.resourceTypes, r.type)}${field('Duration', r.dur)}</div>
       <div class="field-row">${selectField('Goal', ['—', ...taxonomies.learningGoals], r.goal || '—')}${selectField('Topic', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
-      <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}</div>
+      <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}<div class="field"><label>Hub / collection</label><select class="select" id="ed-hub">${['—', ...hubNames()].map(o=>`<option ${o===r.collection?'selected':''}>${o}</option>`).join('')}</select></div></div>
+      <label class="ed-check${r.collection==='—'?' dim':''}" id="ed-hubonly-row"><input type="checkbox" id="ed-hubonly" ${r.hubOnly&&r.collection!=='—'?'checked':''} ${r.collection==='—'?'disabled':''}>
+        <span><strong>Only in this hub</strong> — keep it out of The Vault. Members find it only on the hub's page (and in search, under the hub).</span></label>
       ${imageUpload('Graphic', r, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the card and the page in The Vault. Without one, the default artwork for its type is used.', true)}
       ${field('Content link', '', 'placeholder="Video / audio URL"')}
+      ${docsPicker('resource', r.title)}
       ${accessPicker(accessOf(r))}
       ${selectField('Status', ['Active','Draft'], r.status)}
-      <div class="hint"><strong>Goal</strong>, <strong>Topic</strong>, and <strong>Show</strong> decide where this appears in The Vault (goal tiles, library filters, the Shows row). Assigning a <strong>hub</strong> also puts it inside that hub.</div>`;
+      <div class="hint"><strong>Goal</strong>, <strong>Topic</strong>, and <strong>Show</strong> decide where this appears in The Vault (goal tiles, library filters, the Shows row). Assigning a <strong>hub</strong> also puts it inside that hub — and <strong>Only in this hub</strong> keeps it out of The Vault.</div>`;
   } else if(type==='event'){
     const e = isNew ? {title:'',date:'',type:taxonomies.eventTypes[0],hub:'—',status:'Draft'} : events[idx];
     title = isNew ? 'Add event' : 'Edit event'; sub = isNew?'Create a new event.':e.title;
@@ -1209,6 +1222,7 @@ function openEdit(ref){
       ${selectField('Hub / collection', ['—', ...hubNames()], e.hub)}
       ${imageUpload('Graphic', e, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the event card, the calendar pop-up, and the event page. Without one, the default artwork for its type is used.', true)}
       <div class="field"><label>Sign-up link</label><input class="input" id="ed-signup" type="url" value="${e.signup||''}" placeholder="https://… — where members sign up for this event"><div class="hint">For events members sign up for somewhere else (e.g. a partner's or venue's page). If <strong>Registration</strong> is turned on for this event, members register in the portal and this link isn't shown.</div></div>
+      ${docsPicker('event', e.title)}
       ${accessPicker(accessOf(e), '<strong>All Members</strong> includes everyone. Pick tiers to limit it — other members still see the event, with an upgrade prompt instead of registration.')}
       ${selectField('Status', ['Active','Draft'], e.status)}
       <div class="hint">Assign a hub to surface this event inside a member hub (e.g. VIP, WMN). Leave as “—” for a general event — it still shows on the Events page &amp; calendar.</div>`;
@@ -1295,6 +1309,11 @@ function imageUpload(label, x, hint, wide){
     </div><input type="hidden" id="img-up-val" value="${img||''}"></div>`;
 }
 document.addEventListener('change', (e) => {
+  if(e.target.id !== 'ed-hub') return;
+  const none = e.target.value === '—', cb = $('ed-hubonly');
+  cb.disabled = none; if(none) cb.checked = false; $('ed-hubonly-row').classList.toggle('dim', none);
+});
+document.addEventListener('change', (e) => {
   if(e.target.id !== 'img-up-file' || !e.target.files[0]) return;
   const f = e.target.files[0];
   if(f.size > 2*1024*1024){ showToast('That image is over 2 MB — pick a smaller one.'); e.target.value=''; return; }
@@ -1305,6 +1324,26 @@ document.addEventListener('change', (e) => {
 document.addEventListener('click', (e) => {
   if(!e.target.closest('#img-up-clear')) return;
   e.preventDefault(); $('img-up-val').value=''; $('img-up-prev').innerHTML=`<span>${$('img-up').classList.contains('wide')?'Graphic':'Logo'}</span>`; $('img-up-clear').hidden = true; $('img-up-file').value='';
+});
+// Documents linked to this item (document-links.js) — shown on its page in the portal.
+function docsPicker(kind, name){
+  const linked = (window.AmpDocLinks && name) ? AmpDocLinks.get(kind, name) : [];
+  const accessNote = (t) => { const d = documents.find(x=>x.title===t); return d && !accessOf(d).includes('All Members') ? ` <span class="t-sub" style="display:inline">· ${accessOf(d).join(', ')}</span>` : ''; };
+  return `<div class="field"><label>Documents</label>
+    <div class="ld-list" id="ed-docs">${linked.map(t=>`<div class="ld-item" data-doc="${t.replace(/"/g,'&quot;')}"><span>📄 ${t}${accessNote(t)}</span><button type="button" class="icon-act" data-ld-remove title="Remove">×</button></div>`).join('')}</div>
+    <select class="select" id="ed-docs-add"><option value="">+ Add a document from the library…</option>${documents.filter(d=>d.status==='Active').map(d=>`<option ${linked.includes(d.title)?'disabled':''}>${d.title}</option>`).join('')}</select>
+    <div class="hint">Shown on this item's page in the portal, with a Download button. Each document keeps its own access — a VIP-only document shows locked to other members. Add new files on the Documents page.</div></div>`;
+}
+document.addEventListener('change', (e) => {
+  if(e.target.id !== 'ed-docs-add' || !e.target.value) return;
+  const t = e.target.value;
+  $('ed-docs').insertAdjacentHTML('beforeend', `<div class="ld-item" data-doc="${t.replace(/"/g,'&quot;')}"><span>📄 ${t}</span><button type="button" class="icon-act" data-ld-remove title="Remove">×</button></div>`);
+  [...e.target.options].forEach(o=>{ if(o.value===t) o.disabled = true; }); e.target.value='';
+});
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-ld-remove]'); if(!b) return;
+  e.preventDefault(); const row = b.closest('.ld-item'), t = row.dataset.doc; row.remove();
+  [...$('ed-docs-add').options].forEach(o=>{ if(o.value===t) o.disabled = false; });
 });
 function bioField(value, hint){
   return `<div class="field"><label>Bio</label><textarea class="input" id="ed-bio" maxlength="600" style="min-height:96px" placeholder="A few sentences about them — shown on their page in the portal">${value||''}</textarea>

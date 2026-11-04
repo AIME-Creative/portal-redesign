@@ -121,16 +121,19 @@
     'WMN Community Guidelines': G('Start Here', 'AIME Community', "Women's Mortgage Network"),
   };
 
+  // Hub-only items (admin: "Only in this hub") stay on their hub's page and out of The Vault.
+  const HUB_ONLY = new Set(['Ascent — Leading at Scale']);
+
   /* ---------- one list of everything in the library ---------- */
   const DAY = 864e5, TODAY = new Date(2026, 5, 25);
   const items = [];
-  resources.forEach((r, i) => items.push({ kind: 'resource', title: r.title, type: r.type, dur: r.dur, g: r.g, src: 'AIME', at: TODAY - (i * 3 + 1) * DAY,
+  resources.forEach((r, i) => !HUB_ONLY.has(r.title) && items.push({ kind: 'resource', title: r.title, type: r.type, dur: r.dur, g: r.g, src: 'AIME', at: TODAY - (i * 3 + 1) * DAY,
     open: () => openResource(i), opener: `data-open-resource="${i}"` }));
   if (!partner) {
     Object.keys(hubs).forEach((k, hi) => {
       const h = hubs[k], locked = !!h.vip && !canSeeVIP;
       // The same session can be both a resource and a hub recording — list it once.
-      (h.content || []).forEach((c, i) => !resources.some((r) => r.title === c.title) && items.push({ kind: 'hub', title: c.title, type: c.type, dur: c.dur, g: c.g, src: h.name, locked, at: TODAY - (hi * 4 + i * 6 + 2) * DAY,
+      (h.content || []).forEach((c, i) => !resources.some((r) => r.title === c.title) && !HUB_ONLY.has(c.title) && items.push({ kind: 'hub', title: c.title, type: c.type, dur: c.dur, g: c.g, src: h.name, locked, at: TODAY - (hi * 4 + i * 6 + 2) * DAY,
         open: () => openHubItem(k, 'content', i), opener: `data-open-hub="${k}:content:${i}"` }));
       (h.documents || []).forEach((d, i) => items.push({ kind: 'doc', title: d.title, type: 'Document', desc: d.desc, src: h.name, srcKey: k, locked, at: TODAY - (30 + hi * 5 + i * 9) * DAY }));
     });
