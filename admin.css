@@ -475,3 +475,11 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .ld-new-foot { display:flex; gap:8px; justify-content:flex-end; }
 
 @media (max-width:700px){ .stat-row.admin3{ grid-template-columns:1fr; } }
+
+/* Analytics → Content performance */
+.cp-sort { background:none; border:0; padding:0; font:inherit; color:inherit; font-weight:inherit; letter-spacing:inherit; text-transform:inherit; cursor:pointer; display:inline-flex; gap:4px; align-items:center; }
+.cp-sort span { color:var(--muted); font-size:12px; }
+.cp-sort.on span { color:var(--pink); }
+.cp-show { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); }
+#view-content .cp-table { min-width:0; }
+#view-content .t-right .pv-link { margin-left:auto; }

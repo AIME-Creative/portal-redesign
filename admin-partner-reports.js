@@ -171,12 +171,14 @@
   /* ============================================================
      Analytics — who viewed a lender or vendor page
      ============================================================ */
-  const TABS = (active) => `<div class="filters an-tabs" role="tablist">${[['engagement', 'Engagement'], ['journeys', 'Member journeys'], ['lenderviews', 'Lender page views'], ['vendorclicks', 'Vendor page views']]
+  const TABS = (active) => `<div class="filters an-tabs" role="tablist">${[['engagement', 'Engagement'], ['content', 'Content performance'], ['journeys', 'Member journeys'], ['lenderviews', 'Lender page views'], ['vendorclicks', 'Vendor page views']]
     .map(([v, l]) => `<button class="chip ${v === active ? 'active' : ''}" data-nav="${v}" role="tab">${l}</button>`).join('')}</div>`;
   // Add the new tab to the existing Analytics tab rows.
   document.querySelectorAll('.an-tabs').forEach((row) => {
     const vc = row.querySelector('[data-nav="vendorclicks"]');
     if (vc && !row.querySelector('[data-nav="lenderviews"]')) vc.insertAdjacentHTML('beforebegin', '<button class="chip" data-nav="lenderviews" role="tab">Lender page views</button>');
+    const eg = row.querySelector('[data-nav="engagement"]');
+    if (eg && !row.querySelector('[data-nav="content"]')) eg.insertAdjacentHTML('afterend', '<button class="chip" data-nav="content" role="tab">Content performance</button>');
   });
   $('view-vendorclicks').insertAdjacentHTML('afterend', `
     <section class="view" id="view-lenderviews">${TABS('lenderviews')}
@@ -202,10 +204,11 @@
 
   // Per-lender views: deterministic sample, scaled to the range.
   const hash = (s) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 9973, 17);
-  function lenderStats(name) {
-    const f = ranges.lenderviews.days / 30, h = hash(name);
+  function lenderStats(name, scope) {
+    scope = scope || 'lenderviews';
+    const f = ranges[scope].days / 30, h = hash(name);
     const views = Math.round((120 + (h % 900)) * f), unique = Math.round(views * (0.55 + (h % 20) / 100));
-    const inRange = lenderRows.filter((r) => r.partner === name && inWindow('lenderviews', r.date));
+    const inRange = lenderRows.filter((r) => r.partner === name && inWindow(scope, r.date));
     const c = (t) => inRange.filter((r) => r.type === t).length;
     return { views, unique, esc: c('Escalation'), ae: c('Change AE'), conn: c('Connection') };
   }
@@ -217,6 +220,54 @@
     $('lv-count').textContent = `${rows.length} lenders · ${ranges.lenderviews.label}`;
   }
   setupRange('lenderviews', renderLenderViews);
+
+  /* ---------- Content performance: page views for every kind of content ---------- */
+  ranges.content = { days: 30, label: 'Last 30 days', from: null, to: null };
+  $('view-engagement').insertAdjacentHTML('afterend', `
+    <section class="view" id="view-content">${TABS('content')}
+      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Content performance — page views and unique page views for everything members can open. Click a Page views number to see who viewed it.</p></div>
+        <div class="date-range" id="content-range"><select class="select filter-select daterange-preset"><option value="7d">Last 7 days</option><option value="30d" selected>Last 30 days</option><option value="90d">Last 90 days</option><option value="ytd">Year to date</option><option value="all">All time</option><option value="custom">Custom range…</option></select>
+        <div class="daterange-custom" hidden><input type="date" class="input daterange-from"><span class="dr-sep">to</span><input type="date" class="input daterange-to"><button class="btn btn-outline btn-sm daterange-apply">Apply</button></div></div></div>
+      <div class="filters" id="cp-types">${[['resource', 'The Vault'], ['vendor', 'Market products'], ['lender', 'Lenders'], ['event', 'Events']].map(([k, l], i) => `<button class="chip ${i ? '' : 'active'}" data-cp-type="${k}">${l}</button>`).join('')}</div>
+      <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="cp-q" placeholder="Search by title…"></div>
+        <span class="spacer"></span><span class="count-note" id="cp-count">—</span>
+        <label class="cp-show">Show <select class="select filter-select" id="cp-show" style="min-width:0"><option>10</option><option selected>25</option><option>50</option><option>100</option></select></label>
+        <button class="btn btn-outline btn-sm" id="cp-export">Export CSV</button></div>
+      <div class="table-wrap"><div class="table-scroll"><table class="adm cp-table"><thead><tr>
+        <th><button class="cp-sort" data-cp-sort="title">Title <span></span></button></th>
+        <th class="t-right"><button class="cp-sort" data-cp-sort="views">Page views <span></span></button></th>
+        <th class="t-right"><button class="cp-sort" data-cp-sort="unique">Unique page views <span></span></button></th></tr></thead><tbody id="cp-tbody"></tbody></table></div></div>
+      <p class="flow-caption"><strong>Page views</strong> = times the page was opened · <strong>Unique page views</strong> = different members who opened it. Lender and Market numbers match the Lender page views and Vendor page views tabs for the same dates.</p>
+    </section>`);
+  let cpType = 'resource', cpSort = { key: 'views', dir: -1 };
+  function cpRows() {
+    const list = cpType === 'resource' ? resources.map((x) => ({ title: x.title, sub: `${x.type}${x.collection && x.collection !== '—' ? ' · ' + x.collection : ''}${x.hubOnly ? ' (hub only)' : ''}` }))
+      : cpType === 'event' ? events.map((x) => ({ title: x.title, sub: `${x.date} · ${x.type}` }))
+      : cpType === 'lender' ? lenders.map((x) => ({ title: x.name, sub: `${x.tier} lender` }))
+      : vendorClicks.map((x) => ({ title: x.name, sub: x.cat }));
+    const q = $('cp-q').value.trim().toLowerCase();
+    return list.filter((x) => !q || x.title.toLowerCase().includes(q)).map((x) => Object.assign(x, statsFor(cpType, x.title, 'content')))
+      .sort((a, b) => cpSort.key === 'title' ? a.title.localeCompare(b.title) * cpSort.dir : (a[cpSort.key] - b[cpSort.key]) * cpSort.dir || a.title.localeCompare(b.title));
+  }
+  function renderContent() {
+    const rows = cpRows(), n = +$('cp-show').value;
+    $('cp-tbody').innerHTML = rows.slice(0, n).map((x) => `<tr><td><div class="t-strong">${esc(x.title)}</div><div class="t-sub">${esc(x.sub)}</div></td>
+        <td class="t-right"><button class="pv-link" data-pv="${cpType}::${esc(x.title)}" data-pv-from="content" title="See who viewed this">${x.views.toLocaleString()}</button></td>
+        <td class="t-right">${x.unique.toLocaleString()}</td></tr>`).join('')
+      || '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:28px">Nothing matches that search.</td></tr>';
+    $('cp-count').textContent = `${Math.min(n, rows.length)} of ${rows.length} · ${ranges.content.label}`;
+    document.querySelectorAll('#view-content .cp-sort').forEach((b) => { const on = b.dataset.cpSort === cpSort.key; b.classList.toggle('on', on); b.querySelector('span').textContent = on ? (cpSort.dir > 0 ? '↑' : '↓') : '↕'; });
+  }
+  setupRange('content', renderContent);
+  $('cp-q').addEventListener('input', renderContent);
+  $('cp-show').addEventListener('change', renderContent);
+  document.addEventListener('click', (e) => {
+    let m;
+    if ((m = e.target.closest('[data-cp-type]'))) { cpType = m.dataset.cpType; document.querySelectorAll('#cp-types .chip').forEach((c) => c.classList.toggle('active', c === m)); renderContent(); return; }
+    if ((m = e.target.closest('[data-cp-sort]'))) { const k = m.dataset.cpSort; cpSort = { key: k, dir: cpSort.key === k ? -cpSort.dir : (k === 'title' ? 1 : -1) }; renderContent(); return; }
+    if (e.target.closest('#cp-export')) { e.preventDefault(); showToast(`Exported ${(document.querySelector('#cp-types .chip.active') || {}).textContent || ''} content performance (${ranges.content.label.toLowerCase()}) to CSV.`); }
+  });
+  renderContent();
 
   // Vendor page views: the Page views number opens who viewed it (same as Lender page views).
   const vcBody = $('vendorclicks-tbody');
@@ -233,9 +284,15 @@
   const saveSignups = (all) => { try { localStorage.setItem(SIGN_KEY, JSON.stringify(all)); } catch (e) { /* in-memory */ } };
   let pv = null;   // { kind, name, from }
   // The totals shown in the table the admin clicked (so this page adds up to the same numbers).
-  function statsFor(kind, name) {
-    if (kind === 'lender') return lenderStats(name);
-    const f = ranges.vendorclicks.days / 30, v = vendorClicks.find((x) => x.name === name);
+  function statsFor(kind, name, scope) {
+    if (kind === 'lender') return lenderStats(name, scope || 'lenderviews');
+    if (kind === 'resource' || kind === 'event') {
+      // The Vault and events: deterministic sample page views, scaled to the range.
+      const f = ranges[scope || 'content'].days / 30, h = hash(kind + name);
+      const views = Math.round((kind === 'event' ? 30 + (h % 260) : 20 + (h % 420)) * f);
+      return { views, unique: views ? Math.max(1, Math.round(views * (0.5 + (h % 35) / 100))) : 0, conn: 0 };
+    }
+    const f = ranges[scope || 'vendorclicks'].days / 30, v = vendorClicks.find((x) => x.name === name);
     if (!v) return { views: 0, unique: 0, conn: 0 };
     const t = [v.tiers.premium, v.tiers.elite, v.tiers.vip].map((n) => Math.round(n * f));
     return { views: t[0] + t[1] + t[2], unique: t.reduce((a, n) => a + vendorUnique(n), 0), conn: Math.round(v.connections * f) };
@@ -244,9 +301,10 @@
   const FIRST = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Jamie', 'Avery', 'Quinn', 'Drew', 'Reese', 'Cameron', 'Logan', 'Skyler', 'Parker', 'Rowan', 'Elena', 'Marcus', 'Nadia', 'Omar', 'Grace', 'Victor', 'Leah', 'Andre'];
   const LAST = ['Bennett', 'Ortiz', 'Nguyen', 'Patel', 'Hughes', 'Brooks', 'Rivera', 'Kim', 'Foster', 'Coleman', 'Hayes', 'Reyes', 'Murphy', 'Price', 'Sanders', 'Bishop', 'Lane', 'Wallace', 'Park', 'Russo'];
   const PLANS = ['Premium', 'Premium', 'Premium', 'Elite', 'Elite', 'VIP'];
-  function viewers(kind, name) {
+  function viewers(kind, name, scope) {
     seed = hash(name) + 11;
-    const st = statsFor(kind, name), scope = kind === 'lender' ? 'lenderviews' : 'vendorclicks';
+    scope = scope || (kind === 'lender' ? 'lenderviews' : kind === 'vendor' ? 'vendorclicks' : 'content');
+    const st = statsFor(kind, name, scope);
     const pool = people.slice().sort(() => rnd() - 0.5);
     for (let i = 0; pool.length < st.unique; i++) {
       const f = FIRST[i % FIRST.length], l = LAST[(i * 7 + Math.floor(i / FIRST.length)) % LAST.length];
@@ -263,7 +321,7 @@
       }
     };
     if (kind === 'lender') { give(st.esc, 'esc'); give(st.ae, 'ae'); give(st.conn, 'conn', true); }
-    else {
+    else if (kind === 'vendor') {
       // Connections recorded for these members in the range count first.
       rows.forEach((r) => { if (vendorRows.some((v) => v.partner === name && v.member === r.name && inWindow(scope, v.date))) r.conn = true; });
       give(Math.max(0, st.conn - rows.filter((r) => r.conn).length), 'conn', true);
@@ -279,14 +337,17 @@
     return rows.sort((a, b) => b.views - a.views);
   }
   let shown = 25;
-  function openViewers(kind, name) {
-    pv = { kind, name, from: kind === 'lender' ? 'lenderviews' : 'vendorclicks' };
+  const FROM_LABEL = { lenderviews: 'Lender page views', vendorclicks: 'Vendor page views', content: 'Content performance' };
+  function openViewers(kind, name, from) {
+    from = from || (kind === 'lender' ? 'lenderviews' : kind === 'vendor' ? 'vendorclicks' : 'content');
+    pv = { kind, name, from };
     $('pv-tabs').innerHTML = TABS(pv.from);
     $('pv-back').dataset.nav = pv.from;
-    $('pv-back').querySelector('span').textContent = kind === 'lender' ? 'Back to Lender page views' : 'Back to Vendor page views';
+    $('pv-back').querySelector('span').textContent = `Back to ${FROM_LABEL[from]}`;
     $('pv-title').textContent = `Who viewed ${name}`;
     $('pv-q').value = ''; shown = 25;
-    $('pv-filter').innerHTML = kind === 'lender'
+    $('pv-filter').hidden = kind === 'resource' || kind === 'event';
+    $('pv-filter').innerHTML = (kind === 'resource' || kind === 'event') ? '<option value="all">All viewers</option>' : kind === 'lender'
       ? '<option value="all">All viewers</option><option value="esc">Sent an escalation</option><option value="ae">Requested a new AE</option><option value="conn">Sent a connection</option>'
       : '<option value="all">All viewers</option><option value="conn">Sent a connection</option><option value="signed">Signed up</option><option value="notsigned">Not signed up</option>';
     $('pv-actions').innerHTML = kind === 'vendor' ? `<button class="btn btn-outline" id="pv-upload">${svg(ICO.upload).replace('<svg', '<svg style="width:16px;height:16px"')} Upload sign-ups (CSV)</button>` : '';
@@ -295,14 +356,26 @@
   }
   function viewerRows() {
     const q = $('pv-q').value.trim().toLowerCase(), f = $('pv-filter').value;
-    return viewers(pv.kind, pv.name).filter((r) => (!q || `${r.name} ${r.email}`.toLowerCase().includes(q)) &&
+    return viewers(pv.kind, pv.name, pv.from).filter((r) => (!q || `${r.name} ${r.email}`.toLowerCase().includes(q)) &&
       (f === 'all' || (f === 'esc' && r.esc) || (f === 'ae' && r.ae) || (f === 'conn' && r.conn) || (f === 'signed' && r.signed) || (f === 'notsigned' && !r.signed)));
   }
   function renderViewers() {
-    const all = viewers(pv.kind, pv.name), rows = viewerRows(), lender = pv.kind === 'lender';
-    const scope = lender ? 'lenderviews' : 'vendorclicks';
-    $('pv-sub').textContent = `${lender ? 'Members who viewed this lender\'s page' : 'Members who opened this Market listing'} · ${ranges[scope].label}`;
+    const all = viewers(pv.kind, pv.name, pv.from), rows = viewerRows(), lender = pv.kind === 'lender';
+    const scope = pv.from, plain = pv.kind === 'resource' || pv.kind === 'event';
+    $('pv-sub').textContent = `${lender ? 'Members who viewed this lender\'s page' : pv.kind === 'vendor' ? 'Members who opened this Market listing' : pv.kind === 'event' ? 'Members who viewed this event' : 'Members who viewed this in The Vault'} · ${ranges[scope].label}`;
     const total = all.reduce((s, r) => s + r.views, 0), unique = all.filter((r) => r.views).length;
+    if (plain) {
+      $('pv-tiles').innerHTML = tile(ICO.eye, 'i-navy', 'Page views', total) + tile(ICO.people, 'i-cyan', 'Unique page views', unique);
+      $('pv-upload-note').innerHTML = ''; $('pv-unmatched').innerHTML = '';
+      $('pv-thead').innerHTML = '<tr><th>Member</th><th>Tier</th><th>Page views</th></tr>';
+      $('pv-tbody').innerHTML = rows.slice(0, shown).map((r) => `<tr><td><div class="t-strong">${esc(r.name)}</div><div class="t-sub">${esc(r.email)}</div></td>
+        <td><span class="badge badge-navy">${esc(r.plan)}</span></td><td>${r.views}</td></tr>`).join('')
+        || '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:28px">No members match.</td></tr>';
+      $('pv-count').textContent = `${rows.length.toLocaleString()} member${rows.length === 1 ? '' : 's'}`;
+      $('pv-more').hidden = rows.length <= shown;
+      $('pv-more').textContent = `Show more (${Math.min(25, rows.length - shown)} of ${(rows.length - shown).toLocaleString()} left)`;
+      return;
+    }
     $('pv-tiles').innerHTML = tile(ICO.eye, 'i-navy', 'Page views', total) + tile(ICO.people, 'i-cyan', 'Unique page views', unique) +
       (lender ? tile(ICO.esc, 'i-pink', 'Escalations', all.reduce((s, r) => s + r.esc, 0)) + tile(ICO.ae, 'i-navy', 'Change AE', all.reduce((s, r) => s + r.ae, 0)) : '') +
       tile(ICO.conn, 'i-cyan', 'Connections', all.filter((r) => r.conn).length) +
@@ -358,7 +431,7 @@
   }
   document.addEventListener('click', (e) => {
     let m;
-    if ((m = e.target.closest('[data-pv]'))) { e.preventDefault(); const [kind, ...rest] = m.dataset.pv.split('::'); openViewers(kind, rest.join('::')); return; }
+    if ((m = e.target.closest('[data-pv]'))) { e.preventDefault(); const [kind, ...rest] = m.dataset.pv.split('::'); openViewers(kind, rest.join('::'), m.dataset.pvFrom); return; }
     if ((m = e.target.closest('[data-pr-tile]'))) { e.preventDefault(); const sel = $('lr-type'); sel.value = sel.value === m.dataset.prTile ? 'all' : m.dataset.prTile; renderLender(); return; }
     if ((m = e.target.closest('[data-pr-export]'))) {
       e.preventDefault(); const lender = m.dataset.prExport === 'lender'; const n = lender ? lenderFiltered(false).length : vendorFiltered().length;

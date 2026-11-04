@@ -1406,7 +1406,7 @@ function navigate(view){
   if(view==='analytics') view = 'engagement';    // Analytics opens on Engagement (Overview moved to the Scorecard)
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','journeys','vendorclicks','lenderviews','page-viewers'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
+  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','content','journeys','vendorclicks','lenderviews','page-viewers'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
@@ -1496,4 +1496,5 @@ document.addEventListener('keydown', e=>{
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click', e=>{ if(e.target===o) closeModals(); }));
 
 /* Deep-linking: #members, #analytics, #featured, etc. */
-(function(){ const h=(location.hash||'').replace('#',''); if(h && (document.getElementById('view-'+h) || h==='analytics')) navigate(h); })();   // #analytics opens Engagement
+// Deep link (e.g. admin.html#content). Runs once every script has loaded, since add-ons create some views.
+document.addEventListener('DOMContentLoaded', () => { const h=(location.hash||'').replace('#',''); if(h && (document.getElementById('view-'+h) || h==='analytics')) navigate(h); });   // #analytics opens Engagement
