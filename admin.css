@@ -413,8 +413,7 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .sc-up { color:#15803d; font-weight:700; } .sc-down { color:#c62a2f; font-weight:700; }
 .sc-nums { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:14px; margin-bottom:18px; }
 .sc-nums-3 { grid-template-columns:repeat(3, minmax(0,1fr)); }
-.sc-num { display:flex; flex-direction:column; gap:4px; text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:var(--radius); padding:16px; cursor:pointer; transition:.15s; }
-.sc-num:hover { border-color:var(--cyan); }
+.sc-num { display:flex; flex-direction:column; gap:4px; text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:var(--radius); padding:16px; }
 .sc-num-l { font-size:12.5px; font-weight:600; color:var(--muted); line-height:1.35; }
 .sc-num-v { font-size:28px; font-weight:800; color:var(--ink); line-height:1.1; }
 .sc-num-s { font-size:12.5px; color:var(--muted); }
@@ -424,9 +423,6 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .sc-card p { font-size:13.5px; color:var(--ink-soft); line-height:1.55; margin:0 0 10px; }
 .sc-card-t { font-weight:800; font-size:15px; color:var(--ink); }
 .sc-card-s { font-size:12.5px; color:var(--muted); margin:3px 0 12px; line-height:1.45; }
-.sc-callout { border-left:4px solid #f5a623; }
-.sc-plan { margin:0 0 10px; padding-left:18px; font-size:13.5px; color:var(--ink-soft); line-height:1.55; }
-.sc-plan li { margin-bottom:6px; }
 .sc-h { font-size:17px; font-weight:800; color:var(--ink); margin:26px 0 12px; }
 .sc-chart { width:100%; height:auto; display:block; }
 .sc-legend { display:flex; gap:14px; font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
@@ -438,8 +434,6 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .sc-hbar-track { flex:1; height:16px; background:var(--line-soft); border-radius:4px; overflow:hidden; }
 .sc-hbar-track i { display:block; height:100%; border-radius:4px; }
 .sc-hbar-v { width:44px; text-align:right; font-weight:700; color:var(--ink); }
-.sc-defs p { font-size:13px; color:var(--ink-soft); margin:0 0 8px; padding:6px 8px; border-radius:8px; transition:background .4s; }
-.sc-defs p.hl { background:#fff4d6; }
 @media (max-width:1100px) { .sc-two, .sc-three { grid-template-columns:1fr; } .sc-nums { grid-template-columns:repeat(2, minmax(0,1fr)); } }
 @media (max-width:760px) { .sc-two { grid-template-columns:1fr; } .sc-nums, .sc-nums-3 { grid-template-columns:1fr 1fr; } .sc-num-v { font-size:22px; } }
 /* Scorecard tables fit their card (the shared .adm min-width is for full-page tables). */

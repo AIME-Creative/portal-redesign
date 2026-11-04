@@ -5,12 +5,10 @@
    what they pay, who's leaving, what's renewing next, FUSE, and
    how members use what we offer. Brought in from the "AIME
    Membership Scorecard" artifact so it lives in admin.
-   Sections: headline + 4 key numbers · What this is · Renewal
-   season plan · Growth and retention (paying members, joined vs
-   left, monthly retention) · Tier mix · Risk ahead (past due, set
-   to cancel, enterprise seats, renewals by month) · FUSE · Engagement
-   · How these are counted.
-   Click any number to jump to how it's counted.
+   Sections: headline + 4 key numbers · Growth and retention (paying
+   members, joined vs left, monthly retention) · Tier mix · Risk ahead
+   (past due, set to cancel, enterprise seats, renewals by month) ·
+   FUSE · Engagement.
    Production: membership numbers live from Stripe each time the page
    opens (Stripe's reporting refreshes a few times a day); FUSE and
    engagement from the portal; FUSE 2025 a saved GHL count.
@@ -107,7 +105,7 @@
 
   /* ---------- page ---------- */
   const pct = (v) => `<span class="${v < 0 ? 'sc-down' : 'sc-up'}">${v > 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
-  const num = (def, big, label, sub) => `<button type="button" class="sc-num" data-sc-def="${def}" title="How this is counted"><span class="sc-num-l">${label}</span><span class="sc-num-v">${big}</span><span class="sc-num-s">${sub}</span></button>`;
+  const num = (def, big, label, sub) => `<div class="sc-num"><span class="sc-num-l">${label}</span><span class="sc-num-v">${big}</span><span class="sc-num-s">${sub}</span></div>`;
   const card = (title, sub, body, cls) => `<div class="card card-pad sc-card ${cls || ''}"><div class="sc-card-t">${title}</div>${sub ? `<div class="sc-card-s">${sub}</div>` : ''}${body}</div>`;
   dash.insertAdjacentHTML('afterend', `<button class="nav-item" data-nav="scorecard">${svg('<path d="M12 20V10M18 20V4M6 20v-4"/>')} Scorecard</button>`);
   dashView.insertAdjacentHTML('afterend', `<section class="view" id="view-scorecard">
@@ -119,20 +117,6 @@
       ${num('dues', '$525.2K', 'Annual dues (members\' current plans, annualized)', '<span class="sc-up">+21.2%</span> vs a year ago')}
       ${num('per', '$434', 'Dues per member', 'A year ago: $418')}
       ${num('goal', '790', 'Members still needed for the goal', 'Need +66/mo · pace +16.5/mo')}
-    </div>
-    <div class="sc-two">
-      ${card('What this is', '', `<p>One page for AIME membership health: how many paying members we have, what they pay, who's leaving, what's renewing next, FUSE, and how members use what we offer.</p>
-        <p>It updates itself. Every time it's opened, it pulls the latest numbers — nobody exports a spreadsheet or runs a report.</p>
-        <p><strong>Membership and renewals</strong> come from Stripe, our billing system. Stripe's reporting data catches up a few times a day, so a payment made this morning can take a few hours to show.</p>
-        <p><strong>FUSE 2026 and engagement</strong> come from the member portal. FUSE 2025 is a saved count from GHL as of Nov 4, 2026, since that event is over.</p>
-        <p class="t-sub">Click any number to see exactly where it came from. Definitions are at the bottom of the page.</p>`)}
-      ${card('November through January is our renewal season', 'This is where we keep the year we built, or lose it.', `<p><strong>407</strong> annual members renew November through January. That's <strong>$191.7K</strong> in dues, the biggest renewal wave of the year. Last year December and January were our two worst retention months. We don't repeat that.</p>
-        <p style="margin-bottom:6px">The plan:</p>
-        <ul class="sc-plan"><li><strong>VIP and Elite:</strong> a personal call 30 days before renewal. Thank them, ask what they got out of the year, and offer Elite members the VIP upgrade.</li>
-          <li><strong>Premium:</strong> email at 30, 14, and 7 days out, showing the real value they used: FUSE, escalations, Mortgage Mornings, vendor discounts.</li>
-          <li><strong>A text 3 days before renewal</strong>, only to members who opted in to texts.</li>
-          <li><strong>A call within 48 hours</strong> if a card fails or a member sets their plan to cancel. "Risk ahead" below shows who that is.</li></ul>
-        <p class="t-sub">Texts go only to members who opted in and include opt-out instructions. Emails include an unsubscribe link and our mailing address. No more than one text a week per member.</p>`, 'sc-callout')}
     </div>
     <h2 class="sc-h">Growth and retention</h2>
     <div class="sc-three">
@@ -179,26 +163,6 @@
       ${card('Member requests each month', 'Escalations, lender and vendor connections, and event registrations made in the portal. Event registrations were tracked starting June 2026.', `<div class="table-scroll"><table class="adm sc-table"><thead><tr><th>Month</th><th>Escalations</th><th>Lender connections</th><th>Vendor connections</th><th>Event registrations</th></tr></thead><tbody>
         ${REQUESTS.map((r) => `<tr><td>${r[0]}</td>${r.slice(1).map((v) => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`)}
     </div>
-    <h2 class="sc-h" id="sc-defs">How these are counted</h2>
-    <div class="card card-pad sc-defs">
-      <p data-def="source">Membership numbers come live from Stripe each time the page opens. Stripe's reporting data refreshes a few times a day.</p>
-      <p data-def="fusepeople fuseback fuseskip fusebought">FUSE 2026 and engagement numbers come live from the AIME member portal. The FUSE 2025 numbers are a count of GHL tags saved on Nov 4, 2026. GHL can't return a count without also sending a contact's personal details, so it isn't pulled live, which keeps personal data out of this page.</p>
-      <p data-def="paying goal enterprise">Paying member: someone with a paid plan, at less than 100% off. Enterprise seats (100% off), vendor plans, and test products are left out.</p>
-      <p data-def="tiers">Tiers: VIP, Elite, and Premium, by plan name and price. Processor plans count with Premium.</p>
-      <p data-def="dues per">Annual dues: each member's current plan price for a year (monthly plans × 12), after discounts. This is dues only. It doesn't include sponsorships, FUSE tickets, or enterprise contracts.</p>
-      <p data-def="pastdue cancel">Past due: a paid plan whose latest payment failed. Set to cancel: a plan the member has set to end at renewal. Dues shown are what those plans pay a year.</p>
-      <p data-def="active escalations connections">Active: a member who used the portal at least once in the month. Escalations and connections: requests members sent through the portal.</p>
-      <p data-def="other">These are AIME's own definitions, not Stripe's built-in dashboard metrics, so they can differ slightly from Stripe's dashboard.</p>
-    </div>
   </section>`);
 
-  // Click a number → its definition.
-  document.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-sc-def]'); if (!b) return;
-    e.preventDefault();
-    const key = b.dataset.scDef;
-    const def = [...document.querySelectorAll('.sc-defs [data-def]')].find((p) => p.dataset.def.split(' ').includes(key)) || document.querySelector('.sc-defs [data-def="source"]');
-    document.querySelectorAll('.sc-defs .hl').forEach((p) => p.classList.remove('hl'));
-    def.classList.add('hl'); def.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
 })();

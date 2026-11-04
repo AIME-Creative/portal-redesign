@@ -29,7 +29,7 @@
     { sec: 1, page: 'dashboard', target: '#view-dashboard .stat-row.admin5', title: 'The dashboard',
       body: 'A snapshot of the whole portal: members, pending requests, partners, and revenue. Click any tile to jump to that section.' },
     { sec: 1, page: 'scorecard', target: () => document.querySelector('#view-scorecard .sc-nums'), title: 'The membership scorecard',
-      body: 'Membership health in one place — paying members, dues, retention, who\'s renewing or at risk, FUSE, and engagement. It updates each time you open it. Click any number to see how it\'s counted.' },
+      body: 'Membership health in one place — paying members, dues, retention, who\'s renewing or at risk, FUSE, and engagement. It updates each time you open it.' },
 
     // ---- chapter: working the request queue ----
     { sec: 2, page: 'dashboard', target: '#sidebar .nav-item[data-nav="requests"]', mTarget: '.menu-btn', title: 'Requests — your work queue',
