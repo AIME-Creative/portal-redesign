@@ -187,8 +187,8 @@
         <div class="daterange-custom" hidden><input type="date" class="input daterange-from"><span class="dr-sep">to</span><input type="date" class="input daterange-to"><button class="btn btn-outline btn-sm daterange-apply">Apply</button></div></div></div>
       <div class="stat-row admin5" id="lv-tiles" style="margin:18px 0 20px"></div>
       <div class="toolbar" style="justify-content:space-between"><span class="count-note" id="lv-count">—</span><button class="btn btn-outline btn-sm" data-toast="Exported lender page views report to CSV.">Export CSV</button></div>
-      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Escalations</th><th>Change AE</th><th>Connections</th><th class="t-right">Actions</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
-      <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Escalations</strong>, <strong>Change AE</strong>, <strong>Connections</strong> = requests members sent that lender. "Email lender" sends that lender their own numbers.</p>
+      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Premium</th><th>Elite</th><th>VIP</th><th>Escalations</th><th>Change AE</th><th>Connections</th><th class="t-right">Actions</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
+      <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it (<strong>Premium</strong> · <strong>Elite</strong> · <strong>VIP</strong> split those by membership tier) · <strong>Escalations</strong>, <strong>Change AE</strong>, <strong>Connections</strong> = requests members sent that lender. "Email lender" sends that lender their own numbers.</p>
     </section>
     <section class="view" id="view-page-viewers">
       <div id="pv-tabs"></div>
@@ -214,7 +214,9 @@
     const views = Math.round((120 + (h % 900)) * f), unique = Math.round(views * (0.55 + (h % 20) / 100));
     const inRange = lenderRows.filter((r) => r.partner === name && inWindow(scope, r.date));
     const c = (t) => inRange.filter((r) => r.type === t).length;
-    return { views, unique, esc: c('Escalation'), ae: c('Change AE'), conn: c('Connection') };
+    // Unique page views split by the viewer's membership tier (adds up to unique), like Vendor page views.
+    const uE = Math.round(unique * (0.24 + (h % 9) / 100)), uV = Math.round(unique * (0.08 + (h % 7) / 100)), uP = unique - uE - uV;
+    return { views, unique, uP, uE, uV, esc: c('Escalation'), ae: c('Change AE'), conn: c('Connection') };
   }
   function renderLenderViews() {
     const rows = lenders.map((l) => Object.assign({ name: l.name, tier: l.tier, l }, lenderStats(l.name))).sort((a, b) => b.views - a.views);
@@ -223,7 +225,7 @@
         <td><div class="t-id">${typeof logoTile === 'function' ? logoTile(r.l) : ''}<div class="t-strong">${esc(r.name)}</div></div></td>
         <td><span class="badge ${tierCls[r.tier] || 'badge-navy'}">${esc(r.tier || '')}</span></td>
         <td class="t-strong"><button class="pv-link" data-pv="lender::${esc(r.name)}" title="See who viewed this page">${r.views.toLocaleString()}</button></td>
-        <td>${r.unique.toLocaleString()}</td><td>${r.esc}</td><td>${r.ae}</td><td>${r.conn}</td>
+        <td>${r.unique.toLocaleString()}</td><td>${r.uP.toLocaleString()}</td><td>${r.uE.toLocaleString()}</td><td>${r.uV.toLocaleString()}</td><td>${r.esc}</td><td>${r.ae}</td><td>${r.conn}</td>
         <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.name)} their page views report.">Email lender</button></div></td></tr>`).join('');
     $('lv-count').textContent = `${rows.length} lenders · ${ranges.lenderviews.label}`;
     // Totals across the top, like Vendor page views.
