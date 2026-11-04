@@ -74,14 +74,14 @@
     { sec: 5, page: 'dashboard', target: '.nav-item[data-nav="lenders"]', mTarget: '.bottom-nav-item[data-nav="lenders"]', title: 'Lenders',
       body: "Browse partner lenders by tier and product type. From a lender's page you can escalate a loan, connect, or change your AE." },
     { sec: 6, page: 'resources', target: () => [document.querySelector('#view-resources .lc-hero'), document.querySelector('#view-resources .lc-goals')],
-      mTarget: '#view-resources .lc-goals', title: 'The Learning Center',
+      mTarget: '#view-resources .lc-goals', title: 'The Vault',
       body: 'Every replay, show, training, and download in one place. Pick a goal, search, or browse shows, replays, and tools.' },
     { sec: 6, page: 'resources', target: () => document.querySelector('#lp-grid .lp-card') && [document.querySelector('#learning-paths .section-title'), document.querySelector('#lp-grid .lp-card')],
       mTarget: '#lp-grid .lp-card', title: 'Learning paths',
       body: 'Sessions put in order, so you know what to watch first and what comes next. Open a path to see its steps — each one you open is marked done, and the card shows what\'s next.' },
-    { sec: 6, page: 'dashboard', target: '.nav-item[data-nav="brokersedge"]', mTarget: '.menu-btn', title: 'Learning & hubs',
-      body: 'Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN gather trainings, replays, events, and documents for each program.',
-      mBody: 'Open the ☰ menu for Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN — trainings, replays, events, and documents for each program.' },
+    { sec: 6, page: 'dashboard', target: '.nav-item[data-nav="wmn"]', mTarget: '.menu-btn', title: 'Your hubs',
+      body: 'Hubs gather videos, events, and documents for a community — WMN, plus Ascent and VIP for VIP members. Brokers Edge, Mortgage Mornings, and Accelerate Live are in The Vault.',
+      mBody: 'Open the ☰ menu for your hubs — WMN, plus Ascent and VIP for VIP members. Brokers Edge, Mortgage Mornings, and Accelerate Live are in The Vault.' },
 
     // ---- Events & registration ----
     { sec: 7, page: 'dashboard', target: '.nav-item[data-nav="events"]', mTarget: '.bottom-nav-item[data-nav="events"]', title: 'Events',

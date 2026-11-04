@@ -1,16 +1,16 @@
 /* ============================================================
-   AMP — Learning Center (formerly Resources)
+   AMP — The Vault (formerly Resources)
    ------------------------------------------------------------
    The Resources page, reorganized around what members are trying
    to get done. Same page (view-resources, data-nav="resources"),
-   renamed "Learning Center" everywhere members see it.
+   renamed "The Vault" everywhere members see it.
    Top to bottom:
    1. Header + "What do you want to work on?" goal tiles, and a
       search box for the full library.
    2. Coming up — the next 3 events.
    3. Learning paths (learning-paths.js renders into #lc-paths-slot).
    4. New this month — the latest additions.
-   5. Your saved — Learning Center items in My Library.
+   5. Your saved — Vault items in My Library.
    6. Shows — recurring series; pick one to filter the library.
    7. Replays — recordings of past live sessions.
    8. Tools you can use today — downloadable documents.
@@ -23,6 +23,9 @@
    documents, or learning paths).
    Prototype: goal / topic / show per item come from META below
    (production: fields on each content item, set in admin).
+   Brokers Edge, Mortgage Mornings, and Accelerate Live no longer have
+   their own pages — links to them open The Vault filtered to
+   that program (RETIRED below).
    Uses app.js globals: resources, events, hubs, generalDocuments,
    canSeeVIP, userType, openResource, openEvent, openHubItem,
    navigate, firstWord, resCard.
@@ -172,10 +175,10 @@
   const goalCount = (g) => items.filter((x) => x.goal === g).length;
   view.innerHTML = `
     <div class="lc-hero">
-      <div class="lc-kicker">Learning Center</div>
+      <div class="lc-kicker">The Vault</div>
       <h1>What do you want to <em>work on today?</em></h1>
       <p>Every replay, show, training, and download in your membership, organized by what you're trying to get done. ${partner ? 'Pick a goal or search.' : 'Pick a goal, follow a path, or search.'}</p>
-      <div class="lc-search">${svg(ICO.search)}<input class="input" id="lc-q" placeholder="Search the Learning Center — try “referral partners”, “VA”, or “objections”" autocomplete="off"></div>
+      <div class="lc-search">${svg(ICO.search)}<input class="input" id="lc-q" placeholder="Search The Vault — try “referral partners”, “VA”, or “objections”" autocomplete="off"></div>
     </div>
     <div class="lc-goals">${GOALS.filter(([g]) => goalCount(g)).map(([g, d, ic]) => `<button type="button" class="lc-goal" data-lc-goal="${esc(g)}">
         <span class="lc-goal-ico">${svg(ic)}</span><span class="lc-goal-t">${esc(g)}</span><span class="lc-goal-d">${esc(d)}</span><span class="lc-goal-n">${goalCount(g)} items</span></button>`).join('')}</div>
@@ -185,7 +188,7 @@
         <div style="flex:1;align-self:center;text-align:left"><div class="em-t">${esc(e.title)}</div><div class="em-s">${esc(e.when)}</div></div></button>`;
     }).join('')}</div>`, '<a href="#" data-nav="events">All events <span>→</span></a>')}
     ${partner ? '' : '<div id="lc-paths-slot"></div>'}
-    ${sec('lc-new', 'New this month', 'The latest sessions added to the Learning Center.', `<div class="card-grid lc-row">${items.filter((x) => x.kind !== 'doc' && !x.locked).sort((a, b) => b.at - a.at).slice(0, 4).map(card).join('')}</div>`)}
+    ${sec('lc-new', 'New this month', 'The latest sessions added to The Vault.', `<div class="card-grid lc-row">${items.filter((x) => x.kind !== 'doc' && !x.locked).sort((a, b) => b.at - a.at).slice(0, 4).map(card).join('')}</div>`)}
     <div id="lc-saved-slot"></div>
     ${sec('lc-shows', 'Shows', 'New episodes every week. Pick a show to see every episode.', `<div class="lc-shows">${SHOWS.map(([s, d, g]) => {
       const eps = items.filter((x) => x.show === s && x.kind !== 'doc');
@@ -217,7 +220,7 @@
     const slot = document.getElementById('lc-saved-slot'); if (!slot) return;
     const saved = window.AmpLibrary ? AmpLibrary.all().filter((s) => ['resource', 'hub', 'doc'].includes(s.k)) : [];
     const mine = saved.map((s) => items.find((x) => x.title === s.t && (s.k === x.kind))).filter(Boolean).slice(0, 4);
-    slot.innerHTML = sec('lc-saved', 'Your saved', mine.length ? 'Learning Center items you\'ve saved to My Library.' : '',
+    slot.innerHTML = sec('lc-saved', 'Your saved', mine.length ? 'Vault items you\'ve saved to My Library.' : '',
       mine.length ? `<div class="card-grid lc-row">${mine.map(card).join('')}</div>`
         : `<div class="lc-empty-saved">${svg(ICO.heart)} Tap the heart on anything here to save it — it shows up in this row and in My Library.</div>`,
       '<a href="#" data-nav="library">My Library <span>→</span></a>');
@@ -257,20 +260,45 @@
     if (e.target.closest('#lc-clear')) { e.preventDefault(); ['lc-f-goal', 'lc-f-topic', 'lc-f-fmt', 'lc-f-show'].forEach((id) => { $(id).value = ''; }); $('lc-q').value = ''; shown = PAGE; renderLibrary(); }
   });
 
-  /* ---------- rename "Resources" → "Learning Center" where members see it ---------- */
+  /* ---------- rename "Resources" → "The Vault" where members see it ---------- */
   document.querySelectorAll('.nav-item[data-nav="resources"], .bottom-nav-item[data-nav="resources"]').forEach((b) => {
     const t = [...b.childNodes].reverse().find((n) => n.nodeType === 3 && n.textContent.trim());
     const span = b.querySelector('span');
-    if (span && b.classList.contains('bottom-nav-item')) span.textContent = 'Learning';
-    else if (t) t.textContent = ' Learning Center ';
+    if (span && b.classList.contains('bottom-nav-item')) span.textContent = 'Vault';
+    else if (t) t.textContent = ' The Vault ';
   });
   const origOpen = window.openResource;
   window.openResource = function () {
     const r = origOpen.apply(this, arguments);
     const back = document.querySelector('#resource-detail-body .back-link');
-    if (back) back.lastChild.textContent = ' Back to Learning Center';
+    if (back) back.lastChild.textContent = ' Back to The Vault';
     const up = document.querySelector('#resource-detail-body .section-title h2');
-    if (up && up.textContent === 'Up next') up.textContent = 'Up next in the Learning Center';
+    if (up && up.textContent === 'Up next') up.textContent = 'Up next in The Vault';
+    return r;
+  };
+
+  /* ---------- Brokers Edge, Mortgage Mornings, Accelerate Live live here now ----------
+     Their hub pages (and the sidebar's Learning & Training section) are gone. Anything that still points at
+     one — search, Trending, a hub item's back link — opens The Vault filtered to that program. */
+  const RETIRED = { brokersedge: { q: 'Brokers Edge' }, mortgagemornings: { show: 'Mortgage Mornings' }, acceleratelive: { show: 'AIME Accelerate' } };
+  function showProgram(key) {
+    ['lc-f-goal', 'lc-f-topic', 'lc-f-fmt', 'lc-f-show'].forEach((id) => { $(id).value = ''; });
+    $('lc-q').value = RETIRED[key].q || ''; $('lc-f-show').value = RETIRED[key].show || '';
+    focusLibrary();
+  }
+  const navBefore = window.navigate;
+  window.navigate = function (v) {
+    if (RETIRED[v]) { navBefore.call(this, 'resources'); showProgram(v); return; }
+    return navBefore.apply(this, arguments);
+  };
+  const hubBefore = window.openHubItem;
+  window.openHubItem = function (key) {
+    const r = hubBefore.apply(this, arguments);
+    if (RETIRED[key]) {
+      const back = document.querySelector('#hub-detail-body .back-link');
+      if (back) { back.dataset.nav = 'resources'; back.lastChild.textContent = ' Back to The Vault'; }
+      document.querySelectorAll('.nav-item, .bottom-nav-item').forEach((n) => n.classList.toggle('active', n.dataset.nav === 'resources'));
+    }
     return r;
   };
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   AMP — Learning Center (learning-center.js)
+   AMP — The Vault (learning-center.js)
    ============================================================ */
 .lc-hero { background:linear-gradient(135deg, var(--navy) 0%, #2a1660 60%, #5b1a5e 100%); color:#fff; border-radius:var(--radius);
   padding:30px 30px 28px; margin-bottom:18px; position:relative; overflow:hidden; }

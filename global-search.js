@@ -43,7 +43,7 @@
     page: '<path d="M9 18l6-6-6-6"/>',
     lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>',
   };
-  const GROUPS = [['page', 'Pages & settings'], ['lender', 'Lenders'], ['market', 'Market (vendors)'], ['resource', 'Learning Center'], ['event', 'Events'],
+  const GROUPS = [['page', 'Pages & settings'], ['lender', 'Lenders'], ['market', 'Market (vendors)'], ['resource', 'The Vault'], ['event', 'Events'],
     ['hub', 'Hubs'], ['doc', 'Documents'], ['request', partner ? 'Requests' : 'My requests'], ['help', 'Help guides']];   // results always show in these type groups, in this order;
 
   function build() {
@@ -51,9 +51,9 @@
     const add = (kind, title, meta, text, open, gate) => out.push({ kind, title, meta, text: (title + ' ' + text).toLowerCase(), open, gate: gate || null });
     // Pages & settings
     const pages = partner
-      ? [['Dashboard', 'partner'], ['Requests', 'partner-requests'], ['Lenders', 'lenders'], ['Market', 'market'], ['Learning Center', 'resources'],
+      ? [['Dashboard', 'partner'], ['Requests', 'partner-requests'], ['Lenders', 'lenders'], ['Market', 'market'], ['The Vault', 'resources'],
          ['Events', 'events'], ['My Library', 'library'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']]
-      : [['Home', 'dashboard'], ['Lenders', 'lenders'], ['Market', 'market'], ['Learning Center', 'resources'], ['Events', 'events'], ['Documents', 'documents'],
+      : [['Home', 'dashboard'], ['Lenders', 'lenders'], ['Market', 'market'], ['The Vault', 'resources'], ['Events', 'events'], ['Documents', 'documents'],
          ['My Library', 'library'], ['My Requests', 'requests'], ['FUSE 2026 registration', 'fuse'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']];
     pages.forEach(([t, v]) => add('page', t, 'Page', v, () => navigate(v)));
     const tabs = [['Profile', 'profile', 'name phone address licenses nmls company role'], ['Email & Password', 'security', 'login password email'],
@@ -80,7 +80,7 @@
         (h.documents || []).forEach((d) => add('doc', d.title, `Document · ${h.name}`, d.desc, () => { navigate('documents'); filterDocuments(k); }, gate));
       });
       generalDocuments.forEach((d) => add('doc', d.title, 'Document', d.desc, () => { navigate('documents'); filterDocuments('general'); }));
-      // Learning paths (published) — under Learning Center; opens the path's side panel there.
+      // Learning paths (published) — under The Vault; opens the path's side panel there.
       (window.AmpPaths ? AmpPaths.all() : []).filter((p) => p.status === 'Published' && p.steps.length).forEach((p) =>
         add('resource', p.title, `Learning path · ${p.steps.length} steps`, `learning path ${p.desc} ${p.steps.map((s) => s.t).join(' ')}`,
           () => { navigate('resources'); if (window.AmpLearningPaths) AmpLearningPaths.open(p.id); }));

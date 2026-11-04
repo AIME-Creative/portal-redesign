@@ -53,3 +53,22 @@
 .lp-up { display:inline-block; font-size:11px; font-weight:700; color:var(--pink); background:#fde4ee; padding:1px 8px; border-radius:20px; margin-left:4px; }
 .lp-reset { display:block; margin:16px auto 0; }
 @media (max-width:600px) { .lp-drawer { padding:22px 16px 28px; } .lp-grid { grid-template-columns:1fr; } }
+
+/* Path bar on an item opened from a learning path */
+.lp-pathbar { position:sticky; z-index:15; display:flex; align-items:center; gap:16px; flex-wrap:wrap; background:#fff;
+  border:1.5px solid #f6bcd3; border-radius:var(--radius); padding:12px 16px; margin:0 0 16px; box-shadow:0 6px 18px rgba(2,22,73,.08); }
+.lp-pb-main { flex:1 1 260px; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.lp-pb-kicker { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--pink); }
+.lp-pb-title { font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lp-pathbar .lp-bar { padding-top:4px; max-width:320px; }
+.lp-bar i.here { box-shadow:0 0 0 2px #fff, 0 0 0 3.5px var(--pink); }
+.lp-pb-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; min-width:0; }
+.lp-pb-next { max-width:340px; display:inline-flex; align-items:center; gap:6px; }
+.lp-pb-next span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+.lp-pathbar .btn svg { width:15px; height:15px; }
+@media (max-width:600px) {
+  .lp-pathbar { padding:10px 12px; gap:10px; }
+  .lp-pb-actions { width:100%; }
+  .lp-pb-actions .btn-outline { flex:0 0 auto; }
+  .lp-pb-next { flex:1; min-width:0; max-width:none; justify-content:center; }
+}

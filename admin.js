@@ -17,9 +17,9 @@ const taxMeta = {
   lenderProducts:   { label:"Lender product types", sub:"Shown on lender cards and the product filter." },
   vendorCategories: { label:"Market categories",     sub:"Group products in the Market." },
   resourceTypes:    { label:"Resource types",        sub:"Used to label and filter resources." },
-  resourceTopics:   { label:"Learning Center topics", sub:"Topics members filter the Learning Center's full library by." },
-  learningGoals:    { label:"Learning Center goals",  sub:"The goal tiles at the top of the Learning Center (Start Here, Get More Business…)." },
-  learningShows:    { label:"Shows",                  sub:"Recurring series in the Learning Center's Shows row (Mortgage Mornings, Broker Power-Up…)." },
+  resourceTopics:   { label:"Vault topics", sub:"Topics members filter The Vault's full library by." },
+  learningGoals:    { label:"Vault goals",  sub:"The goal tiles at the top of The Vault (Start Here, Get More Business…)." },
+  learningShows:    { label:"Shows",                  sub:"Recurring series in The Vault's Shows row (Mortgage Mornings, Broker Power-Up…)." },
   eventTypes:       { label:"Event types",           sub:"Used to label and filter events." },
 };
 
@@ -1218,7 +1218,7 @@ function openEdit(ref){
       <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}</div>
       ${field('Content link', '', 'placeholder="Video / audio URL"')}
       ${selectField('Status', ['Active','Draft'], r.status)}
-      <div class="hint"><strong>Goal</strong>, <strong>Topic</strong>, and <strong>Show</strong> decide where this appears in the member Learning Center (goal tiles, library filters, the Shows row). Assigning a <strong>hub</strong> also puts it inside that hub.</div>`;
+      <div class="hint"><strong>Goal</strong>, <strong>Topic</strong>, and <strong>Show</strong> decide where this appears in The Vault (goal tiles, library filters, the Shows row). Assigning a <strong>hub</strong> also puts it inside that hub.</div>`;
   } else if(type==='event'){
     const e = isNew ? {title:'',date:'',type:taxonomies.eventTypes[0],hub:'—',status:'Draft'} : events[idx];
     title = isNew ? 'Add event' : 'Edit event'; sub = isNew?'Create a new event.':e.title;

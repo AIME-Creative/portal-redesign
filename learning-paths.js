@@ -1,14 +1,16 @@
 /* ============================================================
-   AMP — Learning paths in the Learning Center
+   AMP — Learning paths in The Vault
    ------------------------------------------------------------
-   Section in the Learning Center (learning-center.js leaves a slot,
+   Section in The Vault (learning-center.js leaves a slot,
    #lc-paths-slot, under "Coming up"): one card per Published path, in the
    order admin set. Each card shows the number of steps, whether it
    includes VIP-only content, a progress bar (one segment per step),
    and the next step ("Start with" / "Continue with" / "Completed").
    Clicking a card opens a side panel listing the steps in order;
    clicking a step opens that exact resource, hub video or event,
-   document, or event — and marks it done.
+   document, or event — and marks it done. The item then shows a path
+   bar: step N of M, "All steps" (back to the side panel), and
+   "Next: …" straight to the next step.
    - VIP-only steps show to everyone but are locked ("Requires VIP
      membership") for other tiers, and are skipped for "next step".
    - Members only (Lender / Vendor users have their own dashboard).
@@ -120,13 +122,45 @@
     if ((m = e.target.closest('[data-lp]'))) { e.preventDefault(); openDrawer(m.dataset.lp); return; }
     if (e.target.closest('[data-lp-close]')) { e.preventDefault(); closeDrawer(); return; }
     if (e.target.closest('[data-lp-reset]')) { e.preventDefault(); P.resetProgress(openId); renderDrawer(); return; }
-    if ((m = e.target.closest('[data-lp-step]'))) {
-      e.preventDefault();
-      const p = P.get(openId), s = p && p.steps[+m.dataset.lpStep]; const go = s && opener(s);
-      if (!go) return;
-      P.markDone(p.id, s); closeDrawer(); go();
-    }
+    if ((m = e.target.closest('[data-lp-step]'))) { e.preventDefault(); goStep(openId, +m.dataset.lpStep); return; }
+    if (e.target.closest('[data-lp-pb-back]')) { e.preventDefault(); openDrawer(onPath.id); return; }
+    if ((m = e.target.closest('[data-lp-pb-next]'))) { e.preventDefault(); goStep(onPath.id, +m.dataset.lpPbNext); }
   });
+
+  /* ---------- path bar: on an item opened from a path ----------
+     A bar at the top of the item (it stays in view while scrolling): which path and step this is, the path's
+     progress, "All steps" to reopen the side panel, and "Next: …" to go straight to the next step. On the last
+     step (or when the rest is VIP-only) it offers to see the path instead. */
+  let onPath = null;   // { id, n } — the path step the member is on
+  const BODY = { resource: 'resource-detail-body', hub: 'hub-detail-body', event: 'event-detail-body', doc: 'view-documents' };
+  function goStep(pathId, n) {
+    const p = P.get(pathId), s = p && p.steps[n]; const go = s && opener(s);
+    if (!go) return;
+    P.markDone(p.id, s); closeDrawer(); go();
+    onPath = { id: p.id, n }; showBar(p, n);
+  }
+  function showBar(p, n) {
+    document.querySelectorAll('.lp-pathbar').forEach((b) => b.remove());
+    const box = document.getElementById(BODY[p.steps[n].k]); if (!box) return;
+    const st = state(p);
+    const later = st.steps.map((x, i) => ({ x, i })).filter((o) => o.i > n);
+    const next = later.find((o) => !o.x.locked && opener(o.x.s));
+    const action = next ? `<button type="button" class="btn btn-primary btn-sm lp-pb-next" data-lp-pb-next="${next.i}"><span>Next: ${esc(next.x.s.t)}</span> →</button>`
+      : later.length ? `<span class="lp-lock">The rest requires VIP membership</span>`
+      : `<button type="button" class="btn btn-primary btn-sm" data-lp-pb-back>${svg(ICO.check)} Last step — see the path</button>`;
+    const back = box.querySelector(':scope > .back-link');
+    (back || box).insertAdjacentHTML(back ? 'afterend' : 'afterbegin', `<div class="lp-pathbar" role="region" aria-label="Learning path progress">
+        <div class="lp-pb-main"><span class="lp-pb-kicker">Learning path · Step ${n + 1} of ${p.steps.length}</span>
+          <span class="lp-pb-title">${esc(p.title)}</span>
+          <span class="lp-bar">${st.steps.map((x, i) => `<i class="${x.done ? 'on' : ''}${i === n ? ' here' : ''}"></i>`).join('')}</span></div>
+        <div class="lp-pb-actions"><button type="button" class="btn btn-outline btn-sm" data-lp-pb-back>All steps</button>${action}</div>
+      </div>`);
+    const bar = box.querySelector('.lp-pathbar'), top = document.querySelector('.topbar');
+    if (bar && top) bar.style.top = (top.getBoundingClientRect().height + 10) + 'px';
+  }
+  // Leaving the item clears the bar (detail pages re-render anyway; Documents doesn't).
+  const navBefore = window.navigate;
+  window.navigate = function () { document.querySelectorAll('.lp-pathbar').forEach((b) => b.remove()); return navBefore.apply(this, arguments); };
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && openId) closeDrawer(); });
 
   P.onChange(() => { render(); if (openId) renderDrawer(); });

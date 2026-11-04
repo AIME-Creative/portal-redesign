@@ -1,7 +1,7 @@
 /* ============================================================
    AMP Admin — Content → Learning paths
    ------------------------------------------------------------
-   Set up the Learning paths in the member Learning Center.
+   Set up the Learning paths in The Vault.
    - List: every path in home-page order (move up / down), its
      steps, whether it includes VIP-only content, Published / Draft,
      Edit and Delete.
@@ -37,7 +37,7 @@
   $('view-featured').insertAdjacentHTML('afterend', `
     <section class="view" id="view-paths">
       <div class="adm-section-head">
-        <div class="page-head" style="margin:0"><h1>Learning paths</h1><p>Ordered collections of resources, hub videos, documents, and events, shown in the member Learning Center.</p></div>
+        <div class="page-head" style="margin:0"><h1>Learning paths</h1><p>Ordered collections of resources, hub videos, documents, and events, shown to members in The Vault.</p></div>
         <button class="btn btn-primary" data-lpa-edit="new">+ Add learning path</button>
       </div>
       <div class="callout" style="max-width:900px">${svg('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/>')}<p>Members see <strong>Published</strong> paths in this order. A step from a VIP-only hub shows to other tiers locked, with the membership it needs. A step counts as done once the member opens it.</p></div>
