@@ -81,7 +81,8 @@
           <div class="er-meta">${t ? esc(t.name) + ' ticket' : s.mode === 'rsvp' ? 'RSVP confirmed' : ''}${addons.length ? ' · ' + addons.map(esc).join(', ') : ''}${r.guests && r.guests.length ? ` · ${r.guests.length} guest${r.guests.length > 1 ? 's' : ''}` : ''}</div></div></div>
         <button class="btn btn-navy btn-block" style="margin-top:14px" data-er-open>${s.quickClaim ? 'Manage add-ons & guests' : s.mode === 'rsvp' ? 'View / edit RSVP' : 'View / edit registration'}</button>
         ${ev.title.startsWith('FUSE') ? '<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-nav="fuse">FUSE details &amp; referrals</button>' : ''}
-        <button class="link-muted" style="display:block;margin:12px auto 0" data-er-cancel>${s.mode === 'rsvp' ? 'Cancel my RSVP' : 'Cancel registration'}</button>`;
+        ${s.mode === 'rsvp' ? '<button class="link-muted" style="display:block;margin:12px auto 0" data-er-cancel>Cancel my RSVP</button>'
+          : '<p class="er-note er-nocancel">Registrations are non-refundable. Need to cancel? Call the AIME membership team.</p>'}`;
     }
     if (!st.eligible) {
       const top = ['VIP', 'Elite', 'Premium'].find((t) => s.tiers.includes(t)) || s.tiers[0];   // the tier to upgrade to
@@ -302,11 +303,12 @@
         p.lines.map((l) => `<div class="er-line ${l.guest ? 'sub' : ''}"><span>${esc(l.label)}${l.note ? ` <em>${esc(l.note)}</em>` : ''}</span><span>${l.amount ? money(l.amount) : '$0'}</span></div>`).join('') +
         `<div class="er-line total"><span>Total</span><span>${p.total ? money(p.total) : '$0'}</span></div>` +
         (paid ? `<div class="er-line sub"><span>Already paid</span><span>−${money(paid)}</span></div><div class="er-line total"><span>Due now</span><span>${due ? money(due) : '$0'}</span></div>` : '') +
-        (p.total < paid ? '<div class="er-help">Removing paid items? The AIME team will process your refund.</div>' : '') +
+        (p.total < paid ? '<div class="er-help warn">Paid items can\'t be removed — registrations are non-refundable. To change what you\'ve paid for, call the AIME membership team.</div>' : '') +
         (due ? '<div class="er-help">Secure checkout by Stripe in production — the prototype simulates payment.</div>' : '');
     } else box.hidden = true;
     const btn = $('er-submit');
-    btn.disabled = current.preview;
+    // No refunds: an edit can add to a paid registration, never take away from it.
+    btn.disabled = current.preview || p.total < paid;
     btn.textContent = current.preview ? 'Registration disabled (preview)'
       : due ? `Pay ${money(due)} & ${current.editing ? 'update' : 'register'}`
       : current.claimed ? 'Update registration' : current.editing ? 'Save changes' : s.mode === 'rsvp' ? 'RSVP' : 'Register';
@@ -423,7 +425,7 @@
       e.preventDefault();
       const ev = events[+e.target.closest('.er-panel').dataset.event];
       R.cancel(ev.title, ME.email);
-      showToast(`Your registration for ${ev.title} was cancelled.`);
+      showToast(`Your RSVP for ${ev.title} was cancelled.`);
     }
   });
 

@@ -1,0 +1,50 @@
+/* ============================================================
+   AMP — My Library hearts and page (my-library.js)
+   ============================================================ */
+.fav-heart { display:grid; place-items:center; width:34px; height:34px; flex:none; border-radius:50%; cursor:pointer;
+  background:#fff; border:1px solid var(--line); color:var(--muted); transition:.15s; }
+.fav-heart svg { width:17px; height:17px; }
+.fav-heart:hover { color:var(--pink); border-color:#f6bcd3; }
+.fav-heart.on { color:var(--pink); border-color:#f6bcd3; background:#fff4f8; }
+.fav-heart.on svg { fill:currentColor; }
+
+/* On cards: top-right corner over the thumbnail. */
+.res-card, .event-card { position:relative; }
+.fav-heart.on-card { position:absolute; top:10px; right:10px; z-index:2; border-color:transparent; box-shadow:0 2px 8px rgba(2,22,73,.18); }
+/* Lender tiles keep their tier badge top-right, so the heart sits in the footer. */
+.fav-heart.in-foot { margin-left:auto; width:32px; height:32px; }
+.fav-heart.in-row { width:32px; height:32px; }
+
+/* Detail pages: top-right of the first card (white pill on a banner). */
+.fav-heart.fav-corner { position:absolute; top:16px; right:16px; z-index:2; width:38px; height:38px; }
+.fav-heart.fav-corner.on-banner { border-color:transparent; box-shadow:0 2px 10px rgba(2,22,73,.22); }
+#lender-detail-body > .card .detail-head { padding-right:44px; }
+
+/* The resource / hub "Save for later" button, now the same toggle. */
+.btn.fav-save { display:inline-flex; align-items:center; gap:7px; }
+.btn.fav-save svg { width:16px; height:16px; }
+.btn.fav-save.on { color:var(--pink); border-color:#f6bcd3; background:#fff4f8; }
+.btn.fav-save.on svg { fill:currentColor; }
+
+/* My Library page */
+#library-filters .lib-n { font-size:11.5px; font-weight:700; opacity:.6; margin-left:4px; }
+.lib-groups { display:grid; gap:18px; }
+.lib-group .list-row:last-child { border-bottom:0; }
+.lib-row { gap:12px; }
+.lib-open { display:flex; align-items:center; gap:13px; flex:1; min-width:0; text-align:left; cursor:pointer; padding:2px 0; }
+.lib-open:disabled { cursor:not-allowed; }
+.lib-open:not(:disabled):hover .lib-t { color:var(--cyan-600); }
+.lib-ico { width:38px; height:38px; flex:none; border-radius:11px; display:grid; place-items:center; }
+.lib-ico svg { width:18px; height:18px; }
+.lib-lender { background:rgba(2,22,73,.08); color:var(--navy); }
+.lib-market { background:rgba(32,173,206,.12); color:var(--cyan-600); }
+.lib-resource { background:rgba(221,25,105,.1); color:var(--pink); }
+.lib-event { background:rgba(245,166,35,.14); color:#b07c08; }
+.lib-hub { background:rgba(124,92,255,.12); color:#6a4ce0; }
+.lib-doc { background:#fde4ee; color:var(--pink); }
+.lib-row.locked .lib-ico { background:var(--surface-alt); color:var(--muted); }
+.lib-main { min-width:0; display:flex; flex-direction:column; }
+.lib-t { font-weight:600; font-size:14.5px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lib-row.locked .lib-t { color:var(--muted); }
+.lib-s { font-size:12.5px; color:var(--muted); margin-top:1px; }
+.lib-lock { display:inline-block; font-size:11.5px; font-weight:700; color:#6a4ce0; background:rgba(124,92,255,.1); padding:1px 8px; border-radius:20px; }

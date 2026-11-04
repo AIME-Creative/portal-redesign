@@ -52,9 +52,9 @@
     // Pages & settings
     const pages = partner
       ? [['Dashboard', 'partner'], ['Requests', 'partner-requests'], ['Lenders', 'lenders'], ['Market', 'market'], ['Resources', 'resources'],
-         ['Events', 'events'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']]
+         ['Events', 'events'], ['My Library', 'library'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']]
       : [['Home', 'dashboard'], ['Lenders', 'lenders'], ['Market', 'market'], ['Resources', 'resources'], ['Events', 'events'], ['Documents', 'documents'],
-         ['My Requests', 'requests'], ['FUSE 2026 registration', 'fuse'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']];
+         ['My Library', 'library'], ['My Requests', 'requests'], ['FUSE 2026 registration', 'fuse'], ['Help Center', 'help'], ['Get Support', 'support'], ['Settings', 'settings']];
     pages.forEach(([t, v]) => add('page', t, 'Page', v, () => navigate(v)));
     const tabs = [['Profile', 'profile', 'name phone address licenses nmls company role'], ['Email & Password', 'security', 'login password email'],
       ['Notifications & app', 'notifications', 'push install app alerts loan referrals opt in out']];

@@ -67,6 +67,20 @@ window.HELP_ARTICLES = [
       <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are free and created by AIME — ask us to add a teammate.</p>` },
 
   /* ---------------- Getting started ---------------- */
+  { slug: 'my-library', audience: 'all', title: 'Saving things to My Library', category: 'start',
+    summary: 'Tap the heart on anything you want to come back to — it all lands in My Library.',
+    tags: ['library', 'my library', 'save', 'saved', 'favorite', 'favourite', 'heart', 'bookmark', 'save for later'], minutes: 1, updated: 'Nov 4, 2026', status: 'Published',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'Open My Library', attr: 'data-nav="library"' }],
+    body: `
+      <p><strong>My Library</strong> (in the menu) keeps everything you've saved in one place.</p>
+      <ul>
+        <li><strong>To save something,</strong> tap the <strong>heart</strong> — on a lender, Market product, resource, event, hub video, or document. It's on each card, each document, and each page (on resources and hub videos it's the <strong>Save to My Library</strong> button).</li>
+        <li><strong>To remove it,</strong> tap the heart again — on the item or in My Library.</li>
+        <li>My Library groups what you've saved by type, newest first. Use the buttons at the top to show one type.</li>
+        <li>If you save something from a VIP hub and later change membership, it stays in your library, marked with the membership it needs, until you remove it.</li>
+      </ul>
+      <div class="kb-tip">Lender and Vendor accounts can save lenders, Market products, resources, and events.</div>` },
   { slug: 'search', audience: 'member', title: 'Searching the portal', category: 'start',
     summary: 'One search box for lenders, the Market, resources, events, documents, help guides, and your requests.',
     tags: ['search', 'find', 'look up', 'locked', 'lock', 'vip only', 'upgrade', 'keyboard'], minutes: 1, updated: 'Oct 27, 2026', status: 'Published',
@@ -295,7 +309,7 @@ window.HELP_ARTICLES = [
 
   { slug: 'event-registration', title: 'Registering or RSVPing for an event', category: 'events', popular: false,
     summary: 'Which events need registration, tickets and add-ons, guests, and changing your registration.',
-    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'claim', 'upgrade', 'vip only'], minutes: 2, updated: 'Oct 26, 2026', status: 'Published',
+    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'refund', 'non-refundable', 'claim', 'upgrade', 'vip only'], minutes: 2, updated: 'Nov 4, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
     body: `
@@ -306,7 +320,8 @@ window.HELP_ARTICLES = [
         <li>Add guests if the event allows them, answer any questions, and submit. Paid registrations go through secure checkout.</li>
       </ol>
       <div class="kb-tip"><strong>Guests:</strong> each guest needs their own name, email, phone number, and gender — email and phone can't be the same as yours. Guests can join add-ons you've selected (some, like women-only sessions, have their own rules). Some memberships include a free guest; if you're bringing them, their details are required.</div>
-      <p>Some events are for specific membership tiers. You can still see their details, but registration is limited — for example, only VIP members can register for AIME Ascent 2027. If your plan doesn't include it, the event page shows an <strong>Upgrade to VIP</strong> button that takes you to your membership options. To change or cancel, open the event and use <strong>View / edit registration</strong> or <strong>Cancel registration</strong>.</p>` },
+      <p>Some events are for specific membership tiers. You can still see their details, but registration is limited — for example, only VIP members can register for AIME Ascent 2027. If your plan doesn't include it, the event page shows an <strong>Upgrade to VIP</strong> button that takes you to your membership options. To add to your registration, open the event and use <strong>View / edit registration</strong>.</p>
+      <div class="kb-tip"><strong>Registrations are non-refundable.</strong> Paid registrations can't be cancelled, and items you've paid for can't be removed, in the portal. If you need to cancel, call the AIME membership team. Free RSVPs can be cancelled from the event page.</div>` },
 
   { slug: 'events-calendar', audience: 'all', title: 'Viewing events as a calendar', category: 'events',
     summary: 'Switch the Events page between cards and a month calendar.',
