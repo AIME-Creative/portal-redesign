@@ -445,5 +445,9 @@ table.adm tbody tr:hover td { background:#fafbfe; }
   display:grid; place-items:center; overflow:hidden; font-weight:800; color:var(--navy); font-size:15px; }
 .img-up-prev img { width:100%; height:100%; object-fit:contain; background:#fff; }
 .img-up-main { min-width:0; flex:1; }
+.img-up.wide .img-up-prev { width:128px; height:72px; }
+.img-up.wide .img-up-prev img { object-fit:cover; }
+.t-thumb { width:48px; height:27px; object-fit:cover; border-radius:5px; vertical-align:middle; margin-right:8px; border:1px solid var(--line); }
 .img-up-btns { display:flex; gap:8px; flex-wrap:wrap; }
 @media (max-width:600px) { .img-up { align-items:flex-start; } .img-up-prev { width:64px; height:64px; } }
+@media (max-width:600px) { .img-up.wide .img-up-prev { width:112px; height:63px; } }

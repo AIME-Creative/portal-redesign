@@ -462,7 +462,7 @@ function renderVendors(){
 const collTag = (v) => (!v || v==='—') ? '<span class="t-sub" style="display:inline;color:var(--muted)">—</span>' : `<span class="badge badge-navy">${v}</span>`;
 function renderResources(){
   $('resources-tbody').innerHTML = resources.map((r,i)=>`<tr>
-    <td class="t-strong">${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</td>
+    <td class="t-strong">${r.graphic?`<img class="t-thumb" src="${r.graphic}" alt="">`:''}${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</td>
     <td><span class="badge badge-cyan">${r.type}</span></td>
     <td>${collTag(r.collection)}</td>
     <td>${accessTags(accessOf(r))}</td>
@@ -484,7 +484,7 @@ function renderEvents(){
   };
   const regCount = (e) => R && (R.active(e.title) || R.regsFor(e.title).length) ? R.regsFor(e.title).length : e.regs;
   $('events-tbody').innerHTML = events.map((e,i)=>`<tr>
-    <td class="t-strong">${e.title}</td>
+    <td class="t-strong">${e.graphic?`<img class="t-thumb" src="${e.graphic}" alt="">`:''}${e.title}${e.signup?'<div class="t-sub">Sign-up link set</div>':''}</td>
     <td>${e.date}</td>
     <td><span class="badge badge-amber">${e.type}</span></td>
     <td>${collTag(e.hub)}</td>
@@ -1119,9 +1119,13 @@ document.addEventListener('click', (e) => {
   if(!e.target.closest('#edit-save') || !document.querySelector('#modal-edit #access-picker') || !editing || !ACCESS_LISTS[editing.type] || editing.idx < 0) return;
   const item = ACCESS_LISTS[editing.type]()[editing.idx];
   item.access = readAccess();
+  const url = $('ed-signup') ? $('ed-signup').value.trim() : '';
+  if(url && !/^https?:\/\/\S+\.\S+/.test(url)){ e.preventDefault(); e.stopImmediatePropagation(); showToast('Add a full sign-up link, starting with https://'); $('ed-signup').focus(); return; }
+  if(editing.type==='resource' || editing.type==='event'){
+    item.graphic = $('img-up-val').value || '';
+    if(editing.type==='event') item.signup = url;
+  }
   if(editing.type==='lender' || editing.type==='vendor'){
-    const url = $('ed-signup') ? $('ed-signup').value.trim() : '';
-    if(url && !/^https?:\/\/\S+\.\S+/.test(url)){ e.preventDefault(); e.stopImmediatePropagation(); showToast('Add a full sign-up link, starting with https://'); $('ed-signup').focus(); return; }
     item.logo = $('img-up-val').value || '';
     item.bio = $('ed-bio').value.trim();
     const tags = [...document.querySelectorAll('#ed-tags input:checked')].map(i=>i.parentElement.textContent.trim());
@@ -1191,6 +1195,7 @@ function openEdit(ref){
       <div class="field-row">${selectField('Type', taxonomies.resourceTypes, r.type)}${field('Duration', r.dur)}</div>
       <div class="field-row">${selectField('Goal', ['—', ...taxonomies.learningGoals], r.goal || '—')}${selectField('Topic', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
       <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}</div>
+      ${imageUpload('Graphic', r, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the card and the page in The Vault. Without one, the default artwork for its type is used.', true)}
       ${field('Content link', '', 'placeholder="Video / audio URL"')}
       ${accessPicker(accessOf(r))}
       ${selectField('Status', ['Active','Draft'], r.status)}
@@ -1202,6 +1207,8 @@ function openEdit(ref){
       ${field('Event title', e.title)}
       <div class="field-row">${field('Date', e.date)}${selectField('Type', taxonomies.eventTypes, e.type)}</div>
       ${selectField('Hub / collection', ['—', ...hubNames()], e.hub)}
+      ${imageUpload('Graphic', e, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the event card, the calendar pop-up, and the event page. Without one, the default artwork for its type is used.', true)}
+      <div class="field"><label>Sign-up link</label><input class="input" id="ed-signup" type="url" value="${e.signup||''}" placeholder="https://… — where members sign up for this event"><div class="hint">For events members sign up for somewhere else (e.g. a partner's or venue's page). If <strong>Registration</strong> is turned on for this event, members register in the portal and this link isn't shown.</div></div>
       ${accessPicker(accessOf(e), '<strong>All Members</strong> includes everyone. Pick tiers to limit it — other members still see the event, with an upgrade prompt instead of registration.')}
       ${selectField('Status', ['Active','Draft'], e.status)}
       <div class="hint">Assign a hub to surface this event inside a member hub (e.g. VIP, WMN). Leave as “—” for a general event — it still shows on the Events page &amp; calendar.</div>`;
@@ -1274,16 +1281,18 @@ function tagPicker(label, all, selected, id){
 const logoTile = (x, cls) => x.logo
   ? `<div class="${cls||'t-logo'} has-img"><img src="${x.logo}" alt=""></div>`
   : `<div class="${cls||'t-logo'}" style="${x.color?`color:${x.color}`:''}">${x.short||''}</div>`;
-function imageUpload(label, x, hint){
+// wide: a 16:9 graphic (The Vault, events) instead of a square logo; the image is kept on x.graphic.
+function imageUpload(label, x, hint, wide){
+  const img = wide ? x.graphic : x.logo;
   return `<div class="field"><label>${label}</label>
-    <div class="img-up" id="img-up">
-      <div class="img-up-prev" id="img-up-prev">${x.logo ? `<img src="${x.logo}" alt="">` : `<span>${x.short || 'Logo'}</span>`}</div>
+    <div class="img-up${wide?' wide':''}" id="img-up">
+      <div class="img-up-prev" id="img-up-prev">${img ? `<img src="${img}" alt="">` : `<span>${wide ? 'Graphic' : (x.short || 'Logo')}</span>`}</div>
       <div class="img-up-main">
-        <div class="img-up-btns"><label class="btn btn-outline btn-sm" style="cursor:pointer">${x.logo?'Replace':'Upload'} image<input type="file" id="img-up-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
-          <button type="button" class="btn btn-outline btn-sm" id="img-up-clear" ${x.logo?'':'hidden'}>Remove</button></div>
+        <div class="img-up-btns"><label class="btn btn-outline btn-sm" style="cursor:pointer">${img?'Replace':'Upload'} image<input type="file" id="img-up-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
+          <button type="button" class="btn btn-outline btn-sm" id="img-up-clear" ${img?'':'hidden'}>Remove</button></div>
         <div class="hint" style="margin:6px 0 0">${hint}</div>
       </div>
-    </div><input type="hidden" id="img-up-val" value="${x.logo||''}"></div>`;
+    </div><input type="hidden" id="img-up-val" value="${img||''}"></div>`;
 }
 document.addEventListener('change', (e) => {
   if(e.target.id !== 'img-up-file' || !e.target.files[0]) return;
@@ -1295,7 +1304,7 @@ document.addEventListener('change', (e) => {
 });
 document.addEventListener('click', (e) => {
   if(!e.target.closest('#img-up-clear')) return;
-  e.preventDefault(); $('img-up-val').value=''; $('img-up-prev').innerHTML='<span>Logo</span>'; $('img-up-clear').hidden = true; $('img-up-file').value='';
+  e.preventDefault(); $('img-up-val').value=''; $('img-up-prev').innerHTML=`<span>${$('img-up').classList.contains('wide')?'Graphic':'Logo'}</span>`; $('img-up-clear').hidden = true; $('img-up-file').value='';
 });
 function bioField(value, hint){
   return `<div class="field"><label>Bio</label><textarea class="input" id="ed-bio" maxlength="600" style="min-height:96px" placeholder="A few sentences about them — shown on their page in the portal">${value||''}</textarea>
