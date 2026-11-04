@@ -28,6 +28,8 @@
       mBody: 'Tap the menu for every admin section — Overview, Members, Billing, Communications, Content, Access, and Events.' },
     { sec: 1, page: 'dashboard', target: '#view-dashboard .stat-row.admin5', title: 'The dashboard',
       body: 'A snapshot of the whole portal: members, pending requests, partners, and revenue. Click any tile to jump to that section.' },
+    { sec: 1, page: 'scorecard', target: () => document.querySelector('#view-scorecard .sc-nums'), title: 'The membership scorecard',
+      body: 'Membership health in one place — paying members, dues, retention, who\'s renewing or at risk, FUSE, and engagement. It updates each time you open it. Click any number to see how it\'s counted.' },
 
     // ---- chapter: working the request queue ----
     { sec: 2, page: 'dashboard', target: '#sidebar .nav-item[data-nav="requests"]', mTarget: '.menu-btn', title: 'Requests — your work queue',
@@ -71,10 +73,10 @@
       body: 'Everything members browse — Featured on their home screen, lenders, Market products, <strong>The Vault</strong> (resources and <strong>Learning paths</strong>), events, hubs, documents, and the categories behind them. Each lender and Market listing also sets <strong>who requests go to</strong> — one or more people for escalations, connections, and Change AE.' },
     { sec: 7, page: 'help', target: () => [$('kb-stats'), document.querySelector('#view-help .toolbar')], title: 'Help Center',
       body: "Write and edit the guides members see in their Help Center, see searches that found nothing, and how the member walkthrough is doing." },
-    { sec: 8, page: 'reports', target: () => [$('report-tabs'), document.querySelector('#view-reports .toolbar')], title: 'Reports',
-      body: 'Escalation, connection, and Change AE reports for partners, subscription upgrades, downgrades, and cancellations with reasons, and <strong>Retention</strong> — how many cancelling members the team saved, who saved them, and returning members. Export any of them to CSV.' },
+    { sec: 8, page: 'lender-reports', target: () => [$('lr-tiles'), document.querySelector('#view-lender-reports .toolbar')], title: 'Partner Reports',
+      body: '<strong>Lender reports</strong> (escalations, Change AE, connections) and <strong>Vendor reports</strong> (connections) — totals across the top follow your filters and dates (all time by default), and each row shows whether the email to the partner went through. Export to CSV. <strong>Reports</strong> has subscription upgrades, downgrades, and cancellations.' },
     { sec: 9, page: 'analytics', target: () => document.querySelector('#view-analytics .an-tabs'), title: 'Analytics',
-      body: 'One place for the numbers, in four tabs: <strong>Overview</strong> (revenue and growth), <strong>Engagement</strong> (what members use), <strong>Member journeys</strong> (sign-up to active), and <strong>Vendor clickthroughs</strong> per Market product.' },
+      body: 'One place for the numbers: <strong>Overview</strong>, <strong>Engagement</strong>, <strong>Member journeys</strong>, <strong>Lender page views</strong>, and <strong>Vendor clickthroughs</strong>. Click a views number to see which members viewed that lender or vendor page — and, for vendors, upload their sign-up list.' },
     { sec: 10, page: 'events', target: () => document.querySelector('#events-tbody [data-ereg]'), mTarget: () => document.querySelector('#events-tbody [data-ereg]')?.closest('tr'), title: 'Event registration',
       body: 'Registration is set per event — click <strong>Registration</strong> on any event to turn it on: RSVP or ticketed, which tiers, early-bird pricing, ticket types, add-ons, guests, custom questions, and one-click claim (FUSE).',
       mBody: 'Registration is set per event — swipe an event\'s row to the end and tap <strong>Registration</strong> to turn it on: RSVP or ticketed, tiers, early-bird pricing, tickets, add-ons, guests, questions, and one-click claim (FUSE).' },

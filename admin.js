@@ -1042,12 +1042,10 @@ function renderReportPartners(){
   const sel = $('report-partner'); if(!sel) return;
   const label = reportType==='connections' ? 'All partners' : 'All lenders';
   sel.innerHTML = `<option value="all">${label}</option>` + reportPartnerOptions().map(p=>`<option>${p}</option>`).join('');
-  const subs = reportType==='subscriptions', ret = reportType==='retention';   // retention: admin-retention.js
-  sel.hidden = subs || ret;
+  const subs = reportType==='subscriptions';
+  sel.hidden = subs;
   document.querySelectorAll('#view-reports .sub-only').forEach(el => el.hidden = !subs);
-  document.querySelectorAll('#view-reports .ret-only').forEach(el => el.hidden = !ret);
   $('sub-report').hidden = !subs;
-  if($('ret-report')) $('ret-report').hidden = !ret;
   if(subs) $('sub-reason').hidden = $('sub-type').value !== 'cancellation';
 }
 const emptyRow = (cols, msg) => `<tr><td colspan="${cols}" style="text-align:center;color:var(--muted);padding:28px">${msg}</td></tr>`;
@@ -1073,8 +1071,6 @@ function renderReports(){
       (rows.length? rows.map(r=>`<tr><td class="t-strong">${r.member}</td><td>${r.lender}</td><td>${r.ae}</td><td>${r.reason}</td><td>${r.date}</td><td>${statusPill(r.status)}</td></tr>`).join('')
         : emptyRow(6, 'No AE change requests for this lender in the selected range.'))+'</tbody>';
     $('report-count').textContent = `${rows.length} AE change request${rows.length===1?'':'s'} · ${ranges.reports.label}`;
-  } else if(reportType==='retention'){
-    if(window.AmpRetention) AmpRetention.render();
   } else {
     renderSubscriptionReport();
   }
@@ -1344,7 +1340,7 @@ function navigate(view){
   if(view==='subscriptions') view = 'members';   // billing now lives on the Members list
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','journeys','vendorclicks'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
+  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','journeys','vendorclicks','lenderviews','page-viewers'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
@@ -1402,12 +1398,11 @@ $('sub-report').addEventListener('click', e => {
 window.addEventListener('storage', e => { if(e.key === 'amp-sub-events-v1' && reportType === 'subscriptions') renderReports(); });
 function reportScopeLabel(){
   if(reportType==='subscriptions'){ const ty = $('sub-type').value; return ty==='all' ? 'all subscription changes' : ty + 's'; }
-  if(reportType==='retention'){ const o = $('ret-outcome').selectedOptions[0].text; return o==='All outcomes' ? 'all cancellations' : o.toLowerCase(); }
   const partner = $('report-partner').value;
   return partner==='all' ? (reportType==='connections'?'all partners':'all lenders') : partner;
 }
 $('report-export').addEventListener('click', ()=>{
-  const name = { escalations:'escalations', connections:'connections', changeae:'Change AE', subscriptions:'subscriptions', retention:'retention' }[reportType];
+  const name = { escalations:'escalations', connections:'connections', changeae:'Change AE', subscriptions:'subscriptions' }[reportType];
   showToast(`Exported ${name} report for ${reportScopeLabel()} (${ranges.reports.label}) to CSV.`);
 });
 

@@ -23,7 +23,7 @@
   const AREA_OF = { members: 'Members', groups: 'Group memberships', enterprise: 'Enterprise', partners: 'Partner users', requests: 'Requests',
     abandoned: 'Billing', coupons: 'Billing', notifications: 'Communications', emails: 'Communications', referrals: 'Communications',
     featured: 'Content', paths: 'Content', lenders: 'Content', market: 'Content', resources: 'Content', hubs: 'Content', documents: 'Content', taxonomy: 'Content',
-    events: 'Events', help: 'Help Center', team: 'Team access', reports: 'Reports', analytics: 'Reports', dashboard: 'Settings' };
+    events: 'Events', help: 'Help Center', team: 'Team access', reports: 'Reports', 'lender-reports': 'Reports', 'vendor-reports': 'Reports', analytics: 'Reports', scorecard: 'Reports', dashboard: 'Settings' };
 
   /* ---------- sample history ---------- */
   let seq = 0;
