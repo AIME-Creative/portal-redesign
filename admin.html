@@ -367,7 +367,7 @@
           <button class="chip" data-filter="connection">Connections</button>
           <button class="chip" data-filter="changeae">Change AE</button>
           <button class="chip" data-filter="bug">Bugs</button>
-          <button class="chip attn" id="arq-attn" title="Follow-ups requested, unanswered tickets, unassigned escalations">⚑ Needs attention</button>
+          <button class="chip attn" id="arq-attn" title="Follow-ups requested and tickets waiting on a reply">⚑ Needs attention</button>
         </div>
         <div class="toolbar">
           <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="arq-search" placeholder="Search by member, lender, ref, or subject…"></div>
@@ -375,12 +375,11 @@
             <option value="open">Open (not resolved)</option><option value="all">All statuses</option>
             <option>Received</option><option>In progress</option><option>Responded</option><option>Resolved</option><option>Delivered</option>
           </select>
-          <select class="select filter-select" id="arq-assignee"><option value="all">Anyone</option><option value="">Unassigned</option></select>
           <span class="spacer"></span>
           <span class="count-note" id="request-count">—</span>
         </div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Ref</th><th>Request</th><th>Member</th><th>Assigned</th><th>Last activity</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
+          <thead><tr><th>Ref</th><th>Request</th><th>Member</th><th>Last activity</th><th>Status</th><th class="t-right">Actions</th></tr></thead>
           <tbody id="requests-tbody"></tbody>
         </table></div></div>
         <div style="margin-top:14px;text-align:right"><button class="rq-reset" id="arq-reset" title="Prototype only — restores the sample requests">Reset demo request data</button></div>

@@ -6,7 +6,7 @@
    never leaves the admin console. Hands-on chapter:
      • Working the request queue — switches to Requests, then opens
        an example escalation (status, follow-up, lender contacts,
-       composer) and support ticket (conversation, assignee)
+       composer) and support ticket (conversation)
    Starts automatically the first time an admin opens the console;
    replay from the ? menu in the top bar ([data-admin-tour-start])
    or admin.html#tour. Skip at any step (Skip tour, ✕, Esc).
@@ -35,9 +35,9 @@
     { sec: 2, page: 'dashboard', target: '#sidebar .nav-item[data-nav="requests"]', mTarget: '.menu-btn', title: 'Requests — your work queue',
       body: "Every member escalation, connection, AE change, support ticket, and bug report lands here. The pink number counts what needs attention. Let's open it." },
     { sec: 2, chapter: 'Request queue', page: 'requests', target: '#arq-stats', title: 'What needs you',
-      body: 'Open escalations, follow-ups members have requested, tickets waiting on a reply, and anything unassigned. Click a tile to filter the queue.' },
+      body: 'Open escalations, follow-ups members have requested, tickets waiting on a reply, and everything still open. Click a tile to filter the queue.' },
     { sec: 2, chapter: 'Request queue', page: 'requests', target: () => [$('request-filters'), document.querySelector('#view-requests .toolbar')], title: 'Filter and search',
-      body: 'Filter by type, status, or assignee, or search by member, lender, or ref. <strong>⚑ Needs attention</strong> shows only what is waiting on the team.' },
+      body: 'Filter by type or status, or search by member, lender, or ref. <strong>⚑ Needs attention</strong> shows only what is waiting on the team.' },
     { sec: 2, chapter: 'Request queue', page: 'esc', target: '#arq-detail-body .rq-seg', title: 'Set the status',
       body: 'Escalations move Received → Responded → Resolved. The member sees every change on their side.' },
     { sec: 2, chapter: 'Request queue', page: 'esc', target: () => document.querySelector('#arq-detail-body .rq-fu.pending') || detailCard('Follow-ups')(), title: 'Member follow-ups',
@@ -50,8 +50,6 @@
       body: "The member's messages and your team's replies, in order. Status changes show inline." },
     { sec: 2, chapter: 'Request queue', page: 'tkt', target: () => [$('arq-text'), document.querySelector('#arq-detail-body .rq-composer-foot')], title: 'Reply in the portal',
       body: '<strong>Send reply</strong> sets the ticket to Responded and notifies the member; <strong>Send &amp; resolve</strong> closes it. If they reply, it moves back to In progress.' },
-    { sec: 2, chapter: 'Request queue', page: 'tkt', target: detailCard('Assigned to'), title: 'Assign an owner',
-      body: 'Assign each request so the team knows who has it. Your reply assigns it to you automatically if nobody has it yet.' },
 
     { sec: 3, page: 'members', target: '#view-members .toolbar', title: 'Members',
       body: 'Every member — individual, Group, or Enterprise (tagged) — with their tier, NMLS #, licensed states, and billing from Stripe — status (active, past due, trialing, canceled), amount, and next payment. Filter by any of them; <strong>Send payment link</strong> appears on past-due members. <strong>Manage</strong> opens their role, plan, billing, and escalation allowance.' },

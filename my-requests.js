@@ -91,7 +91,6 @@
               <span>Ref <strong>${r.id}</strong></span>
               <span>${partnerLbl} <strong>${esc(r.partner)}</strong></span>
               <span>Submitted <strong>${fmt.dateTime(r.createdAt)}</strong></span>
-              ${r.assignee ? `<span>AIME contact <strong>${esc(r.assignee)}</strong></span>` : ''}
             </div>
           </div>
         </div>

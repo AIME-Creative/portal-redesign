@@ -27,7 +27,6 @@
     connection: { label: 'Connection',        prefix: 'CON', flow: ['Delivered'] },
     changeae:   { label: 'Change AE',         prefix: 'CAE', flow: ['Delivered'] },
   };
-  const TEAM = ['AIME Team', 'Jordan Blake', 'Sofia Marin', 'Wes Carter'];
 
   // Fallback escalation inboxes when partner-store.js isn't loaded. Lenders never log in: they reply to
   // the email or click a one-click status link in it. The real lists are on the lender listing (partner-store.js).
@@ -47,7 +46,7 @@
     // ---- Kyle Lord (the example member) ----
     r.push({ id: 'ESC-1042', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'United Wholesale Mortgage', title: 'Appraisal delay — loan #100482910',
-      status: 'Received', assignee: 'Jordan Blake', createdAt: t(4 * D),
+      status: 'Received', createdAt: t(4 * D),
       fields: { 'Loan number': '100482910', 'Loan type': 'Conventional', 'Loan amount': '$412,500', 'Closing date': 'Jul 10, 2026',
         'Issue': 'Appraisal ordered 12 days ago and still not scheduled. Borrower is at risk of losing their rate lock.' },
       followUp: null,
@@ -58,7 +57,7 @@
       ] });
     r.push({ id: 'ESC-1037', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'Newrez Wholesale', title: 'CD error — loan #100471552',
-      status: 'Responded', assignee: 'Sofia Marin', createdAt: t(9 * D),
+      status: 'Responded', createdAt: t(9 * D),
       fields: { 'Loan number': '100471552', 'Loan type': 'FHA', 'Loan amount': '$298,000', 'Closing date': 'Jun 30, 2026',
         'Issue': 'Closing Disclosure shows the wrong lender credit; re-disclosure needed before closing.' },
       followUp: null,
@@ -72,7 +71,7 @@
       ] });
     r.push({ id: 'ESC-1021', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'EPM', title: 'UW conditions stalled — loan #100460318',
-      status: 'Resolved', assignee: 'Jordan Blake', createdAt: t(26 * D),
+      status: 'Resolved', createdAt: t(26 * D),
       fields: { 'Loan number': '100460318', 'Loan type': 'VA', 'Loan amount': '$365,000', 'Closing date': 'Jun 12, 2026',
         'Issue': 'Conditions submitted 6 days ago with no underwriter review.' },
       followUp: null,
@@ -85,7 +84,7 @@
       ] });
     r.push({ id: 'TKT-2201', type: 'support', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'Billing & membership', title: "Can't download my FUSE 2026 invoice",
-      status: 'Responded', assignee: 'Sofia Marin', createdAt: t(2 * D),
+      status: 'Responded', createdAt: t(2 * D),
       fields: { Category: 'Billing & membership' }, followUp: null,
       activity: [
         { at: t(2 * D), kind: 'message', by: 'member', author: ME.name, text: "I need the invoice for my FUSE 2026 ticket for my expense report, but the download link on the registration page just spins. Can you send it over?" },
@@ -95,14 +94,14 @@
       ] });
     r.push({ id: 'TKT-2207', type: 'support', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'Lender connection', title: 'Which lenders offer non-QM bank statement loans?',
-      status: 'Received', assignee: '', createdAt: t(5 * H),
+      status: 'Received', createdAt: t(5 * H),
       fields: { Category: 'Lender connection' }, followUp: null,
       activity: [
         { at: t(5 * H), kind: 'message', by: 'member', author: ME.name, text: "I have a self-employed borrower. Which of the AIME partner lenders have the best bank-statement programs right now?" },
       ] });
     r.push({ id: 'TKT-2188', type: 'support', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'Billing & membership', title: 'Billing date moved after upgrading to Elite',
-      status: 'Resolved', assignee: 'Wes Carter', createdAt: t(19 * D),
+      status: 'Resolved', createdAt: t(19 * D),
       fields: { Category: 'Billing & membership' }, followUp: null,
       activity: [
         { at: t(19 * D), kind: 'message', by: 'member', author: ME.name, text: 'My renewal date changed when I upgraded from Premium to Elite. Was I charged twice?' },
@@ -112,21 +111,21 @@
         { at: t(18 * D + 17 * H), kind: 'status', by: 'team', author: 'Wes Carter', text: 'Resolved' },
       ] });
     r.push({ id: 'CON-3310', type: 'connection', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'EPM', title: 'Connection request — EPM', status: 'Delivered', assignee: '', createdAt: t(3 * D),
+      partner: 'EPM', title: 'Connection request — EPM', status: 'Delivered', createdAt: t(3 * D),
       fields: { Lender: 'EPM', 'Shared with lender': 'Name, email, phone, NMLS #9158, licenses MD · VA · DE' }, followUp: null,
       activity: [
         { at: t(3 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Connection request submitted.' },
         { at: t(3 * D - 60e3), kind: 'delivered', by: 'system', text: "Delivered to EPM's partner team." },
       ] });
     r.push({ id: 'CON-3264', type: 'connection', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'Newfi', title: 'Connection request — Newfi', status: 'Delivered', assignee: '', createdAt: t(21 * D),
+      partner: 'Newfi', title: 'Connection request — Newfi', status: 'Delivered', createdAt: t(21 * D),
       fields: { Lender: 'Newfi', 'Shared with lender': 'Name, email, phone, NMLS #9158, licenses MD · VA · DE' }, followUp: null,
       activity: [
         { at: t(21 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Connection request submitted.' },
         { at: t(21 * D - 60e3), kind: 'delivered', by: 'system', text: "Delivered to Newfi's partner team." },
       ] });
     r.push({ id: 'CAE-0418', type: 'changeae', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'United Wholesale Mortgage', title: 'Change AE — United Wholesale Mortgage', status: 'Delivered', assignee: '', createdAt: t(12 * D),
+      partner: 'United Wholesale Mortgage', title: 'Change AE — United Wholesale Mortgage', status: 'Delivered', createdAt: t(12 * D),
       fields: { Lender: 'United Wholesale Mortgage', 'Current AE': 'Brett Hollis', Reason: 'Unresponsive',
         Details: "Haven't heard back on three scenarios over two weeks.", 'Tried to resolve with AE': 'Yes' }, followUp: null,
       activity: [
@@ -135,14 +134,14 @@
       ] });
 
     // ---- other members (admin view) ----
-    const other = (o) => r.push(Object.assign({ followUp: null, assignee: '', fields: {} }, o));
+    const other = (o) => r.push(Object.assign({ followUp: null, fields: {} }, o));
     other({ id: 'ESC-1044', type: 'escalation', member: 'Maria Chen', email: 'maria@chenlending.com', tier: 'VIP',
       partner: 'United Wholesale Mortgage', title: 'Title issue blocking CTC — loan #100489207', status: 'Received', createdAt: t(2 * H),
       fields: { 'Loan number': '100489207', 'Loan type': 'Jumbo', 'Loan amount': '$1,240,000', 'Closing date': 'Jul 2, 2026', Issue: 'Title cleared Friday but UWM still shows the condition open.' },
       activity: [{ at: t(2 * H), kind: 'submitted', by: 'member', author: 'Maria Chen', text: 'Escalation submitted.' },
         { at: t(2 * H - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to United Wholesale Mortgage's escalation team." }] });
     other({ id: 'ESC-1039', type: 'escalation', member: 'Carlos Diaz', email: 'carlos@diazhomeloans.com', tier: 'Elite',
-      partner: 'Windsor Mortgage', title: 'Rate lock extension denied — loan #100474410', status: 'Received', assignee: 'Wes Carter', createdAt: t(6 * D),
+      partner: 'Windsor Mortgage', title: 'Rate lock extension denied — loan #100474410', status: 'Received', createdAt: t(6 * D),
       fields: { 'Loan number': '100474410', 'Loan type': 'Conventional', 'Loan amount': '$505,000', 'Closing date': 'Jun 28, 2026', Issue: 'Lock expires in 3 days; extension request denied without explanation.' },
       followUp: { requestedAt: t(20 * H), note: "Still nothing from Windsor and the lock expires Friday. Please help!", status: 'open' },
       activity: [{ at: t(6 * D), kind: 'submitted', by: 'member', author: 'Carlos Diaz', text: 'Escalation submitted.' },
@@ -158,7 +157,7 @@
         { at: t(3 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to EPM's escalation team." },
         { at: t(3 * H), kind: 'followup-request', by: 'member', author: 'Ahmed Sayed', text: '' }] });
     other({ id: 'TKT-2206', type: 'support', member: 'Sam Whitfield', email: 'sam@whitfieldfunding.com', tier: 'Elite',
-      partner: 'Billing & membership', title: "Can't update billing card", status: 'In progress', assignee: 'Sofia Marin', createdAt: t(1 * D),
+      partner: 'Billing & membership', title: "Can't update billing card", status: 'In progress', createdAt: t(1 * D),
       fields: { Category: 'Billing & membership' },
       activity: [{ at: t(1 * D), kind: 'message', by: 'member', author: 'Sam Whitfield', text: 'The card form says "declined" but my bank says no attempt was made.' },
         { at: t(20 * H), kind: 'message', by: 'team', author: 'Sofia Marin', text: "Sorry about that, Sam. Can you tell me which browser you're using? We're seeing this on older Safari versions." },
@@ -166,7 +165,7 @@
         { at: t(6 * H), kind: 'message', by: 'member', author: 'Sam Whitfield', text: 'Safari 15 on my work Mac. Tried Chrome and it worked — but you may want to fix Safari.' },
         { at: t(6 * H), kind: 'status', by: 'member', author: 'Sam Whitfield', text: 'In progress' }] });
     other({ id: 'TKT-2203', type: 'support', member: 'Alicia Gomez', email: 'alicia@gomezlending.com', tier: 'VIP',
-      partner: 'Loan escalation', title: 'Question about VIP escalations', status: 'Resolved', assignee: 'Jordan Blake', createdAt: t(3 * D),
+      partner: 'Loan escalation', title: 'Question about VIP escalations', status: 'Resolved', createdAt: t(3 * D),
       fields: { Category: 'Loan escalation' },
       activity: [{ at: t(3 * D), kind: 'message', by: 'member', author: 'Alicia Gomez', text: 'Is there really no cap on escalations for VIP?' },
         { at: t(3 * D - 2 * H), kind: 'message', by: 'team', author: 'Jordan Blake', text: 'Correct — VIP members have unlimited escalations each cycle.' },
@@ -237,7 +236,7 @@
   /* ---------- public API ---------- */
   load();
   window.AmpRequests = {
-    TYPES, TEAM, ME, byAt,
+    TYPES, ME, byAt,
     all: () => items.slice().sort((a, b) => (lastActivity(b) > lastActivity(a) ? 1 : -1)),
     // The signed-in user's own requests (a partner user only has their own support tickets)
     mine: () => window.AmpRequests.all().filter((r) => (window.AMP_PARTNER_USER ? r.email === window.AMP_PARTNER_USER.email : r.member === ME.name)),
@@ -252,14 +251,13 @@
     memberUnread: (r) => r.activity.some((a) => a.at > r.memberSeenAt && a.by !== 'member' && a.kind !== 'note' && a.kind !== 'delivered'),
     adminNeedsAttention: (r) =>
       (r.followUp && r.followUp.status === 'open') ||
-      (r.type === 'support' && (r.status === 'Received' || r.status === 'In progress') && lastMsgBy(r) === 'member') ||
-      (r.type === 'escalation' && r.status === 'Received' && !r.assignee),
+      (r.type === 'support' && (r.status === 'Received' || r.status === 'In progress') && lastMsgBy(r) === 'member'),
     markSeen(id, side) { const r = find(id); if (!r) return; r[side === 'admin' ? 'adminSeenAt' : 'memberSeenAt'] = nowISO(); save(); },
 
     create(type, data) {
       const at = nowISO();
       const r = Object.assign({ id: nextId(type), type, member: ME.name, email: ME.email, tier: ME.tier,
-        status: TYPES[type].flow[0], assignee: '', createdAt: at, updatedAt: at, followUp: null,
+        status: TYPES[type].flow[0], createdAt: at, updatedAt: at, followUp: null,
         memberSeenAt: at, adminSeenAt: '1970-01-01T00:00:00.000Z', fields: {}, activity: [] }, data);
       if (type === 'support') {
         r.activity.push({ at, kind: 'message', by: 'member', author: r.member, text: data.message || '' });
@@ -285,7 +283,7 @@
       log(r, { kind: 'message', by, author, text: text.trim() });
       const next = by === 'team' ? (resolve ? 'Resolved' : 'Responded') : 'In progress';
       if (r.status !== next) { r.status = next; log(r, { kind: 'status', by, author, text: next }); }
-      if (by === 'team') { r.adminSeenAt = nowISO(); if (!r.assignee) r.assignee = author; } else r.memberSeenAt = nowISO();
+      if (by === 'team') { r.adminSeenAt = nowISO(); } else r.memberSeenAt = nowISO();
       changed();
     },
     // Escalation: a lender response → Responded. `via` says how it arrived:
@@ -342,7 +340,6 @@
       changed();
     },
     addNote(id, text, author) { const r = find(id); if (!r || !text.trim()) return; log(r, { kind: 'note', by: 'team', author, text: text.trim() }); changed(); },
-    assign(id, who) { const r = find(id); if (!r) return; r.assignee = who; changed(); },
     reset() { items = seed(); markAllSeen(); changed(); },
   };
   // The lender answering is what a member follow-up was waiting for, so it closes the request.

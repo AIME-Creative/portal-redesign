@@ -45,7 +45,7 @@
     e(50, 'Wes Carter', 'Members', 'Cancelled membership', 'Beth Coleman', [['Status', 'Active', 'Cancelling — ends Jul 30, 2026']], 'Reason: switching companies.'),
     e(72, 'AIME Team', 'Communications', 'Sent notification', 'All VIP members', [['Message', '', 'VIP Luncheon seats are open']]),
     e(75, 'Sofia Marin', 'Content', 'Added Market product', 'Ask Mindy — Scenario Desk', [['Company', '', 'Ask Mindy']]),
-    e(96, 'Jordan Blake', 'Requests', 'Reassigned escalation', 'ESC-1042 · Kyle Lord', [['Owner', 'Sofia Marin', 'Jordan Blake']]),
+    e(96, 'Jordan Blake', 'Requests', 'Changed escalation status', 'ESC-1042 · Kyle Lord', [['Status', 'Received', 'Responded']]),
     e(120, 'Wes Carter', 'Enterprise', 'Edited enterprise partner', 'NEXA Lending', [['VIP seats', '40', '50']]),
     e(144, 'AIME Team', 'Partner users', 'Removed partner user', 'Marcus Lee · EPM', [], 'Left the company.'),
     e(170, 'Jordan Blake', 'Members', 'Edited member profile', 'Maria Chen', [['Licensed states', 'CA, NV', 'CA, NV, AZ']]),

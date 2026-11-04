@@ -2,10 +2,10 @@
    AMP Admin — Request tracking
    ------------------------------------------------------------
    Admin side of the member request history (requests-store.js):
-     • Queue with type chips, status / assignee filters, search,
+     • Queue with type chips, status filter, search,
        and a "Needs attention" view (follow-ups requested,
-       unanswered tickets, unassigned escalations)
-     • Detail page per request: status control, assignment,
+       unanswered tickets)
+     • Detail page per request: status control,
        support replies, logging the lender's response on an
        escalation, closing out a member follow-up, internal notes
    Bug reports still use admin.js's `requests` array + modal.
@@ -15,7 +15,7 @@
 (function () {
   const S = window.AmpRequests;
   if (!S) return;
-  const { fmt, statusBadge, TYPES, TEAM } = S;
+  const { fmt, statusBadge, TYPES } = S;
   const esc = fmt.esc;
   const $ = (id) => document.getElementById(id);
   const ME = 'AIME Team';                       // signed-in admin (sidebar profile)
@@ -44,7 +44,6 @@
     let f = '';
     if (r.followUp && r.followUp.status === 'open') f += ' <span class="rq-flag amber">Follow-up requested</span>';
     else if (r.type === 'support' && S.adminNeedsAttention(r)) f += ` <span class="rq-flag">${r.status === 'Received' ? 'Needs first reply' : 'Member replied'}</span>`;
-    else if (r.type === 'escalation' && S.adminNeedsAttention(r)) f += ' <span class="rq-flag">Unassigned</span>';
     return f;
   }
 
@@ -55,20 +54,20 @@
       esc: all.filter((r) => r.type === 'escalation' && isOpen(r)).length,
       fu: all.filter((r) => r.followUp && r.followUp.status === 'open').length,
       tk: all.filter((r) => r.type === 'support' && S.adminNeedsAttention(r)).length,
-      un: all.filter((r) => isOpen(r) && !r.assignee).length,
+      open: all.filter(isOpen).length,
     };
     const tile = (k, cls, ico, val, lbl) => `<button class="stat" data-arq-stat="${k}"><div class="s-ico ${cls}">${S.svg(ico)}</div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div></button>`;
     $('arq-stats').innerHTML =
       tile('esc', 'i-pink', 'escalation', n.esc, 'Open escalations') +
       tile('fu', 'i-amber', 'flag', n.fu, 'Follow-ups requested') +
       tile('tk', 'i-cyan', 'support', n.tk, 'Tickets awaiting a reply') +
-      tile('un', 'i-navy', 'changeae', n.un, 'Open &amp; unassigned');
+      tile('open', 'i-navy', 'changeae', n.open, 'All open requests');
   }
 
   function renderQueue() {
     renderStats();
     const q = ($('arq-search').value || '').trim().toLowerCase();
-    const st = $('arq-status').value, who = $('arq-assignee').value;
+    const st = $('arq-status').value;
     document.querySelectorAll('#request-filters .chip[data-filter]').forEach((c) => c.classList.toggle('active', c.dataset.filter === typeFilter));
     $('arq-attn').classList.toggle('active', attnOnly);
 
@@ -78,7 +77,6 @@
         (typeFilter === 'all' || r.type === typeFilter) &&
         (!attnOnly || S.adminNeedsAttention(r)) &&
         (st === 'all' || (st === 'open' ? isOpen(r) : r.status === st)) &&
-        (who === 'all' || r.assignee === who) &&
         (!q || [r.id, r.member, r.partner, r.title, r.email].join(' ').toLowerCase().includes(q)));
       // needs-attention first, then most recent activity
       rows.sort((a, b) => (S.adminNeedsAttention(b) - S.adminNeedsAttention(a)) || (S.lastActivity(b) > S.lastActivity(a) ? 1 : -1));
@@ -89,14 +87,13 @@
         <td><div class="t-id">${S.icon(r.type, true)}<div><div class="t-strong">${esc(r.title)}</div>
           <div class="t-sub">${TYPES[r.type].label} · ${esc(r.partner)}${flags(r)}</div></div></div></td>
         <td><div class="t-strong">${esc(r.member)}</div><div class="t-sub">${r.tier}</div></td>
-        <td>${r.assignee ? esc(r.assignee) : '<span style="color:var(--muted)">—</span>'}</td>
         <td>${lastLabel(r)}</td>
         <td>${statusBadge(r.status)}</td>
         <td class="t-right"><div class="row-actions"><button class="link-act" data-arq-open="${r.id}">Open</button></div></td>
       </tr>`).join('');
 
     // Bug reports (interface only) — shown under All / Bugs
-    const showBugs = (typeFilter === 'all' || typeFilter === 'bug') && !attnOnly && (who === 'all' || who === '');
+    const showBugs = (typeFilter === 'all' || typeFilter === 'bug') && !attnOnly;
     const bugRows = showBugs ? bugs().filter((b) =>
       (st === 'all' || (st === 'open' ? b.status !== 'Resolved' : b.status === st)) &&
       (!q || [b.member, b.detail].join(' ').toLowerCase().includes(q))) : [];
@@ -106,14 +103,14 @@
         <td><span class="rq-ref">BUG</span></td>
         <td><div class="t-id"><span class="rq-ico sm" style="background:#fde4ee;color:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${m.ico}</svg></span>
           <div><div class="t-strong">${esc(b.detail)}</div><div class="t-sub">Bug report</div></div></div></td>
-        <td class="t-strong">${esc(b.member)}</td><td><span style="color:var(--muted)">—</span></td>
+        <td class="t-strong">${esc(b.member)}</td>
         <td><div class="t-sub">${b.date}</div></td><td>${statusPill(b.status)}</td>
         <td class="t-right"><div class="row-actions"><button class="link-act" data-request="${b.i}">Review</button></div></td>
       </tr>`).join('');
 
     const total = rows.length + bugRows.length;
     $('requests-tbody').innerHTML = total ? html
-      : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">No requests match these filters.</td></tr>';
+      : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px">No requests match these filters.</td></tr>';
     const attn = S.all().filter(S.adminNeedsAttention).length;
     $('request-count').textContent = `${total} shown · ${attn} need${attn === 1 ? 's' : ''} attention`;
   }
@@ -170,9 +167,6 @@
       : `<div class="card card-pad"><h3 style="font-size:15px;margin-bottom:8px">Status</h3>${statusBadge('Delivered')}
           <p class="t-sub" style="margin-top:10px">${r.type === 'connection' ? 'Sent to the partner automatically — no further tracking.' : 'Sent to the lender and the membership team — no further tracking.'}</p></div>`;
 
-    const assignCard = `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:10px">Assigned to</h3>
-      <select class="select" id="arq-assign"><option value="">Unassigned</option>${TEAM.map((t) => `<option ${t === r.assignee ? 'selected' : ''}>${t}</option>`).join('')}</select></div>`;
-
     let fuCard = '';
     if (r.type === 'escalation') {
       const n = r.activity.filter((a) => a.kind === 'followup-request').length;
@@ -212,7 +206,7 @@
     const fields = Object.entries(r.fields).map(([k, v]) =>
       `<div class="rq-kv ${String(v).length > 40 ? 'block' : ''}"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join('');
     const fieldsCard = fields ? `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:15px;margin-bottom:6px">Submitted details</h3>${fields}</div>` : '';
-    return statusCard + assignCard + fuCard + lenderCard + memberCard + fieldsCard;
+    return statusCard + fuCard + lenderCard + memberCard + fieldsCard;
   }
 
   function renderDetail() {
@@ -274,8 +268,7 @@
   }
 
   /* ---------- events ---------- */
-  $('arq-assignee').innerHTML += TEAM.map((t) => `<option>${t}</option>`).join('');
-  ['arq-search', 'arq-status', 'arq-assignee'].forEach((id) => $(id).addEventListener(id === 'arq-search' ? 'input' : 'change', renderQueue));
+  ['arq-search', 'arq-status'].forEach((id) => $(id).addEventListener(id === 'arq-search' ? 'input' : 'change', renderQueue));
   $('arq-reset').addEventListener('click', () => { S.reset(); showToast('Sample request data restored.'); });
 
   document.addEventListener('click', (e) => {
@@ -287,7 +280,6 @@
       typeFilter = k === 'esc' || k === 'fu' ? 'escalation' : k === 'tk' ? 'support' : 'all';
       attnOnly = k === 'fu' || k === 'tk';
       $('arq-status').value = 'open';
-      $('arq-assignee').value = k === 'un' ? '' : 'all';
       renderQueue();
       return;
     }
@@ -313,12 +305,6 @@
       S.setStatus(r.id, s, 'team', ME);
       showToast(`${r.id} set to ${s}.`);
       return;
-    }
-  });
-  document.addEventListener('change', (e) => {
-    if (e.target.id === 'arq-assign') {
-      S.assign(currentId, e.target.value);
-      showToast(e.target.value ? `Assigned to ${e.target.value}.` : 'Unassigned.');
     }
   });
 
