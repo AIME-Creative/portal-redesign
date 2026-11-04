@@ -46,9 +46,6 @@
       mBody: 'These tiles count what was added this week — new lenders, Market deals, resources, and events. Tap one to jump straight there.' },
     { sec: 1, page: 'dashboard', target: '#trending-card', title: 'Trending',
       body: "The most-viewed pages across the portal — lenders, Market products, resources, events, and hubs. Change the date range (last 7, 30, or 90 days, year to date, or all time), and click one to open it." },
-    { sec: 1, page: 'dashboard', target: () => document.querySelector('#lp-grid .lp-card') && [document.querySelector('#learning-paths .section-title'), document.querySelector('#lp-grid .lp-card')],
-      title: 'Learning paths',
-      body: 'Sessions put in order, so you know what to watch first and what comes next. Open a path to see its steps — each one you open is marked done, and the card shows what\'s next.' },
     { sec: 2, page: 'dashboard', target: '.qa-grid', title: 'Quick actions',
       body: "The things members do most — change your AE, connect with a lender, or escalate a loan. Let's escalate a loan together: click Next to open the form." },
 
@@ -76,6 +73,12 @@
       mBody: 'Tap the <strong>heart</strong> on anything to save it — open the ☰ menu for <strong>My Library</strong>, where everything you save lives.' },
     { sec: 5, page: 'dashboard', target: '.nav-item[data-nav="lenders"]', mTarget: '.bottom-nav-item[data-nav="lenders"]', title: 'Lenders',
       body: "Browse partner lenders by tier and product type. From a lender's page you can escalate a loan, connect, or change your AE." },
+    { sec: 6, page: 'resources', target: () => [document.querySelector('#view-resources .lc-hero'), document.querySelector('#view-resources .lc-goals')],
+      mTarget: '#view-resources .lc-goals', title: 'The Learning Center',
+      body: 'Every replay, show, training, and download in one place. Pick a goal, search, or browse shows, replays, and tools.' },
+    { sec: 6, page: 'resources', target: () => document.querySelector('#lp-grid .lp-card') && [document.querySelector('#learning-paths .section-title'), document.querySelector('#lp-grid .lp-card')],
+      mTarget: '#lp-grid .lp-card', title: 'Learning paths',
+      body: 'Sessions put in order, so you know what to watch first and what comes next. Open a path to see its steps — each one you open is marked done, and the card shows what\'s next.' },
     { sec: 6, page: 'dashboard', target: '.nav-item[data-nav="brokersedge"]', mTarget: '.menu-btn', title: 'Learning & hubs',
       body: 'Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN gather trainings, replays, events, and documents for each program.',
       mBody: 'Open the ☰ menu for Brokers Edge, Mortgage Mornings, Accelerate Live, and WMN — trainings, replays, events, and documents for each program.' },
@@ -176,6 +179,7 @@
       return;
     }
     if (s.page === 'dashboard' && !active('dashboard')) navigate('dashboard');
+    else if (s.page === 'resources') { if (!active('resources')) navigate('resources'); const t = typeof s.target === 'function' ? s.target() : null; const el = Array.isArray(t) ? t[0] : t; if (el) el.scrollIntoView({ block: 'center' }); }
     else if (s.page === 'requests' && !active('requests')) window.AmpMyRequests.showList('all');
     else if ((s.page === 'esc' || s.page === 'tkt')) {
       const id = examples[s.page], body = document.getElementById('rq-detail-body');

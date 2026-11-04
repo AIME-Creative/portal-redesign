@@ -8,14 +8,18 @@ const taxonomies = {
   lenderProducts:    ["Conventional","FHA","VA","Jumbo","Non-QM","USDA","DSCR","Bank Stmt","Renovation","Reverse","Fix & Flip","Bridge"],
   vendorCategories:  ["Core Partner","Origination","Coaching","Marketing"],
   resourceTypes:     ["Podcast","Webinar","Training","Recording","Certification"],
-  resourceTopics:    ["AI Strategy","Marketing","Sales"],
+  resourceTopics:    ["AI & Technology","AIME Community","Business Planning & Numbers","Compliance & Ethics","Leadership & Team","Leads & Referral Partners","Loan Products & Guidelines","Marketing & Personal Brand","Mindset & Habits","Operations & Systems","Sales & Conversations"],
+  learningGoals:     ["Start Here","Get More Business","Close More Loans","Run & Grow Your Business","Mindset & Habits"],
+  learningShows:     ["Mortgage Mornings","Broker Power-Up","Broker to Broker","Women's Mortgage Network","AIME Accelerate"],
   eventTypes:        ["Virtual","In person","Training"],
 };
 const taxMeta = {
   lenderProducts:   { label:"Lender product types", sub:"Shown on lender cards and the product filter." },
   vendorCategories: { label:"Market categories",     sub:"Group products in the Market." },
   resourceTypes:    { label:"Resource types",        sub:"Used to label and filter resources." },
-  resourceTopics:   { label:"Resource topics",        sub:"Topic tags members filter by on Resources (AI Strategy, Marketing, Sales…)." },
+  resourceTopics:   { label:"Learning Center topics", sub:"Topics members filter the Learning Center's full library by." },
+  learningGoals:    { label:"Learning Center goals",  sub:"The goal tiles at the top of the Learning Center (Start Here, Get More Business…)." },
+  learningShows:    { label:"Shows",                  sub:"Recurring series in the Learning Center's Shows row (Mortgage Mornings, Broker Power-Up…)." },
   eventTypes:       { label:"Event types",           sub:"Used to label and filter events." },
 };
 
@@ -1210,10 +1214,11 @@ function openEdit(ref){
     body = `
       ${field('Title', r.title)}
       <div class="field-row">${selectField('Type', taxonomies.resourceTypes, r.type)}${field('Duration', r.dur)}</div>
-      <div class="field-row">${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}${selectField('Topic tag', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
+      <div class="field-row">${selectField('Goal', ['—', ...taxonomies.learningGoals], r.goal || '—')}${selectField('Topic', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
+      <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}${selectField('Hub / collection', ['—', ...hubNames()], r.collection)}</div>
       ${field('Content link', '', 'placeholder="Video / audio URL"')}
       ${selectField('Status', ['Active','Draft'], r.status)}
-      <div class="hint">Assigning a <strong>hub</strong> makes this appear inside that hub (Brokers Edge, Mortgage Mornings, etc.). <strong>Topic</strong> drives the AI Strategy / Marketing / Sales filters on Resources.</div>`;
+      <div class="hint"><strong>Goal</strong>, <strong>Topic</strong>, and <strong>Show</strong> decide where this appears in the member Learning Center (goal tiles, library filters, the Shows row). Assigning a <strong>hub</strong> also puts it inside that hub.</div>`;
   } else if(type==='event'){
     const e = isNew ? {title:'',date:'',type:taxonomies.eventTypes[0],hub:'—',status:'Draft'} : events[idx];
     title = isNew ? 'Add event' : 'Edit event'; sub = isNew?'Create a new event.':e.title;

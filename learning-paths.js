@@ -1,7 +1,8 @@
 /* ============================================================
-   AMP — Learning paths on the member home page
+   AMP — Learning paths in the Learning Center
    ------------------------------------------------------------
-   Section under Featured: one card per Published path, in the
+   Section in the Learning Center (learning-center.js leaves a slot,
+   #lc-paths-slot, under "Coming up"): one card per Published path, in the
    order admin set. Each card shows the number of steps, whether it
    includes VIP-only content, a progress bar (one segment per step),
    and the next step ("Start with" / "Continue with" / "Completed").
@@ -18,8 +19,7 @@
 (function () {
   const P = window.AmpPaths;
   if (!P || typeof userType === 'undefined' || userType !== 'member') return;
-  const featured = document.getElementById('featured-grid');
-  const anchor = featured && featured.parentElement;
+  const anchor = document.getElementById('lc-paths-slot');
   if (!anchor) return;
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const svg = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${d}</svg>`;
@@ -55,7 +55,7 @@
   }
 
   /* ---------- home page section ---------- */
-  anchor.insertAdjacentHTML('afterend', `<div class="lp-section" id="learning-paths">
+  anchor.insertAdjacentHTML('beforeend', `<div class="lp-section" id="learning-paths">
       <div class="section-title" style="margin-bottom:4px"><h2>Learning paths</h2></div>
       <p class="lp-intro">Sessions put in order so you know what to watch first and what comes next.</p>
       <div class="lp-grid" id="lp-grid"></div></div>`);

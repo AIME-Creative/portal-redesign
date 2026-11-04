@@ -68,7 +68,7 @@
       mTarget: () => [document.querySelector('#rf-form .rf-radios').closest('.field'), $('rf-first').closest('.field')], title: 'Loan referrals',
       body: 'Fill in a referral and submit it — opted-in VIP members matching its type and state get it first, Elite members after a short delay. <strong>Sent referrals</strong> lists each one with how many VIP and Elite members it went to, and a preview of the email.' },
     { sec: 6, page: 'notifications', target: navItems('featured', 'paths', 'lenders', 'market', 'resources', 'events', 'hubs', 'documents', 'taxonomy'), mTarget: '.menu-btn', title: 'Content',
-      body: 'Everything members browse — Featured and <strong>Learning paths</strong> on their home screen, lenders, Market products, resources, events, hubs, documents, and the categories behind them. Each lender and Market listing also sets <strong>who requests go to</strong> — one or more people for escalations, connections, and Change AE.' },
+      body: 'Everything members browse — Featured on their home screen, lenders, Market products, the <strong>Learning Center</strong> (resources and <strong>Learning paths</strong>), events, hubs, documents, and the categories behind them. Each lender and Market listing also sets <strong>who requests go to</strong> — one or more people for escalations, connections, and Change AE.' },
     { sec: 7, page: 'help', target: () => [$('kb-stats'), document.querySelector('#view-help .toolbar')], title: 'Help Center',
       body: "Write and edit the guides members see in their Help Center, see searches that found nothing, and how the member walkthrough is doing." },
     { sec: 8, page: 'reports', target: () => [$('report-tabs'), document.querySelector('#view-reports .toolbar')], title: 'Reports',

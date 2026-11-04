@@ -58,7 +58,7 @@ window.HELP_ARTICLES = [
     views: 0, helpful: [0, 0], actions: [{ label: 'Get support', attr: 'data-nav="support"' }],
     body: `
       <ul>
-        <li><strong>Resources and Events</strong> — the same as members (event registration is for members).</li>
+        <li><strong>Learning Center and Events</strong> — the same as members (event registration is for members).</li>
         <li><strong>Lenders and Market</strong> — view only: partner accounts can't submit escalations, connections, or Change AE requests, or use member discounts.</li>
         <li><strong>Support</strong> — open tickets and reply to our team, just like members. Your tickets are under <strong>Requests → My support tickets</strong>.</li>
         <li><strong>AIME Exchange</strong> — available from the sidebar.</li>
@@ -67,13 +67,30 @@ window.HELP_ARTICLES = [
       <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are free and created by AIME — ask us to add a teammate.</p>` },
 
   /* ---------------- Getting started ---------------- */
+  { slug: 'learning-center', audience: 'all', title: 'Finding what to watch in the Learning Center', category: 'learning',
+    summary: 'Every replay, show, training, and download in one place — organized by what you want to get done.',
+    tags: ['learning center', 'resources', 'videos', 'podcasts', 'webinars', 'trainings', 'shows', 'replays', 'downloads', 'tools', 'goals', 'filter'], minutes: 2, updated: 'Nov 4, 2026', status: 'Published',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'Open the Learning Center', attr: 'data-nav="resources"' }],
+    body: `
+      <p>The <strong>Learning Center</strong> (in the menu) holds every replay, show, training, and download in your membership.</p>
+      <ul>
+        <li><strong>Pick a goal</strong> at the top — Start Here, Get More Business, Close More Loans, Run &amp; Grow Your Business, or Mindset &amp; Habits — to see everything for it.</li>
+        <li><strong>Search</strong> in plain words, like "referral partners" or "VA".</li>
+        <li><strong>Coming up</strong> shows the next live events. <strong>Learning paths</strong> put sessions in order. <strong>New this month</strong> has the latest additions.</li>
+        <li><strong>Shows</strong> are weekly series — pick one to see every episode. <strong>Replays</strong> are recordings of live sessions. <strong>Tools you can use today</strong> are guides, checklists, and templates to download.</li>
+        <li>The <strong>Full library</strong> filters by goal, topic, format (Watch, Listen, Download), or show, and sorts by newest, oldest, or A to Z.</li>
+        <li>Tap the <strong>heart</strong> to save something — it shows under <strong>Your saved</strong> and in My Library.</li>
+        <li>Content from VIP-only hubs is marked <strong>Requires VIP membership</strong>.</li>
+      </ul>
+      <div class="kb-tip">Lender and Vendor accounts see resources and events in the Learning Center — hubs, documents, and learning paths are for members.</div>` },
   { slug: 'learning-paths', audience: 'member', title: 'Following a learning path', category: 'learning',
-    summary: 'Sessions put in order on your home page — what to watch first and what comes next.',
+    summary: 'Sessions put in order in the Learning Center — what to watch first and what comes next.',
     tags: ['learning path', 'learning paths', 'path', 'course', 'series', 'in order', 'what to watch', 'progress', 'steps'], minutes: 1, updated: 'Nov 4, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
-    actions: [{ label: 'See learning paths', attr: 'data-nav="dashboard"' }],
+    actions: [{ label: 'Open the Learning Center', attr: 'data-nav="resources"' }],
     body: `
-      <p><strong>Learning paths</strong> on your home page (under Featured) put resources, hub videos, documents, and events in order, so you know where to start.</p>
+      <p><strong>Learning paths</strong> in the <strong>Learning Center</strong> put resources, hub videos, documents, and events in order, so you know where to start.</p>
       <ul>
         <li>Each card shows how many steps it has, a progress bar, and the next step to take.</li>
         <li>Open a card to see every step in order. Tap a step to open it — it's marked done once you open it.</li>
@@ -100,7 +117,7 @@ window.HELP_ARTICLES = [
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Open Settings', attr: 'data-nav="settings"' }],
     body: `
-      <p>The search box at the top of every page searches the whole portal. Results are grouped by type — <strong>Pages &amp; settings</strong>, <strong>Lenders</strong>, <strong>Market</strong>, <strong>Resources</strong>, <strong>Events</strong>, <strong>Hubs</strong>, <strong>Documents</strong>, <strong>My requests</strong>, and <strong>Help guides</strong> — with the best matches first.</p>
+      <p>The search box at the top of every page searches the whole portal. Results are grouped by type — <strong>Pages &amp; settings</strong>, <strong>Lenders</strong>, <strong>Market</strong>, <strong>Learning Center</strong>, <strong>Events</strong>, <strong>Hubs</strong>, <strong>Documents</strong>, <strong>My requests</strong>, and <strong>Help guides</strong> — with the best matches first.</p>
       <ul>
         <li>Search by name, product type (like FHA or DSCR), topic, request number, or what you want to do (like "billing").</li>
         <li>Use <strong>↑ ↓</strong> and <strong>Enter</strong> to open a result, or click it. <strong>Show all</strong> lists every match in a group.</li>
@@ -117,7 +134,7 @@ window.HELP_ARTICLES = [
       <p>The portal is built around a few places you'll use every week:</p>
       <ul>
         <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions, your next few <strong>Upcoming events</strong>, and <strong>Trending</strong>: the most-viewed pages across the portal — last 7 days by default; pick 30 or 90 days, year to date, or all time. Click one to open it.</li>
-        <li><strong>The sidebar</strong> — Lenders, Market, Resources, Events, Documents, your learning hubs, and Support.</li>
+        <li><strong>The sidebar</strong> — Lenders, Market, the Learning Center, Events, Documents, My Library, your learning hubs, and Support.</li>
         <li><strong>Search</strong> (top of every page) — search everything: lenders, the Market, resources, events, hubs, documents, help guides, and your requests.</li>
         <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more (VIP is unlimited, so there's nothing to buy).</li>
         <li><strong>My Requests</strong> — every escalation, connection, AE change, and support ticket you've submitted, with its status.</li>
@@ -132,7 +149,7 @@ window.HELP_ARTICLES = [
     body: `
       <p>The portal works in any mobile browser, and you can also install it as an app.</p>
       <ol class="kb-steps">
-        <li>The <strong>bottom bar</strong> takes you to the main sections (Home or your Dashboard, Lenders, Market, Resources, and Events).</li>
+        <li>The <strong>bottom bar</strong> takes you to the main sections (Home or your Dashboard, Lenders, Market, Learning, and Events).</li>
         <li>Tap the <strong>☰ menu</strong> (top left) for everything else, including My Requests, Help Center, and Settings.</li>
         <li>Your notifications stay in the top bar.</li>
       </ol>
