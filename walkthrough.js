@@ -46,6 +46,9 @@
       mBody: 'These tiles count what was added this week — new lenders, Market deals, resources, and events. Tap one to jump straight there.' },
     { sec: 1, page: 'dashboard', target: '#trending-card', title: 'Trending',
       body: "The most-viewed pages across the portal — lenders, Market products, resources, events, and hubs. Change the date range (last 7, 30, or 90 days, year to date, or all time), and click one to open it." },
+    { sec: 1, page: 'dashboard', target: () => document.querySelector('#lp-grid .lp-card') && [document.querySelector('#learning-paths .section-title'), document.querySelector('#lp-grid .lp-card')],
+      title: 'Learning paths',
+      body: 'Sessions put in order, so you know what to watch first and what comes next. Open a path to see its steps — each one you open is marked done, and the card shows what\'s next.' },
     { sec: 2, page: 'dashboard', target: '.qa-grid', title: 'Quick actions',
       body: "The things members do most — change your AE, connect with a lender, or escalate a loan. Let's escalate a loan together: click Next to open the form." },
 

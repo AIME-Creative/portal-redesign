@@ -1,0 +1,55 @@
+/* ============================================================
+   AMP — Learning paths on the member home page (learning-paths.js)
+   ============================================================ */
+.lp-section { margin-top:28px; }
+.lp-intro { color:var(--muted); font-size:13.5px; margin:0 0 14px; }
+.lp-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:14px; }
+.lp-card { display:flex; flex-direction:column; gap:6px; text-align:left; background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  padding:16px 16px 14px; box-shadow:var(--shadow-sm); cursor:pointer; transition:.18s; min-width:0; }
+.lp-card:hover { border-color:#c9cfdd; transform:translateY(-1px); box-shadow:0 6px 18px rgba(2,22,73,.08); }
+.lp-meta { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.lp-title { font-size:16px; font-weight:800; color:var(--ink); line-height:1.25; }
+.lp-desc { font-size:13px; color:var(--ink-soft); line-height:1.45; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.lp-bar { display:flex; gap:4px; margin-top:auto; padding-top:6px; }
+.lp-bar i { flex:1; height:5px; border-radius:3px; background:var(--line); }
+.lp-bar i.on { background:var(--pink); }
+.lp-next { font-size:12.5px; font-weight:700; color:var(--pink); line-height:1.35; display:flex; align-items:flex-start; gap:5px; }
+.lp-next svg { width:14px; height:14px; flex:none; margin-top:1px; }
+.lp-next.done { color:#15803d; }
+.lp-next.locked { color:#6a4ce0; }
+
+/* Side panel */
+.lp-drawer-wrap { position:fixed; inset:0; z-index:10001; }   /* above the install card and review pill */
+.lp-scrim { position:absolute; inset:0; background:rgba(2,22,73,.45); opacity:0; transition:opacity .2s; }
+.lp-drawer { position:absolute; top:0; right:0; bottom:0; width:min(480px, 100%); background:#fff; box-shadow:-12px 0 40px rgba(2,22,73,.18);
+  padding:26px 24px 30px; overflow-y:auto; transform:translateX(100%); transition:transform .2s ease; }
+.lp-drawer-wrap.open .lp-scrim { opacity:1; }
+.lp-drawer-wrap.open .lp-drawer { transform:none; }
+.lp-close { position:absolute; top:16px; right:16px; width:36px; height:36px; border-radius:50%; border:1px solid var(--line); background:#fff;
+  display:grid; place-items:center; color:var(--ink-soft); cursor:pointer; }
+.lp-close svg { width:17px; height:17px; }
+.lp-d-kicker { font-size:12px; font-weight:600; color:var(--muted); margin:2px 44px 6px 0; }
+.lp-drawer h2 { font-size:22px; font-weight:800; color:var(--ink); margin:0 44px 8px 0; line-height:1.2; }
+.lp-d-desc { font-size:14px; color:var(--ink-soft); line-height:1.5; margin:0 0 14px; }
+.lp-d-progress { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.lp-d-progress .lp-bar { flex:1; padding-top:0; }
+.lp-d-count { font-size:12.5px; font-weight:600; color:var(--muted); white-space:nowrap; }
+.lp-steps { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.lp-step { display:flex; align-items:center; gap:13px; width:100%; text-align:left; padding:13px 14px; border:1px solid var(--line); border-radius:14px;
+  background:#fff; cursor:pointer; transition:.15s; }
+.lp-step:hover:not(:disabled) { border-color:#f6bcd3; background:#fffafc; }
+.lp-step.next { border-color:var(--pink); box-shadow:0 0 0 3px rgba(221,25,105,.08); }
+.lp-step:disabled { cursor:not-allowed; background:var(--surface-alt); }
+.lp-num { width:28px; height:28px; flex:none; border-radius:50%; display:grid; place-items:center; font-size:12.5px; font-weight:800;
+  color:var(--pink); background:#fde4ee; }
+.lp-num svg { width:15px; height:15px; }
+.lp-step.done .lp-num { background:#e7f7ee; color:#15803d; }
+.lp-step.locked .lp-num { background:var(--line-soft); color:var(--muted); }
+.lp-step-main { min-width:0; display:flex; flex-direction:column; }
+.lp-step-t { font-size:14.5px; font-weight:700; color:var(--ink); line-height:1.3; }
+.lp-step.locked .lp-step-t { color:var(--muted); }
+.lp-step-s { font-size:12.5px; color:var(--muted); margin-top:2px; }
+.lp-lock { display:inline-block; font-size:11.5px; font-weight:700; color:#6a4ce0; background:rgba(124,92,255,.1); padding:1px 8px; border-radius:20px; }
+.lp-up { display:inline-block; font-size:11px; font-weight:700; color:var(--pink); background:#fde4ee; padding:1px 8px; border-radius:20px; margin-left:4px; }
+.lp-reset { display:block; margin:16px auto 0; }
+@media (max-width:600px) { .lp-drawer { padding:22px 16px 28px; } .lp-grid { grid-template-columns:1fr; } }

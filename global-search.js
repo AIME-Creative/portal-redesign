@@ -80,6 +80,10 @@
         (h.documents || []).forEach((d) => add('doc', d.title, `Document · ${h.name}`, d.desc, () => { navigate('documents'); filterDocuments(k); }, gate));
       });
       generalDocuments.forEach((d) => add('doc', d.title, 'Document', d.desc, () => { navigate('documents'); filterDocuments('general'); }));
+      // Learning paths (published) — under Resources; opens the path's side panel on the home page.
+      (window.AmpPaths ? AmpPaths.all() : []).filter((p) => p.status === 'Published' && p.steps.length).forEach((p) =>
+        add('resource', p.title, `Learning path · ${p.steps.length} steps`, `learning path ${p.desc} ${p.steps.map((s) => s.t).join(' ')}`,
+          () => { navigate('dashboard'); if (window.AmpLearningPaths) AmpLearningPaths.open(p.id); }));
     }
 
     const R = window.AmpRequests;

@@ -67,6 +67,19 @@ window.HELP_ARTICLES = [
       <p><strong>Need to change your company listing?</strong> Email AIME at lenders@aimegroup.com (lenders) or vendors@aimegroup.com (vendors). Accounts are free and created by AIME — ask us to add a teammate.</p>` },
 
   /* ---------------- Getting started ---------------- */
+  { slug: 'learning-paths', audience: 'member', title: 'Following a learning path', category: 'learning',
+    summary: 'Sessions put in order on your home page — what to watch first and what comes next.',
+    tags: ['learning path', 'learning paths', 'path', 'course', 'series', 'in order', 'what to watch', 'progress', 'steps'], minutes: 1, updated: 'Nov 4, 2026', status: 'Published',
+    views: 0, helpful: [0, 0],
+    actions: [{ label: 'See learning paths', attr: 'data-nav="dashboard"' }],
+    body: `
+      <p><strong>Learning paths</strong> on your home page (under Featured) put resources, hub videos, documents, and events in order, so you know where to start.</p>
+      <ul>
+        <li>Each card shows how many steps it has, a progress bar, and the next step to take.</li>
+        <li>Open a card to see every step in order. Tap a step to open it — it's marked done once you open it.</li>
+        <li>Steps from VIP-only hubs show to every member, marked <strong>Requires VIP membership</strong>; only VIP members can open them.</li>
+        <li><strong>Start over</strong> at the bottom of a path clears your progress on it.</li>
+      </ul>` },
   { slug: 'my-library', audience: 'all', title: 'Saving things to My Library', category: 'start',
     summary: 'Tap the heart on anything you want to come back to — it all lands in My Library.',
     tags: ['library', 'my library', 'save', 'saved', 'favorite', 'favourite', 'heart', 'bookmark', 'save for later'], minutes: 1, updated: 'Nov 4, 2026', status: 'Published',

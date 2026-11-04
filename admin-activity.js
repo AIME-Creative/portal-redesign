@@ -22,7 +22,7 @@
   // Admin sidebar section → activity area
   const AREA_OF = { members: 'Members', groups: 'Group memberships', enterprise: 'Enterprise', partners: 'Partner users', requests: 'Requests',
     abandoned: 'Billing', coupons: 'Billing', notifications: 'Communications', emails: 'Communications', referrals: 'Communications',
-    featured: 'Content', lenders: 'Content', market: 'Content', resources: 'Content', hubs: 'Content', documents: 'Content', taxonomy: 'Content',
+    featured: 'Content', paths: 'Content', lenders: 'Content', market: 'Content', resources: 'Content', hubs: 'Content', documents: 'Content', taxonomy: 'Content',
     events: 'Events', help: 'Help Center', team: 'Team access', reports: 'Reports', analytics: 'Reports', dashboard: 'Settings' };
 
   /* ---------- sample history ---------- */
