@@ -12,7 +12,7 @@
      show a notification itself (prototype test notifications).
    Registered by pwa.js. Bump CACHE when the shell changes.
    ============================================================ */
-const CACHE = 'amp-shell-v23';
+const CACHE = 'amp-shell-v24';
 const SHELL = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './assets/AMP-Logo.png', './assets/icons/icon-192.png', './assets/icons/icon-512.png'];
 

@@ -183,6 +183,7 @@
   $('view-vendorclicks').insertAdjacentHTML('afterend', `
     <section class="view" id="view-lenderviews">${TABS('lenderviews')}
       <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Lender page views — how many members view each lender's page, and what they sent that lender. Click a views number to see who viewed it.</p></div>${rangeMarkup('lenderviews').replace('value="all" selected', 'value="all"').replace('value="30d"', 'value="30d" selected')}</div>
+      <div class="stat-row admin5" id="lv-tiles" style="margin:18px 0 20px"></div>
       <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Escalations</th><th>Change AE</th><th>Connections</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
       <div class="count-note" id="lv-count" style="margin-top:10px"></div>
     </section>
@@ -218,6 +219,11 @@
         <td><button class="pv-link" data-pv="lender::${esc(r.name)}" title="See who viewed this page">${r.views.toLocaleString()}</button></td>
         <td>${r.unique.toLocaleString()}</td><td>${r.esc}</td><td>${r.ae}</td><td>${r.conn}</td></tr>`).join('');
     $('lv-count').textContent = `${rows.length} lenders · ${ranges.lenderviews.label}`;
+    // Totals across the top, like Vendor page views.
+    const sum = (k) => rows.reduce((a, x) => a + x[k], 0).toLocaleString();
+    const box = (cls, ico, val, lbl) => `<div class="stat"><div class="s-ico ${cls}">${svg(ico)}</div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div></div>`;
+    $('lv-tiles').innerHTML = box('i-navy', ICO.eye, sum('views'), 'Page views') + box('i-pink', ICO.people, sum('unique'), 'Unique page views')
+      + box('i-cyan', ICO.esc, sum('esc'), 'Escalations') + box('i-navy', ICO.ae, sum('ae'), 'Change AE requests') + box('i-green', ICO.conn, sum('conn'), 'Connection requests');
   }
   setupRange('lenderviews', renderLenderViews);
 
