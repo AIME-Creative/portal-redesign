@@ -182,10 +182,13 @@
   });
   $('view-vendorclicks').insertAdjacentHTML('afterend', `
     <section class="view" id="view-lenderviews">${TABS('lenderviews')}
-      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Lender page views — how many members view each lender's page, and what they sent that lender. Click a views number to see who viewed it.</p></div>${rangeMarkup('lenderviews').replace('value="all" selected', 'value="all"').replace('value="30d"', 'value="30d" selected')}</div>
+      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Lender page views — how many members view each lender's page, and what they sent that lender. Numbers your team can share with lenders. Click a views number to see who viewed it.</p></div>
+        <div class="date-range" id="lenderviews-range"><select class="select filter-select daterange-preset"><option value="7d">Last 7 days</option><option value="30d" selected>Last 30 days</option><option value="90d">Last 90 days</option><option value="ytd">Year to date</option><option value="all">All time</option><option value="custom">Custom range…</option></select>
+        <div class="daterange-custom" hidden><input type="date" class="input daterange-from"><span class="dr-sep">to</span><input type="date" class="input daterange-to"><button class="btn btn-outline btn-sm daterange-apply">Apply</button></div></div></div>
       <div class="stat-row admin5" id="lv-tiles" style="margin:18px 0 20px"></div>
-      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Escalations</th><th>Change AE</th><th>Connections</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
-      <div class="count-note" id="lv-count" style="margin-top:10px"></div>
+      <div class="toolbar" style="justify-content:space-between"><span class="count-note" id="lv-count">—</span><button class="btn btn-outline btn-sm" data-toast="Exported lender page views report to CSV.">Export CSV</button></div>
+      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Escalations</th><th>Change AE</th><th>Connections</th><th class="t-right">Actions</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
+      <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Escalations</strong>, <strong>Change AE</strong>, <strong>Connections</strong> = requests members sent that lender. "Email lender" sends that lender their own numbers.</p>
     </section>
     <section class="view" id="view-page-viewers">
       <div id="pv-tabs"></div>
@@ -214,10 +217,14 @@
     return { views, unique, esc: c('Escalation'), ae: c('Change AE'), conn: c('Connection') };
   }
   function renderLenderViews() {
-    const rows = lenders.map((l) => Object.assign({ name: l.name, tier: l.tier }, lenderStats(l.name))).sort((a, b) => b.views - a.views);
-    $('lv-tbody').innerHTML = rows.map((r) => `<tr><td class="t-strong">${esc(r.name)}</td><td><span class="badge badge-navy">${esc(r.tier || '')}</span></td>
-        <td><button class="pv-link" data-pv="lender::${esc(r.name)}" title="See who viewed this page">${r.views.toLocaleString()}</button></td>
-        <td>${r.unique.toLocaleString()}</td><td>${r.esc}</td><td>${r.ae}</td><td>${r.conn}</td></tr>`).join('');
+    const rows = lenders.map((l) => Object.assign({ name: l.name, tier: l.tier, l }, lenderStats(l.name))).sort((a, b) => b.views - a.views);
+    const tierCls = { Gold: 'badge-gold', Silver: 'badge-silver', Bronze: 'badge-bronze' };
+    $('lv-tbody').innerHTML = rows.map((r) => `<tr>
+        <td><div class="t-id">${typeof logoTile === 'function' ? logoTile(r.l) : ''}<div class="t-strong">${esc(r.name)}</div></div></td>
+        <td><span class="badge ${tierCls[r.tier] || 'badge-navy'}">${esc(r.tier || '')}</span></td>
+        <td class="t-strong"><button class="pv-link" data-pv="lender::${esc(r.name)}" title="See who viewed this page">${r.views.toLocaleString()}</button></td>
+        <td>${r.unique.toLocaleString()}</td><td>${r.esc}</td><td>${r.ae}</td><td>${r.conn}</td>
+        <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.name)} their page views report.">Email lender</button></div></td></tr>`).join('');
     $('lv-count').textContent = `${rows.length} lenders · ${ranges.lenderviews.label}`;
     // Totals across the top, like Vendor page views.
     const sum = (k) => rows.reduce((a, x) => a + x[k], 0).toLocaleString();
