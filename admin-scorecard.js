@@ -158,10 +158,10 @@
       ${num('escalations', '72', 'Loan escalations, last 12 months', 'Advocacy cases members sent to AIME')}
       ${num('connections', '430', 'Lender + vendor connections, last 12 months', 'Members asking AIME to connect them with a partner')}
     </div>
-    <div class="sc-two">
+    <div class="sc-one">
       ${card('Members active in the portal each month', 'Distinct people who used the member portal. The current month is partial.', chartActive())}
       ${card('Member requests each month', 'Escalations, lender and vendor connections, and event registrations made in the portal. Event registrations were tracked starting June 2026.', `<div class="table-scroll"><table class="adm sc-table"><thead><tr><th>Month</th><th>Escalations</th><th>Lender connections</th><th>Vendor connections</th><th>Event registrations</th></tr></thead><tbody>
-        ${REQUESTS.map((r) => `<tr><td>${r[0]}</td>${r.slice(1).map((v) => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`)}
+        ${REQUESTS.map((r) => `<tr><td style="white-space:nowrap">${r[0]}</td>${r.slice(1).map((v) => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`)}
     </div>
   </section>`);
 

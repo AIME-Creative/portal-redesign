@@ -439,3 +439,6 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 /* Scorecard tables fit their card (the shared .adm min-width is for full-page tables). */
 #view-scorecard .sc-table { min-width:0; width:100%; }
 #view-scorecard .sc-card { overflow-x:auto; }
+/* Scorecard: full-width cards stacked one per row */
+.sc-one { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; margin-bottom:18px; }
+.sc-one .sc-chart { max-height:300px; }
