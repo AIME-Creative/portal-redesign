@@ -27,7 +27,7 @@
       body: 'Everything is grouped in the sidebar — Overview, Members, Billing, Communications, Content, Access, and Events. Click a section heading\'s arrow to collapse or expand it.',
       mBody: 'Tap the menu for every admin section — Overview, Members, Billing, Communications, Content, Access, and Events.' },
     { sec: 1, page: 'dashboard', target: '#view-dashboard .stat-row.admin5', title: 'The dashboard',
-      body: 'A snapshot of the whole portal: members, pending requests, partners, and revenue. Click any tile to jump to that section.' },
+      body: 'Your day-to-day view: paying members, pending requests, partners, and registrations. Click any tile to jump there. Membership numbers and trends live on the Scorecard.' },
     { sec: 1, page: 'scorecard', target: () => document.querySelector('#view-scorecard .sc-nums'), title: 'The membership scorecard',
       body: 'Membership health in one place — paying members, dues, retention, who\'s renewing or at risk, FUSE, and engagement. It updates each time you open it.' },
 
@@ -76,7 +76,7 @@
     { sec: 8, page: 'lender-reports', target: () => [$('lr-tiles'), document.querySelector('#view-lender-reports .toolbar')], title: 'Partner Reports',
       body: '<strong>Lender reports</strong> (escalations, Change AE, connections) and <strong>Vendor reports</strong> (connections) — totals across the top follow your filters and dates (all time by default), and each row shows whether the email to the partner went through. Export to CSV. <strong>Reports</strong> has subscription upgrades, downgrades, and cancellations.' },
     { sec: 9, page: 'analytics', target: () => document.querySelector('#view-analytics .an-tabs'), title: 'Analytics',
-      body: 'One place for the numbers: <strong>Overview</strong>, <strong>Engagement</strong>, <strong>Member journeys</strong>, <strong>Lender page views</strong>, and <strong>Vendor clickthroughs</strong>. Click a views number to see which members viewed that lender or vendor page — and, for vendors, upload their sign-up list.' },
+      body: 'How members use the portal: <strong>Overview</strong> (sign-ups and where they come from), <strong>Engagement</strong>, <strong>Member journeys</strong>, <strong>Lender page views</strong>, and <strong>Vendor clickthroughs</strong>. Click a views number to see which members viewed that lender or vendor page — and, for vendors, upload their sign-up list.' },
     { sec: 10, page: 'events', target: () => document.querySelector('#events-tbody [data-ereg]'), mTarget: () => document.querySelector('#events-tbody [data-ereg]')?.closest('tr'), title: 'Event registration',
       body: 'Registration is set per event — click <strong>Registration</strong> on any event to turn it on: RSVP or ticketed, which tiers, early-bird pricing, ticket types, add-ons, guests, custom questions, and one-click claim (FUSE).',
       mBody: 'Registration is set per event — swipe an event\'s row to the end and tap <strong>Registration</strong> to turn it on: RSVP or ticketed, tiers, early-bird pricing, tickets, add-ons, guests, questions, and one-click claim (FUSE).' },

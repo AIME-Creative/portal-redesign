@@ -61,9 +61,9 @@ const resources = [
   { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast", dur:"28 min", pub:"Jun 20, 2026", collection:"—", topic:"Sales", status:"Active" },
   { title:"Broker to Broker — Episode 251", type:"Podcast", dur:"41 min", pub:"Jun 18, 2026", collection:"—", topic:"—", status:"Active" },
   { title:"Broker Power-Up: Episode 65", type:"Webinar", dur:"52 min", pub:"Jun 15, 2026", collection:"—", topic:"Marketing", status:"Active" },
-  { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", pub:"Jun 17, 2026", collection:"Mortgage Mornings", topic:"—", status:"Active" },
+  { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", pub:"Jun 17, 2026", collection:"—", topic:"—", status:"Active" },
   { title:"Women's Mortgage Network Podcast", type:"Podcast", dur:"33 min", pub:"Jun 12, 2026", collection:"WMN", topic:"—", status:"Active" },
-  { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"Brokers Edge", topic:"—", status:"Active" },
+  { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"—", status:"Active" },
   { title:"Ascent — Leading at Scale", type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
   { title:"Scaling Past $1M in Volume", type:"Training", dur:"47 min", pub:"Jun 2, 2026", collection:"—", topic:"Sales", status:"Active" },
   { title:"Using AI to Pre-Qualify Borrowers", type:"Webinar", dur:"39 min", pub:"Jun 5, 2026", collection:"—", topic:"AI Strategy", status:"Active" },
@@ -75,7 +75,7 @@ const events = [
   { title:"AIME Accelerate — Identity Reset", date:"Jun 6, 2026", type:"Virtual", hub:"—", regs:842, status:"Active" },
   { title:"AIME Accelerate — Win the Day", date:"Jun 15, 2026", type:"Virtual", hub:"—", regs:770, status:"Active" },
   { title:"AIME Accelerate — Run Toward It", date:"Jun 22, 2026", type:"Virtual", hub:"—", regs:615, status:"Active" },
-  { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", hub:"Mortgage Mornings", regs:412, status:"Active" },
+  { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", hub:"—", regs:412, status:"Active" },
   { title:"AIME Accelerate — Compound", date:"Jun 29, 2026", type:"Training", hub:"—", regs:308, status:"Active" },
   { title:"FUSE 2026 — National Conference", date:"Sep 24, 2026", type:"In person", hub:"—", regs:1204, status:"Active" },
   { title:"VIP Quarterly Mastermind", date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
@@ -90,9 +90,6 @@ const tierOptions = ["Premium","Elite","VIP"];
 const accessOptions = ["All Members", ...tierOptions];
 // `access` is an array: ["All Members"] (everyone) or specific tiers, e.g. ["Elite","VIP"].
 const hubs = [
-  { name:"Brokers Edge",      kind:"Standard", access:["All Members"], items:4, docs:3, status:"Active" },
-  { name:"Mortgage Mornings", kind:"Standard", access:["All Members"], items:4, docs:2, status:"Active" },
-  { name:"Accelerate Live",   kind:"Standard", access:["All Members"], items:4, docs:2, status:"Active" },
   { name:"Ascent",            kind:"Standard", access:["VIP"],         items:3, docs:2, status:"Active" },
   { name:"VIP",               kind:"Mixed",    access:["VIP"],         items:2, docs:2, status:"Active" },
   { name:"WMN",               kind:"Mixed",    access:["All Members"], items:2, docs:2, status:"Active" },
@@ -104,13 +101,13 @@ const documents = [
   { title:"Loan Escalation Guide",           source:"General",           access:"All members", added:"May 12, 2026", status:"Active" },
   { title:"AIME Brand & Logo Kit",           source:"General",           access:"All members", added:"Apr 2, 2026",  status:"Active" },
   { title:"2026 Membership Agreement",       source:"General",           access:"All members", added:"Jan 1, 2026",  status:"Active" },
-  { title:"Brokers Edge Curriculum Guide",   source:"Brokers Edge",      access:"All members", added:"Jun 10, 2026", status:"Active" },
-  { title:"Certification Completion Checklist", source:"Brokers Edge",   access:"All members", added:"Jun 10, 2026", status:"Active" },
-  { title:"Continuing Education Credit Form",source:"Brokers Edge",      access:"All members", added:"Jun 10, 2026", status:"Active" },
-  { title:"Rate Sheet Roundup — This Week",  source:"Mortgage Mornings", access:"All members", added:"Jun 24, 2026", status:"Active" },
-  { title:"Show Notes Archive (2026)",       source:"Mortgage Mornings", access:"All members", added:"Jun 1, 2026",  status:"Active" },
-  { title:"Accelerate Live — Session Workbook", source:"Accelerate Live", access:"All members", added:"Jun 20, 2026", status:"Active" },
-  { title:"Weekly Action Plan Template",     source:"Accelerate Live",   access:"All members", added:"Jun 20, 2026", status:"Active" },
+  { title:"Brokers Edge Curriculum Guide",   source:"General", access:"All members", added:"Jun 10, 2026", status:"Active" },
+  { title:"Certification Completion Checklist", source:"General", access:"All members", added:"Jun 10, 2026", status:"Active" },
+  { title:"Continuing Education Credit Form",source:"General", access:"All members", added:"Jun 10, 2026", status:"Active" },
+  { title:"Rate Sheet Roundup — This Week",  source:"General", access:"All members", added:"Jun 24, 2026", status:"Active" },
+  { title:"Show Notes Archive (2026)",       source:"General", access:"All members", added:"Jun 1, 2026",  status:"Active" },
+  { title:"Accelerate Live — Session Workbook", source:"General", access:"All members", added:"Jun 20, 2026", status:"Active" },
+  { title:"Weekly Action Plan Template",     source:"General",   access:"All members", added:"Jun 20, 2026", status:"Active" },
   { title:"WMN Mentorship Program Overview", source:"WMN",               access:"All members", added:"Jun 9, 2026",  status:"Active" },
   { title:"WMN Community Guidelines",        source:"WMN",               access:"All members", added:"May 1, 2026",  status:"Active" },
   { title:"Ascent Workbook — Q3 Cohort",     source:"Ascent",            access:"VIP only",    added:"Jun 8, 2026",  status:"Active" },
@@ -137,11 +134,11 @@ const members = [
 ];
 const planTotal = { Premium:1, Elite:6, VIP:"∞" };
 const membershipBreakdown = [
-  { plan:"Premium", count:1910, seg:"mseg-premium", dot:"var(--cyan)" },
-  { plan:"Elite",   count:712,  seg:"mseg-elite",   dot:"var(--pink)" },
-  { plan:"VIP",     count:225,  seg:"mseg-vip",     dot:"var(--navy)" },
+  { plan:"Premium", count:920 },
+  { plan:"Elite",   count:160 },
+  { plan:"VIP",     count:131 },
 ];
-const totalMembers = 2847;
+const totalMembers = 1210; // paying members — matches the Scorecard
 
 /* ---------- Requests & submissions ---------- */
 const reqTypeMeta = {
@@ -297,7 +294,6 @@ const engEscalations = [
 ];
 
 /* ---------- Revenue & subscriptions (synced with Stripe in production) ---------- */
-const revenueKpis = { mrr:"$84.2K", arr:"$1.01M", activeSubs:"2,710", arpu:"$31.07", pastDueAmt:"$1,840" };
 const revenueTrend = [ // MRR by month
   { label:"Nov", val:61000 }, { label:"Dec", val:64000 }, { label:"Jan", val:68000 },
   { label:"Feb", val:71200 }, { label:"Mar", val:74100 }, { label:"Apr", val:78300 },
@@ -352,11 +348,11 @@ let coupons = [
 
 /* ---------- Notifications (admin broadcasts) ---------- */
 const sentNotifications = [
-  { title:"New Gold partner: Newrez Wholesale", audience:"All members", type:"Announcement", sent:"2h ago", recipients:"2,847" },
+  { title:"New Gold partner: Newrez Wholesale", audience:"All members", type:"Announcement", sent:"2h ago", recipients:"1,210" },
   { title:"FUSE early-bird ends Sept 1", audience:"Elite + VIP", type:"Promotion", sent:"Yesterday", recipients:"937" },
-  { title:"New training: Scaling Past $1M in Volume", audience:"All members", type:"Update", sent:"3d ago", recipients:"2,847" },
-  { title:"VIP Luncheon seats filling up", audience:"VIP only", type:"Info", sent:"5d ago", recipients:"225" },
-  { title:"Mortgage Mornings is live now", audience:"All members", type:"Info", sent:"1w ago", recipients:"2,847" },
+  { title:"New training: Scaling Past $1M in Volume", audience:"All members", type:"Update", sent:"3d ago", recipients:"1,210" },
+  { title:"VIP Luncheon seats filling up", audience:"VIP only", type:"Info", sent:"5d ago", recipients:"131" },
+  { title:"Mortgage Mornings is live now", audience:"All members", type:"Info", sent:"1w ago", recipients:"1,210" },
 ];
 
 /* ---------- Analytics trends (live between dashboard snapshot & engagement) ---------- */
@@ -603,26 +599,6 @@ function renderEngagement(){
 }
 
 /* ---------- Chart helpers (CSS-only) ---------- */
-function colChart(items, color, fmt){
-  const max = Math.max(...items.map(i=>i.val), 1);
-  return `<div class="col-chart">${items.map(i=>`
-    <div class="col-item">
-      <div class="col-v">${fmt?fmt(i.val):i.val.toLocaleString()}</div>
-      <div class="col-bar-wrap"><span class="col-bar" style="height:${(i.val/max*100).toFixed(0)}%;background:${color}"></span></div>
-      <div class="col-x">${i.label}</div>
-    </div>`).join('')}</div>`;
-}
-function growthChart(items){
-  const max = Math.max(...items.flatMap(i=>[i.joined,i.churned]), 1);
-  return `<div class="col-chart">${items.map(i=>`
-    <div class="col-item">
-      <div class="col-bar-wrap dual">
-        <span class="col-bar" style="height:${(i.joined/max*100).toFixed(0)}%;background:var(--green)" title="${i.joined} new"></span>
-        <span class="col-bar" style="height:${(i.churned/max*100).toFixed(0)}%;background:var(--red)" title="${i.churned} churned"></span>
-      </div>
-      <div class="col-x">${i.month}</div>
-    </div>`).join('')}</div>`;
-}
 function funnelChart(items){
   const top = items[0].val;
   return `<div class="funnel">${items.map((i,idx)=>`
@@ -716,10 +692,10 @@ function cohortGrid(cohorts){
 }
 // Active-member health (DAU/WAU/MAU + stickiness) — Mixpanel Insights.
 const journeyActive = [
-  { val:"612",   label:"Daily active",   sub:"avg members per day" },
-  { val:"1,840", label:"Weekly active",  sub:"unique this week" },
-  { val:"2,847", label:"Monthly active", sub:"unique this month" },
-  { val:"22%",   label:"Stickiness",     sub:"daily ÷ monthly active" },
+  { val:"24",  label:"Daily active",   sub:"avg members per day" },
+  { val:"79",  label:"Weekly active",  sub:"unique this week" },
+  { val:"158", label:"Monthly active", sub:"unique last full month" },
+  { val:"15%", label:"Stickiness",     sub:"daily ÷ monthly active" },
 ];
 // Where members go first after signing in (% of sessions) — Mixpanel User Flows / top events.
 const journeyPaths = [
@@ -750,9 +726,9 @@ function searchList(items){
 }
 // Journey metrics split by membership tier — Mixpanel "Breakdown by tier".
 const tierJourneys = [
-  { tier:"Premium", members:1180, activation:"54%", retention:"62%", stickiness:"17%", sessions:11 },
-  { tier:"Elite",   members:1290, activation:"66%", retention:"73%", stickiness:"23%", sessions:15 },
-  { tier:"VIP",     members:377,  activation:"81%", retention:"84%", stickiness:"31%", sessions:22 },
+  { tier:"Premium", members:920, activation:"54%", retention:"62%", stickiness:"17%", sessions:11 },
+  { tier:"Elite",   members:160, activation:"66%", retention:"73%", stickiness:"23%", sessions:15 },
+  { tier:"VIP",     members:131,  activation:"81%", retention:"84%", stickiness:"31%", sessions:22 },
 ];
 const tierPill = (t) => t==='VIP'
   ? `<span class="badge" style="background:#fbf0d8;color:#9a6a05">VIP</span>`
@@ -897,18 +873,6 @@ function inWindow(scope, dateStr){
   const { from, to } = windowFor(scope);
   return d >= from && d <= to;
 }
-function genRevenue(b){
-  const labels = bucketLabels(b), end = 84200;
-  const step = b.gran==='month' ? 3.5 : b.gran==='week' ? 1.0 : 0.35, k = labels.length;
-  return labels.map((label,i) => ({ label, val:Math.round(end*(1 - step/100*(k-1-i))) }));
-}
-function genGrowth(b){
-  const labels = bucketLabels(b), k = labels.length, jTot = 255*b.factor, cTot = 43*b.factor;
-  const span = Math.max(1, k-1);
-  return labels.map((label,i) => ({ month:label,
-    joined: Math.max(1, Math.round(jTot/k*(0.85 + 0.30*i/span))),
-    churned:Math.max(1, Math.round(cTot/k*(1.10 - 0.20*i/span))) }));
-}
 /* wire a date-range control: preset dropdown + custom from/to */
 function setupRange(scope, rerender, opts){
   opts = opts || {};
@@ -940,11 +904,9 @@ function setupRange(scope, rerender, opts){
 /* ---------- Analytics trend charts ---------- */
 function renderAnalyticsCharts(){
   const b = rangeBuckets(ranges.analytics.days), lbl = ranges.analytics.label;
-  $('an-revenue').innerHTML = colChart(genRevenue(b), 'var(--cyan)', v=>'$'+Math.round(v/1000)+'K');
-  $('an-growth').innerHTML = growthChart(genGrowth(b));
   $('an-funnel').innerHTML = funnelChart(scaleList(funnel, b.factor));
   $('an-acquisition').innerHTML = rankList(scaleList(acquisition, b.factor), 'var(--pink)');
-  ['an-cap-revenue','an-cap-funnel','an-cap-acq'].forEach(id => { if($(id)) $(id).textContent = lbl; });
+  ['an-cap-funnel','an-cap-acq'].forEach(id => { if($(id)) $(id).textContent = lbl; });
   if($('an-range-note')) $('an-range-note').textContent = lbl;
 }
 
@@ -1014,18 +976,12 @@ function updateAudience(){
 function renderDashboard(){
   $('dash-lenders').textContent = lenders.length;
   $('dash-vendors').textContent = vendors.length;
-  if($('dash-pastdue')) $('dash-pastdue').textContent = members.filter(m=>m.status==='Past due').length;
   // newest members
   $('dash-members').innerHTML = members.slice(0,5).map(m=>`
     <div class="list-row"><div class="t-avatar">${initials(m.name)}</div>
       <div class="list-main"><div class="lt">${m.name}</div><div class="ls">${m.plan} · joined ${m.joined}</div></div>
       <span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span>
     </div>`).join('');
-  // membership breakdown
-  $('mbar').innerHTML = membershipBreakdown.map(b=>`<span class="${b.seg}" style="width:${(b.count/totalMembers*100).toFixed(1)}%"></span>`).join('');
-  $('mbreakdown').innerHTML = membershipBreakdown.map(b=>`
-    <div class="mrow"><span class="mdot" style="background:${b.dot}"></span><span class="mname">${b.plan}</span>
-      <span class="mcount">${b.count.toLocaleString()}</span><span class="mpct">${(b.count/totalMembers*100).toFixed(0)}%</span></div>`).join('');
 }
 
 /* ============================================================

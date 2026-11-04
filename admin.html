@@ -182,12 +182,12 @@
 
       <!-- ============ DASHBOARD ============ -->
       <section class="view active" id="view-dashboard">
-        <div class="page-head"><h1>Admin dashboard</h1><p>Overview of members, content, and incoming requests.</p></div>
+        <div class="page-head"><h1>Admin dashboard</h1><p>Today's work: incoming requests, new members, and content. Membership numbers and trends are on the Scorecard.</p></div>
 
         <div class="stat-row admin5">
-          <button class="stat" data-nav="members">
+          <button class="stat" data-nav="scorecard">
             <div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
-            <div class="s-val">2,847</div><div class="s-lbl">Total members</div>
+            <div class="s-val">1,210</div><div class="s-lbl">Paying members</div>
           </button>
           <button class="stat" data-nav="requests">
             <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.5-6.9A2 2 0 0016.8 4H7.2a2 2 0 00-1.7 1.1z"/></svg></div>
@@ -207,25 +207,11 @@
           </button>
         </div>
 
-        <div class="section-title" style="margin:26px 0 14px"><h2 style="font-size:18px;font-weight:700">Revenue &amp; subscriptions</h2><a href="#" data-nav="members">View members <span>→</span></a></div>
-        <div class="stat-row admin4">
-          <div class="stat">
-            <div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-            <div class="s-val">$84.2K</div><div class="s-lbl">Monthly recurring revenue</div>
-          </div>
-          <div class="stat">
-            <div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
-            <div class="s-val">$1.01M</div><div class="s-lbl">Annual recurring revenue</div>
-          </div>
-          <div class="stat">
-            <div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-            <div class="s-val">2,710</div><div class="s-lbl">Active subscriptions</div>
-          </div>
-          <button class="stat" data-nav="members">
-            <div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></div>
-            <div class="s-val" id="dash-pastdue">0</div><div class="s-lbl">Past due payments</div>
-          </button>
-        </div>
+        <button class="card card-pad dash-sc-link" data-nav="scorecard">
+          <span class="dash-sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></span>
+          <span class="dash-sc-main"><span class="dash-sc-t">Membership scorecard</span><span class="dash-sc-s">Growth, retention, dues, tiers, renewals, FUSE.</span></span>
+          <span class="dash-sc-go">Open <span>→</span></span>
+        </button>
 
         <div class="grid" style="grid-template-columns:1.7fr 1fr;align-items:start">
           <div class="card card-pad">
@@ -233,12 +219,6 @@
             <div class="table-scroll"><table class="adm" id="dash-requests"></table></div>
           </div>
           <div>
-            <div class="card card-pad" style="margin-bottom:20px">
-              <div class="section-title"><h2>Membership breakdown</h2></div>
-              <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><span style="font-size:30px;font-weight:800;letter-spacing:-.02em">2,847</span><span style="color:var(--muted);font-size:13px">total members</span></div>
-              <div class="mbar" id="mbar"></div>
-              <div id="mbreakdown"></div>
-            </div>
             <div class="card card-pad">
               <div class="section-title"><h2>Newest members</h2><a href="#" data-nav="members">All members <span>→</span></a></div>
               <div id="dash-members"></div>
@@ -257,7 +237,7 @@
           </div>
         </div>
         <div class="stat-row admin4" style="margin-bottom:20px">
-          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="s-val">$84.2K</div><div class="s-lbl">Monthly recurring revenue</div></div>
+          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="s-val">$43.8K</div><div class="s-lbl">Monthly recurring revenue</div></div>
           <div class="stat"><div class="s-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="s-val" id="mem-active">0</div><div class="s-lbl">Active</div></div>
           <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></div><div class="s-val" id="mem-pastdue">0</div><div class="s-lbl">Past due</div></div>
           <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="s-val" id="mem-trialing">0</div><div class="s-lbl">Trialing</div></div>
@@ -337,7 +317,7 @@
       <!-- ============ HUBS ============ -->
       <section class="view" id="view-hubs">
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Hubs</h1><p>Content hubs shown in the member sidebar (Brokers Edge, Mortgage Mornings, WMN, Ascent, VIP).</p></div>
+          <div class="page-head" style="margin:0"><h1>Hubs</h1><p>Content hubs shown in the member sidebar (Ascent, VIP, WMN). Brokers Edge, Mortgage Mornings, and Accelerate Live no longer have hubs — their content lives in The Vault.</p></div>
           <button class="btn btn-primary" data-edit="hub:new">+ Add hub</button>
         </div>
         <div class="card card-pad" style="margin-bottom:18px">
@@ -365,9 +345,6 @@
         <div class="filters" id="document-filters" style="margin-bottom:14px">
           <button class="chip active" data-filter="all">All sources</button>
           <button class="chip" data-filter="General">General</button>
-          <button class="chip" data-filter="Brokers Edge">Brokers Edge</button>
-          <button class="chip" data-filter="Mortgage Mornings">Mortgage Mornings</button>
-          <button class="chip" data-filter="Accelerate Live">Accelerate Live</button>
           <button class="chip" data-filter="WMN">WMN</button>
           <button class="chip" data-filter="Ascent">Ascent</button>
           <button class="chip" data-filter="VIP">VIP</button>
@@ -453,7 +430,7 @@
       <section class="view" id="view-analytics">
         <div class="filters an-tabs" role="tablist"><button class="chip active" data-nav="analytics" role="tab">Overview</button><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button><button class="chip" data-nav="vendorclicks" role="tab">Vendor clickthroughs</button></div>
         <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Overview — trends across <span id="an-range-note">the last 30 days</span> — revenue, membership growth, conversion, and acquisition — the parts that don't fit the dashboard snapshot or content engagement.</p></div>
+          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Signup conversion and where new members come from, across <span id="an-range-note">the last 30 days</span>. Member growth, retention, and dues are on the Scorecard.</p></div>
           <div class="date-range" id="analytics-range">
             <select class="select filter-select daterange-preset">
               <option value="7d">Last 7 days</option>
@@ -472,15 +449,6 @@
           </div>
         </div>
         <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
-          <div class="card card-pad">
-            <div class="section-title"><h2>Recurring revenue (MRR)</h2><span class="t-sub" id="an-cap-revenue" style="display:inline">Last 30 days</span></div>
-            <div id="an-revenue"></div>
-          </div>
-          <div class="card card-pad">
-            <div class="section-title"><h2>Membership growth</h2><span class="t-sub" style="display:inline">New vs. churned</span></div>
-            <div id="an-growth"></div>
-            <div class="chart-legend"><span><i style="background:var(--green)"></i>New members</span><span><i style="background:var(--red)"></i>Churned</span></div>
-          </div>
           <div class="card card-pad">
             <div class="section-title"><h2>Signup conversion</h2><span class="t-sub" id="an-cap-funnel" style="display:inline">Last 30 days</span></div>
             <div id="an-funnel"></div>
@@ -598,7 +566,7 @@
               <div class="field"><label>Role</label><select class="select" id="notif-role"><option>All roles</option><option>Broker Owner</option><option>Loan Officer</option><option>Loan Officer Assistant</option><option>Processor</option></select></div>
             </div>
             <div class="field"><label>Delivery</label><select class="select" id="notif-schedule"><option>Send now</option><option>Schedule for later</option></select></div>
-            <div class="audience-row">Audience estimate: <span class="audience-pill" id="aud-est">~2,847 members</span></div>
+            <div class="audience-row">Audience estimate: <span class="audience-pill" id="aud-est">~1,210 members</span></div>
             <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
               <button class="btn btn-primary" id="send-notif" data-toast="Notification sent.">Send notification</button>
               <button class="btn btn-outline" data-toast="Saved as draft.">Save draft</button>
