@@ -210,8 +210,13 @@ document.getElementById('featured-grid').innerHTML = featured.map(f=>`
     <div style="padding:0 17px 17px"><button class="btn btn-outline btn-sm btn-block" data-nav="${f.nav}">${f.cta}</button></div>
   </div>`).join('');
 
-// This-week events on dashboard (clickable to event detail)
-document.getElementById('dash-events').innerHTML = events.slice(0,3).map((e,i)=>{
+// Upcoming events on dashboard: the next 3 by date, from today on (clickable to event detail).
+// Prototype "today" is Jun 25, 2026; dates without a year are 2026 unless the event says 2027.
+const PROTO_TODAY = new Date('2026-06-25T00:00:00');
+const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const eventDate = (e) => { const [m,d] = e.date.split(' '); return new Date(/2027/.test(e.when) ? 2027 : 2026, MONTHS.indexOf(m), +d); };
+const upcomingEvents = events.map((e,i)=>({e,i,at:eventDate(e)})).filter(x=>x.at >= PROTO_TODAY).sort((a,b)=>a.at-b.at).slice(0,3);
+document.getElementById('dash-events').innerHTML = upcomingEvents.map(({e,i})=>{
   const [m,d] = e.date.split(' ');
   return `<button class="ev-mini" data-open-event="${i}">
     <div class="ev-date"><span class="d">${d}</span><span class="m">${m}</span></div>
@@ -663,10 +668,7 @@ function openVendor(i){
         </div>
       </div>
     </div>
-    <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;margin-top:20px">
-      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">Your member benefit</h3><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 010-4h12v4M4 6v12a2 2 0 002 2h14v-4M18 12a2 2 0 000 4h4v-4z"/></svg><p>${v.offer}</p></div></div>
-      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">How it works</h3><ol class="how-list how-num"><li>Click Connect to request an intro.</li><li>${v.name} reaches out within 1 business day.</li><li>Mention AIME to claim your member pricing.</li></ol></div>
-    </div>`;
+    <div class="card card-pad" style="margin-top:20px"><h3 style="font-size:16px;margin-bottom:12px">Your member benefit</h3><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 010-4h12v4M4 6v12a2 2 0 002 2h14v-4M18 12a2 2 0 000 4h4v-4z"/></svg><p>${v.offer}</p></div></div>`;
   navigate('market-detail');
 }
 

@@ -83,13 +83,13 @@ window.HELP_ARTICLES = [
 
   { slug: 'portal-tour', title: 'A quick tour of the member portal', category: 'start', popular: true,
     summary: 'What lives where — the sidebar, search, your escalation count, and quick actions.',
-    tags: ['tour', 'walkthrough', 'navigation', 'new member', 'dashboard', 'trending', 'popular'], minutes: 2, updated: 'Nov 3, 2026', status: 'Published',
+    tags: ['tour', 'walkthrough', 'navigation', 'new member', 'dashboard', 'trending', 'popular'], minutes: 2, updated: 'Nov 4, 2026', status: 'Published',
     views: 1840, helpful: [212, 9],
     actions: [{ label: 'Take the walkthrough', attr: 'data-tour-start' }],
     body: `
       <p>The portal is built around a few places you'll use every week:</p>
       <ul>
-        <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions and <strong>Trending</strong>: the most-viewed pages across the portal — last 7 days by default; pick 30 or 90 days, year to date, or all time. Click one to open it.</li>
+        <li><strong>Home</strong> — what's new this week across lenders, Market deals, resources, and events, plus quick actions, your next few <strong>Upcoming events</strong>, and <strong>Trending</strong>: the most-viewed pages across the portal — last 7 days by default; pick 30 or 90 days, year to date, or all time. Click one to open it.</li>
         <li><strong>The sidebar</strong> — Lenders, Market, Resources, Events, Documents, your learning hubs, and Support.</li>
         <li><strong>Search</strong> (top of every page) — search everything: lenders, the Market, resources, events, hubs, documents, help guides, and your requests.</li>
         <li><strong>Escalations left</strong> (top bar) — how many loan escalations remain this cycle. Tap <strong>+</strong> to buy more (VIP is unlimited, so there's nothing to buy).</li>
