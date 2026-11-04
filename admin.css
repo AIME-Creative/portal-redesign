@@ -122,6 +122,7 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 
 /* 4-up stat row */
 .stat-row.admin4 { grid-template-columns:repeat(4,1fr); }
+.stat-row.admin3 { grid-template-columns:repeat(3,1fr); }
 @media (max-width:1080px){ .stat-row.admin4{ grid-template-columns:repeat(2,1fr); } }
 
 /* Extra status colors (subscriptions / carts) */
@@ -463,3 +464,14 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .ld-item { display:flex; align-items:center; gap:10px; justify-content:space-between; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--surface-alt); font-size:13.5px; }
 .ld-item span { min-width:0; overflow:hidden; text-overflow:ellipsis; }
 .ld-item .icon-act { width:28px; height:28px; font-size:18px; line-height:1; flex:none; }
+
+.ld-add-row { display:flex; gap:8px; align-items:center; }
+.ld-add-row .select { flex:1; min-width:0; }
+.ld-add-row .btn { flex:none; }
+.ld-new { margin-top:10px; padding:14px; border:1.5px dashed var(--line); border-radius:12px; background:#fff; }
+.ld-new-h { font-weight:800; font-size:14px; margin-bottom:10px; color:var(--ink); }
+.ld-file-name { font-size:13px; color:var(--muted); margin-left:8px; word-break:break-all; }
+.ld-new .field { margin-bottom:10px; }
+.ld-new-foot { display:flex; gap:8px; justify-content:flex-end; }
+
+@media (max-width:700px){ .stat-row.admin3{ grid-template-columns:1fr; } }

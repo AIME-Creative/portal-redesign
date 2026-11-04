@@ -6,7 +6,7 @@
    how members use what we offer. Brought in from the "AIME
    Membership Scorecard" artifact so it lives in admin.
    Sections: headline + 4 key numbers · Growth and retention (paying
-   members, joined vs left, monthly retention) · Tier mix · Risk ahead
+   members, joined vs left, monthly retention) · Sign-ups (conversion, where new members came from) · Tier mix · Risk ahead
    (past due, set to cancel, enterprise seats, renewals by month) ·
    FUSE · Engagement.
    Production: membership numbers live from Stripe each time the page
@@ -36,6 +36,15 @@
     { tier: 'Elite', members: 160, yoy: -6.2, dues: 112160, duesYoy: -5.0, per: 701, monthly: 7.2 },
     { tier: 'VIP', members: 131, yoy: 41.9, dues: 222569, duesYoy: 38.6, per: 1699, monthly: 9.8 },
     { tier: 'All', members: 1210, yoy: 18.4, dues: 525169, duesYoy: 21.2, per: 434, monthly: 11.6 },
+  ];
+  // Sign-ups (moved here from Analytics → Overview). Made-up sample numbers; Paid = last month's joined (74).
+  const SIGNUP_FUNNEL = [
+    { label: 'Started sign-up', val: 210 }, { label: 'Contact captured', val: 152 }, { label: 'Checkout started', val: 112 },
+    { label: 'Paid', val: 74 }, { label: 'Onboarded', val: 69 },
+  ];
+  const ACQUISITION = [
+    { name: 'Referral', sub: '38%', val: 28 }, { name: 'FUSE & events', sub: '22%', val: 16 }, { name: 'Paid social', sub: '18%', val: 13 },
+    { name: 'Email', sub: '12%', val: 9 }, { name: 'Partner co-marketing', sub: '10%', val: 8 },
   ];
   const RENEW = [
     { m: 'Nov 2026', n: 18, dues: 11920, p: 14, e: 2, v: 2 }, { m: 'Dec 2026', n: 121, dues: 78410, p: 58, e: 38, v: 25 },
@@ -123,6 +132,11 @@
       ${card('Paying members, start of each month', 'Last 24 full months. Company-paid enterprise seats are not counted.', chartPaying())}
       ${card('Joined vs. left each month', 'Joined: first-time paying members. Left: no paid membership a month later. Plan switches don\'t count as leaving.', `<div class="sc-legend"><span><i style="background:${C.blue}"></i>Joined</span><span><i style="background:${C.orange}"></i>Left</span></div>` + chartJoinedLeft())}
       ${card('Monthly retention', 'Share of members at the start of a month who still pay at the start of the next. Dashed line: 96.5% target. Moves to enterprise seats count as leaving here, so this can read a little lower than the bonus numbers.', chartRetention())}
+    </div>
+    <h2 class="sc-h">Sign-ups</h2>
+    <div class="sc-two">
+      ${card('Sign-up conversion, last 30 days', 'People who started signing up, and how many reached each step. Paid matches last month\'s joined count above.', funnelChart(SIGNUP_FUNNEL))}
+      ${card('Where new members came from, last 30 days', 'New paying members by how they found AIME.', rankList(ACQUISITION, C.blue))}
     </div>
     <h2 class="sc-h">Tier mix</h2>
     ${card('Members and dues by tier, today', 'Change is vs. a year ago. A member with two plans can appear in two tiers, so tiers can add up to one more than the total.', `<div class="table-scroll"><table class="adm sc-table"><thead><tr><th>Tier</th><th>Members</th><th>vs. a year ago</th><th>Annual dues</th><th>Dues vs. a year ago</th><th>Dues per member</th><th>On monthly billing</th></tr></thead><tbody>

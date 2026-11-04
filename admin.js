@@ -356,21 +356,7 @@ const growthTrend = [
   { month:"Mar", joined:223, churned:38 }, { month:"Apr", joined:245, churned:52 },
   { month:"May", joined:268, churned:44 }, { month:"Jun", joined:291, churned:49 },
 ];
-const acquisition = [ // val = new members per ~30 days (scaled by the selected range)
-  { name:"Referral", sub:"38%", val:96 },
-  { name:"FUSE & events", sub:"22%", val:54 },
-  { name:"Paid social", sub:"18%", val:44 },
-  { name:"Email", sub:"12%", val:30 },
-  { name:"Partner co-marketing", sub:"10%", val:24 },
-];
 const engBase = { plays:9418, connections:1832, lenderViews:3047, escalations:426 }; // per 30 days
-const funnel = [
-  { label:"Signups started", val:1000 },
-  { label:"Contact captured", val:720 },
-  { label:"Checkout started", val:540 },
-  { label:"Paid", val:432 },
-  { label:"Onboarded", val:410 },
-];
 
 /* ============================================================
    Helpers
@@ -775,50 +761,45 @@ function renderJourneys(){
   if($('jr-range-note')) $('jr-range-note').textContent = ranges.journeys.label.toLowerCase();
 }
 
-/* ---------- Vendor clickthroughs (for the vendor team to share with vendors) ---------- */
-// `tiers` = clicks split by membership tier; total clicks = premium + elite + vip.
+/* ---------- Vendor page views (for the vendor team to share with vendors) ---------- */
+// `tiers` = page views split by membership tier; page views = premium + elite + vip.
+// Unique page views ≈ 62% of page views, per tier (matches the who-viewed page in admin-partner-reports.js).
 const vendorClicks = [
-  { name:"Direct Authority AI",          short:"DAi",  cat:"Marketing",    impressions:5120, tiers:{premium:548,elite:402,vip:124}, connections:142 },
-  { name:"Waive Inspection Fee",         short:"WIF",  cat:"Origination",  impressions:4680, tiers:{premium:360,elite:360,vip:122}, connections:120 },
-  { name:"Lead Hackers",                 short:"LH",   cat:"Marketing",    impressions:3940, tiers:{premium:360,elite:266,vip:80},  connections:96 },
-  { name:"Arive",                        short:"AR",   cat:"Origination",  impressions:3610, tiers:{premium:230,elite:200,vip:68},  connections:73 },
-  { name:"The CORE Training",            short:"CORE", cat:"Coaching",     impressions:3120, tiers:{premium:120,elite:180,vip:102}, connections:51 },
-  { name:"Xactus",                       short:"XAC",  cat:"Core Partner", impressions:2840, tiers:{premium:150,elite:130,vip:50},  connections:44 },
-  { name:"Ask Mindy",                    short:"AM",   cat:"Origination",  impressions:2510, tiers:{premium:130,elite:118,vip:40},  connections:39 },
-  { name:"Advantage Partners Solutions", short:"APS",  cat:"Core Partner", impressions:2190, tiers:{premium:96,elite:86,vip:30},   connections:28 },
-  { name:"BrokerVA",                     short:"BVA",  cat:"Coaching",     impressions:1760, tiers:{premium:50,elite:70,vip:40},    connections:21 },
-  { name:"Cotality",                     short:"CO",   cat:"Origination",  impressions:1430, tiers:{premium:55,elite:48,vip:18},    connections:15 },
+  { name:"Direct Authority AI",          short:"DAi",  cat:"Marketing",    tiers:{premium:548,elite:402,vip:124}, connections:142 },
+  { name:"Waive Inspection Fee",         short:"WIF",  cat:"Origination",  tiers:{premium:360,elite:360,vip:122}, connections:120 },
+  { name:"Lead Hackers",                 short:"LH",   cat:"Marketing",    tiers:{premium:360,elite:266,vip:80},  connections:96 },
+  { name:"Arive",                        short:"AR",   cat:"Origination",  tiers:{premium:230,elite:200,vip:68},  connections:73 },
+  { name:"The CORE Training",            short:"CORE", cat:"Coaching",     tiers:{premium:120,elite:180,vip:102}, connections:51 },
+  { name:"Xactus",                       short:"XAC",  cat:"Core Partner", tiers:{premium:150,elite:130,vip:50},  connections:44 },
+  { name:"Ask Mindy",                    short:"AM",   cat:"Origination",  tiers:{premium:130,elite:118,vip:40},  connections:39 },
+  { name:"Advantage Partners Solutions", short:"APS",  cat:"Core Partner", tiers:{premium:96,elite:86,vip:30},   connections:28 },
+  { name:"BrokerVA",                     short:"BVA",  cat:"Coaching",     tiers:{premium:50,elite:70,vip:40},    connections:21 },
+  { name:"Cotality",                     short:"CO",   cat:"Origination",  tiers:{premium:55,elite:48,vip:18},    connections:15 },
 ];
+const vendorUnique = (n) => Math.max(n ? 1 : 0, Math.round(n * 0.62));
 function renderVendorClicks(){
   const f = ranges.vendorclicks.days/30;
   const scaled = vendorClicks.map(v=>{
     const premium = Math.round(v.tiers.premium*f), elite = Math.round(v.tiers.elite*f), vip = Math.round(v.tiers.vip*f);
-    return { ...v, impressions:Math.round(v.impressions*f), connections:Math.round(v.connections*f),
-      premium, elite, vip, clicks: premium+elite+vip };
+    const uP = vendorUnique(premium), uE = vendorUnique(elite), uV = vendorUnique(vip);
+    return { ...v, connections:Math.round(v.connections*f), views: premium+elite+vip, unique: uP+uE+uV, uP, uE, uV };
   });
-  const totI = scaled.reduce((a,v)=>a+v.impressions,0);
-  const totC = scaled.reduce((a,v)=>a+v.clicks,0);
-  const totCon = scaled.reduce((a,v)=>a+v.connections,0);
+  const tot = (k) => scaled.reduce((a,v)=>a+v[k],0);
   const set = (id,val) => { if($(id)) $(id).textContent = val; };
-  set('vc-impr', totI.toLocaleString());
-  set('vc-clicks', totC.toLocaleString());
-  set('vc-ctr', (totI ? (totC/totI*100) : 0).toFixed(1) + '%');
-  set('vc-conn', totCon.toLocaleString());
-  $('vendorclicks-tbody').innerHTML = scaled.map(v=>{
-    const ctr = v.impressions ? (v.clicks/v.impressions*100) : 0;
-    return `<tr>
+  set('vc-views', tot('views').toLocaleString());
+  set('vc-unique', tot('unique').toLocaleString());
+  set('vc-conn', tot('connections').toLocaleString());
+  $('vendorclicks-tbody').innerHTML = scaled.map(v=>`<tr>
       <td><div class="t-id"><div class="t-logo">${v.short}</div><div class="t-strong">${v.name}</div></div></td>
       <td><span class="badge badge-navy">${v.cat}</span></td>
-      <td>${v.impressions.toLocaleString()}</td>
-      <td class="t-strong">${v.clicks.toLocaleString()}</td>
-      <td>${v.premium.toLocaleString()}</td>
-      <td>${v.elite.toLocaleString()}</td>
-      <td>${v.vip.toLocaleString()}</td>
-      <td>${ctr.toFixed(1)}%</td>
+      <td class="t-strong">${v.views.toLocaleString()}</td>
+      <td>${v.unique.toLocaleString()}</td>
+      <td>${v.uP.toLocaleString()}</td>
+      <td>${v.uE.toLocaleString()}</td>
+      <td>${v.uV.toLocaleString()}</td>
       <td>${v.connections.toLocaleString()}</td>
-      <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${v.name} their clickthrough report.">Email vendor</button></div></td>
-    </tr>`;
-  }).join('');
+      <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${v.name} their page views report.">Email vendor</button></div></td>
+    </tr>`).join('');
   $('vendorclicks-count').textContent = `${scaled.length} products · ${ranges.vendorclicks.label}`;
 }
 
@@ -898,13 +879,6 @@ function setupRange(scope, rerender, opts){
 }
 
 /* ---------- Analytics trend charts ---------- */
-function renderAnalyticsCharts(){
-  const b = rangeBuckets(ranges.analytics.days), lbl = ranges.analytics.label;
-  $('an-funnel').innerHTML = funnelChart(scaleList(funnel, b.factor));
-  $('an-acquisition').innerHTML = rankList(scaleList(acquisition, b.factor), 'var(--pink)');
-  ['an-cap-funnel','an-cap-acq'].forEach(id => { if($(id)) $(id).textContent = lbl; });
-  if($('an-range-note')) $('an-range-note').textContent = lbl;
-}
 
 /* ---------- Abandoned carts ---------- */
 function renderAbandoned(){
@@ -1331,9 +1305,48 @@ function docsPicker(kind, name){
   const accessNote = (t) => { const d = documents.find(x=>x.title===t); return d && !accessOf(d).includes('All Members') ? ` <span class="t-sub" style="display:inline">· ${accessOf(d).join(', ')}</span>` : ''; };
   return `<div class="field"><label>Documents</label>
     <div class="ld-list" id="ed-docs">${linked.map(t=>`<div class="ld-item" data-doc="${t.replace(/"/g,'&quot;')}"><span>📄 ${t}${accessNote(t)}</span><button type="button" class="icon-act" data-ld-remove title="Remove">×</button></div>`).join('')}</div>
-    <select class="select" id="ed-docs-add"><option value="">+ Add a document from the library…</option>${documents.filter(d=>d.status==='Active').map(d=>`<option ${linked.includes(d.title)?'disabled':''}>${d.title}</option>`).join('')}</select>
-    <div class="hint">Shown on this item's page in the portal, with a Download button. Each document keeps its own access — a VIP-only document shows locked to other members. Add new files on the Documents page.</div></div>`;
+    <div class="ld-add-row"><select class="select" id="ed-docs-add"><option value="">+ Add a document from the library…</option>${documents.filter(d=>d.status==='Active').map(d=>`<option ${linked.includes(d.title)?'disabled':''}>${d.title}</option>`).join('')}</select>
+      <button type="button" class="btn btn-outline btn-sm" id="ld-new-open">Upload new</button></div>
+    <div class="ld-new" id="ld-new" hidden>
+      <div class="ld-new-h">Upload a new document</div>
+      <label class="btn btn-outline btn-sm ld-file-btn" style="cursor:pointer">Choose file<input type="file" id="ld-file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.png,.jpg,.jpeg" hidden></label>
+      <span class="ld-file-name" id="ld-file-name">No file chosen</span>
+      <div class="field" style="margin-top:12px"><label>Title <span class="req">*</span></label><input class="input" id="ld-title" placeholder="How it appears to members"></div>
+      <div class="field"><label>Description</label><input class="input" id="ld-desc" placeholder="One line shown under the title (optional)"></div>
+      <div class="field"><label>Who can see it</label><select class="select" id="ld-access"><option value="All Members">All members</option><option value="Elite,VIP">Elite and VIP</option><option value="VIP">VIP only</option></select></div>
+      <div class="er-error" id="ld-err" hidden></div>
+      <div class="ld-new-foot"><button type="button" class="btn btn-outline btn-sm" id="ld-new-cancel">Cancel</button><button type="button" class="btn btn-primary btn-sm" id="ld-new-add">Add document</button></div>
+      <div class="hint" style="margin:8px 0 0">PDF, Word, Excel, PowerPoint, CSV, or image, up to 25 MB. It's added to the Documents library (source General) and attached here — edit it later on the Documents page.</div>
+    </div>
+    <div class="hint">Shown on this item's page in the portal, with a Download button. Each document keeps its own access — a VIP-only document shows locked to other members.</div></div>`;
 }
+// Inline upload: skip the trip to the Documents page.
+const ldRow = (t) => `<div class="ld-item" data-doc="${t.replace(/"/g,'&quot;')}"><span>📄 ${t}</span><button type="button" class="icon-act" data-ld-remove title="Remove">×</button></div>`;
+function ldReset(){ ['ld-title','ld-desc'].forEach(id=>$(id).value=''); $('ld-file').value=''; $('ld-file-name').textContent='No file chosen'; $('ld-access').value='All Members'; $('ld-err').hidden=true; }
+document.addEventListener('click', (e) => {
+  if(e.target.closest('#ld-new-open')){ e.preventDefault(); $('ld-new').hidden = false; $('ld-new-open').hidden = true; return; }
+  if(e.target.closest('#ld-new-cancel')){ e.preventDefault(); ldReset(); $('ld-new').hidden = true; $('ld-new-open').hidden = false; return; }
+  if(!e.target.closest('#ld-new-add')) return;
+  e.preventDefault();
+  const f = $('ld-file').files[0], title = $('ld-title').value.trim(), err = $('ld-err');
+  const problem = !f ? 'Choose a file to upload.' : !title ? 'Add a title.' : documents.some(d=>d.title.toLowerCase()===title.toLowerCase()) ? 'A document with that title is already in the library — pick it from the list instead.' : '';
+  if(problem){ err.textContent = problem; err.hidden = false; return; }
+  const access = $('ld-access').value.split(','), desc = $('ld-desc').value.trim();
+  documents.unshift({ title, desc, source:'General', access, added:'Jun 25, 2026', status:'Active', file:f.name });
+  if(window.AmpDocLinks) AmpDocLinks.addDoc({ title, desc, access, file:f.name });
+  $('ed-docs').insertAdjacentHTML('beforeend', ldRow(title));
+  $('ed-docs-add').insertAdjacentHTML('beforeend', `<option disabled>${title}</option>`);
+  ldReset(); $('ld-new').hidden = true; $('ld-new-open').hidden = false;
+  renderDocuments();
+  showToast(`Uploaded ${title} to the Documents library and attached it.`);
+});
+document.addEventListener('change', (e) => {
+  if(e.target.id !== 'ld-file' || !e.target.files[0]) return;
+  const f = e.target.files[0];
+  if(f.size > 25*1024*1024){ showToast('That file is over 25 MB — pick a smaller one.'); e.target.value=''; return; }
+  $('ld-file-name').textContent = f.name;
+  if(!$('ld-title').value.trim()) $('ld-title').value = f.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();
+});
 document.addEventListener('change', (e) => {
   if(e.target.id !== 'ed-docs-add' || !e.target.value) return;
   const t = e.target.value;
@@ -1390,6 +1403,7 @@ function toggleAccess(opt){
    ============================================================ */
 function navigate(view){
   if(view==='subscriptions') view = 'members';   // billing now lives on the Members list
+  if(view==='analytics') view = 'engagement';    // Analytics opens on Engagement (Overview moved to the Scorecard)
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
   const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','journeys','vendorclicks','lenderviews','page-viewers'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
@@ -1410,11 +1424,10 @@ fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
 renderResources(); renderEvents();
 renderHubs(); renderDocuments(); renderJourneys(); renderVendorClicks();
-renderReportPartners(); renderReports(); renderAnalyticsCharts(); renderTaxonomy();
+renderReportPartners(); renderReports(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
 renderAbandoned(); renderCoupons();
 renderSentNotifications(); updateAudience();
-setupRange('analytics', renderAnalyticsCharts);
 setupRange('engagement', renderEngagement);
 setupRange('journeys', renderJourneys);
 setupRange('vendorclicks', renderVendorClicks);
@@ -1483,4 +1496,4 @@ document.addEventListener('keydown', e=>{
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click', e=>{ if(e.target===o) closeModals(); }));
 
 /* Deep-linking: #members, #analytics, #featured, etc. */
-(function(){ const h=(location.hash||'').replace('#',''); if(h && document.getElementById('view-'+h)) navigate(h); })();
+(function(){ const h=(location.hash||'').replace('#',''); if(h && (document.getElementById('view-'+h) || h==='analytics')) navigate(h); })();   // #analytics opens Engagement

@@ -14,7 +14,7 @@
       vendor connection emails notify bennett@aimegroup.com.
       The Reports page keeps Subscriptions.
    2. Analytics → Lender page views (new tab) and Vendor
-      clickthroughs: click a views number to see which members
+      page views: click a views number to see which members
       viewed that page — totals (total / unique views, escalations,
       Change AE, connections, sign-ups), one row per member, Export CSV.
       Vendors: upload the sign-up list a vendor sends (CSV) — matched
@@ -171,7 +171,7 @@
   /* ============================================================
      Analytics — who viewed a lender or vendor page
      ============================================================ */
-  const TABS = (active) => `<div class="filters an-tabs" role="tablist">${[['analytics', 'Overview'], ['engagement', 'Engagement'], ['journeys', 'Member journeys'], ['lenderviews', 'Lender page views'], ['vendorclicks', 'Vendor clickthroughs']]
+  const TABS = (active) => `<div class="filters an-tabs" role="tablist">${[['engagement', 'Engagement'], ['journeys', 'Member journeys'], ['lenderviews', 'Lender page views'], ['vendorclicks', 'Vendor page views']]
     .map(([v, l]) => `<button class="chip ${v === active ? 'active' : ''}" data-nav="${v}" role="tab">${l}</button>`).join('')}</div>`;
   // Add the new tab to the existing Analytics tab rows.
   document.querySelectorAll('.an-tabs').forEach((row) => {
@@ -181,7 +181,7 @@
   $('view-vendorclicks').insertAdjacentHTML('afterend', `
     <section class="view" id="view-lenderviews">${TABS('lenderviews')}
       <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Lender page views — how many members view each lender's page, and what they sent that lender. Click a views number to see who viewed it.</p></div>${rangeMarkup('lenderviews').replace('value="all" selected', 'value="all"').replace('value="30d"', 'value="30d" selected')}</div>
-      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Views</th><th>Unique views</th><th>Escalations</th><th>Change AE</th><th>Connections</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
+      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Escalations</th><th>Change AE</th><th>Connections</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
       <div class="count-note" id="lv-count" style="margin-top:10px"></div>
     </section>
     <section class="view" id="view-page-viewers">
@@ -218,10 +218,10 @@
   }
   setupRange('lenderviews', renderLenderViews);
 
-  // Vendor clickthroughs: the Clicks number (members who opened the listing) opens who viewed it.
+  // Vendor page views: the Page views number opens who viewed it (same as Lender page views).
   const vcBody = $('vendorclicks-tbody');
   const decorateVC = () => vcBody.querySelectorAll('tr').forEach((tr) => {
-    const cell = tr.children[3], name = tr.querySelector('.t-strong'); if (!cell || !name || cell.querySelector('.pv-link')) return;
+    const cell = tr.children[2], name = tr.querySelector('.t-strong'); if (!cell || !name || cell.querySelector('.pv-link')) return;
     cell.innerHTML = `<button class="pv-link" data-pv="vendor::${esc(name.textContent)}" title="See who viewed this listing">${cell.textContent}</button>`;
   });
   new MutationObserver(decorateVC).observe(vcBody, { childList: true });
@@ -237,8 +237,8 @@
     if (kind === 'lender') return lenderStats(name);
     const f = ranges.vendorclicks.days / 30, v = vendorClicks.find((x) => x.name === name);
     if (!v) return { views: 0, unique: 0, conn: 0 };
-    const views = Math.round(v.tiers.premium * f) + Math.round(v.tiers.elite * f) + Math.round(v.tiers.vip * f);
-    return { views, unique: Math.max(1, Math.round(views * 0.62)), conn: Math.round(v.connections * f) };
+    const t = [v.tiers.premium, v.tiers.elite, v.tiers.vip].map((n) => Math.round(n * f));
+    return { views: t[0] + t[1] + t[2], unique: t.reduce((a, n) => a + vendorUnique(n), 0), conn: Math.round(v.connections * f) };
   }
   // Sample viewers: real sample members first, then generated ones, until the unique count is reached.
   const FIRST = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Jamie', 'Avery', 'Quinn', 'Drew', 'Reese', 'Cameron', 'Logan', 'Skyler', 'Parker', 'Rowan', 'Elena', 'Marcus', 'Nadia', 'Omar', 'Grace', 'Victor', 'Leah', 'Andre'];
@@ -283,7 +283,7 @@
     pv = { kind, name, from: kind === 'lender' ? 'lenderviews' : 'vendorclicks' };
     $('pv-tabs').innerHTML = TABS(pv.from);
     $('pv-back').dataset.nav = pv.from;
-    $('pv-back').querySelector('span').textContent = kind === 'lender' ? 'Back to Lender page views' : 'Back to Vendor clickthroughs';
+    $('pv-back').querySelector('span').textContent = kind === 'lender' ? 'Back to Lender page views' : 'Back to Vendor page views';
     $('pv-title').textContent = `Who viewed ${name}`;
     $('pv-q').value = ''; shown = 25;
     $('pv-filter').innerHTML = kind === 'lender'
@@ -303,7 +303,7 @@
     const scope = lender ? 'lenderviews' : 'vendorclicks';
     $('pv-sub').textContent = `${lender ? 'Members who viewed this lender\'s page' : 'Members who opened this Market listing'} · ${ranges[scope].label}`;
     const total = all.reduce((s, r) => s + r.views, 0), unique = all.filter((r) => r.views).length;
-    $('pv-tiles').innerHTML = tile(ICO.eye, 'i-navy', 'Total views', total) + tile(ICO.people, 'i-cyan', 'Unique views', unique) +
+    $('pv-tiles').innerHTML = tile(ICO.eye, 'i-navy', 'Page views', total) + tile(ICO.people, 'i-cyan', 'Unique page views', unique) +
       (lender ? tile(ICO.esc, 'i-pink', 'Escalations', all.reduce((s, r) => s + r.esc, 0)) + tile(ICO.ae, 'i-navy', 'Change AE', all.reduce((s, r) => s + r.ae, 0)) : '') +
       tile(ICO.conn, 'i-cyan', 'Connections', all.filter((r) => r.conn).length) +
       (lender ? '' : tile(ICO.check, 'i-green', 'Signed up', all.filter((r) => r.signed).length));
@@ -311,7 +311,7 @@
     $('pv-upload-note').innerHTML = lender ? '' : `<div class="pr-note">${svg(ICO.info)}<p>${up
       ? `Sign-up list <strong>${esc(up.file)}</strong> uploaded ${esc(up.at)} — ${up.matched.length} matched to members${up.unmatched.length ? `, ${up.unmatched.length} not matched (listed below)` : ''}. Upload a new list any time; it replaces this one.`
       : `${esc(pv.name)} sends a list of who signed up with them. <strong>Upload sign-ups (CSV)</strong> to mark them here — matched to members by email, or NMLS # when the email doesn't match.`}</p></div>`;
-    $('pv-thead').innerHTML = `<tr><th>Member</th><th>Tier</th><th>Views</th>${lender ? '<th>Escalations sent</th><th>Change AE requests</th>' : ''}<th>Connection sent?</th>${lender ? '' : '<th>Signed up?</th>'}</tr>`;
+    $('pv-thead').innerHTML = `<tr><th>Member</th><th>Tier</th><th>Page views</th>${lender ? '<th>Escalations sent</th><th>Change AE requests</th>' : ''}<th>Connection sent?</th>${lender ? '' : '<th>Signed up?</th>'}</tr>`;
     const yn = (v) => `<span class="badge ${v ? 'badge-green' : 'badge-gray'}">${v ? 'Yes' : 'No'}</span>`;
     $('pv-tbody').innerHTML = rows.slice(0, shown).map((r) => `<tr><td><div class="t-strong">${esc(r.name)}</div><div class="t-sub">${esc(r.email)}</div></td>
         <td><span class="badge badge-navy">${esc(r.plan)}</span></td><td>${r.views ? r.views : '<span class="t-sub">0 — signed up without viewing</span>'}</td>
