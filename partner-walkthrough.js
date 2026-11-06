@@ -47,7 +47,7 @@
     { sec: 5, page: 'partner', target: () => [document.querySelector('.nav-item[data-nav="lenders"]'), document.querySelector('.nav-item[data-nav="market"]')],
       mTarget: () => [document.querySelector('.bottom-nav-item[data-nav="lenders"]'), document.querySelector('.bottom-nav-item[data-nav="market"]')],
       title: 'Lenders & Market — view only',
-      body: 'Browse the lender directory and Market like a member. Partner accounts can\'t submit escalations, connections, or AE requests, or use member discounts. The Vault and Events are the same as for members. Tap the heart on anything to save it to <strong>My Library</strong>.' },
+      body: 'Browse the lender directory and Market like a member. Partner accounts can\'t submit escalations, connections, or AE requests, or use member discounts. The Vault and Events are the same as for members. Tap the heart on anything to save it to <strong>My Library</strong> — it\'s just yours, not shared with your company.' },
     { sec: 6, page: 'partner', target: '#help-btn', mTarget: '.menu-btn', title: 'Help & support',
       body: 'Partner guides are in the Help Center, and you can open a support ticket any time. To get notified about new requests, install the AMP app and turn on notifications in Settings. Replay this walkthrough from the ? menu.',
       mBody: 'Open the ☰ menu for the Help Center (partner guides), Get Support, and Settings — where you can install the AMP app and turn on notifications for new requests.' },

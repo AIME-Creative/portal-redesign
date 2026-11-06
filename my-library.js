@@ -14,7 +14,8 @@
      they need — they can still remove them.
    - Lender / Vendor users can save what they can see: lenders,
      Market, resources, events. No hubs or documents.
-   Saved in localStorage amp-library-v1 (production: per account).
+   Saved in localStorage amp-library-v1 (Lender / Vendor users: amp-library-v1:<their email>).
+   Production: per person (each login) — never shared across a company.
    Uses app.js globals: lenders, vendors, resources, events, hubs,
    canSeeVIP, userType, navigate, showToast, openLender, openVendor,
    openResource, openEvent, openHubItem, filterDocuments,
@@ -23,7 +24,8 @@
 (function () {
   if (typeof userType === 'undefined') return;
   const partner = userType !== 'member';
-  const KEY = 'amp-library-v1';
+  // Saved per person: a Lender / Vendor user's library is their own, never shared with others at their company.
+  const KEY = 'amp-library-v1' + (window.AMP_PARTNER_USER && AMP_PARTNER_USER.email ? ':' + AMP_PARTNER_USER.email.toLowerCase() : '');
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const svg = (d, extra) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"${extra || ''}>${d}</svg>`;
