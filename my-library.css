@@ -26,25 +26,10 @@
 .btn.fav-save.on { color:var(--pink); border-color:#f6bcd3; background:#fff4f8; }
 .btn.fav-save.on svg { fill:currentColor; }
 
-/* My Library page */
+/* My Library page — saved items use the portal's own cards in a grid, grouped by type */
 #library-filters .lib-n { font-size:11.5px; font-weight:700; opacity:.6; margin-left:4px; }
-.lib-groups { display:grid; gap:18px; }
-.lib-group .list-row:last-child { border-bottom:0; }
-.lib-row { gap:12px; }
-.lib-open { display:flex; align-items:center; gap:13px; flex:1; min-width:0; text-align:left; cursor:pointer; padding:2px 0; }
-.lib-open:disabled { cursor:not-allowed; }
-.lib-open:not(:disabled):hover .lib-t { color:var(--cyan-600); }
-.lib-ico { width:38px; height:38px; flex:none; border-radius:11px; display:grid; place-items:center; }
-.lib-ico svg { width:18px; height:18px; }
-.lib-lender { background:rgba(2,22,73,.08); color:var(--navy); }
-.lib-market { background:rgba(32,173,206,.12); color:var(--cyan-600); }
-.lib-resource { background:rgba(221,25,105,.1); color:var(--pink); }
-.lib-event { background:rgba(245,166,35,.14); color:#b07c08; }
-.lib-hub { background:rgba(124,92,255,.12); color:#6a4ce0; }
-.lib-doc { background:#fde4ee; color:var(--pink); }
-.lib-row.locked .lib-ico { background:var(--surface-alt); color:var(--muted); }
-.lib-main { min-width:0; display:flex; flex-direction:column; }
-.lib-t { font-weight:600; font-size:14.5px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.lib-row.locked .lib-t { color:var(--muted); }
-.lib-s { font-size:12.5px; color:var(--muted); margin-top:1px; }
-.lib-lock { display:inline-block; font-size:11.5px; font-weight:700; color:#6a4ce0; background:rgba(124,92,255,.1); padding:1px 8px; border-radius:20px; }
+.lib-groups { display:grid; gap:30px; }
+.lib-group .section-title { margin-bottom:14px; }
+.lib-group .section-title h2 { font-size:18px; }
+.lib-group .lc-doc { position:relative; }
+.lib-group .lc-doc .lc-doc-body { padding-right:52px; }

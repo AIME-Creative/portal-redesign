@@ -110,7 +110,7 @@ window.HELP_ARTICLES = [
       <ul>
         <li><strong>To save something,</strong> tap the <strong>heart</strong> — on a lender, Market product, resource, event, hub video, or document. It's on each card, each document, and each page (on resources and hub videos it's the <strong>Save to My Library</strong> button).</li>
         <li><strong>To remove it,</strong> tap the heart again — on the item or in My Library.</li>
-        <li>My Library groups what you've saved by type, newest first. Use the buttons at the top to show one type.</li>
+        <li>My Library groups what you've saved by type, newest first, as the same cards you see around the portal. Use the buttons at the top to show one type.</li>
         <li>If you save something from a VIP hub and later change membership, it stays in your library, marked with the membership it needs, until you remove it.</li>
       </ul>
       <div class="kb-tip">Lender and Vendor accounts can save lenders, Market products, resources, and events.</div>` },

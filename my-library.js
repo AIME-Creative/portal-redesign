@@ -153,6 +153,32 @@
   const docsView = $('view-documents') || document.querySelector('.view');
   docsView.insertAdjacentHTML('afterend', '<section class="view" id="view-library"></section>');
   let filter = 'all';
+  // Saved items use the same cards as the rest of the portal (Lenders, Market, The Vault, Events, hubs).
+  const LOCK = '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>';
+  const DOC = '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>';
+  function cardFor(x) {
+    const ref = { k: x.k, h: x.h, hk: x.hk, t: x.t };
+    const at = (list, key) => list.findIndex((y) => y[key] === x.t);
+    if (x.k === 'lender') return lenderCard(lenders[at(lenders, 'name')], at(lenders, 'name'));
+    if (x.k === 'market') return vendorCard(vendors[at(vendors, 'name')], at(vendors, 'name'));
+    if (x.k === 'resource') return resCard(resources[at(resources, 'title')], at(resources, 'title'));
+    if (x.k === 'event') return eventCard(events[at(events, 'title')], at(events, 'title'));
+    if (x.k === 'hub') {
+      const hub = hubs[x.h], list = x.hk === 'event' ? hub.events : hub.content, i = at(list, 'title'), it = list[i];
+      if (!x.r.locked) return x.hk === 'event' ? hubEventCard(it, x.h, i) : hubContentCard(it, x.h, x.hk, i);
+      return `<div class="res-card lc-locked"><div class="card-open" aria-disabled="true">
+          <div class="res-thumb" style="background:linear-gradient(135deg,${it.g[0]},${it.g[1]})"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(it.type)}</span></span>${esc(firstWord(it.title))}
+            <span class="lc-lockbadge">${svg(LOCK)} VIP</span></div>
+          <div class="res-body"><h3>${esc(it.title)}</h3><div class="lc-lockline">Requires VIP membership</div></div></div>${heartBtn(ref, 'on-card')}</div>`;
+    }
+    // Documents: the same card as The Vault's Tools section.
+    const src = x.h || 'general', list = src === 'general' ? generalDocuments : (hubs[src] && hubs[src].documents) || [];
+    const d = list.find((y) => y.title === x.t) || { desc: '' };
+    return `<div class="res-card lc-doc${x.r.locked ? ' lc-locked' : ''}"><div class="lc-doc-body">
+        <span class="lc-doc-ico">${svg(x.r.locked ? LOCK : DOC)}</span>
+        <h3>${esc(x.t)}</h3><p>${esc(d.desc || '')}</p><div class="lc-tags"><span class="lc-fmt">Download</span><span>${esc(src === 'general' ? 'General' : hubs[src].name)}</span></div>
+        ${x.r.locked ? '<div class="lc-lockline">Requires VIP membership</div>' : `<a class="btn btn-outline btn-sm" href="${esc(d.link || '#')}" data-toast="Downloading: ${esc(x.t)}">Download</a>`}</div>${heartBtn(ref, 'on-card')}</div>`;
+  }
   function render() {
     const page = $('view-library'); if (!page) return;
     const kinds = GROUPS.map(([k]) => k);
@@ -162,20 +188,14 @@
     const chips = `<button class="chip ${filter === 'all' ? 'active' : ''}" data-lib-filter="all">All <span class="lib-n">${items.length}</span></button>` +
       GROUPS.filter(([k]) => count(k)).map(([k, l]) => `<button class="chip ${filter === k ? 'active' : ''}" data-lib-filter="${k}">${l} <span class="lib-n">${count(k)}</span></button>`).join('');
     const groups = GROUPS.filter(([k]) => count(k) && (filter === 'all' || filter === k)).map(([k, l]) => `
-      <div class="card card-pad lib-group"><div class="section-title" style="margin-bottom:6px"><h2 style="font-size:16px">${l}</h2><span class="count-note">${count(k)}</span></div>
-        ${items.filter((x) => x.k === k).map((x) => `<div class="list-row lib-row${x.r.locked ? ' locked' : ''}">
-          <button type="button" class="lib-open" ${x.r.locked ? 'disabled' : `data-lib-open='${esc(JSON.stringify({ k: x.k, h: x.h, hk: x.hk, t: x.t }))}'`}>
-            <span class="lib-ico lib-${x.k}">${svg(x.r.locked ? ICO.lock : ICO[x.k])}</span>
-            <span class="lib-main"><span class="lib-t">${esc(x.t)}</span><span class="lib-s">${x.r.locked ? '<span class="lib-lock">Requires VIP membership</span>' : esc(x.r.sub)}</span></span>
-          </button>
-          ${heartBtn({ k: x.k, h: x.h, hk: x.hk, t: x.t }, 'in-row')}
-        </div>`).join('')}
-      </div>`).join('');
+      <section class="lib-group"><div class="section-title"><h2>${l}</h2><span class="count-note">${count(k)}</span></div>
+        <div class="card-grid${k === 'lender' ? ' lib-lenders' : ''}">${items.filter((x) => x.k === k).map(cardFor).join('')}</div></section>`).join('');
     page.innerHTML = `<div class="page-head"><h1>My Library</h1><p>Everything you've saved — tap the heart on any ${partner ? 'lender, Market product, resource, or event' : 'lender, Market product, resource, event, hub video, or document'} to keep it here.</p></div>
       ${items.length ? `<div class="filters" id="library-filters">${chips}</div><div class="lib-groups">${groups}</div>`
         : `<div class="card empty"><div class="e-ico">${svg(HEART)}</div><h3 style="color:var(--ink);margin-bottom:6px">Nothing saved yet</h3>
             <p style="margin:0 auto 16px;max-width:420px">Tap the heart on anything you want to come back to — it'll show up here.</p>
             <button class="btn btn-primary btn-sm" data-nav="resources">Browse resources</button></div>`}`;
+    decorate(page); syncHearts();   // hearts on the cards right away
   }
   function refresh() { syncHearts(); if ($('view-library') && $('view-library').classList.contains('active')) render(); }
   wrap('navigate', (view) => { if (view === 'library') { render(); } });
@@ -190,8 +210,6 @@
   document.addEventListener('click', (e) => {
     const f = e.target.closest('[data-lib-filter]');
     if (f) { e.preventDefault(); filter = f.dataset.libFilter; render(); return; }
-    const o = e.target.closest('[data-lib-open]');
-    if (o) { e.preventDefault(); const r = resolve(JSON.parse(o.dataset.libOpen)); if (r && !r.locked) r.open(); }
   });
 
   // Cards are rendered by app.js and other add-ons at different times — add hearts as they appear.
