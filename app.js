@@ -3,71 +3,23 @@
    Navigation, data rendering, detail pages, modals & interactions
    ============================================================ */
 
-/* ---------- Sample data (illustrative only) ---------- */
-const lenders = [
-  { name: "United Wholesale Mortgage", short: "UWM", tier: "Gold",   color: "#0b1f5b", desc: "The #1 wholesale lender in the nation, delivering state-of-the-art technology and unrivaled client service to independent mortgage brokers.", tags:["Conventional","FHA","VA","Jumbo","Non-QM"] },
-  { name: "EPM",                       short: "EPM", tier: "Gold",   color: "#1b7a4a", desc: "Equity Prime Mortgage — fast, broker-first wholesale lending with a full product menu and dedicated support.", tags:["Conventional","FHA","VA","USDA"] },
-  { name: "Windsor Mortgage",          short: "WM",  tier: "Gold",   color: "#3a3a3a", desc: "Boutique wholesale lender specializing in non-QM and jumbo products for independent brokers.", tags:["Non-QM","Jumbo","DSCR"] },
-  { name: "Newrez Wholesale",          short: "NRZ", tier: "Gold",   color: "#e0463c", desc: "A leading national lender offering a broad product suite and dedicated broker support.", tags:["Conventional","FHA","VA","Renovation"] },
-  { name: "Newfi Wholesale",           short: "NF",  tier: "Silver", color: "#163a85", desc: "Tech-forward lender focused on non-QM, bank-statement, and investor loans.", tags:["Non-QM","Bank Stmt","DSCR"] },
-  { name: "Cake Mortgage",             short: "CK",  tier: "Silver", color: "#2bb673", desc: "Modern wholesale platform with a slice of every product and a fast, digital process.", tags:["Conventional","Non-QM","Jumbo"] },
-  { name: "eLEND",                      short: "eL",  tier: "Silver", color: "#1893b1", desc: "Diverse loan options with a focus on first-time and government-backed buyers.", tags:["FHA","VA","USDA","Conventional"] },
-  { name: "RCN Capital",               short: "RCN", tier: "Bronze", color: "#0b2a5b", desc: "Nationwide private lender for real estate investors — fix & flip, bridge, and rental loans.", tags:["Fix & Flip","Bridge","DSCR"] },
-  { name: "Kind Lending",              short: "KIND",tier: "Gold",   color: "#e0982a", desc: "Broker-focused lender with a kind, tech-enabled experience across agency and non-QM products.", tags:["Conventional","FHA","VA","Non-QM"] },
-  { name: "Rocket Pro TPO",            short: "RKT", tier: "Gold",   color: "#d6322e", desc: "High-volume national lender with deep technology and marketing support for brokers.", tags:["Conventional","FHA","VA","Jumbo"] },
-  { name: "Plaza Home Mortgage",       short: "PLZ", tier: "Silver", color: "#15467e", desc: "Full-service wholesale lender known for its renovation and reverse mortgage programs.", tags:["Renovation","Jumbo","Reverse","FHA"] },
-  { name: "Home Point",                short: "HP",  tier: "Silver", color: "#1b9d6b", desc: "Relationship-driven lender with competitive agency and government pricing.", tags:["Conventional","FHA","USDA"] },
-  { name: "Angel Oak",                 short: "AO",  tier: "Bronze", color: "#3a6b35", desc: "The leader in non-QM lending — bank statement, DSCR, and asset-qualifier loans.", tags:["Non-QM","Bank Stmt","DSCR"] },
-  { name: "Quontic Wholesale",         short: "QW",  tier: "Bronze", color: "#0b2a5b", desc: "Digital bank offering common-sense non-QM and bank-statement loans.", tags:["Non-QM","Bank Stmt"] },
-];
-const tierBadge = { Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze" };
+/* ---------- Portal content ----------
+   Lenders, Market products, resources and events are the real items from the
+   production portal (content-data.js, generated from Supabase). Placeholder
+   events below demo new features only (event registration RSVP, VIP-only). */
+const lenders = AMP_CONTENT.lenders;
+const tierBadge = { "Title/Platinum":"badge-platinum", Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze", "Fuse Flex":"badge-flex", "AIME Capital":"badge-capital" };
 
-const vendors = [
-  { name:"Advantage Partners Solutions", short:"APS", cat:"Core Partner", g:["#1b7a4a","#2bb673"], desc:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit","Verifications"], offer:"Up to 20% off credit reports + waived setup" },
-  { name:"Ask Mindy",                    short:"AM",  cat:"Origination", g:["#86145a","#dd1969"], desc:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios","Guidelines"], offer:"Free for AIME members" },
-  { name:"Waive Inspection Fee",         short:"WIF", cat:"Origination", g:["#0b6b82","#20adce"], desc:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal","Savings"], offer:"$0 inspection fee on qualifying loans" },
-  { name:"Arive",                        short:"AR",  cat:"Origination", g:["#0b1f5b","#163a85"], desc:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS","LOS"], offer:"Exclusive member pricing on Pro plans" },
-  { name:"BrokerVA",                     short:"BVA", cat:"Coaching",    g:["#4a217a","#7a3fb0"], desc:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing","Ops"], offer:"Waived placement fee for members" },
-  { name:"Cotality",                     short:"CO",  cat:"Origination", g:["#0b2a5b","#1893b1"], desc:"Property data, analytics, and verification tools for brokers.", tags:["Data","Analytics"], offer:"Member-only data bundles" },
-  { name:"Direct Authority AI",          short:"DAi", cat:"Marketing",   g:["#7a1f1a","#e0463c"], desc:"AI-powered lead generation and nurture built for loan officers.", tags:["AI","Leads"], offer:"First month free for members" },
-  { name:"Lead Hackers",                 short:"LH",  cat:"Marketing",   g:["#0f5e3f","#1b9d6b"], desc:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads","Funnels"], offer:"Discounted setup for members" },
-  { name:"APS Verification Services",    short:"APS", cat:"Core Partner", g:["#14613d","#20adce"], desc:"Employment, income, and asset verifications from Advantage Partners Solutions.", tags:["Verifications","VOE"], offer:"Member pricing on VOE / VOI bundles" },
-  { name:"Xactus",                       short:"XAC", cat:"Core Partner",g:["#1b4f7a","#20adce"], desc:"Verification and credit solutions trusted across the mortgage industry.", tags:["Credit","Verifications"], offer:"Member pricing on verification bundles" },
-  { name:"The CORE Training",            short:"CORE",cat:"Coaching",    g:["#5b2a86","#a23fb0"], desc:"Performance coaching program for top-producing originators and teams.", tags:["Coaching","Scaling"], offer:"Discounted enrollment for members" },
-  { name:"Mortgage Coach",               short:"MC",  cat:"Coaching",    g:["#0b1f5b","#1893b1"], desc:"Interactive presentations that help borrowers understand their options.", tags:["Presentations","Coaching"], offer:"Free trial + member rate" },
-  { name:"Surefire CRM",                 short:"SF",  cat:"Marketing",   g:["#7a1f55","#dd1969"], desc:"Mortgage CRM and marketing automation built for loan officers.", tags:["CRM","Automation"], offer:"Setup fee waived for members" },
-];
+const vendors = AMP_CONTENT.memberVendors;   // per-tier products: only the member's tier version
 
-// `topic` is an optional content tag (AI Strategy / Marketing / Sales) used by the
-// Resources filter chips. A card matches a chip on either its type OR its topic.
-const resources = [
-  { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast",  cta:"Listen now", dur:"28 min", topic:"Sales",       g:["#5b2a86","#dd1969"] },
-  { title:"Broker to Broker — Episode 251",     type:"Podcast",  cta:"Listen now", dur:"41 min",                     g:["#0b1f5b","#20adce"] },
-  { title:"Broker Power-Up: Episode 65",        type:"Webinar",  cta:"Watch now",  dur:"52 min", topic:"Marketing",   g:["#1b1b3a","#7a3fb0"] },
-  { title:"Using AI to Pre-Qualify Borrowers",  type:"Webinar",  cta:"Watch now",  dur:"39 min", topic:"AI Strategy", g:["#0b1f5b","#1893b1"] },
-  { title:"AI Tools for the Daily Workflow",    type:"Training", cta:"Watch now",  dur:"31 min", topic:"AI Strategy", g:["#021649","#7a3fb0"] },
-  { title:"Mortgage Mornings — June 17, 2026",  type:"Webinar",  cta:"Watch now",  dur:"35 min",                     g:["#0b2a5b","#e0463c"] },
-  { title:"Women's Mortgage Network Podcast",   type:"Podcast",  cta:"Listen now", dur:"33 min",                     g:["#86145a","#dd1969"] },
-  { title:"The Social Media Playbook",          type:"Training", cta:"Watch now",  dur:"42 min", topic:"Marketing",   g:["#86145a","#20adce"] },
-  { title:"Closing: Objection Handling 101",    type:"Training", cta:"Watch now",  dur:"29 min", topic:"Sales",       g:["#0b2a5b","#dd1969"] },
-  { title:"Broker to Broker — Episode 250",     type:"Podcast",  cta:"Listen now", dur:"39 min",                     g:["#0b1f5b","#163a85"] },
-  { title:"AIME Accelerate — Identity Reset",   type:"Training", cta:"Watch now",  dur:"24 min",                     g:["#1b1b3a","#20adce"] },
-  { title:"Scaling Past $1M in Volume",         type:"Training", cta:"Watch now",  dur:"47 min", topic:"Sales",       g:["#021649","#1893b1"] },
-  { title:"Compliance Corner — Q3 Update",      type:"Webinar",  cta:"Watch now",  dur:"38 min",                     g:["#0b2a5b","#1893b1"] },
-  { title:"Building Your Referral Engine",      type:"Training", cta:"Watch now",  dur:"45 min", topic:"Marketing",   g:["#5b2a86","#20adce"] },
-  { title:"Broker to Broker — Episode 249",     type:"Podcast",  cta:"Listen now", dur:"44 min",                     g:["#0b1f5b","#7a3fb0"] },
-];
+// Each resource carries goal / topic / show for The Vault (learning-center.js).
+const resources = AMP_CONTENT.resources;
 
 const events = [
-  { title:"AIME Accelerate — Identity Reset", date:"JUN 6",  when:"Mon · 1:00 PM ET", type:"Virtual",   g:["#1b1b3a","#dd1969"] },
-  { title:"AIME Accelerate — Win the Day",    date:"JUN 15", when:"Mon · 1:00 PM ET", type:"Virtual",   g:["#0b1f5b","#20adce"] },
-  { title:"AIME Accelerate — Run Toward It",  date:"JUN 22", when:"Mon · 1:00 PM ET", type:"Virtual",   g:["#5b2a86","#dd1969"] },
-  { title:"Mortgage Mornings — Live",         date:"JUL 1",  when:"Wed · 10:00 AM ET",type:"Virtual",   g:["#0b2a5b","#e0463c"] },
-  { title:"AIME Accelerate — Compound",       date:"JUN 29", when:"Mon · 1:00 PM ET", type:"Training",  g:["#1b1b3a","#1893b1"] },
-  { title:"FUSE 2026 — National Conference",  date:"SEP 24", when:"Sep 24–26 · Austin, TX", type:"In person", loc:"JW Marriott Downtown Austin, TX", g:["#021649","#dd1969"] },
-  { title:"AIME Accelerate — Mindset",        date:"JUL 6",  when:"Mon · 1:00 PM ET", type:"Training",  g:["#1b1b3a","#7a3fb0"] },
-  { title:"Regional Mixer — Dallas",          date:"AUG 12", when:"Tue · 6:00 PM CT", type:"In person", loc:"Downtown Dallas, TX", g:["#0b2a5b","#20adce"] },
-  { title:"AIME Ascent 2027",                 date:"FEB 8", year:2027, when:"Feb 8–10, 2027 · VIP retreat", type:"In person", loc:"Venue details sent to registered VIP members", g:["#3a1d5c","#c9851f"] },
+  ...AMP_CONTENT.events,
+  // Placeholders (new features): RSVP registration + VIP-only registration
+  { title:"Regional Mixer — Dallas",           date:"AUG 12", when:"Tue · 6:00 PM CT", type:"In person", loc:"Downtown Dallas, TX", g:["#0b2a5b","#20adce"], placeholder:true },
+  { title:"AIME Ascent 2027",                 date:"FEB 8", year:2027, when:"Feb 8–10, 2027 · VIP retreat", type:"In person", loc:"Venue details sent to registered VIP members", g:["#3a1d5c","#c9851f"], placeholder:true },
 ];
 
 const backArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>';
@@ -80,7 +32,7 @@ function lenderCard(l, i){
     <button class="card-open" data-open-lender="${i}" title="${l.name}">
       <div class="lender-logo-box">
         <span class="badge ${tierBadge[l.tier]}" style="position:absolute;top:12px;right:12px">${l.tier}</span>
-        <div class="lender-logo-ph" style="color:${l.color}">${l.short}</div>
+        ${l.logo ? `<img class="lender-logo-img" src="${l.logo}" alt="${l.name}" loading="lazy">` : `<div class="lender-logo-ph" style="color:${l.color}">${l.short}</div>`}
       </div>
     </button>
     <div class="partner-foot">
@@ -92,11 +44,11 @@ function lenderCard(l, i){
 
 // Market items use the same thumbnail size as Events & Resources
 function vendorCard(v, i){
-  return `<div class="res-card" data-filter="${v.cat}">
+  return `<div class="res-card" data-filter="${v.cat}|${v.group}">
     <button class="card-open" data-open-market="${i}">
-      <div class="res-thumb" style="background:linear-gradient(135deg,${v.g[0]},${v.g[1]})">
+      <div class="res-thumb${v.logo?' has-logo':''}" style="${cardBg(v,true)}">
         <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${v.cat}</span></span>
-        ${firstWord(v.name)}
+        ${v.logo?'':firstWord(v.name)}
       </div>
       <div class="res-body">
         <h3>${v.name}</h3>
@@ -112,14 +64,14 @@ function vendorCard(v, i){
 function resCard(r, i){
   return `<div class="res-card" data-filter="${r.type}${r.topic?'|'+r.topic:''}">
     <button class="card-open" data-open-resource="${i}">
-      <div class="res-thumb" style="background:linear-gradient(135deg,${r.g[0]},${r.g[1]})">
+      <div class="res-thumb" style="${cardBg(r)}">
         <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${r.type}</span></span>
-        ${firstWord(r.title)}
+        ${r.img?'':firstWord(r.title)}
         <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg></span>
       </div>
       <div class="res-body">
         <h3>${r.title}</h3>
-        <div class="res-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> ${r.dur}</div>
+        <div class="res-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg> ${r.dur}</div>
       </div>
     </button>
     <div style="padding:0 17px 17px">
@@ -131,9 +83,9 @@ function resCard(r, i){
 function eventCard(e, i){
   return `<div class="event-card" data-filter="${e.type}">
     <button class="card-open" data-open-event="${i}">
-      <div class="event-banner" style="background:linear-gradient(135deg,${e.g[0]},${e.g[1]})">
+      <div class="event-banner" style="${cardBg(e)}">
         <span style="position:absolute;left:12px;top:12px"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${e.type}</span></span>
-        ${firstWord(e.title)}
+        ${e.img?'':firstWord(e.title)}
       </div>
       <div class="event-body">
         <h3>${e.title}</h3>
@@ -188,19 +140,20 @@ document.getElementById('resource-grid').innerHTML= resources.map(resCard).join(
 document.getElementById('event-grid').innerHTML   = events.map(eventCard).join('');
 
 // Featured on dashboard — can highlight anything new/notable
+const pick = (list, key, name) => list.find(x=>x[key]===name) || {};
 const featured = [
-  { kind:"Lender",   title:"Newrez Wholesale",                sub:"Just joined as a Gold partner", cta:"View lender", g:["#0b1f5b","#e0463c"], nav:"lenders" },
-  { kind:"Resource", title:"AIME Accelerate — Identity Reset", sub:"New training added",            cta:"Watch now",   g:["#1b1b3a","#20adce"], nav:"resources" },
-  { kind:"Market",   title:"Waive Inspection Fee",            sub:"New member deal",               cta:"View deal",   g:["#1b7a4a","#20adce"], nav:"market" },
-  { kind:"Event",    title:"FUSE 2026",                       sub:"Tickets on sale now",           cta:"Get tickets", g:["#021649","#dd1969"], nav:"events" },
-];
+  { kind:"Lender",   title:"Newrez LLC",                                        sub:"Featured Silver lender",     cta:"View lender", nav:"lenders",   img:pick(lenders,'name','Newrez LLC').logo, logo:true },
+  { kind:"Resource", title:"The 'Daily Six' Challenge (Part 3)",                sub:"New from AIME Accelerate",   cta:"Listen now",  nav:"resources", img:pick(resources,'title',"The 'Daily Six' Challenge (Part 3)").img },
+  { kind:"Market",   title:"Advantage Partners Solutions Waived Inspection Fee", sub:"Member deal",                cta:"View deal",   nav:"market",    img:pick(vendors,'name','Advantage Partners Solutions Waived Inspection Fee').logo, logo:true },
+  { kind:"Event",    title:"Fuse 2026",                                         sub:"Tickets on sale now",        cta:"Get tickets", nav:"events",    img:pick(events,'title','Fuse 2026').img },
+].map(f => f.logo ? { ...f, g:["#021649","#20adce"], logo:f.img, img:null } : { ...f, g:["#021649","#20adce"] });
 const kindBadge = { Lender:"badge-navy", Resource:"badge-pink", Market:"badge-cyan", Event:"badge-amber" };
 document.getElementById('featured-grid').innerHTML = featured.map(f=>`
   <div class="res-card">
     <button class="card-open" data-nav="${f.nav}">
-      <div class="res-thumb" style="background:linear-gradient(135deg,${f.g[0]},${f.g[1]});height:120px;font-size:17px">
+      <div class="res-thumb" style="${cardBg(f,true)};height:120px;font-size:17px">
         <span class="res-type"><span class="badge ${kindBadge[f.kind]}" style="background:rgba(255,255,255,.92)">${f.kind}</span></span>
-        ${firstWord(f.title)}
+        ${f.img||f.logo?'':firstWord(f.title)}
       </div>
       <div class="res-body">
         <h3 style="min-height:0">${f.title}</h3>
@@ -295,12 +248,7 @@ const hubs = {
   mortgagemornings: {
     name:"Mortgage Mornings", layout:"standard", vip:false, contentLabel:"Recordings",
     intro:"Every Mortgage Mornings episode, on demand — catch up on the ones you missed.",
-    content:[
-      { title:"Mortgage Mornings — June 24, 2026", type:"Recording", dur:"36 min", cta:"Watch now", g:["#0b2a5b","#e0463c"] },
-      { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", cta:"Watch now", g:["#0b2a5b","#1893b1"] },
-      { title:"Mortgage Mornings — June 10, 2026", type:"Recording", dur:"41 min", cta:"Watch now", g:["#0b1f5b","#20adce"] },
-      { title:"Mortgage Mornings — June 3, 2026",  type:"Recording", dur:"33 min", cta:"Watch now", g:["#1b1b3a","#dd1969"] },
-    ],
+    content: resources.filter(r=>r.series==="Mortgage Mornings").slice(0,4).map(r=>({ ...r, type:"Recording", cta:"Watch now" })),
     documents:[
       { title:"Rate Sheet Roundup — This Week", desc:"The weekly rate and market snapshot referenced on the show.", link:"#" },
       { title:"Show Notes Archive (2026)",      desc:"Links and resources mentioned across every 2026 episode.", link:"#" },
@@ -309,12 +257,7 @@ const hubs = {
   acceleratelive: {
     name:"Accelerate Live", layout:"standard", vip:false, contentLabel:"Replays",
     intro:"Live coaching sessions and replays from the AIME Accelerate program — momentum for your business every week.",
-    content:[
-      { title:"Accelerate Live — Identity Reset", type:"Recording", dur:"58 min", cta:"Watch now", g:["#1b1b3a","#dd1969"] },
-      { title:"Accelerate Live — Win the Day",    type:"Recording", dur:"52 min", cta:"Watch now", g:["#0b1f5b","#20adce"] },
-      { title:"Accelerate Live — Run Toward It",  type:"Recording", dur:"47 min", cta:"Watch now", g:["#5b2a86","#1893b1"] },
-      { title:"Accelerate Live — Compound",       type:"Recording", dur:"55 min", cta:"Watch now", g:["#021649","#7a3fb0"] },
-    ],
+    content: resources.filter(r=>r.series==="Accelerate").slice(0,4).map(r=>({ ...r, type:"Recording", cta:"Watch now" })),
     documents:[
       { title:"Accelerate Live — Session Workbook", desc:"The companion workbook used across the current Accelerate Live series.", link:"#" },
       { title:"Weekly Action Plan Template",        desc:"Turn each session into a concrete weekly plan for your team.", link:"#" },
@@ -373,9 +316,9 @@ const calIcon   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 function hubContentCard(item, key, kind, i){
   return `<div class="res-card">
     <button class="card-open" data-open-hub="${key}:${kind}:${i}">
-      <div class="res-thumb" style="background:linear-gradient(135deg,${item.g[0]},${item.g[1]})">
+      <div class="res-thumb" style="${cardBg(item)}">
         <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${item.type}</span></span>
-        ${firstWord(item.title)}
+        ${item.img?'':firstWord(item.title)}
         <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg></span>
       </div>
       <div class="res-body">
@@ -392,9 +335,9 @@ function hubContentCard(item, key, kind, i){
 function hubEventCard(ev, key, i){
   return `<div class="event-card">
     <button class="card-open" data-open-hub="${key}:event:${i}">
-      <div class="event-banner" style="background:linear-gradient(135deg,${ev.g[0]},${ev.g[1]})">
+      <div class="event-banner" style="${cardBg(ev)}">
         <span style="position:absolute;left:12px;top:12px"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${ev.type}</span></span>
-        ${firstWord(ev.title)}
+        ${ev.img?'':firstWord(ev.title)}
       </div>
       <div class="event-body">
         <h3>${ev.title}</h3>
@@ -481,9 +424,9 @@ function openHubItem(key, kind, i){
   if(kind==='event'){
     document.getElementById('hub-detail-body').innerHTML = `${back}
       <div class="card" style="overflow:hidden;margin-bottom:20px">
-        <div class="detail-banner" style="background:linear-gradient(135deg,${it.g[0]},${it.g[1]})">
+        <div class="detail-banner" style="${cardBg(it)}">
           <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${it.type}</span></span>
-          <div style="font-size:30px;font-weight:800">${firstWord(it.title)}</div>
+          <div style="font-size:30px;font-weight:800">${it.img?'':firstWord(it.title)}</div>
         </div>
       </div>
       <div class="grid" style="grid-template-columns:1.6fr 1fr;align-items:start">
@@ -502,9 +445,9 @@ function openHubItem(key, kind, i){
   } else {
     document.getElementById('hub-detail-body').innerHTML = `${back}
       <div class="card" style="overflow:hidden">
-        <div class="detail-banner" style="background:linear-gradient(135deg,${it.g[0]},${it.g[1]})">
+        <div class="detail-banner" style="${cardBg(it)}">
           <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${it.type}</span></span>
-          <div style="font-size:30px;font-weight:800;letter-spacing:.04em">${firstWord(it.title)}</div>
+          <div style="font-size:30px;font-weight:800;letter-spacing:.04em">${it.img?'':firstWord(it.title)}</div>
         </div>
         <div class="card-pad">
           <h1 style="font-size:24px">${it.title}</h1>
@@ -623,17 +566,21 @@ function flashAddons(){
 }
 
 /* ---------- Detail pages ---------- */
+// Plain-text paragraphs from content-data.js → HTML
+const escText = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const paraHtml = (list, style) => (list || []).map(p => `<p style="${style}">${escText(p)}</p>`).join('');
+
 function openLender(i){
   const l = lenders[i]; if(!l) return;
+  const about = (l.body && l.body.length) ? paraHtml(l.body, 'color:var(--ink-soft);margin:10px 0 0;max-width:700px;line-height:1.6') : '';
   document.getElementById('lender-detail-body').innerHTML = `
     <a class="back-link" data-nav="lenders">${backArrow} Back to lenders</a>
     <div class="card card-pad">
       <div class="detail-head">
-        <div class="detail-logo" style="color:${l.color}">${l.short}</div>
+        <div class="detail-logo${l.logo?' has-logo':''}" style="color:${l.color}">${l.logo ? `<img src="${l.logo}" alt="${l.name}">` : l.short}</div>
         <div style="flex:1">
-          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="font-size:24px">${l.name}</h1><span class="badge ${tierBadge[l.tier]}">${l.tier} partner</span></div>
-          <p style="color:var(--ink-soft);margin:10px 0 0;max-width:700px;line-height:1.6">${l.desc}</p>
-          <div class="tag-row" style="margin-top:16px">${l.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="font-size:24px">${l.name}</h1><span class="badge ${tierBadge[l.tier]||'badge-silver'}">${l.tier} partner</span></div>
+          ${about}
           <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
             <button class="btn btn-primary" data-modal="escalate">Escalate a loan</button>
             <button class="btn btn-cyan" data-modal="connect">Connect</button>
@@ -643,7 +590,7 @@ function openLender(i){
       </div>
     </div>
     <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;margin-top:20px">
-      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">Product offerings</h3><div class="tag-row">${l.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+      <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:12px">Product offerings</h3><div class="tag-row">${l.tags.map(t=>`<span class="tag">${escText(t)}</span>`).join('')}</div></div>
       <div class="card card-pad"><h3 style="font-size:16px;margin-bottom:10px">Need help with a file?</h3><p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 14px">Escalate a loan in your pipeline to send a report straight to ${l.name}'s escalation team.</p><button class="btn btn-primary btn-sm" data-modal="escalate">Escalate a loan</button></div>
     </div>`;
   navigate('lender-detail');
@@ -651,73 +598,80 @@ function openLender(i){
 
 function openVendor(i){
   const v = vendors[i]; if(!v) return;
+  const body = (v.body || []).filter(p => p !== v.benefit);
   document.getElementById('market-detail-body').innerHTML = `
     <a class="back-link" data-nav="market">${backArrow} Back to market</a>
     <div class="card" style="overflow:hidden">
-      <div class="detail-banner" style="background:linear-gradient(135deg,${v.g[0]},${v.g[1]})">
+      <div class="detail-banner${v.logo?' has-logo':''}" style="${cardBg(v,true)}">
         <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${v.cat}</span></span>
-        <div style="font-size:30px;font-weight:800">${firstWord(v.name)}</div>
+        ${v.logo?'':`<div style="font-size:30px;font-weight:800">${firstWord(v.name)}</div>`}
       </div>
       <div class="card-pad">
         <h1 style="font-size:24px">${v.name}</h1>
-        <p style="color:var(--ink-soft);margin:14px 0;max-width:720px;line-height:1.7">${v.desc} As an AIME member, you unlock exclusive pricing and priority onboarding with ${v.name}.</p>
-        <div class="tag-row">${v.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div style="margin:14px 0">${paraHtml(body, 'color:var(--ink-soft);margin:0 0 12px;max-width:720px;line-height:1.7')}</div>
+        <div class="tag-row">${v.tags.map(t=>`<span class="tag">${escText(t)}</span>`).join('')}</div>
         <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
-          <button class="btn btn-cyan" data-submit="vendor" data-vendor="${v.name}" data-toast="Connection request sent to ${v.name} — track it in My Requests.">Connect with ${v.name}</button>
+          <button class="btn btn-cyan" data-submit="vendor" data-vendor="${v.name}" data-toast="Connection request sent to ${v.company||v.name} — track it in My Requests.">Connect with ${v.company||v.name}</button>
           <button class="btn btn-outline" data-toast="Opening website…">Visit website</button>
         </div>
       </div>
     </div>
-    <div class="card card-pad" style="margin-top:20px"><h3 style="font-size:16px;margin-bottom:12px">Your member benefit</h3><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 010-4h12v4M4 6v12a2 2 0 002 2h14v-4M18 12a2 2 0 000 4h4v-4z"/></svg><p>${v.offer}</p></div></div>`;
+    ${v.benefit ? `<div class="card card-pad" style="margin-top:20px"><h3 style="font-size:16px;margin-bottom:12px">Your member benefit</h3><div class="callout" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 010-4h12v4M4 6v12a2 2 0 002 2h14v-4M18 12a2 2 0 000 4h4v-4z"/></svg><p>${escText(v.benefit)}</p></div></div>` : ''}`;
   navigate('market-detail');
 }
 
 function openResource(i){
   const r = resources[i]; if(!r) return;
+  const meta = [r.sub, r.show || (r.series && r.series !== 'Webinar' ? r.series : ''), 'Published ' + r.dur].filter(Boolean).map(escText).join(' · ');
+  const about = (r.body && r.body.length) ? paraHtml(r.body, 'color:var(--ink-soft);margin:0 0 12px;line-height:1.7;max-width:720px')
+    : `<p style="color:var(--ink-soft);margin:0 0 12px;line-height:1.7;max-width:720px">${escText(r.title)} — from the AIME library.</p>`;
+  const points = (r.points && r.points.length) ? `<h3 style="font-size:15px;margin:6px 0 8px">Key takeaways</h3><ul class="how-list" style="margin-bottom:16px">${r.points.map(p=>`<li>${escText(p)}</li>`).join('')}</ul>` : '';
   document.getElementById('resource-detail-body').innerHTML = `
     <a class="back-link" data-nav="resources">${backArrow} Back to resources</a>
     <div class="card" style="overflow:hidden">
-      <div class="detail-banner" style="background:linear-gradient(135deg,${r.g[0]},${r.g[1]})">
+      <div class="detail-banner" style="${cardBg(r)}">
         <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${r.type}</span></span>
-        <div style="font-size:30px;font-weight:800;letter-spacing:.04em">${firstWord(r.title)}</div>
+        ${r.img?'':`<div style="font-size:30px;font-weight:800;letter-spacing:.04em">${firstWord(r.title)}</div>`}
       </div>
       <div class="card-pad">
-        <h1 style="font-size:24px">${r.title}</h1>
-        <div class="res-meta" style="margin-top:10px;font-size:13.5px">⏱ ${r.dur} · Hosted by AIME · Published Jun 2026</div>
-        <p style="color:var(--ink-soft);margin:16px 0;line-height:1.7;max-width:720px">In this ${r.type.toLowerCase()}, we break down actionable strategies you can apply to your business this week — learn from top originators and AIME experts on growing volume, sharpening your process, and winning more borrowers.</p>
+        <h1 style="font-size:24px">${escText(r.title)}</h1>
+        <div class="res-meta" style="margin-top:10px;font-size:13.5px">${meta}</div>
+        <div style="margin:16px 0 4px">${about}</div>
+        ${points}
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-primary" data-toast="Now playing: ${r.title}">▶ ${r.cta}</button>
+          <button class="btn btn-primary" data-toast="Now playing: ${escText(r.title)}">${r.type==='Document'?'⬇':'▶'} ${r.cta}</button>
           <button class="btn btn-outline" data-toast="Saved to your library.">Save for later</button>
         </div>
       </div>
     </div>
     <div style="margin-top:24px"><div class="section-title"><h2>Up next</h2></div><div class="card-grid" id="res-related"></div></div>`;
+  // Up next: more from the same series first, then the latest
   document.getElementById('res-related').innerHTML = resources
-    .map((rr,j)=>({rr,j})).filter(o=>o.j!==i).slice(0,4)
+    .map((rr,j)=>({rr,j})).filter(o=>o.j!==i).sort((a,b)=>(b.rr.series===r.series)-(a.rr.series===r.series)).slice(0,4)
     .map(o=>resCard(o.rr,o.j)).join('');
   navigate('resource-detail');
 }
 
 function openEvent(i){
   const ev = events[i]; if(!ev) return;
+  const about = (ev.body && ev.body.length) ? paraHtml(ev.body, 'color:var(--ink-soft);margin:0 0 10px;line-height:1.7')
+    : `<p style="color:var(--ink-soft);margin:14px 0;line-height:1.7">Join us for ${ev.title}. Connect with fellow independent mortgage brokers, learn from industry leaders, and pick up tactics you can put to work immediately.</p>`;
   document.getElementById('event-detail-body').innerHTML = `
     <a class="back-link" data-nav="events">${backArrow} Back to events</a>
     <div class="card" style="overflow:hidden;margin-bottom:20px">
-      <div class="detail-banner" style="background:linear-gradient(135deg,${ev.g[0]},${ev.g[1]})">
+      <div class="detail-banner" style="${cardBg(ev)}">
         <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${ev.type}</span></span>
-        <div style="font-size:30px;font-weight:800">${firstWord(ev.title)}</div>
+        ${ev.img?'':`<div style="font-size:30px;font-weight:800">${firstWord(ev.title)}</div>`}
       </div>
     </div>
     <div class="grid" style="grid-template-columns:1.6fr 1fr;align-items:start">
       <div class="card card-pad">
-        <h1 style="font-size:24px">${ev.title}</h1>
-        <p style="color:var(--ink-soft);margin:14px 0;line-height:1.7">Join us for ${ev.title}. Connect with fellow independent mortgage brokers, learn from industry leaders, and pick up tactics you can put to work immediately.</p>
-        <h3 style="font-size:15px;margin:18px 0 8px">What you'll get</h3>
-        <ul class="how-list"><li>Live training &amp; Q&amp;A with AIME experts</li><li>Networking with brokers in your market</li><li>On-demand replay access afterward</li></ul>
+        <h1 style="font-size:24px;margin-bottom:14px">${ev.title}</h1>
+        ${about}
       </div>
       <div class="card card-pad summary-card">
         <h3 style="font-size:16px;margin-bottom:14px">Event details</h3>
-        <div class="detail-meta-row"><span>📅</span> ${ev.date}, ${ev.year || 2026}</div>
+        <div class="detail-meta-row"><span>📅</span> ${ev.recurring ? 'Every week · next ' : ''}${ev.date}, ${ev.year || 2026}</div>
         <div class="detail-meta-row"><span>⏰</span> ${ev.when}</div>
         <div class="detail-meta-row"><span>📍</span> ${ev.loc || (ev.type==='In person'?'In person — venue TBA':'Online — link sent after registering')}</div>
         <button class="btn btn-primary btn-block" style="margin-top:16px" data-toast="Registered for ${ev.title}!">Register now</button>

@@ -41,10 +41,10 @@
   // Portal news — each opens its exact item.
   function news() {
     const out = [];
-    const l = idx(lenders, (x) => x.name === 'Newrez Wholesale');
-    if (l >= 0) out.push({ at: now - 2 * H, t: 'New Gold partner — Newrez Wholesale', s: 'A new lender just joined the portal', ico: 'lender', cls: 'i-navy', unread: true, open: () => openLender(l) });
+    const l = idx(lenders, (x) => x.name === 'Newrez LLC');
+    if (l >= 0) out.push({ at: now - 2 * H, t: 'Featured lender — Newrez LLC', s: 'See their products and how to connect', ico: 'lender', cls: 'i-navy', unread: true, open: () => openLender(l) });
     out.push({ at: now - 24 * H, t: 'FUSE 2026 — early-bird pricing ends Friday', s: 'Manage your registration', ico: 'escalation', cls: 'i-amber', open: () => navigate('fuse') });
-    const r = idx(resources, (x) => /Broker Power-Up: Episode 65/.test(x.title));
+    const r = idx(resources, (x) => /Broker Power-Up Podcast: Episode 65/.test(x.title));
     if (r >= 0) out.push({ at: now - 48 * H, t: `New resource: ${resources[r].title}`, s: 'Just published', ico: 'resource', cls: 'i-cyan', open: () => openResource(r) });
     const e = idx(events, (x) => /^AIME Accelerate/.test(x.title));
     if (e >= 0) out.push({ at: now - 72 * H, t: `Reminder: ${events[e].title}`, s: `${events[e].when}`, ico: 'event', cls: 'i-navy', open: () => openEvent(e) });

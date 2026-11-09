@@ -173,9 +173,9 @@
     } else { closeTourModal(); lastFill = 0; }
     const active = (id) => document.getElementById('view-' + id)?.classList.contains('active');
     if (s.page === 'fuse') {   // FUSE event page (registration panel) — opened, never claimed, by the tour
-      const i = events.findIndex((e) => e.title.startsWith('FUSE'));
+      const i = events.findIndex((e) => e.title === 'Fuse 2026');
       const title = document.querySelector('#event-detail-body h1');
-      if (i > -1 && (!active('event-detail') || !title || !title.textContent.startsWith('FUSE'))) openEvent(i);
+      if (i > -1 && (!active('event-detail') || !title || title.textContent !== 'Fuse 2026')) openEvent(i);
       return;
     }
     if (s.page === 'dashboard' && !active('dashboard')) navigate('dashboard');

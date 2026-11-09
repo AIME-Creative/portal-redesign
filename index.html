@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="my-library.css">
 <link rel="stylesheet" href="learning-paths.css">
 <link rel="stylesheet" href="learning-center.css">
+<link rel="stylesheet" href="content.css">
 <!-- Installable app (pwa.js / sw.js) -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#021649">
@@ -162,7 +163,7 @@
           <div class="notif-panel" id="notif-panel">
             <div class="notif-head"><span>Notifications</span><button class="notif-readall" data-toast="All notifications marked as read.">Mark all read</button></div>
             <div class="notif-list">
-              <button class="notif-item unread" data-nav="lenders"><span class="ni-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></span><div class="ni-main"><div class="ni-t">New Gold partner — Newrez Wholesale</div><div class="ni-s">A new lender just joined the portal · 2h ago</div></div></button>
+              <button class="notif-item unread" data-nav="lenders"><span class="ni-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></span><div class="ni-main"><div class="ni-t">Featured lender — Newrez LLC</div><div class="ni-s">A new lender just joined the portal · 2h ago</div></div></button>
               <button class="notif-item unread" data-modal="escalate"><span class="ni-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/><circle cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg></span><div class="ni-main"><div class="ni-t">Your loan escalation was submitted to UWM</div><div class="ni-s">Report delivered to the lender · 5h ago</div></div></button>
               <button class="notif-item" data-nav="fuse"><span class="ni-ico i-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><div class="ni-main"><div class="ni-t">FUSE 2026 — early-bird pricing ends Friday</div><div class="ni-s">Manage your registration · 1d ago</div></div></button>
               <button class="notif-item" data-nav="resources"><span class="ni-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg></span><div class="ni-main"><div class="ni-t">New resource: Broker Power-Up Ep. 65</div><div class="ni-s">Just published · 2d ago</div></div></button>
@@ -295,9 +296,12 @@
         </div>
         <div class="filters" id="lender-filters">
           <button class="chip active" data-tier="all">All partners</button>
+          <button class="chip" data-tier="Title/Platinum">Title/Platinum</button>
           <button class="chip" data-tier="Gold">Gold</button>
           <button class="chip" data-tier="Silver">Silver</button>
           <button class="chip" data-tier="Bronze">Bronze</button>
+          <button class="chip" data-tier="Fuse Flex">Fuse Flex</button>
+          <button class="chip" data-tier="AIME Capital">AIME Capital</button>
           <select class="select filter-select" id="lender-product" title="Filter by product type"></select>
           <span class="count-note" id="lender-count" style="margin-left:auto;align-self:center">Showing all lenders</span>
         </div>
@@ -310,9 +314,14 @@
         <div class="filters" id="market-filters">
           <button class="chip active" data-filter="all">All categories</button>
           <button class="chip" data-filter="Core Partner">Core Partners</button>
-          <button class="chip" data-filter="Origination">Origination Tools</button>
-          <button class="chip" data-filter="Coaching">Coaching</button>
-          <button class="chip" data-filter="Marketing">Marketing</button>
+          <button class="chip" data-filter="Affiliate">Affiliates</button>
+          <button class="chip" data-filter="Coaching + Training">Coaching + Training</button>
+          <button class="chip" data-filter="Origination Tools">Origination Tools</button>
+          <button class="chip" data-filter="CRM">CRM</button>
+          <button class="chip" data-filter="Customer Retention">Customer Retention</button>
+          <button class="chip" data-filter="Compliance">Compliance</button>
+          <button class="chip" data-filter="Business Ops">Business Ops</button>
+          <button class="chip" data-filter="Banking">Banking</button>
           <span class="count-note" style="margin-left:auto;align-self:center">Showing all vendors</span>
         </div>
         <div class="card-grid" id="market-grid"></div>
@@ -628,7 +637,7 @@
       </div>
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p>Loans should be escalated only after you've exhausted standard channels with your AE. Your contact details are pre-filled from your profile.</p></div>
       <div class="form-section-label">Lender information</div>
-      <div class="field"><label>Which lender? <span class="req">*</span></label><select class="select"><option>Choose a lender…</option><option>United Wholesale Mortgage</option><option>EPM</option><option>Newrez</option><option>Windsor Mortgage</option></select></div>
+      <div class="field"><label>Which lender? <span class="req">*</span></label><select class="select"><option>Choose a lender…</option><option>United Wholesale Mortgage</option><option>Windsor Mortgage</option><option>Equity Prime Mortgage LLC</option><option>Newrez LLC</option><option>Cake Mortgage</option><option>eLend</option><option>RCN Capital</option><option>Newfi Wholesale</option><option>Gold Star Wholesale</option><option>PRMG</option><option>KIND Lending</option><option>MLB Wholesale</option><option>Verus Wholesale</option><option>FlipCo</option></select></div>
       <div class="field-row"><div class="field"><label>Loan number <span class="req">*</span></label><input class="input" placeholder="e.g. 100482910"></div><div class="field"><label>Loan type</label><select class="select"><option>Conventional</option><option>FHA</option><option>VA</option><option>Jumbo</option></select></div></div>
       <div class="field-row"><div class="field"><label>Loan amount</label><input class="input" placeholder="$0.00"></div><div class="field"><label>Closing date</label><input class="input" type="date"></div></div>
     </div>
@@ -644,7 +653,7 @@
     </div>
     <div class="modal-body">
       <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg><p>Your contact details below are pulled from your profile. Update them in Settings if anything has changed.</p></div>
-      <div class="field"><label>Which lender would you like to connect with? <span class="req">*</span></label><select class="select"><option>Select a lender partner…</option><option>United Wholesale Mortgage</option><option>EPM</option><option>Newrez</option><option>Newfi</option></select></div>
+      <div class="field"><label>Which lender would you like to connect with? <span class="req">*</span></label><select class="select"><option>Select a lender partner…</option><option>United Wholesale Mortgage</option><option>Windsor Mortgage</option><option>Equity Prime Mortgage LLC</option><option>Newrez LLC</option><option>Cake Mortgage</option><option>eLend</option><option>RCN Capital</option><option>Newfi Wholesale</option><option>Gold Star Wholesale</option><option>PRMG</option><option>KIND Lending</option><option>MLB Wholesale</option><option>Verus Wholesale</option><option>FlipCo</option></select></div>
       <div class="form-section-label">Your information</div>
       <div class="field"><label>Name</label><input class="input" value="Kyle Lord"></div>
       <div class="field-row"><div class="field"><label>Email</label><input class="input" value="kyle@aimegroup.com"></div><div class="field"><label>Phone number</label><input class="input" value="(555) 014-2278"></div></div>
@@ -661,7 +670,7 @@
       <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
     <div class="modal-body">
-      <div class="field"><label>Which lender? <span class="req">*</span></label><select class="select"><option>Choose a lender…</option><option>United Wholesale Mortgage</option><option>EPM</option><option>Newrez</option></select></div>
+      <div class="field"><label>Which lender? <span class="req">*</span></label><select class="select"><option>Choose a lender…</option><option>United Wholesale Mortgage</option><option>Windsor Mortgage</option><option>Equity Prime Mortgage LLC</option><option>Newrez LLC</option><option>Cake Mortgage</option><option>eLend</option><option>RCN Capital</option><option>Newfi Wholesale</option><option>Gold Star Wholesale</option><option>PRMG</option><option>KIND Lending</option><option>MLB Wholesale</option><option>Verus Wholesale</option><option>FlipCo</option></select></div>
       <div class="field"><label>Current Account Executive name</label><input class="input" placeholder="Type a name"></div>
       <div class="field"><label>Reason for change <span class="req">*</span></label><select class="select"><option>Choose a reason…</option><option>Unresponsive</option><option>Poor communication</option><option>Relocated / no longer my market</option><option>Other</option></select></div>
       <div class="field"><label>Tell us more</label><textarea class="input" placeholder="Describe the issue…"></textarea></div>
@@ -894,6 +903,7 @@
 <!-- Toast -->
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-msg">Done</span></div>
 
+<script src="content-data.js"></script>
 <script src="requests-store.js"></script>
 <script src="partner-store.js"></script>
 <script src="learning-paths-store.js"></script>

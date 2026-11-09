@@ -76,7 +76,7 @@
   }
   for (let i = 0; i < 64; i++) vendorRows.push({ type: 'Connection', member: pick(people).name, partner: pick(vendorNames), date: ago(3 + Math.floor(rnd() * 390)), status: 'Delivered', email: email(rnd() < 0.05) });
   // A couple of recent failures so the notification note has something to point at.
-  lenderRows.push({ type: 'Escalation', member: 'Janet Park', partner: 'Kind Lending', detail: 'Loan #100409881', date: ago(2), status: 'Received', email: 'Failed' });
+  lenderRows.push({ type: 'Escalation', member: 'Janet Park', partner: 'KIND Lending', detail: 'Loan #100409881', date: ago(2), status: 'Received', email: 'Failed' });
   vendorRows.push({ type: 'Connection', member: 'Tom Becker', partner: 'Lead Hackers', date: ago(1), status: 'Delivered', email: 'Failed' });
   const byDate = (a, b) => new Date(b.date) - new Date(a.date);
   lenderRows.sort(byDate); vendorRows.sort(byDate);

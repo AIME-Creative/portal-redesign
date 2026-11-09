@@ -276,7 +276,7 @@ window.HELP_ARTICLES = [
     body: `
       <ol class="kb-steps">
         <li>Open <strong>Lenders</strong> from the sidebar.</li>
-        <li>Use the <strong>tier</strong> chips (Gold, Silver, Bronze) and the <strong>product type</strong> menu to narrow the list.</li>
+        <li>Use the <strong>tier</strong> chips (Title/Platinum, Gold, Silver, Bronze, Fuse Flex, AIME Capital) and the <strong>product type</strong> menu to narrow the list.</li>
         <li>Open a lender to see their full product list, then connect or escalate from there.</li>
       </ol>
       <div class="kb-tip">Still not sure? Open a support ticket with your scenario — our team can point you to the best fit.</div>` },
@@ -341,11 +341,11 @@ window.HELP_ARTICLES = [
 
   { slug: 'event-registration', title: 'Registering or RSVPing for an event', category: 'events', popular: false,
     summary: 'Which events need registration, tickets and add-ons, guests, and changing your registration.',
-    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'refund', 'non-refundable', 'claim', 'upgrade', 'vip only'], minutes: 2, updated: 'Nov 4, 2026', status: 'Published',
+    tags: ['register', 'registration', 'rsvp', 'ticket', 'event', 'guest', 'guest email', 'early-bird', 'ascent', 'cancel registration', 'refund', 'non-refundable', 'claim', 'upgrade', 'vip only', 'sign up'], minutes: 2, updated: 'Nov 9, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Browse events', attr: 'data-nav="events"' }],
     body: `
-      <p>Events that take registrations show <strong>RSVP</strong> or <strong>Registration open</strong> on their card. Others don't need one — just add them to your calendar.</p>
+      <p>Events that take registrations show <strong>RSVP</strong> or <strong>Registration open</strong> on their card. Some events, like Mortgage Mornings, have you sign up on AIME's site instead — click <strong>Sign up</strong> on the event page and it opens in a new tab. Others don't need one — just add them to your calendar.</p>
       <ol class="kb-steps">
         <li>Open the event and click <strong>Register</strong> (or <strong>RSVP</strong> for free events).</li>
         <li>Your name, email, and phone come from your profile. Pick a ticket and any add-ons — prices show early-bird discounts while they last, and some tickets are included with your membership.</li>

@@ -41,15 +41,15 @@
   // Sample views per range. Each entry finds its item by name, so it opens the real page.
   // Newer things lead the short ranges; long-standing lenders and hubs lead the long ones.
   const SAMPLE = [
-    { kind: 'event', name: 'FUSE 2026 — National Conference', views: { 7: 2184, 30: 6420, 90: 11380, ytd: 19650, all: 24310 } },
-    { kind: 'lender', name: 'Newrez Wholesale', views: { 7: 1630, 30: 2870, 90: 2870, ytd: 2870, all: 2870 } },
+    { kind: 'event', name: 'Fuse 2026', views: { 7: 2184, 30: 6420, 90: 11380, ytd: 19650, all: 24310 } },
+    { kind: 'lender', name: 'Newrez LLC', views: { 7: 1630, 30: 2870, 90: 2870, ytd: 2870, all: 2870 } },
     { kind: 'hub', hub: 'ascent', views: { 7: 1412, 30: 4980, 90: 12040, ytd: 30120, all: 41870 } },
-    { kind: 'resource', name: 'Broker Power-Up: Episode 65', views: { 7: 1275, 30: 1990, 90: 1990, ytd: 1990, all: 1990 } },
+    { kind: 'resource', name: 'Broker Power-Up Podcast: Episode 65', views: { 7: 1275, 30: 1990, 90: 1990, ytd: 1990, all: 1990 } },
     { kind: 'lender', name: 'United Wholesale Mortgage', views: { 7: 1108, 30: 5210, 90: 15870, ytd: 38940, all: 96420 } },
-    { kind: 'resource', name: 'Using AI to Pre-Qualify Borrowers', views: { 7: 964, 30: 3640, 90: 7210, ytd: 9880, all: 9880 } },
-    { kind: 'market', name: 'Arive', views: { 7: 871, 30: 3120, 90: 8930, ytd: 17460, all: 33150 } },
+    { kind: 'resource', name: 'AI-Powered Retention and Growth Tech', views: { 7: 964, 30: 3640, 90: 7210, ytd: 9880, all: 9880 } },
+    { kind: 'market', name: 'ARIVE', views: { 7: 871, 30: 3120, 90: 8930, ytd: 17460, all: 33150 } },
     { kind: 'hub', hub: 'mortgagemornings', views: { 7: 702, 30: 3305, 90: 10120, ytd: 27310, all: 58740 } },
-    { kind: 'lender', name: 'EPM', views: { 7: 655, 30: 2980, 90: 9460, ytd: 22080, all: 51230 } },
+    { kind: 'lender', name: 'Equity Prime Mortgage LLC', views: { 7: 655, 30: 2980, 90: 9460, ytd: 22080, all: 51230 } },
     { kind: 'hub', hub: 'brokersedge', views: { 7: 540, 30: 2410, 90: 8770, ytd: 24950, all: 62810 } },
   ];
   function rows() {

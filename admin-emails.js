@@ -72,7 +72,7 @@
   const carlos = P('Carlos Diaz', 'carlos@diazcapital.com', { plan: 'Elite', amount: '$69.99/mo', renews: 'Jul 5, 2026' });
   const beth = P('Beth Coleman', 'beth@colemanloans.cm', { plan: 'Premium', amount: '$19.99/mo', renews: '—' });
   const janet = P('Janet Park', 'jpark@parklending.com', { plan: 'Premium', amount: '$19.99/mo', renews: 'Jul 9, 2026' });
-  const marcus = P('Marcus Lee', 'marcus.lee@epm.net', { plan: '—', company: 'EPM' });
+  const marcus = P('Marcus Lee', 'marcus.lee@epm.net', { plan: '—', company: 'Equity Prime Mortgage LLC' });
   let emails = [
     row(0, 1, 'reset', kyle, 'clicked'),
     row(0, 3, 'magic', priya, 'delivered'),

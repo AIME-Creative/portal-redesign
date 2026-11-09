@@ -5,13 +5,13 @@
 
 /* ---------- Taxonomies (managed in Categories & tags) ---------- */
 const taxonomies = {
-  lenderProducts:    ["Conventional","FHA","VA","Jumbo","Non-QM","USDA","DSCR","Bank Stmt","Renovation","Reverse","Fix & Flip","Bridge"],
-  vendorCategories:  ["Core Partner","Origination","Coaching","Marketing"],
+  lenderProducts:    [...new Set(AMP_CONTENT.lenders.flatMap(l => l.tags))].sort(),
+  vendorCategories:  [...new Set(AMP_CONTENT.vendors.map(v => v.cat))].sort(),
   vendorProducts:    ["AI","Ads","Analytics","Appraisal","Automation","CRM","Coaching","Credit","Data","Funnels","Guidelines","LOS","Leads","Ops","POS","Presentations","Savings","Scaling","Scenarios","Staffing","VOE","Verifications"],
-  resourceTypes:     ["Podcast","Webinar","Training","Recording","Certification"],
+  resourceTypes:     ["Podcast","Webinar","Training","Video","Document","Recording","Certification"],
   resourceTopics:    ["AI & Technology","AIME Community","Business Planning & Numbers","Compliance & Ethics","Leadership & Team","Leads & Referral Partners","Loan Products & Guidelines","Marketing & Personal Brand","Mindset & Habits","Operations & Systems","Sales & Conversations"],
   learningGoals:     ["Start Here","Get More Business","Close More Loans","Run & Grow Your Business","Mindset & Habits"],
-  learningShows:     ["Mortgage Mornings","Broker Power-Up","Broker to Broker","Women's Mortgage Network","AIME Accelerate"],
+  learningShows:     ["Mortgage Mornings","Broker Power-Up","Broker to Broker","Women's Mortgage Network","AIME Accelerate","Loan Officer Experience","AIME To Serve"],
   eventTypes:        ["Virtual","In person","Training"],
 };
 const taxMeta = {
@@ -25,61 +25,30 @@ const taxMeta = {
   eventTypes:       { label:"Event types",           sub:"Used to label and filter events." },
 };
 
-/* ---------- Content data ---------- */
-const tierBadge = { Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze" };
-const lenders = [
-  { name:"United Wholesale Mortgage", bio:"The #1 wholesale lender in the nation, delivering state-of-the-art technology and unrivaled client service to independent mortgage brokers.", short:"UWM", tier:"Gold", color:"#0b1f5b", products:["Conventional","FHA","VA","Jumbo","Non-QM"], status:"Active" },
-  { name:"EPM", bio:"Equity Prime Mortgage \u2014 fast, broker-first wholesale lending with a full product menu and dedicated support.", short:"EPM", tier:"Gold", color:"#1b7a4a", products:["Conventional","FHA","VA","USDA"], status:"Active" },
-  { name:"Windsor Mortgage", bio:"Boutique wholesale lender specializing in non-QM and jumbo products for independent brokers.", short:"WM", tier:"Gold", color:"#3a3a3a", products:["Non-QM","Jumbo","DSCR"], status:"Active" },
-  { name:"Newrez Wholesale", bio:"A leading national lender offering a broad product suite and dedicated broker support.", short:"NRZ", tier:"Gold", color:"#e0463c", products:["Conventional","FHA","VA","Renovation"], status:"Active" },
-  { name:"Newfi Wholesale", bio:"Tech-forward lender focused on non-QM, bank-statement, and investor loans.", short:"NF", tier:"Silver", color:"#163a85", products:["Non-QM","Bank Stmt","DSCR"], status:"Active" },
-  { name:"Cake Mortgage", bio:"Modern wholesale platform with a slice of every product and a fast, digital process.", short:"CK", tier:"Silver", color:"#2bb673", products:["Conventional","Non-QM","Jumbo"], status:"Active" },
-  { name:"eLEND", bio:"Diverse loan options with a focus on first-time and government-backed buyers.", short:"eL", tier:"Silver", color:"#1893b1", products:["FHA","VA","USDA","Conventional"], status:"Active" },
-  { name:"RCN Capital", bio:"Nationwide private lender for real estate investors \u2014 fix & flip, bridge, and rental loans.", short:"RCN", tier:"Bronze", color:"#0b2a5b", products:["Fix & Flip","Bridge","DSCR"], status:"Active" },
-  { name:"Kind Lending", bio:"Broker-focused lender with a kind, tech-enabled experience across agency and non-QM products.", short:"KIND", tier:"Gold", color:"#e0982a", products:["Conventional","FHA","VA","Non-QM"], status:"Active" },
-  { name:"Rocket Pro TPO", bio:"High-volume national lender with deep technology and marketing support for brokers.", short:"RKT", tier:"Gold", color:"#d6322e", products:["Conventional","FHA","VA","Jumbo"], status:"Active" },
-  { name:"Plaza Home Mortgage", bio:"Full-service wholesale lender known for its renovation and reverse mortgage programs.", short:"PLZ", tier:"Silver", color:"#15467e", products:["Renovation","Jumbo","Reverse","FHA"], status:"Active" },
-  { name:"Home Point", bio:"Relationship-driven lender with competitive agency and government pricing.", short:"HP", tier:"Silver", color:"#1b9d6b", products:["Conventional","FHA","USDA"], status:"Draft" },
-  { name:"Angel Oak", bio:"The leader in non-QM lending \u2014 bank statement, DSCR, and asset-qualifier loans.", short:"AO", tier:"Bronze", color:"#3a6b35", products:["Non-QM","Bank Stmt","DSCR"], status:"Active" },
-  { name:"Quontic Wholesale", bio:"Digital bank offering common-sense non-QM and bank-statement loans.", short:"QW", tier:"Bronze", color:"#0b2a5b", products:["Non-QM","Bank Stmt"], status:"Active" },
-];
-const vendors = [
-  { name:"Advantage Partners Solutions", bio:"National mortgage Consumer Reporting Agency built to support lenders at every stage of the loan process.", tags:["Credit", "Verifications"], short:"APS", cat:"Core Partner", offer:"Up to 20% off credit reports", status:"Active" },
-  { name:"APS Verification Services", bio:"Employment, income, and asset verifications from Advantage Partners Solutions.", tags:["Verifications", "VOE"], short:"APS", cat:"Core Partner", offer:"Member pricing on VOE / VOI bundles", status:"Active" },
-  { name:"Ask Mindy", bio:"On-demand scenario desk and guideline help for tough loan files.", tags:["Scenarios", "Guidelines"], short:"AM", cat:"Origination", offer:"Free for AIME members", status:"Active" },
-  { name:"Waive Inspection Fee", bio:"Member benefit that waives appraisal inspection fees on qualifying loans.", tags:["Appraisal", "Savings"], short:"WIF", cat:"Origination", offer:"$0 inspection fee on qualifying loans", status:"Active" },
-  { name:"Arive", bio:"All-in-one mortgage POS and LOS platform with member pricing.", tags:["POS", "LOS"], short:"AR", cat:"Origination", offer:"Member pricing on Pro plans", status:"Active" },
-  { name:"BrokerVA", bio:"Trained virtual assistants who specialize in mortgage operations.", tags:["Staffing", "Ops"], short:"BVA", cat:"Coaching", offer:"Waived placement fee", status:"Active" },
-  { name:"Cotality", bio:"Property data, analytics, and verification tools for brokers.", tags:["Data", "Analytics"], short:"CO", cat:"Origination", offer:"Member-only data bundles", status:"Active" },
-  { name:"Direct Authority AI", bio:"AI-powered lead generation and nurture built for loan officers.", tags:["AI", "Leads"], short:"DAi", cat:"Marketing", offer:"First month free", status:"Active" },
-  { name:"Lead Hackers", bio:"Done-for-you paid media and funnels for mortgage pros.", tags:["Ads", "Funnels"], short:"LH", cat:"Marketing", offer:"Discounted setup", status:"Active" },
-  { name:"Xactus", bio:"Verification and credit solutions trusted across the mortgage industry.", tags:["Credit", "Verifications"], short:"XAC", cat:"Core Partner", offer:"Member pricing on verifications", status:"Active" },
-  { name:"The CORE Training", bio:"Performance coaching program for top-producing originators and teams.", tags:["Coaching", "Scaling"], short:"CORE", cat:"Coaching", offer:"Discounted enrollment", status:"Active" },
-  { name:"Mortgage Coach", bio:"Interactive presentations that help borrowers understand their options.", tags:["Presentations", "Coaching"], short:"MC", cat:"Coaching", offer:"Free trial + member rate", status:"Draft" },
-  { name:"Surefire CRM", bio:"Mortgage CRM and marketing automation built for loan officers.", tags:["CRM", "Automation"], short:"SF", cat:"Marketing", offer:"Setup fee waived", status:"Active" },
-];
-// `collection` assigns a resource to a hub (— = none); `topic` is an optional topic tag.
+/* ---------- Content data ----------
+   Lenders, Market products, resources and events are the real items from the
+   production portal (content-data.js, generated from Supabase) — the same lists
+   the member app shows. Hub-only items and placeholder events demo new features. */
+const tierBadge = { "Title/Platinum":"badge-platinum", Gold:"badge-gold", Silver:"badge-silver", Bronze:"badge-bronze", "Fuse Flex":"badge-flex", "AIME Capital":"badge-capital" };
+const shortDate = (iso) => { const d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); };
+const lenders = AMP_CONTENT.lenders.map(l => ({ name:l.name, bio:l.desc, short:l.short, tier:l.tier, color:l.color, products:l.tags.slice(), logo:l.logo, status:"Active" }));
+const vendors = AMP_CONTENT.vendors.map(v => ({ name:v.name, bio:v.desc, tags:v.tags.slice(), short:v.short, cat:v.cat, offer:v.offer, logo:v.logo,
+  access:v.access.slice(), status:"Active" }));
+// `collection` assigns a resource to a hub (— = none); `topic` is the Vault topic.
 const resources = [
-  { title:"The 'Daily Six' Challenge (Part 3)", type:"Podcast", dur:"28 min", pub:"Jun 20, 2026", collection:"—", topic:"Sales", status:"Active" },
-  { title:"Broker to Broker — Episode 251", type:"Podcast", dur:"41 min", pub:"Jun 18, 2026", collection:"—", topic:"—", status:"Active" },
-  { title:"Broker Power-Up: Episode 65", type:"Webinar", dur:"52 min", pub:"Jun 15, 2026", collection:"—", topic:"Marketing", status:"Active" },
-  { title:"Mortgage Mornings — June 17, 2026", type:"Recording", dur:"35 min", pub:"Jun 17, 2026", collection:"—", topic:"—", status:"Active" },
-  { title:"Women's Mortgage Network Podcast", type:"Podcast", dur:"33 min", pub:"Jun 12, 2026", collection:"WMN", topic:"—", status:"Active" },
-  { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"—", status:"Active" },
-  { title:"Ascent — Leading at Scale", access:["VIP"], hubOnly:true, type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"—", status:"Active" },
-  { title:"Scaling Past $1M in Volume", type:"Training", dur:"47 min", pub:"Jun 2, 2026", collection:"—", topic:"Sales", status:"Active" },
-  { title:"Using AI to Pre-Qualify Borrowers", type:"Webinar", dur:"39 min", pub:"Jun 5, 2026", collection:"—", topic:"AI Strategy", status:"Active" },
-  { title:"Compliance Corner — Q3 Update", type:"Webinar", dur:"38 min", pub:"Jun 24, 2026", collection:"—", topic:"—", status:"Draft" },
-  { title:"Building Your Referral Engine", type:"Training", dur:"45 min", pub:"—", collection:"—", topic:"Marketing", status:"Draft" },
+  ...AMP_CONTENT.resources.map(r => ({ title:r.title, type:r.type, dur:r.sub || r.series, pub:shortDate(r.pub), collection:"—", topic:r.topic,
+    access:r.access.slice(), graphic:r.img, status:"Active" })),
+  // Hub content (placeholders — hubs are new)
+  { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"Loan Products & Guidelines", status:"Active" },
+  { title:"Ascent — Leading at Scale", access:["VIP"], hubOnly:true, type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"Leadership & Team", status:"Active" },
 ];
-// `hub` assigns an event to a hub (— = appears only on the main Events page/calendar).
+// `hub` assigns an event to a hub (— = appears only on the main Events page/calendar). regs = sample counts.
+const SAMPLE_REGS = { "AIME Accelerate - Identity Reset":842, "AIME Accelerate - Win the Day, Win the Week":770, "AIME Accelerate - Run Toward It":615,
+  "AIME Accelerate - Compound":308, "Mortgage Mornings":412, "Fuse 2026":1204, "Fuse 2027":96 };
 const events = [
-  { title:"AIME Accelerate — Identity Reset", date:"Jun 6, 2026", type:"Virtual", hub:"—", regs:842, status:"Active" },
-  { title:"AIME Accelerate — Win the Day", date:"Jun 15, 2026", type:"Virtual", hub:"—", regs:770, status:"Active" },
-  { title:"AIME Accelerate — Run Toward It", date:"Jun 22, 2026", type:"Virtual", hub:"—", regs:615, status:"Active" },
-  { title:"Mortgage Mornings — Live", date:"Jul 1, 2026", type:"Virtual", hub:"—", regs:412, status:"Active" },
-  { title:"AIME Accelerate — Compound", date:"Jun 29, 2026", type:"Training", hub:"—", regs:308, status:"Active" },
-  { title:"FUSE 2026 — National Conference", date:"Sep 24, 2026", type:"In person", hub:"—", regs:1204, status:"Active" },
+  ...AMP_CONTENT.events.map(e => ({ title:e.title, date:`${e.date.charAt(0)}${e.date.slice(1,3).toLowerCase()} ${e.date.split(' ')[1]}, ${e.year || 2026}`, type:e.type, hub:"—",
+    regs:SAMPLE_REGS[e.title] || 0, access:(e.access || ["All Members"]).slice(), graphic:e.img, signup:e.signup || "", status:"Active" })),
+  // Placeholders — hub events and event-registration demos
   { title:"VIP Quarterly Mastermind", access:["VIP"], date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
   { title:"WMN Monthly Meetup", date:"Jul 9, 2026", type:"Virtual", hub:"WMN", regs:138, status:"Active" },
   { title:"Regional Mixer — Dallas", date:"Aug 12, 2026", type:"In person", hub:"—", regs:86, status:"Active" },
@@ -153,41 +122,41 @@ const reqTypeMeta = {
 /* ---------- Analytics records ---------- */
 const escalationRecords = [
   { member:"Maria Chen", lender:"United Wholesale Mortgage", loan:"100482910", date:"Jun 24, 2026", status:"Received" },
-  { member:"Carlos Diaz", lender:"Newrez Wholesale", loan:"100471552", date:"Jun 22, 2026", status:"Responded" },
-  { member:"Ahmed Sayed", lender:"EPM", loan:"100460318", date:"Jun 21, 2026", status:"Received" },
+  { member:"Carlos Diaz", lender:"Newrez LLC", loan:"100471552", date:"Jun 22, 2026", status:"Responded" },
+  { member:"Ahmed Sayed", lender:"Equity Prime Mortgage LLC", loan:"100460318", date:"Jun 21, 2026", status:"Received" },
   { member:"Priya Nair", lender:"United Wholesale Mortgage", loan:"100455201", date:"Jun 19, 2026", status:"Resolved" },
   { member:"Sam Whitfield", lender:"Windsor Mortgage", loan:"100451090", date:"Jun 18, 2026", status:"Received" },
   { member:"Kyle Lord", lender:"United Wholesale Mortgage", loan:"100448817", date:"Jun 16, 2026", status:"Resolved" },
-  { member:"Rachel Stone", lender:"EPM", loan:"100442204", date:"Jun 14, 2026", status:"Resolved" },
-  { member:"Alicia Gomez", lender:"Newrez Wholesale", loan:"100439912", date:"Jun 12, 2026", status:"Received" },
+  { member:"Rachel Stone", lender:"Equity Prime Mortgage LLC", loan:"100442204", date:"Jun 14, 2026", status:"Resolved" },
+  { member:"Alicia Gomez", lender:"Newrez LLC", loan:"100439912", date:"Jun 12, 2026", status:"Received" },
   { member:"Janet Park", lender:"Newfi Wholesale", loan:"100431774", date:"Jun 10, 2026", status:"Resolved" },
   { member:"Darnell Ross", lender:"United Wholesale Mortgage", loan:"100428650", date:"Jun 8, 2026", status:"Resolved" },
   { member:"Maria Chen", lender:"Cake Mortgage", loan:"100421039", date:"Jun 5, 2026", status:"Resolved" },
-  { member:"Tom Becker", lender:"EPM", loan:"100417788", date:"Jun 3, 2026", status:"Resolved" },
+  { member:"Tom Becker", lender:"Equity Prime Mortgage LLC", loan:"100417788", date:"Jun 3, 2026", status:"Resolved" },
 ];
 const connectionRecords = [
-  { member:"Darnell Ross", partner:"EPM", kind:"Lender", date:"Jun 24, 2026", status:"Delivered" },
+  { member:"Darnell Ross", partner:"Equity Prime Mortgage LLC", kind:"Lender", date:"Jun 24, 2026", status:"Delivered" },
   { member:"Janet Park", partner:"Newfi Wholesale", kind:"Lender", date:"Jun 23, 2026", status:"Delivered" },
   { member:"Priya Nair", partner:"Advantage Partners Solutions", kind:"Vendor", date:"Jun 22, 2026", status:"Delivered" },
   { member:"Sam Whitfield", partner:"United Wholesale Mortgage", kind:"Lender", date:"Jun 20, 2026", status:"Delivered" },
-  { member:"Kyle Lord", partner:"Arive", kind:"Vendor", date:"Jun 19, 2026", status:"Delivered" },
-  { member:"Alicia Gomez", partner:"Surefire CRM", kind:"Vendor", date:"Jun 17, 2026", status:"Delivered" },
-  { member:"Carlos Diaz", partner:"Newrez Wholesale", kind:"Lender", date:"Jun 15, 2026", status:"Delivered" },
+  { member:"Kyle Lord", partner:"ARIVE", kind:"Vendor", date:"Jun 19, 2026", status:"Delivered" },
+  { member:"Alicia Gomez", partner:"Leaf360", kind:"Vendor", date:"Jun 17, 2026", status:"Delivered" },
+  { member:"Carlos Diaz", partner:"Newrez LLC", kind:"Lender", date:"Jun 15, 2026", status:"Delivered" },
   { member:"Rachel Stone", partner:"BrokerVA", kind:"Vendor", date:"Jun 13, 2026", status:"Delivered" },
   { member:"Ahmed Sayed", partner:"United Wholesale Mortgage", kind:"Lender", date:"Jun 11, 2026", status:"Delivered" },
-  { member:"Maria Chen", partner:"The CORE Training", kind:"Vendor", date:"Jun 9, 2026", status:"Delivered" },
-  { member:"Beth Coleman", partner:"EPM", kind:"Lender", date:"Jun 6, 2026", status:"Delivered" },
+  { member:"Maria Chen", partner:"The Defining Difference", kind:"Vendor", date:"Jun 9, 2026", status:"Delivered" },
+  { member:"Beth Coleman", partner:"Equity Prime Mortgage LLC", kind:"Lender", date:"Jun 6, 2026", status:"Delivered" },
 ];
 const changeAERecords = [
   { member:"Tom Becker", lender:"United Wholesale Mortgage", ae:"Dana Price", reason:"Poor communication", date:"Jun 24, 2026", status:"Delivered" },
   { member:"Kyle Lord", lender:"United Wholesale Mortgage", ae:"Brett Hollis", reason:"Unresponsive", date:"Jun 13, 2026", status:"Delivered" },
-  { member:"Priya Nair", lender:"EPM", ae:"Grant Ellis", reason:"Relocated / no longer my market", date:"Jun 11, 2026", status:"Delivered" },
-  { member:"Carlos Diaz", lender:"Newrez Wholesale", ae:"Mia Torres", reason:"Unresponsive", date:"Jun 6, 2026", status:"Delivered" },
+  { member:"Priya Nair", lender:"Equity Prime Mortgage LLC", ae:"Grant Ellis", reason:"Relocated / no longer my market", date:"Jun 11, 2026", status:"Delivered" },
+  { member:"Carlos Diaz", lender:"Newrez LLC", ae:"Mia Torres", reason:"Unresponsive", date:"Jun 6, 2026", status:"Delivered" },
   { member:"Janet Park", lender:"Windsor Mortgage", ae:"Ray Quinn", reason:"Poor communication", date:"May 29, 2026", status:"Delivered" },
   { member:"Sam Whitfield", lender:"United Wholesale Mortgage", ae:"Dana Price", reason:"Unresponsive", date:"May 21, 2026", status:"Delivered" },
-  { member:"Rachel Stone", lender:"Kind Lending", ae:"Owen Pike", reason:"Other", date:"May 12, 2026", status:"Delivered" },
-  { member:"Ahmed Sayed", lender:"EPM", ae:"Grant Ellis", reason:"Unresponsive", date:"Apr 30, 2026", status:"Delivered" },
-  { member:"Darnell Ross", lender:"Rocket Pro TPO", ae:"Lena Moss", reason:"Poor communication", date:"Apr 18, 2026", status:"Delivered" },
+  { member:"Rachel Stone", lender:"KIND Lending", ae:"Owen Pike", reason:"Other", date:"May 12, 2026", status:"Delivered" },
+  { member:"Ahmed Sayed", lender:"Equity Prime Mortgage LLC", ae:"Grant Ellis", reason:"Unresponsive", date:"Apr 30, 2026", status:"Delivered" },
+  { member:"Darnell Ross", lender:"PRMG", ae:"Lena Moss", reason:"Poor communication", date:"Apr 18, 2026", status:"Delivered" },
 ];
 
 /* Subscription conversions (Reports → Subscriptions). Sample history generated
@@ -241,10 +210,10 @@ function allSubscriptionEvents(){
 
 /* ---------- Featured (curated for the member home screen) ---------- */
 let featuredItems = [
-  { kind:"Lender",   item:"Newrez Wholesale",                note:"Just joined as a Gold partner" },
-  { kind:"Resource", item:"AIME Accelerate — Identity Reset", note:"New training added" },
-  { kind:"Market",   item:"Waive Inspection Fee",            note:"New member deal" },
-  { kind:"Event",    item:"FUSE 2026",                       note:"Tickets on sale now" },
+  { kind:"Lender",   item:"Newrez LLC",                note:"Featured Silver lender" },
+  { kind:"Resource", item:"The 'Daily Six' Challenge (Part 3)", note:"New from AIME Accelerate" },
+  { kind:"Market",   item:"Advantage Partners Solutions Waived Inspection Fee", note:"Member deal" },
+  { kind:"Event",    item:"Fuse 2026",                       note:"Tickets on sale now" },
 ];
 const kindBadge = { Lender:"badge-navy", Resource:"badge-pink", Market:"badge-cyan", Event:"badge-amber" };
 
@@ -260,30 +229,31 @@ const admins = [
 
 /* ---------- Engagement (last 30 days) ---------- */
 const engResources = [
-  { name:"Broker to Broker — Episode 251", sub:"Podcast", val:1840 },
-  { name:"AIME Accelerate — Identity Reset", sub:"Training", val:1520 },
-  { name:"Broker Power-Up: Episode 65", sub:"Webinar", val:1190 },
-  { name:"Mortgage Mornings — June 17", sub:"Webinar", val:980 },
+  { name:"Broker to Broker Podcast: Episode 251", sub:"Podcast", val:1840 },
+  { name:"The 'Daily Six' Challenge", sub:"Training", val:1520 },
+  { name:"Broker Power-Up Podcast: Episode 65", sub:"Podcast", val:1190 },
+  { name:"Mortgage Mornings | June 17th, 2026", sub:"Podcast", val:980 },
   { name:"The 'Daily Six' Challenge (Part 3)", sub:"Podcast", val:760 },
 ];
 const engLenders = [
   { name:"United Wholesale Mortgage", sub:"42 escalations", val:1240 },
-  { name:"EPM", sub:"21 escalations", val:720 },
-  { name:"Newrez Wholesale", sub:"18 escalations", val:540 },
+  { name:"Equity Prime Mortgage LLC", sub:"21 escalations", val:720 },
+  { name:"Newrez LLC", sub:"18 escalations", val:540 },
   { name:"Windsor Mortgage", sub:"7 escalations", val:360 },
   { name:"Newfi Wholesale", sub:"9 escalations", val:290 },
 ];
 const engVendors = [
   { name:"Advantage Partners Solutions", sub:"Core Partner", val:418 },
-  { name:"Arive", sub:"Origination", val:362 },
-  { name:"Surefire CRM", sub:"Marketing", val:291 },
+  { name:"ARIVE", sub:"Origination", val:362 },
+  { name:"Leaf360", sub:"Marketing", val:291 },
   { name:"BrokerVA", sub:"Coaching", val:205 },
   { name:"Direct Authority AI", sub:"Marketing", val:188 },
 ];
+engVendors.forEach(v => { const c = AMP_CONTENT.vendors.find(x => x.name === v.name); if(c) v.sub = c.cat; });
 const engEscalations = [
   { name:"United Wholesale Mortgage", val:42 },
-  { name:"EPM", val:21 },
-  { name:"Newrez Wholesale", val:18 },
+  { name:"Equity Prime Mortgage LLC", val:21 },
+  { name:"Newrez LLC", val:18 },
   { name:"Newfi Wholesale", val:9 },
   { name:"Windsor Mortgage", val:7 },
 ];
@@ -343,9 +313,9 @@ let coupons = [
 
 /* ---------- Notifications (admin broadcasts) ---------- */
 const sentNotifications = [
-  { title:"New Gold partner: Newrez Wholesale", audience:"All members", type:"Announcement", sent:"2h ago", recipients:"1,210" },
+  { title:"New Fuse Flex lender: Verus Wholesale", audience:"All members", type:"Announcement", sent:"2h ago", recipients:"1,210" },
   { title:"FUSE early-bird ends Sept 1", audience:"Elite + VIP", type:"Promotion", sent:"Yesterday", recipients:"937" },
-  { title:"New training: Scaling Past $1M in Volume", audience:"All members", type:"Update", sent:"3d ago", recipients:"1,210" },
+  { title:"New training: Paul Olbrantz: Fund Over $200M in 14 Months", audience:"All members", type:"Update", sent:"3d ago", recipients:"1,210" },
   { title:"VIP Luncheon seats filling up", audience:"VIP only", type:"Info", sent:"5d ago", recipients:"131" },
   { title:"Mortgage Mornings is live now", audience:"All members", type:"Info", sent:"1w ago", recipients:"1,210" },
 ];
@@ -766,16 +736,19 @@ function renderJourneys(){
 // Unique page views ≈ 62% of page views, per tier (matches the who-viewed page in admin-partner-reports.js).
 const vendorClicks = [
   { name:"Direct Authority AI",          short:"DAi",  cat:"Marketing",    tiers:{premium:548,elite:402,vip:124}, connections:142 },
-  { name:"Waive Inspection Fee",         short:"WIF",  cat:"Origination",  tiers:{premium:360,elite:360,vip:122}, connections:120 },
+  { name:"Advantage Partners Solutions Waived Inspection Fee",         short:"WIF",  cat:"Origination",  tiers:{premium:360,elite:360,vip:122}, connections:120 },
   { name:"Lead Hackers",                 short:"LH",   cat:"Marketing",    tiers:{premium:360,elite:266,vip:80},  connections:96 },
-  { name:"Arive",                        short:"AR",   cat:"Origination",  tiers:{premium:230,elite:200,vip:68},  connections:73 },
-  { name:"The CORE Training",            short:"CORE", cat:"Coaching",     tiers:{premium:120,elite:180,vip:102}, connections:51 },
-  { name:"Xactus",                       short:"XAC",  cat:"Core Partner", tiers:{premium:150,elite:130,vip:50},  connections:44 },
-  { name:"Ask Mindy",                    short:"AM",   cat:"Origination",  tiers:{premium:130,elite:118,vip:40},  connections:39 },
+  { name:"ARIVE",                        short:"AR",   cat:"Origination",  tiers:{premium:230,elite:200,vip:68},  connections:73 },
+  { name:"The Defining Difference",            short:"CORE", cat:"Coaching",     tiers:{premium:120,elite:180,vip:102}, connections:51 },
+  { name:"Pre-Fi",                       short:"XAC",  cat:"Core Partner", tiers:{premium:150,elite:130,vip:50},  connections:44 },
+  { name:"Advantage Partners Solutions Ask Mindy",                    short:"AM",   cat:"Origination",  tiers:{premium:130,elite:118,vip:40},  connections:39 },
   { name:"Advantage Partners Solutions", short:"APS",  cat:"Core Partner", tiers:{premium:96,elite:86,vip:30},   connections:28 },
   { name:"BrokerVA",                     short:"BVA",  cat:"Coaching",     tiers:{premium:50,elite:70,vip:40},    connections:21 },
   { name:"Cotality",                     short:"CO",   cat:"Origination",  tiers:{premium:55,elite:48,vip:18},    connections:15 },
 ];
+// Category, initials and logo come from the real Market product.
+const contentVendor = (name) => AMP_CONTENT.vendors.find(x => x.name === name);
+vendorClicks.forEach(v => { const c = contentVendor(v.name); if(c) Object.assign(v, { cat:c.cat, short:c.short, logo:c.logo }); });
 const vendorUnique = (n) => Math.max(n ? 1 : 0, Math.round(n * 0.62));
 function renderVendorClicks(){
   const f = ranges.vendorclicks.days/30;

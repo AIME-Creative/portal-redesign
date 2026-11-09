@@ -20,12 +20,14 @@
    company_id; contacts on the listing; page views from Mixpanel.
    ============================================================ */
 (function () {
-  const KEY = 'amp-partners-v2';   // v2: no Deactivated status (users are removed instead)
+  const KEY = 'amp-partners-v3';   // v3: real lender / vendor names (v2: no Deactivated status)
   const TIERS = ['Premium', 'Elite', 'VIP'];
   const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '');
 
-  // Market products that belong to a different company name (everything else: product = company)
-  const PRODUCT_COMPANY = { 'APS Verification Services': 'Advantage Partners Solutions' };
+  // Market products that belong to a different company name (everything else: product = company),
+  // e.g. the three Advantage Partners Solutions member deals. From content-data.js (company field).
+  const PRODUCT_COMPANY = {};
+  ((window.AMP_CONTENT && AMP_CONTENT.vendors) || []).forEach((v) => { if (v.company && v.company !== v.name) PRODUCT_COMPANY[v.name] = v.company; });
   const companyOf = (product) => PRODUCT_COMPANY[product] || product;
 
   // Who each request type is sent to, per company (set on the lender / vendor listing). Each type is a list —
@@ -37,12 +39,12 @@
       connection: [{ name: 'Chris Morales', email: 'chris.morales@uwm.com' }],
       changeae:   [{ name: 'Tasha Greene', email: 'tasha.greene@uwm.com' }, { name: 'Chris Morales', email: 'chris.morales@uwm.com' }],
     },
-    'EPM': {
+    'Equity Prime Mortgage LLC': {
       escalation: [{ name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' }],
       connection: [{ name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' }],
       changeae:   [{ name: 'Marcus Lee', email: 'wholesale.escalations@epm.net' }],
     },
-    'Newrez Wholesale': { escalation: [{ name: 'TPO escalations', email: 'tpo.escalations@newrez.com' }] },
+    'Newrez LLC': { escalation: [{ name: 'TPO escalations', email: 'tpo.escalations@newrez.com' }] },
     'Newrez': { escalation: [{ name: 'TPO escalations', email: 'tpo.escalations@newrez.com' }] },
     'Windsor Mortgage': { escalation: [{ name: 'Escalations', email: 'escalate@windsormortgage.com' }, { name: 'Priya Shah', email: 'priya.shah@windsormortgage.com' }] },
     'Advantage Partners Solutions': { connection: [{ name: 'Morgan Reyes', email: 'morgan.reyes@advantagepartners.com' }] },
@@ -84,10 +86,10 @@
   const seedUsers = () => [
     { id: 'PU-101', first: 'Dana', last: 'Whitaker', email: 'dana.whitaker@uwm.com', phone: '(555) 410-2210', type: 'Lender', company: 'United Wholesale Mortgage', status: 'Active', lastLogin: '2h ago' },
     { id: 'PU-102', first: 'Chris', last: 'Morales', email: 'chris.morales@uwm.com', phone: '(555) 410-2288', type: 'Lender', company: 'United Wholesale Mortgage', status: 'Active', lastLogin: 'Yesterday' },
-    { id: 'PU-103', first: 'Marcus', last: 'Lee', email: 'marcus.lee@epm.net', phone: '(555) 302-7741', type: 'Lender', company: 'EPM', status: 'Invited', lastLogin: '—' },
+    { id: 'PU-103', first: 'Marcus', last: 'Lee', email: 'marcus.lee@epm.net', phone: '(555) 302-7741', type: 'Lender', company: 'Equity Prime Mortgage LLC', status: 'Invited', lastLogin: '—' },
     { id: 'PU-104', first: 'Morgan', last: 'Reyes', email: 'morgan.reyes@advantagepartners.com', phone: '(555) 619-4420', type: 'Vendor', company: 'Advantage Partners Solutions', status: 'Active', lastLogin: '5h ago' },
-    { id: 'PU-105', first: 'Taylor', last: 'Brooks', email: 'taylor.brooks@arive.com', phone: '(555) 845-3307', type: 'Vendor', company: 'Arive', status: 'Active', lastLogin: '3d ago' },
-    { id: 'PU-106', first: 'Jamie', last: 'Lin', email: 'jamie.lin@xactus.com', phone: '(555) 527-6610', type: 'Vendor', company: 'Xactus', status: 'Invited', lastLogin: '—' },
+    { id: 'PU-105', first: 'Taylor', last: 'Brooks', email: 'taylor.brooks@arive.com', phone: '(555) 845-3307', type: 'Vendor', company: 'ARIVE', status: 'Active', lastLogin: '3d ago' },
+    { id: 'PU-106', first: 'Jamie', last: 'Lin', email: 'jamie.lin@pre-fi.com', phone: '(555) 527-6610', type: 'Vendor', company: 'Pre-Fi', status: 'Invited', lastLogin: '—' },
   ];
   let users;
   try { users = JSON.parse(localStorage.getItem(KEY)); } catch (e) { users = null; }

@@ -169,7 +169,7 @@
       const hub = hubs[x.h], list = x.hk === 'event' ? hub.events : hub.content, i = at(list, 'title'), it = list[i];
       if (!x.r.locked) return x.hk === 'event' ? hubEventCard(it, x.h, i) : hubContentCard(it, x.h, x.hk, i);
       return `<div class="res-card lc-locked"><div class="card-open" aria-disabled="true">
-          <div class="res-thumb" style="background:linear-gradient(135deg,${it.g[0]},${it.g[1]})"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(it.type)}</span></span>${esc(firstWord(it.title))}
+          <div class="res-thumb" style="${cardBg(it)}"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(it.type)}</span></span>${it.img ? '' : esc(firstWord(it.title))}
             <span class="lc-lockbadge">${svg(LOCK)} VIP</span></div>
           <div class="res-body"><h3>${esc(it.title)}</h3><div class="lc-lockline">Requires VIP membership</div></div></div>${heartBtn(ref, 'on-card')}</div>`;
     }

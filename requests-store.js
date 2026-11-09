@@ -17,7 +17,7 @@
      Connection / Change AE : Delivered
    ============================================================ */
 (function () {
-  const KEY = 'amp-requests-v4';   // bump when the seed shape changes
+  const KEY = 'amp-requests-v5';   // bump when the seed shape changes
   // Example member; tier follows the prototype's tier switch (review toggle) if set
   const ME = { name: 'Kyle Lord', email: 'kyle@aimegroup.com', tier: (() => { try { const t = localStorage.getItem('amp-proto-tier'); return ['Premium', 'Elite', 'VIP'].includes(t) ? t : 'Elite'; } catch (e) { return 'Elite'; } })() };
 
@@ -31,8 +31,8 @@
   // Fallback escalation inboxes when partner-store.js isn't loaded. Lenders never log in: they reply to
   // the email or click a one-click status link in it. The real lists are on the lender listing (partner-store.js).
   const LENDER_CONTACTS = {
-    'United Wholesale Mortgage': 'escalations@uwm.com', 'EPM': 'wholesale.escalations@epm.net',
-    'Newrez Wholesale': 'tpo.escalations@newrez.com', 'Newrez': 'tpo.escalations@newrez.com', 'Windsor Mortgage': 'escalate@windsormortgage.com',
+    'United Wholesale Mortgage': 'escalations@uwm.com', 'Equity Prime Mortgage LLC': 'wholesale.escalations@epm.net',
+    'Newrez LLC': 'tpo.escalations@newrez.com', 'Newrez': 'tpo.escalations@newrez.com', 'Windsor Mortgage': 'escalate@windsormortgage.com',
   };
   const REMINDER_DAYS = 2;   // business days without a lender response before an automatic reminder
 
@@ -56,30 +56,30 @@
         { at: t(2 * D), kind: 'lender-reminder', by: 'system', text: "Automatic reminder sent to United Wholesale Mortgage's escalation team (no response in 2 business days)." },
       ] });
     r.push({ id: 'ESC-1037', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'Newrez Wholesale', title: 'CD error — loan #100471552',
+      partner: 'Newrez LLC', title: 'CD error — loan #100471552',
       status: 'Responded', createdAt: t(9 * D),
       fields: { 'Loan number': '100471552', 'Loan type': 'FHA', 'Loan amount': '$298,000', 'Closing date': 'Jun 30, 2026',
         'Issue': 'Closing Disclosure shows the wrong lender credit; re-disclosure needed before closing.' },
       followUp: null,
       activity: [
         { at: t(9 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Escalation submitted.' },
-        { at: t(9 * D - 3 * 60e3), kind: 'delivered', by: 'system', text: "Report delivered to Newrez Wholesale's escalation team." },
+        { at: t(9 * D - 3 * 60e3), kind: 'delivered', by: 'system', text: "Report delivered to Newrez LLC's escalation team." },
         { at: t(7 * D), kind: 'followup-request', by: 'member', author: ME.name, text: 'No word yet and closing is close — can someone check in?' },
         { at: t(6 * D), kind: 'followup-update', by: 'team', author: 'Sofia Marin', text: "We reached Newrez's escalation desk — they've assigned a closer and expect to re-disclose within 48 hours." },
-        { at: t(5 * D), kind: 'lender-response', by: 'lender', author: 'Newrez Wholesale', via: 'email reply', text: 'Corrected CD issued this morning. Please have the borrower e-sign; we can close as scheduled.' },
-        { at: t(5 * D), kind: 'status', by: 'lender', author: 'Newrez Wholesale', text: 'Responded' },
+        { at: t(5 * D), kind: 'lender-response', by: 'lender', author: 'Newrez LLC', via: 'email reply', text: 'Corrected CD issued this morning. Please have the borrower e-sign; we can close as scheduled.' },
+        { at: t(5 * D), kind: 'status', by: 'lender', author: 'Newrez LLC', text: 'Responded' },
       ] });
     r.push({ id: 'ESC-1021', type: 'escalation', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'EPM', title: 'UW conditions stalled — loan #100460318',
+      partner: 'Equity Prime Mortgage LLC', title: 'UW conditions stalled — loan #100460318',
       status: 'Resolved', createdAt: t(26 * D),
       fields: { 'Loan number': '100460318', 'Loan type': 'VA', 'Loan amount': '$365,000', 'Closing date': 'Jun 12, 2026',
         'Issue': 'Conditions submitted 6 days ago with no underwriter review.' },
       followUp: null,
       activity: [
         { at: t(26 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Escalation submitted.' },
-        { at: t(26 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to EPM's escalation team." },
-        { at: t(25 * D), kind: 'lender-response', by: 'lender', author: 'EPM', via: 'one-click link', text: 'Conditions reviewed and cleared. Clear to close issued.' },
-        { at: t(25 * D), kind: 'status', by: 'lender', author: 'EPM', text: 'Responded' },
+        { at: t(26 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to Equity Prime Mortgage LLC's escalation team." },
+        { at: t(25 * D), kind: 'lender-response', by: 'lender', author: 'Equity Prime Mortgage LLC', via: 'one-click link', text: 'Conditions reviewed and cleared. Clear to close issued.' },
+        { at: t(25 * D), kind: 'status', by: 'lender', author: 'Equity Prime Mortgage LLC', text: 'Responded' },
         { at: t(24 * D), kind: 'status', by: 'member', author: ME.name, text: 'Resolved' },
       ] });
     r.push({ id: 'TKT-2201', type: 'support', member: ME.name, email: ME.email, tier: ME.tier,
@@ -111,18 +111,18 @@
         { at: t(18 * D + 17 * H), kind: 'status', by: 'team', author: 'Wes Carter', text: 'Resolved' },
       ] });
     r.push({ id: 'CON-3310', type: 'connection', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'EPM', title: 'Connection request — EPM', status: 'Delivered', createdAt: t(3 * D),
-      fields: { Lender: 'EPM', 'Shared with lender': 'Name, email, phone, NMLS #9158, licenses MD · VA · DE' }, followUp: null,
+      partner: 'Equity Prime Mortgage LLC', title: 'Connection request — Equity Prime Mortgage LLC', status: 'Delivered', createdAt: t(3 * D),
+      fields: { Lender: 'Equity Prime Mortgage LLC', 'Shared with lender': 'Name, email, phone, NMLS #9158, licenses MD · VA · DE' }, followUp: null,
       activity: [
         { at: t(3 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Connection request submitted.' },
-        { at: t(3 * D - 60e3), kind: 'delivered', by: 'system', text: "Delivered to EPM's partner team." },
+        { at: t(3 * D - 60e3), kind: 'delivered', by: 'system', text: "Delivered to Equity Prime Mortgage LLC's partner team." },
       ] });
     r.push({ id: 'CON-3264', type: 'connection', member: ME.name, email: ME.email, tier: ME.tier,
-      partner: 'Newfi', title: 'Connection request — Newfi', status: 'Delivered', createdAt: t(21 * D),
-      fields: { Lender: 'Newfi', 'Shared with lender': 'Name, email, phone, NMLS #9158, licenses MD · VA · DE' }, followUp: null,
+      partner: 'Newfi Wholesale', title: 'Connection request — Newfi Wholesale', status: 'Delivered', createdAt: t(21 * D),
+      fields: { Lender: 'Newfi Wholesale', 'Shared with lender': 'Name, email, phone, NMLS #9158, licenses MD · VA · DE' }, followUp: null,
       activity: [
         { at: t(21 * D), kind: 'submitted', by: 'member', author: ME.name, text: 'Connection request submitted.' },
-        { at: t(21 * D - 60e3), kind: 'delivered', by: 'system', text: "Delivered to Newfi's partner team." },
+        { at: t(21 * D - 60e3), kind: 'delivered', by: 'system', text: "Delivered to Newfi Wholesale's partner team." },
       ] });
     r.push({ id: 'CAE-0418', type: 'changeae', member: ME.name, email: ME.email, tier: ME.tier,
       partner: 'United Wholesale Mortgage', title: 'Change AE — United Wholesale Mortgage', status: 'Delivered', createdAt: t(12 * D),
@@ -150,11 +150,11 @@
         { at: t(20 * H), kind: 'followup-request', by: 'member', author: 'Carlos Diaz', text: 'Still nothing from Windsor and the lock expires Friday. Please help!' },
         { at: t(20 * H), kind: 'lender-reminder', by: 'system', text: "Reminder sent to Windsor Mortgage's escalation team (follow-up requested)." }] });
     other({ id: 'ESC-1035', type: 'escalation', member: 'Ahmed Sayed', email: 'ahmed@sayedmortgage.com', tier: 'Premium',
-      partner: 'EPM', title: 'Appraisal review — loan #100460912', status: 'Received', createdAt: t(3 * D),
+      partner: 'Equity Prime Mortgage LLC', title: 'Appraisal review — loan #100460912', status: 'Received', createdAt: t(3 * D),
       fields: { 'Loan number': '100460912', 'Loan type': 'FHA', 'Loan amount': '$276,000', 'Closing date': 'Jul 8, 2026', Issue: 'Appraisal came in low; reconsideration of value submitted 5 days ago.' },
       followUp: { requestedAt: t(3 * H), note: '', status: 'open' },
       activity: [{ at: t(3 * D), kind: 'submitted', by: 'member', author: 'Ahmed Sayed', text: 'Escalation submitted.' },
-        { at: t(3 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to EPM's escalation team." },
+        { at: t(3 * D - 60e3), kind: 'delivered', by: 'system', text: "Report delivered to Equity Prime Mortgage LLC's escalation team." },
         { at: t(3 * H), kind: 'followup-request', by: 'member', author: 'Ahmed Sayed', text: '' }] });
     other({ id: 'TKT-2206', type: 'support', member: 'Sam Whitfield', email: 'sam@whitfieldfunding.com', tier: 'Elite',
       partner: 'Billing & membership', title: "Can't update billing card", status: 'In progress', createdAt: t(1 * D),
@@ -180,10 +180,10 @@
       activity: [{ at: t(4 * D), kind: 'message', by: 'member', author: 'Rachel Stone', text: 'On my phone the AMP logo sits on top of the welcome banner.' },
         { at: t(4 * D), kind: 'status', by: 'team', author: 'AIME Team', text: 'In progress' }] });
     other({ id: 'CON-3318', type: 'connection', member: 'Darnell Ross', email: 'darnell@rossmortgage.com', tier: 'Premium',
-      partner: 'EPM', title: 'Connection request — EPM', status: 'Delivered', createdAt: t(4 * H),
-      fields: { Lender: 'EPM' },
+      partner: 'Equity Prime Mortgage LLC', title: 'Connection request — Equity Prime Mortgage LLC', status: 'Delivered', createdAt: t(4 * H),
+      fields: { Lender: 'Equity Prime Mortgage LLC' },
       activity: [{ at: t(4 * H), kind: 'submitted', by: 'member', author: 'Darnell Ross', text: 'Connection request submitted.' },
-        { at: t(4 * H - 60e3), kind: 'delivered', by: 'system', text: "Delivered to EPM's partner team." }] });
+        { at: t(4 * H - 60e3), kind: 'delivered', by: 'system', text: "Delivered to Equity Prime Mortgage LLC's partner team." }] });
     // Connections to UWM and to Advantage Partners Solutions' products (shown to those partner users)
     const conn = (id, who, email, tier, partner, vendor, ago) => other({ id, type: 'connection', member: who, email, tier, partner,
       title: `Connection request — ${partner}`, status: 'Delivered', createdAt: t(ago),
@@ -193,7 +193,7 @@
     conn('CON-3321', 'Maria Chen', 'maria@chenlending.com', 'VIP', 'United Wholesale Mortgage', false, 1 * D);
     conn('CON-3322', 'Sam Whitfield', 'sam@whitfieldfunding.com', 'Elite', 'United Wholesale Mortgage', false, 5 * D);
     conn('CON-3323', ME.name, ME.email, ME.tier, 'Advantage Partners Solutions', true, 6 * D);
-    conn('CON-3324', 'Priya Nair', 'priya@nairhomeloans.com', 'Elite', 'APS Verification Services', true, 2 * D);
+    conn('CON-3324', 'Priya Nair', 'priya@nairhomeloans.com', 'Elite', 'Advantage Partners Solutions Discounted Credit Reports', true, 2 * D);
     conn('CON-3325', 'Tom Becker', 'tom@beckerhomes.com', 'Elite', 'Advantage Partners Solutions', true, 10 * D);
     other({ id: 'CAE-0421', type: 'changeae', member: 'Tom Becker', email: 'tom@beckerhomes.com', tier: 'Elite',
       partner: 'United Wholesale Mortgage', title: 'Change AE — United Wholesale Mortgage', status: 'Delivered', createdAt: t(1 * D),

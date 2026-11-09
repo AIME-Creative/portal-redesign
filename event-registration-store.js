@@ -36,7 +36,7 @@
    event_registrations) + Stripe Checkout for anything with a cost.
    ============================================================ */
 (function () {
-  const KEY = 'amp-event-reg-v3';   // bump when the seed shape changes
+  const KEY = 'amp-event-reg-v4';   // bump when the seed shape changes
   const TIERS = ['Premium', 'Elite', 'VIP'];
   // The prototype's "today" — matches the admin console (June 2026) so early-bird windows read correctly.
   const TODAY = new Date('2026-06-25T12:00:00');
@@ -44,7 +44,7 @@
   /* ---------- seed setups ---------- */
   function seedSetups() {
     return {
-      'FUSE 2026 — National Conference': {
+      'Fuse 2026': {
         enabled: true, mode: 'ticketed', quickClaim: true, tiers: ['All'], capacity: 1500, closes: 'Sep 10, 2026',
         earlyBird: { on: true, until: 'Jul 8, 2026' },
         tickets: [
@@ -110,7 +110,7 @@
     const add = (event, count, make) => { for (let k = 0; k < count; k++) { const p = person(k + n); regs.push(Object.assign({ id: 'REG-' + n++, event, phone: `(555) ${200 + (n % 700)}-${String(1000 + n * 37).slice(-4)}` }, p, make(k))); } };
     const tierMix = () => { const r = rnd(); return r < 0.45 ? 'Premium' : r < 0.82 ? 'Elite' : 'VIP'; };
 
-    add('FUSE 2026 — National Conference', 64, () => {
+    add('Fuse 2026', 64, () => {
       const tier = tierMix(), daysAgo = Math.floor(rnd() * 60), eb = TODAY - daysAgo * day <= new Date('2026-07-08').getTime();
       const vip = tier === 'VIP', ticket = vip ? 'vip' : 'ga';
       const woman = rnd() < 0.45;
@@ -120,7 +120,7 @@
       // guests can join sessions the member picked; women guests can also do WMN on their own
       const guests = Array.from({ length: nGuests }, () => { const g = guest(); g.addons = addons.filter((id) => id !== 'wmn' && rnd() < 0.6).concat(g.gender === 'Woman' && rnd() < 0.5 ? ['wmn'] : []); return g; });
       const reg = { tier, ticket, addons, guests, answers: { badge: '', diet: rnd() < 0.15 ? pick(['Vegetarian', 'Gluten-free', 'No shellfish']) : '' }, earlyBird: eb, at: new Date(TODAY - daysAgo * day).toISOString() };
-      reg.total = priceOf(setups['FUSE 2026 — National Conference'], reg, eb).total;
+      reg.total = priceOf(setups['Fuse 2026'], reg, eb).total;
       return reg;
     });
     add('AIME Ascent 2027', 38, () => ({

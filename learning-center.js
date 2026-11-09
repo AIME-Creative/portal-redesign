@@ -12,17 +12,21 @@
    4. New this month — the latest additions.
    5. Your saved — Vault items in My Library.
    6. Shows — recurring series; pick one to filter the library.
-   7. Replays — recordings of past live sessions.
+   7. Replays — recordings of past live sessions (webinars, Accelerate
+      trainings, hub recordings).
    8. Tools you can use today — downloadable documents.
    9. Full library — every resource, hub video, and document;
       filter by goal, topic, format (Watch / Listen / Download), or
       show; sort newest / oldest / A to Z; search; show more.
    Tier rules: VIP-only hub content and documents show to everyone,
-   locked with "Requires VIP membership", and can't be opened.
+   locked with "Requires VIP membership", and can't be opened. Resources
+   limited to some tiers (e.g. Elite & VIP webinars) show locked the
+   same way, naming the membership they need.
    Lender / Vendor users see resources and events only (no hubs,
    documents, or learning paths).
-   Prototype: goal / topic / show per item come from META below
-   (production: fields on each content item, set in admin).
+   Resources are the real library items (content-data.js) and carry
+   their own goal / topic / show; hub items and documents use META
+   below (production: fields on each content item, set in admin).
    Brokers Edge, Mortgage Mornings, and Accelerate Live no longer have
    their own pages — links to them open The Vault filtered to
    that program (RETIRED below).
@@ -63,38 +67,19 @@
     ['Broker to Broker', 'Brokers sharing what\'s working right now.', ['#0b1f5b', '#1893b1']],
     ['Women\'s Mortgage Network', 'Conversations from the WMN community.', ['#7a1f55', '#dd1969']],
     ['AIME Accelerate', 'Mindset sessions to sharpen how you work.', ['#5b2a86', '#dd1969']],
+    ['Loan Officer Experience', 'Loan officers on how they win and keep clients.', ['#0b2a5b', '#1893b1']],
+    ['AIME To Serve', 'Members giving back to their communities.', ['#1b7a4a', '#20adce']],
   ];
   const FORMAT = { Podcast: 'Listen', Webinar: 'Watch', Training: 'Watch', Recording: 'Watch', Certification: 'Watch', Video: 'Watch', Document: 'Download' };
 
-  // goal · topic · show, by title (production: fields on each item)
+  // goal · topic · show for hub items and documents, by title (production: fields on each item).
+  // Resources from content-data.js carry their own goal / topic / show.
   const G = (goal, topic, show) => ({ goal, topic, show: show || '' });
   const META = {
-    "The 'Daily Six' Challenge (Part 3)": G('Mindset & Habits', 'Mindset & Habits'),
-    'Broker to Broker — Episode 251': G('Get More Business', 'AIME Community', 'Broker to Broker'),
-    'Broker to Broker — Episode 250': G('Get More Business', 'AIME Community', 'Broker to Broker'),
-    'Broker to Broker — Episode 249': G('Get More Business', 'Sales & Conversations', 'Broker to Broker'),
-    'Broker Power-Up: Episode 65': G('Get More Business', 'Marketing & Personal Brand', 'Broker Power-Up'),
-    'Using AI to Pre-Qualify Borrowers': G('Close More Loans', 'AI & Technology'),
-    'AI Tools for the Daily Workflow': G('Run & Grow Your Business', 'AI & Technology'),
-    'Mortgage Mornings — June 17, 2026': G('Close More Loans', 'Loan Products & Guidelines', 'Mortgage Mornings'),
-    "Women's Mortgage Network Podcast": G('Get More Business', 'Leads & Referral Partners', "Women's Mortgage Network"),
-    'The Social Media Playbook': G('Get More Business', 'Marketing & Personal Brand'),
-    'Closing: Objection Handling 101': G('Close More Loans', 'Sales & Conversations'),
-    'AIME Accelerate — Identity Reset': G('Mindset & Habits', 'Mindset & Habits', 'AIME Accelerate'),
-    'Scaling Past $1M in Volume': G('Run & Grow Your Business', 'Business Planning & Numbers'),
-    'Compliance Corner — Q3 Update': G('Run & Grow Your Business', 'Compliance & Ethics'),
-    'Building Your Referral Engine': G('Get More Business', 'Leads & Referral Partners'),
     'Brokers Edge — Core Certification': G('Start Here', 'Loan Products & Guidelines'),
     'Non-QM Specialist': G('Close More Loans', 'Loan Products & Guidelines'),
     'VA Loan Pro': G('Close More Loans', 'Loan Products & Guidelines'),
     'Self-Employed Borrowers': G('Close More Loans', 'Loan Products & Guidelines'),
-    'Mortgage Mornings — June 24, 2026': G('Close More Loans', 'Loan Products & Guidelines', 'Mortgage Mornings'),
-    'Mortgage Mornings — June 10, 2026': G('Close More Loans', 'Loan Products & Guidelines', 'Mortgage Mornings'),
-    'Mortgage Mornings — June 3, 2026': G('Close More Loans', 'Loan Products & Guidelines', 'Mortgage Mornings'),
-    'Accelerate Live — Identity Reset': G('Mindset & Habits', 'Mindset & Habits', 'AIME Accelerate'),
-    'Accelerate Live — Win the Day': G('Mindset & Habits', 'Mindset & Habits', 'AIME Accelerate'),
-    'Accelerate Live — Run Toward It': G('Mindset & Habits', 'Mindset & Habits', 'AIME Accelerate'),
-    'Accelerate Live — Compound': G('Mindset & Habits', 'Mindset & Habits', 'AIME Accelerate'),
     'Ascent — Leading at Scale': G('Run & Grow Your Business', 'Leadership & Team'),
     'Ascent — Building a $100M Team': G('Run & Grow Your Business', 'Leadership & Team'),
     'Ascent — The Founder Mindset': G('Mindset & Habits', 'Mindset & Habits'),
@@ -127,7 +112,10 @@
   /* ---------- one list of everything in the library ---------- */
   const DAY = 864e5, TODAY = new Date(2026, 5, 25);
   const items = [];
-  resources.forEach((r, i) => !HUB_ONLY.has(r.title) && items.push({ kind: 'resource', title: r.title, type: r.type, dur: r.dur, g: r.g, src: 'AIME', at: TODAY - (i * 3 + 1) * DAY,
+  // Resources limited to some tiers (e.g. Elite & VIP webinars) show locked to everyone else.
+  const needs = (r) => { const a = r.access || ['All Members']; return a.includes('All Members') || (!partner && a.includes(memberTier)) ? '' : a.join(' or '); };
+  resources.forEach((r, i) => !HUB_ONLY.has(r.title) && items.push({ kind: 'resource', title: r.title, type: r.type, dur: r.dur, g: r.g, img: r.img, src: 'AIME',
+    at: r.pub ? new Date(r.pub + 'T12:00:00').getTime() : TODAY - (i * 3 + 1) * DAY, goal: r.goal, topic: r.topic, show: r.show || '', needs: needs(r), locked: !!needs(r),
     open: () => openResource(i), opener: `data-open-resource="${i}"` }));
   if (!partner) {
     Object.keys(hubs).forEach((k, hi) => {
@@ -139,18 +127,18 @@
     });
     generalDocuments.forEach((d, i) => items.push({ kind: 'doc', title: d.title, type: 'Document', desc: d.desc, src: 'General', srcKey: 'general', at: TODAY - (20 + i * 11) * DAY }));
   }
-  items.forEach((x) => Object.assign(x, META[x.title] || G('Other', ''), { format: FORMAT[x.type] || 'Watch' }));
+  items.forEach((x) => Object.assign(x, META[x.title] || (x.goal ? {} : G('Other', '')), { format: FORMAT[x.type] || 'Watch' }));
 
   /* ---------- cards ---------- */
   const tags = (x) => `<div class="lc-tags"><span class="lc-fmt">${x.format}</span>${x.show ? `<span>${esc(x.show)}</span>` : x.kind === 'hub' ? `<span>${esc(x.src)}</span>` : ''}</div>`;
   function card(x) {
     if (x.kind === 'resource' || x.kind === 'hub') {
       if (x.locked) return `<div class="res-card lc-locked"><div class="card-open" aria-disabled="true">
-          <div class="res-thumb" style="background:linear-gradient(135deg,${x.g[0]},${x.g[1]})"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(x.type)}</span></span>${esc(firstWord(x.title))}
-            <span class="lc-lockbadge">${svg(ICO.lock)} VIP</span></div>
-          <div class="res-body"><h3>${esc(x.title)}</h3>${tags(x)}<div class="lc-lockline">Requires VIP membership</div></div></div></div>`;
+          <div class="res-thumb" style="${cardBg(x)}"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(x.type)}</span></span>${x.img ? '' : esc(firstWord(x.title))}
+            <span class="lc-lockbadge">${svg(ICO.lock)} ${esc(x.needs ? x.needs.replace(' or ', ' / ') : 'VIP')}</span></div>
+          <div class="res-body"><h3>${esc(x.title)}</h3>${tags(x)}<div class="lc-lockline">Requires ${esc(x.needs || 'VIP')} membership</div></div></div></div>`;
       return `<div class="res-card"><button class="card-open" ${x.opener}>
-          <div class="res-thumb" style="background:linear-gradient(135deg,${x.g[0]},${x.g[1]})"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(x.type)}</span></span>${esc(firstWord(x.title))}
+          <div class="res-thumb" style="${cardBg(x)}"><span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${esc(x.type)}</span></span>${x.img ? '' : esc(firstWord(x.title))}
             <span class="play">${svg(ICO.play).replace('fill="none"', 'fill="currentColor"')}</span></div>
           <div class="res-body"><h3>${esc(x.title)}</h3>${tags(x)}<div class="res-meta">${x.dur ? esc(x.dur) : ''}</div></div></button></div>`;
     }
@@ -201,7 +189,7 @@
           <span class="lc-show-t">${esc(s)}</span><span class="lc-show-d">${esc(d)}</span>
           <span class="lc-show-n">${eps.length} episode${eps.length === 1 ? '' : 's'} · Latest: ${esc(latest.title)}</span></button>`;
     }).join('')}</div>`)}
-    ${partner ? '' : sec('lc-replays', 'Replays', 'Recordings of live sessions, so you can catch up any time.', `<div class="card-grid lc-row">${items.filter((x) => x.type === 'Recording').sort((a, b) => b.at - a.at).slice(0, 4).map(card).join('')}</div>`)}
+    ${partner ? '' : sec('lc-replays', 'Replays', 'Recordings of live sessions, so you can catch up any time.', `<div class="card-grid lc-row">${items.filter((x) => ['Recording', 'Webinar', 'Training'].includes(x.type) && x.kind !== 'doc').sort((a, b) => b.at - a.at).slice(0, 4).map(card).join('')}</div>`)}
     ${partner ? '' : sec('lc-tools', 'Tools you can use today', 'Guides, checklists, templates, and workbooks to download and put to work.', `<div class="card card-pad doc-card">${items.filter((x) => x.kind === 'doc').sort((a, b) => (a.locked - b.locked) || (b.at - a.at)).slice(0, 6).map(toolRow).join('')}</div>`, '<a href="#" data-lc-fmt="Download">All downloads <span>→</span></a>')}
     <section class="lc-sec" id="lc-library">
       <div class="section-title" style="margin-bottom:4px"><h2>Full library</h2></div>

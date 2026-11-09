@@ -72,7 +72,11 @@
   function panelHTML(ev) {
     if (PARTNER) return `<p class="er-note">Event registration is for AIME members.</p>`;
     const st = status(ev), s = st.setup;
-    if (!s) return `<p class="er-note">No registration needed — add it to your calendar and we'll send the details beforehand.</p>`;
+    // No portal registration: a sign-up link (set on the event in admin) opens the outside sign-up page.
+    if (!s) return ev.signup
+      ? `<a class="btn btn-primary btn-block" style="margin-top:14px" href="${esc(ev.signup)}" target="_blank" rel="noopener">Sign up</a>
+         <p class="er-note">Sign-up happens on AIME's site — it opens in a new tab.</p>`
+      : `<p class="er-note">No registration needed — add it to your calendar and we'll send the details beforehand.</p>`;
     const tiersLine = `<div class="er-meta">${s.mode === 'rsvp' ? 'Free · RSVP' : 'Ticketed'} · ${R.tierText(s.tiers)}${st.left != null ? ` · ${st.left} spot${st.left === 1 ? '' : 's'} left` : ''}</div>`;
     if (st.reg) {
       const r = st.reg, t = s.tickets.find((x) => x.id === r.ticket);
@@ -80,7 +84,7 @@
       return `<div class="er-registered">${checkIco}<div><strong>You're registered</strong>
           <div class="er-meta">${t ? esc(t.name) + ' ticket' : s.mode === 'rsvp' ? 'RSVP confirmed' : ''}${addons.length ? ' · ' + addons.map(esc).join(', ') : ''}${r.guests && r.guests.length ? ` · ${r.guests.length} guest${r.guests.length > 1 ? 's' : ''}` : ''}</div></div></div>
         <button class="btn btn-navy btn-block" style="margin-top:14px" data-er-open>${s.quickClaim ? 'Manage add-ons & guests' : s.mode === 'rsvp' ? 'View / edit RSVP' : 'View / edit registration'}</button>
-        ${ev.title.startsWith('FUSE') ? '<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-nav="fuse">FUSE details &amp; referrals</button>' : ''}
+        ${/^fuse 2026/i.test(ev.title) ? '<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px" data-nav="fuse">FUSE details &amp; referrals</button>' : ''}
         ${s.mode === 'rsvp' ? '<button class="link-muted" style="display:block;margin:12px auto 0" data-er-cancel>Cancel my RSVP</button>'
           : '<p class="er-note er-nocancel">Registrations are non-refundable. Need to cancel? Call the AIME membership team.</p>'}`;
     }
@@ -432,7 +436,7 @@
   // FUSE: registering is claiming the included ticket. The "claim your ticket" banner shows only
   // while the member has no FUSE registration; it opens the FUSE event with the Claim card highlighted
   // (so the member sees which ticket they're getting before the one click).
-  const FUSE = 'FUSE 2026 — National Conference';
+  const FUSE = 'Fuse 2026';
   function syncClaimBanner() {
     if (typeof updateClaimBanner !== 'function' || PARTNER) return;
     ticketClaimed = !!R.find(FUSE, ME.email);   // app.js global

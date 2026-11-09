@@ -12,36 +12,19 @@
      (production: per account).
    Prototype: paths in localStorage amp-paths-v1 (seeded below);
    progress in amp-path-progress-v1. CATALOG lists the member app's
-   content (from app.js) so admin picks steps from exactly what
-   members see. Production: real content records.
+   content — resources and events from content-data.js (the real
+   portal items), hub items and documents below — so admin picks
+   steps from exactly what members see. Production: real content records.
    ============================================================ */
 window.AmpPaths = (function () {
-  const KEY = 'amp-paths-v1', PKEY = 'amp-path-progress-v1';
+  const KEY = 'amp-paths-v2', PKEY = 'amp-path-progress-v1';   // v2: real resource / event titles
 
   // Everything a step can point to. k: resource | event | hub | doc · h: hub key · hk: content | event · v: VIP-only hub
+  const C = window.AMP_CONTENT || { resources: [], events: [] };
   const CATALOG = [
-    {"k": "resource", "t": "The 'Daily Six' Challenge (Part 3)", "s": "Podcast · 28 min"},
-    {"k": "resource", "t": "Broker to Broker — Episode 251", "s": "Podcast · 41 min"},
-    {"k": "resource", "t": "Broker Power-Up: Episode 65", "s": "Webinar · 52 min"},
-    {"k": "resource", "t": "Using AI to Pre-Qualify Borrowers", "s": "Webinar · 39 min"},
-    {"k": "resource", "t": "AI Tools for the Daily Workflow", "s": "Training · 31 min"},
-    {"k": "resource", "t": "Mortgage Mornings — June 17, 2026", "s": "Webinar · 35 min"},
-    {"k": "resource", "t": "Women's Mortgage Network Podcast", "s": "Podcast · 33 min"},
-    {"k": "resource", "t": "The Social Media Playbook", "s": "Training · 42 min"},
-    {"k": "resource", "t": "Closing: Objection Handling 101", "s": "Training · 29 min"},
-    {"k": "resource", "t": "Broker to Broker — Episode 250", "s": "Podcast · 39 min"},
-    {"k": "resource", "t": "AIME Accelerate — Identity Reset", "s": "Training · 24 min"},
-    {"k": "resource", "t": "Scaling Past $1M in Volume", "s": "Training · 47 min"},
-    {"k": "resource", "t": "Compliance Corner — Q3 Update", "s": "Webinar · 38 min"},
-    {"k": "resource", "t": "Building Your Referral Engine", "s": "Training · 45 min"},
-    {"k": "resource", "t": "Broker to Broker — Episode 249", "s": "Podcast · 44 min"},
-    {"k": "event", "t": "AIME Accelerate — Identity Reset", "s": "Event · JUN 6"},
-    {"k": "event", "t": "AIME Accelerate — Win the Day", "s": "Event · JUN 15"},
-    {"k": "event", "t": "AIME Accelerate — Run Toward It", "s": "Event · JUN 22"},
-    {"k": "event", "t": "Mortgage Mornings — Live", "s": "Event · JUL 1"},
-    {"k": "event", "t": "AIME Accelerate — Compound", "s": "Event · JUN 29"},
-    {"k": "event", "t": "FUSE 2026 — National Conference", "s": "Event · SEP 24"},
-    {"k": "event", "t": "AIME Accelerate — Mindset", "s": "Event · JUL 6"},
+    ...C.resources.map((r) => ({ k: 'resource', t: r.title, s: `${r.type} · ${r.dur}` })),
+    ...C.events.map((e) => ({ k: 'event', t: e.title, s: `Event · ${e.date}` })),
+    // Placeholder events (app.js) — event registration demos
     {"k": "event", "t": "Regional Mixer — Dallas", "s": "Event · AUG 12"},
     {"k": "event", "t": "AIME Ascent 2027", "s": "Event · FEB 8"},
     {"k": "hub", "h": "brokersedge", "hk": "content", "t": "Brokers Edge — Core Certification", "s": "Certification · Brokers Edge", "v": false},
@@ -51,16 +34,8 @@ window.AmpPaths = (function () {
     {"k": "doc", "h": "brokersedge", "t": "Brokers Edge Curriculum Guide", "s": "Document · Brokers Edge", "v": false},
     {"k": "doc", "h": "brokersedge", "t": "Certification Completion Checklist", "s": "Document · Brokers Edge", "v": false},
     {"k": "doc", "h": "brokersedge", "t": "Continuing Education Credit Form", "s": "Document · Brokers Edge", "v": false},
-    {"k": "hub", "h": "mortgagemornings", "hk": "content", "t": "Mortgage Mornings — June 24, 2026", "s": "Recording · Mortgage Mornings", "v": false},
-    {"k": "hub", "h": "mortgagemornings", "hk": "content", "t": "Mortgage Mornings — June 17, 2026", "s": "Recording · Mortgage Mornings", "v": false},
-    {"k": "hub", "h": "mortgagemornings", "hk": "content", "t": "Mortgage Mornings — June 10, 2026", "s": "Recording · Mortgage Mornings", "v": false},
-    {"k": "hub", "h": "mortgagemornings", "hk": "content", "t": "Mortgage Mornings — June 3, 2026", "s": "Recording · Mortgage Mornings", "v": false},
     {"k": "doc", "h": "mortgagemornings", "t": "Rate Sheet Roundup — This Week", "s": "Document · Mortgage Mornings", "v": false},
     {"k": "doc", "h": "mortgagemornings", "t": "Show Notes Archive (2026)", "s": "Document · Mortgage Mornings", "v": false},
-    {"k": "hub", "h": "acceleratelive", "hk": "content", "t": "Accelerate Live — Identity Reset", "s": "Recording · Accelerate Live", "v": false},
-    {"k": "hub", "h": "acceleratelive", "hk": "content", "t": "Accelerate Live — Win the Day", "s": "Recording · Accelerate Live", "v": false},
-    {"k": "hub", "h": "acceleratelive", "hk": "content", "t": "Accelerate Live — Run Toward It", "s": "Recording · Accelerate Live", "v": false},
-    {"k": "hub", "h": "acceleratelive", "hk": "content", "t": "Accelerate Live — Compound", "s": "Recording · Accelerate Live", "v": false},
     {"k": "doc", "h": "acceleratelive", "t": "Accelerate Live — Session Workbook", "s": "Document · Accelerate Live", "v": false},
     {"k": "doc", "h": "acceleratelive", "t": "Weekly Action Plan Template", "s": "Document · Accelerate Live", "v": false},
     {"k": "hub", "h": "ascent", "hk": "content", "t": "Ascent — Leading at Scale", "s": "Training · Ascent", "v": true},
@@ -92,28 +67,28 @@ window.AmpPaths = (function () {
   const seed = () => [
     { id: 'lp-start', title: 'Start Here: Get to Know AIME', for: 'New or returning members', status: 'Published',
       desc: 'What AIME is, how to use the portal, and the standards members commit to.',
-      steps: [S('doc', 'AIME Member Handbook'), S('resource', 'Broker Power-Up: Episode 65'), S('doc', 'Loan Escalation Guide'), S('doc', '2026 Membership Agreement')] },
+      steps: [S('doc', 'AIME Member Handbook'), S('resource', 'Broker Power-Up Podcast: Episode 65'), S('doc', 'Loan Escalation Guide'), S('doc', '2026 Membership Agreement')] },
     { id: 'lp-ai', title: 'Use AI in Your Business', for: 'Every member', status: 'Published',
-      desc: 'Pre-qualifying with AI, tools for the daily workflow, then how top VIPs scale with it.',
-      steps: [S('resource', 'Using AI to Pre-Qualify Borrowers'), S('resource', 'AI Tools for the Daily Workflow'), S('hub', 'VIP Roundtable — Scaling to IMB', 'vip', 'content')] },
+      desc: 'Automating income calculations, staying visible as AI changes search, then how top VIPs scale with it.',
+      steps: [S('resource', 'Automated Income Calculation & Smart Conditions'), S('resource', 'Surviving the AI Shift in Google & YouTube'), S('hub', 'VIP Roundtable — Scaling to IMB', 'vip', 'content')] },
     { id: 'lp-be', title: 'Brokers Edge Certifications', for: 'Members building expertise', status: 'Published',
       desc: 'The curriculum guide, all four certifications in order, then the completion checklist.',
       steps: [S('doc', 'Brokers Edge Curriculum Guide'), S('hub', 'Brokers Edge — Core Certification'), S('hub', 'Non-QM Specialist'), S('hub', 'VA Loan Pro'), S('hub', 'Self-Employed Borrowers'), S('doc', 'Certification Completion Checklist')] },
     { id: 'lp-ref', title: 'Build Your Referral Engine', for: 'Every member', status: 'Published',
       desc: 'Referral systems, social media, the WMN referral panel, and handling objections.',
-      steps: [S('resource', 'Building Your Referral Engine'), S('resource', 'The Social Media Playbook'), S('hub', 'WMN Panel — Building Referral Networks'), S('resource', 'Closing: Objection Handling 101')] },
-    { id: 'lp-acc', title: 'Accelerate: Identity Reset to Compound', for: 'Accelerate Live members', status: 'Published',
-      desc: 'The four Accelerate Live sessions in order, with the workbook to follow along.',
-      steps: [S('doc', 'Accelerate Live — Session Workbook'), S('hub', 'Accelerate Live — Identity Reset'), S('hub', 'Accelerate Live — Win the Day'), S('hub', 'Accelerate Live — Run Toward It'), S('hub', 'Accelerate Live — Compound')] },
+      steps: [S('resource', 'Ashley Bedford: Producing $100M a year with Referral Partners'), S('resource', 'Joe Rychalsky: Social Media for Mortgage Brokers: Going Viral'), S('hub', 'WMN Panel — Building Referral Networks'), S('resource', 'RCN: Overcoming Client Objections & Answering Investors')] },
+    { id: 'lp-acc', title: 'Accelerate: The Daily Six Challenge', for: 'Every member', status: 'Published',
+      desc: 'The three-part Daily Six Challenge from AIME Accelerate, with the workbook to follow along.',
+      steps: [S('doc', 'Accelerate Live — Session Workbook'), S('resource', "The 'Daily Six' Challenge"), S('resource', "The 'Daily Six' Challenge (Part 2)"), S('resource', "The 'Daily Six' Challenge (Part 3)")] },
     { id: 'lp-scale', title: 'Scale & Lead a Team', for: 'Growing brokerages', status: 'Published', access: ['Elite', 'VIP'],
-      desc: 'Getting past $1M, then the Ascent sessions on building and leading a team.',
-      steps: [S('resource', 'Scaling Past $1M in Volume'), S('hub', 'Ascent — Building a $100M Team'), S('hub', 'Ascent — Leading at Scale'), S('doc', '90-Day Growth Plan Template')] },
+      desc: 'How one broker funded $200M in 14 months, then the Ascent sessions on building and leading a team.',
+      steps: [S('resource', 'Paul Olbrantz: Fund Over $200M in 14 Months'), S('hub', 'Ascent — Building a $100M Team'), S('hub', 'Ascent — Leading at Scale'), S('doc', '90-Day Growth Plan Template')] },
     { id: 'lp-mm', title: 'Catch Up on Mortgage Mornings', for: 'Every member', status: 'Published',
       desc: 'This month\'s Mornings, oldest first, plus the show notes.',
-      steps: [S('hub', 'Mortgage Mornings — June 3, 2026'), S('hub', 'Mortgage Mornings — June 10, 2026'), S('hub', 'Mortgage Mornings — June 17, 2026', 'mortgagemornings'), S('hub', 'Mortgage Mornings — June 24, 2026'), S('doc', 'Show Notes Archive (2026)')] },
+      steps: [S('resource', 'Mortgage Mornings | June 3rd, 2026'), S('resource', 'Mortgage Mornings | June 10th, 2026'), S('resource', 'Mortgage Mornings | June 17th, 2026'), S('resource', 'Mortgage Mornings | June 24th, 2026'), S('doc', 'Show Notes Archive (2026)')] },
     { id: 'lp-comp', title: 'Compliance Basics', for: 'Every member', status: 'Draft',
       desc: 'The latest compliance update and the membership agreement.',
-      steps: [S('resource', 'Compliance Corner — Q3 Update'), S('doc', '2026 Membership Agreement')] },
+      steps: [S('resource', 'MCR V6 Changes with SCP'), S('doc', '2026 Membership Agreement')] },
   ].map((p) => Object.assign(p, { steps: p.steps.filter(Boolean) }));
 
   let paths;

@@ -218,7 +218,7 @@
   /* ============================================================
      2. Registrations dashboard
      ============================================================ */
-  let dashEvent = 'FUSE 2026 — National Conference';
+  let dashEvent = 'Fuse 2026';
   const dashEvents = () => events.map((e) => e.title).filter((t) => R.setup(t) || R.regsFor(t).length);
 
   function bars(rows, total) {

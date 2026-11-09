@@ -13,17 +13,17 @@
      • Lender / Vendor users only see General documents.
      • Removing a document from the library drops it from every
        item it was linked to.
-   Data: localStorage amp-doclinks-v1 — { "lender|UWM": [titles] }
+   Data: localStorage amp-doclinks-v2 — { "lender|UWM": [titles] }
    Member side wraps app.js openLender / openVendor / openResource
    / openEvent and uses generalDocuments, hubs, memberTier,
    userType.
    ============================================================ */
 (function () {
-  const KEY = 'amp-doclinks-v1', DKEY = 'amp-doclinks-docs-v1';   // links; documents uploaded from an item's editor
+  const KEY = 'amp-doclinks-v2', DKEY = 'amp-doclinks-docs-v1';   // links; documents uploaded from an item's editor
   const SEED = {
     'lender|United Wholesale Mortgage': ['Loan Escalation Guide'],
-    'resource|Scaling Past $1M in Volume': ['90-Day Growth Plan Template', 'Weekly Action Plan Template'],
-    'event|AIME Accelerate — Identity Reset': ['Accelerate Live — Session Workbook'],
+    'resource|Paul Olbrantz: Fund Over $200M in 14 Months': ['90-Day Growth Plan Template', 'Weekly Action Plan Template'],
+    'event|AIME Accelerate - Identity Reset': ['Accelerate Live — Session Workbook'],
     'market|Advantage Partners Solutions': ['AIME Member Handbook'],
   };
   const read = () => { try { const v = JSON.parse(localStorage.getItem(KEY)); return v && typeof v === 'object' ? v : null; } catch (e) { return null; } };
