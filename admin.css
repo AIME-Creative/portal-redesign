@@ -503,6 +503,10 @@ table.adm tr.bk-selected td { background:rgba(221,25,105,.05); }
 .btn.bk-danger-solid { background:#c8102e; border-color:#c8102e; }
 .bk-err { color:#c8102e; font-weight:600; }
 #bk-ed-when { margin:4px 0 16px; }
+.bt-modes { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+#bt-tags .tax-chip.bt-on { border-color:var(--pink, #dd1969); background:#fef4f8; }
+.bk-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+.bk-tags .tag { font-size:11.5px; font-weight:600; }
 .bk-spacer { flex:1; }
 .bk-list { margin:0; padding-left:18px; max-height:260px; overflow:auto; font-size:14px; line-height:1.6; }
 @media (max-width:640px) { .bk-bar.on { position:static; } .bk-bar.on .bk-spacer { flex-basis:100%; height:0; } }

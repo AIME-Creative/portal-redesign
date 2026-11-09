@@ -13,6 +13,8 @@ const taxonomies = {
   learningGoals:     ["Start Here","Get More Business","Close More Loans","Run & Grow Your Business","Mindset & Habits"],
   learningShows:     ["Mortgage Mornings","Broker Power-Up","Broker to Broker","Women's Mortgage Network","AIME Accelerate","Loan Officer Experience","AIME To Serve"],
   eventTypes:        ["Virtual","In person","Training"],
+  // Tags on Vault resources and events (the live portal's shared tag list; bulk-taggable — admin-bulk.js)
+  contentTags:       ["Artificial Intelligence","Business Ops","Compliance","Cyber Security","Data Intelligence","Education","Fuse","Lead Generation","Live Stream","Market Data","Marketing","Personal Finances","Software"],
 };
 const taxMeta = {
   lenderProducts:   { label:"Lender product types", sub:"Shown on lender cards and the product filter." },
@@ -23,6 +25,7 @@ const taxMeta = {
   learningGoals:    { label:"Vault goals",  sub:"The goal tiles at the top of The Vault (Start Here, Get More Business…)." },
   learningShows:    { label:"Shows",                  sub:"Recurring series in The Vault's Shows row (Mortgage Mornings, Broker Power-Up…)." },
   eventTypes:       { label:"Event types",           sub:"Used to label and filter events." },
+  contentTags:      { label:"Content tags",          sub:"Tags on Vault resources and events — add them one at a time or several items at once." },
 };
 
 /* ---------- Content data ----------
@@ -52,7 +55,8 @@ const SAMPLE_REGS = { "AIME Accelerate - Identity Reset":842, "AIME Accelerate -
   "AIME Accelerate - Compound":308, "Mortgage Mornings":412, "Fuse 2026":1204, "Fuse 2027":96 };
 const events = [
   ...AMP_CONTENT.events.map(e => ({ title:e.title, date:`${e.date.charAt(0)}${e.date.slice(1,3).toLowerCase()} ${e.date.split(' ')[1]}, ${e.year || 2026}`, type:e.type, hub:"—",
-    regs:SAMPLE_REGS[e.title] || 0, access:(e.access || ["All Members"]).slice(), graphic:e.img, signup:e.signup || "", status:"Active" })),
+    regs:SAMPLE_REGS[e.title] || 0, access:(e.access || ["All Members"]).slice(), graphic:e.img, signup:e.signup || "",
+    tags:/^Fuse/.test(e.title) ? ["Fuse"] : /Mortgage Mornings/.test(e.title) ? ["Live Stream"] : [], status:"Active" })),
   // Placeholders — hub events and event-registration demos
   { title:"VIP Quarterly Mastermind", access:["VIP"], date:"Jul 18, 2026", type:"Virtual", hub:"VIP", regs:64, status:"Active" },
   { title:"WMN Monthly Meetup", date:"Jul 9, 2026", type:"Virtual", hub:"WMN", regs:138, status:"Active" },

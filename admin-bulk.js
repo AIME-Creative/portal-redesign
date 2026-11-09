@@ -9,6 +9,10 @@
        drafts / scheduled items to go live on their own.
      • Move to draft — takes selected live / scheduled items down
        (cancels a schedule). Nothing is deleted.
+     • Tag — add, remove, or replace tags on the selected items
+       (Lenders, Market, The Vault, Events — the live portal's
+       Bulk Tag, restyled). Lenders / Market use their product
+       types; Vault + Events use Content tags.
      • Delete — removes the selected items for good. Events that
        have registrations can't be deleted (move them to draft).
        Deleted documents drop off every item they were linked to.
@@ -21,7 +25,7 @@
    Prototype: in memory (resets on reload); nothing publishes on
    its own. Prototype "now" = Jun 25, 2026, 12:00 PM ET.
    Uses admin.js globals: lenders, vendors, resources, events,
-   hubs, documents, render* functions, openEdit, editing,
+   hubs, documents, taxonomies, tagPicker, render* functions, openEdit, editing,
    openModal, closeModals, showToast.
    ============================================================ */
 (function () {
@@ -39,6 +43,13 @@
     { kind: 'hub',      tbody: 'hubs-tbody',      render: 'renderHubs',      arr: () => hubs,      name: (x) => x.name,  one: 'hub',      many: 'hubs' },
     { kind: 'document', tbody: 'documents-tbody', render: 'renderDocuments', arr: () => documents, name: (x) => x.title, one: 'document', many: 'documents' },
   ];
+  // Bulk Tag: which field holds the tags and which list they come from
+  const TAGS = {
+    lender:   { field: 'products', list: () => taxonomies.lenderProducts },
+    vendor:   { field: 'tags',     list: () => taxonomies.vendorProducts },
+    resource: { field: 'tags',     list: () => taxonomies.contentTags },
+    event:    { field: 'tags',     list: () => taxonomies.contentTags },
+  };
   const sel = {};                       // kind -> Set of indexes
   LISTS.forEach((L) => { sel[L.kind] = new Set(); });
   const byKind = (k) => LISTS.find((L) => L.kind === k);
@@ -87,6 +98,8 @@
       tr.classList.toggle('bk-selected', sel[L.kind].has(i));
       // Scheduled: show when it goes live under the status
       const dot = x && x.status === 'Scheduled' && tr.querySelector('.dot-status');
+      const tagCell = x && TAGS[L.kind] && TAGS[L.kind].field === 'tags' && (L.kind === 'resource' || L.kind === 'event') && tr.children[1];
+      if (tagCell && (x.tags || []).length && !tagCell.querySelector('.bk-tags')) tagCell.insertAdjacentHTML('beforeend', `<div class="bk-tags">${x.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>`);
       if (dot && x.publishAt && !dot.parentElement.querySelector('.bk-when-note')) dot.insertAdjacentHTML('afterend', `<div class="t-sub bk-when-note">Goes live ${esc(when(x.publishAt))}</div>`);
     });
     // Drafts first, then scheduled, then live — stable within each group
@@ -120,6 +133,7 @@
       <span class="bk-spacer"></span>
       ${btn('publish', 'Publish', 'btn-primary', 'None of the selected items are drafts or scheduled')}
       ${btn('schedule', 'Schedule', 'btn-outline', 'None of the selected items are drafts or scheduled')}
+      ${TAGS[L.kind] ? `<button class="btn btn-outline btn-sm" data-bk-tag="${L.kind}">Tag ${s.length}</button>` : ''}
       ${btn('draft', 'Move to draft', 'btn-outline', 'None of the selected items are live or scheduled')}
       ${btn('delete', 'Delete', 'btn-outline bk-danger', 'Events with registrations can’t be deleted')}
       <button class="link-act" data-bk-clear="${L.kind}">Clear</button>`;
@@ -194,6 +208,58 @@
     showToast({ publish: `Published ${n}.`, draft: `Moved ${n} to draft.`, delete: `Deleted ${n}.`, schedule: `Scheduled ${n} to publish ${at && when(at)}.` }[action]);
   }
 
+  /* ---------- Bulk Tag ---------- */
+  const TAG_MODES = {
+    add:     { label: 'Add tags',    hint: 'Selected tags will be added to existing tags', done: 'added to' },
+    remove:  { label: 'Remove tags', hint: 'Selected tags will be removed from items',      done: 'removed from' },
+    replace: { label: 'Replace all', hint: 'All existing tags will be replaced with selected tags', done: 'set for' },
+  };
+  let tagging = null;   // { L, idx, mode }
+  document.body.insertAdjacentHTML('beforeend', `<div class="modal-overlay" id="modal-bulktag">
+    <div class="modal" style="max-width:560px">
+      <div class="modal-head"><div><h2 id="bt-title">Tag</h2><p>Apply tags to multiple items at once</p></div>
+        <button class="modal-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+      <div class="modal-body">
+        <div class="field"><label>Action</label><div class="bt-modes" role="radiogroup">${Object.entries(TAG_MODES).map(([k, m]) => `<button type="button" class="btn btn-sm" role="radio" data-bt-mode="${k}">${m.label}</button>`).join('')}</div>
+          <div class="hint" id="bt-hint"></div></div>
+        <div id="bt-picker"></div>
+        <div class="hint bk-err" id="bt-err" hidden>Pick at least one tag.</div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-outline" data-close>Cancel</button><button class="btn btn-primary" id="bt-go">Apply</button></div>
+    </div></div>`);
+  function setTagMode(mode) {
+    tagging.mode = mode;
+    document.querySelectorAll('[data-bt-mode]').forEach((b) => { const on = b.dataset.btMode === mode; b.classList.toggle('btn-primary', on); b.classList.toggle('btn-outline', !on); b.setAttribute('aria-checked', on); });
+    $('bt-hint').textContent = TAG_MODES[mode].hint;
+  }
+  function openTag(L) {
+    const idx = [...sel[L.kind]]; if (!idx.length) return;
+    tagging = { L, idx, mode: 'add' };
+    $('bt-title').textContent = `Tag ${plural(L, idx.length)}`;
+    $('bt-picker').innerHTML = tagPicker(L.kind === 'lender' || L.kind === 'vendor' ? 'Product types' : 'Tags', TAGS[L.kind].list(), [], 'bt-tags');
+    $('bt-err').hidden = true;
+    $('bt-go').textContent = `Apply to ${idx.length} item${idx.length === 1 ? '' : 's'}`;
+    setTagMode('add');
+    openModal('bulktag');
+  }
+  function applyTag() {
+    if (!tagging) return;
+    const picked = [...document.querySelectorAll('#bt-tags input:checked')].map((i) => i.parentElement.textContent.trim());
+    if (!picked.length) { $('bt-err').hidden = false; return; }
+    const { L, idx, mode } = tagging, f = TAGS[L.kind].field, arr = L.arr();
+    idx.forEach((i) => {
+      const cur = arr[i][f] || [];
+      arr[i][f] = mode === 'add' ? [...new Set([...cur, ...picked])] : mode === 'remove' ? cur.filter((t) => !picked.includes(t)) : picked.slice();
+    });
+    tagging = null; sel[L.kind].clear(); closeModals(); window[L.render]();
+    showToast(`Tags ${TAG_MODES[mode].done} ${plural(L, idx.length)}: ${picked.join(', ')}.`);
+  }
+  document.addEventListener('change', (e) => {
+    const box = e.target.closest('#bt-tags input'); if (!box) return;
+    box.parentElement.classList.toggle('bt-on', box.checked);
+    $('bt-err').hidden = true;
+  });
+
   /* ---------- the item editor: Scheduled + Publish on ---------- */
   function statusSelect() {
     const f = [...document.querySelectorAll('#modal-edit .field')].find((x) => (x.querySelector('label') || {}).textContent === 'Status');
@@ -259,6 +325,12 @@
       const L = byKind(t.dataset.bkClear); sel[L.kind].clear(); window[L.render]();
     } else if ((t = e.target.closest('[data-bk-act]'))) {
       const [action, k] = t.dataset.bkAct.split(':'); ask(action, byKind(k));
+    } else if ((t = e.target.closest('[data-bk-tag]'))) {
+      openTag(byKind(t.dataset.bkTag));
+    } else if ((t = e.target.closest('[data-bt-mode]'))) {
+      e.preventDefault(); setTagMode(t.dataset.btMode);
+    } else if (e.target.closest('#bt-go')) {
+      e.preventDefault(); applyTag();
     } else if (e.target.closest('#bk-m-go')) {
       e.preventDefault(); apply();
     }
