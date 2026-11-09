@@ -75,7 +75,7 @@
       body: "Browse partner lenders by tier and product type. From a lender's page you can escalate a loan, connect, or change your AE." },
     { sec: 6, page: 'resources', target: () => [document.querySelector('#view-resources .lc-hero'), document.querySelector('#view-resources .lc-goals')],
       mTarget: '#view-resources .lc-goals', title: 'The Vault',
-      body: 'Every replay, show, training, and download in one place. Pick a goal, search, or browse shows, replays, and tools.' },
+      body: 'Every replay, show, training, and download in one place. Pick a goal, search, or browse shows, replays, and tools — or use <strong>Browse the full library</strong> to jump straight to everything.' },
     { sec: 6, page: 'resources', target: () => document.querySelector('#lp-grid .lp-card') && [document.querySelector('#learning-paths .section-title'), document.querySelector('#lp-grid .lp-card')],
       mTarget: '#lp-grid .lp-card', title: 'Learning paths',
       body: 'Sessions put in order, so you know what to watch first and what comes next. Open a path to see its steps — each one you open is marked done, and the card shows what\'s next.' },

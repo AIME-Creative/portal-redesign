@@ -69,7 +69,7 @@ window.HELP_ARTICLES = [
   /* ---------------- Getting started ---------------- */
   { slug: 'learning-center', audience: 'all', title: 'Finding what to watch in The Vault', category: 'learning',
     summary: 'Every replay, show, training, and download in one place — organized by what you want to get done.',
-    tags: ['vault', 'the vault', 'learning center', 'resources', 'videos', 'podcasts', 'webinars', 'trainings', 'shows', 'replays', 'downloads', 'tools', 'goals', 'filter'], minutes: 2, updated: 'Nov 4, 2026', status: 'Published',
+    tags: ['vault', 'the vault', 'learning center', 'resources', 'videos', 'podcasts', 'webinars', 'trainings', 'shows', 'replays', 'downloads', 'tools', 'goals', 'filter', 'full library', 'browse'], minutes: 2, updated: 'Nov 9, 2026', status: 'Published',
     views: 0, helpful: [0, 0],
     actions: [{ label: 'Open The Vault', attr: 'data-nav="resources"' }],
     body: `
@@ -79,7 +79,7 @@ window.HELP_ARTICLES = [
         <li><strong>Search</strong> in plain words, like "referral partners" or "VA".</li>
         <li><strong>Coming up</strong> shows the next live events. <strong>Learning paths</strong> put sessions in order. <strong>New this month</strong> has the latest additions.</li>
         <li><strong>Shows</strong> are weekly series — pick one to see every episode. <strong>Replays</strong> are recordings of live sessions. <strong>Tools you can use today</strong> are guides, checklists, and templates to download.</li>
-        <li>The <strong>Full library</strong> filters by goal, topic, format (Watch, Listen, Download), or show, and sorts by newest, oldest, or A to Z.</li>
+        <li>The <strong>Full library</strong> is at the bottom of the page — use <strong>Browse the full library</strong> under the search box to jump straight to it. It filters by goal, topic, format (Watch, Listen, Download), or show, and sorts by newest, oldest, or A to Z.</li>
         <li>A few sessions live only in their hub (for example, some Ascent trainings). Find them on the hub's page, or search for them.</li>
         <li>Tap the <strong>heart</strong> to save something — it shows under <strong>Your saved</strong> and in My Library.</li>
         <li>Content from VIP-only hubs is marked <strong>Requires VIP membership</strong>.</li>

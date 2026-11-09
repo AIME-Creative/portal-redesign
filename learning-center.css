@@ -68,3 +68,11 @@
   .lc-goals { grid-template-columns:1fr 1fr; }
   .lc-filters .filter-select { flex:1 1 calc(50% - 4px); width:auto; }
 }
+
+/* Header shortcut to the Full library (it sits below the other sections) */
+.lc-jump { position:relative; z-index:1; display:inline-flex; align-items:center; gap:8px; margin-top:14px; padding:9px 16px;
+  border-radius:999px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.1); color:#fff;
+  font:inherit; font-size:13.5px; font-weight:700; cursor:pointer; transition:.15s; }
+.lc-jump:hover { background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.6); }
+.lc-jump svg { width:15px; height:15px; flex:0 0 auto; }
+#lc-library { scroll-margin-top:90px; }
