@@ -36,3 +36,7 @@
 @media (max-width: 720px) {
   .detail-banner[style*="url("]:not(.has-logo) { height:auto; aspect-ratio:16 / 9; }
 }
+
+/* Market cards: thumbnails are 16:9 like the uploaded graphics, so a graphic fills the space with nothing cut off
+   (transparent logos stay centered on white). */
+#market-grid .res-thumb { height:auto; aspect-ratio:16 / 9; }

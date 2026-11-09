@@ -46,7 +46,7 @@ function lenderCard(l, i){
 function vendorCard(v, i){
   return `<div class="res-card" data-filter="${v.cat}|${v.group}">
     <button class="card-open" data-open-market="${i}">
-      <div class="res-thumb${v.logo?' has-logo':''}" style="${cardBg(v,true)}">
+      <div class="res-thumb${v.logo && !v.art ? ' has-logo' : ''}" style="${cardBg(v,true)}">
         <span class="res-type"><span class="badge" style="background:rgba(255,255,255,.9);color:#0b1f5b">${v.cat}</span></span>
         ${v.logo?'':firstWord(v.name)}
       </div>
@@ -144,7 +144,7 @@ const pick = (list, key, name) => list.find(x=>x[key]===name) || {};
 const featured = [
   { kind:"Lender",   title:"Newrez LLC",                                        sub:"Featured Silver lender",     cta:"View lender", nav:"lenders",   img:pick(lenders,'name','Newrez LLC').logo, logo:true },
   { kind:"Resource", title:"The 'Daily Six' Challenge (Part 3)",                sub:"New from AIME Accelerate",   cta:"Listen now",  nav:"resources", img:pick(resources,'title',"The 'Daily Six' Challenge (Part 3)").img },
-  { kind:"Market",   title:"Advantage Partners Solutions Waived Inspection Fee", sub:"Member deal",                cta:"View deal",   nav:"market",    img:pick(vendors,'name','Advantage Partners Solutions Waived Inspection Fee').logo, logo:true },
+  { kind:"Market",   title:"Advantage Partners Solutions Waived Inspection Fee", sub:"Member deal",                cta:"View deal",   nav:"market",    img:pick(vendors,'name','Advantage Partners Solutions Waived Inspection Fee').logo, logo:true, art:pick(vendors,'name','Advantage Partners Solutions Waived Inspection Fee').art },
   { kind:"Event",    title:"Fuse 2026",                                         sub:"Tickets on sale now",        cta:"Get tickets", nav:"events",    img:pick(events,'title','Fuse 2026').img },
   { kind:"Resource", title:"Mortgage Mornings | June 24th, 2026",               sub:"This week's Mortgage Mornings", cta:"Listen now", nav:"resources", img:pick(resources,'title','Mortgage Mornings | June 24th, 2026').img },
   { kind:"Lender",   title:"United Wholesale Mortgage",                         sub:"Featured Title/Platinum lender", cta:"View lender", nav:"lenders", img:pick(lenders,'name','United Wholesale Mortgage').logo, logo:true },

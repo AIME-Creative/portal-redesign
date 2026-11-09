@@ -4222,7 +4222,8 @@ window.AMP_CONTENT = {
 })();
 // Card / banner background: the item's image when it has one, else its brand gradient.
 window.cardBg = function (x, logo) {
-  if (logo && x.logo) return `background:#fff url('${x.logo}') center/58% auto no-repeat`;
+  if (logo && x.logo && x.art) return `background:#0b1f5b url('${x.logo}') center/cover no-repeat`;   // Market graphic: fill
+  if (logo && x.logo) return `background:#fff url('${x.logo}') center/58% auto no-repeat`;          // transparent logo on white
   if (x.img) return `background:#0b1f5b url('${x.img}') center/cover no-repeat`;
   const g = x.g || ['#021649', '#20adce'];
   return `background:linear-gradient(135deg,${g[0]},${g[1]})`;
