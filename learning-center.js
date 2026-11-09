@@ -170,7 +170,7 @@
       <h1>What do you want to <em>work on today?</em></h1>
       <p>Every replay, show, training, and download in your membership, organized by what you're trying to get done. ${partner ? 'Pick a goal or search.' : 'Pick a goal, follow a path, or search.'}</p>
       <div class="lc-search">${svg(ICO.search)}<input class="input" id="lc-q" placeholder="Search The Vault — try “referral partners”, “VA”, or “objections”" autocomplete="off"></div>
-      <button type="button" class="lc-jump" data-lc-jump>Browse the full library · ${items.length} items<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+      <button type="button" class="lc-jump" data-lc-jump>Browse the full library<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
     </div>
     <div class="lc-goals">${GOALS.filter(([g]) => goalCount(g)).map(([g, d, ic]) => `<button type="button" class="lc-goal" data-lc-goal="${esc(g)}">
         <span class="lc-goal-ico">${svg(ic)}</span><span class="lc-goal-t">${esc(g)}</span><span class="lc-goal-d">${esc(d)}</span><span class="lc-goal-n">${goalCount(g)} items</span></button>`).join('')}</div>
