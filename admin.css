@@ -483,3 +483,26 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .cp-show { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); }
 #view-content .cp-table { min-width:0; }
 #view-content .t-right .pv-link { margin-left:auto; }
+
+/* ---------- Bulk edit on content lists (admin-bulk.js) ---------- */
+table.adm th.bk-col, table.adm td.bk-col { width:36px; padding-right:0; }
+.bk-check { width:16px; height:16px; accent-color:var(--pink, #dd1969); cursor:pointer; vertical-align:middle; }
+table.adm tr.bk-selected td { background:rgba(221,25,105,.05); }
+.bk-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:-6px 0 12px; font-size:14px; }
+.bk-bar.idle { color:var(--ink-soft); }
+.bk-bar.on { background:var(--navy, #021649); color:#fff; border-radius:12px; padding:10px 14px; position:sticky; top:8px; z-index:5; }
+.bk-bar.on .bk-sub { color:rgba(255,255,255,.7); }
+.bk-bar.on .link-act { color:#fff; }
+.bk-bar.on .btn-outline { background:transparent; color:#fff; border-color:rgba(255,255,255,.45); }
+.bk-bar .btn[disabled] { opacity:.45; cursor:not-allowed; }
+.bk-bar[hidden] { display:none; }
+.bk-bar.idle .dot-status { font-weight:600; }
+.dot-scheduled::before { background:var(--cyan, #20adce); }
+.bk-when-note { margin-top:3px; }
+.bk-bar.on .bk-danger { color:#ffc2d6; border-color:rgba(255,160,190,.55); }
+.btn.bk-danger-solid { background:#c8102e; border-color:#c8102e; }
+.bk-err { color:#c8102e; font-weight:600; }
+#bk-ed-when { margin:4px 0 16px; }
+.bk-spacer { flex:1; }
+.bk-list { margin:0; padding-left:18px; max-height:260px; overflow:auto; font-size:14px; line-height:1.6; }
+@media (max-width:640px) { .bk-bar.on { position:static; } .bk-bar.on .bk-spacer { flex-basis:100%; height:0; } }

@@ -41,6 +41,11 @@ const resources = [
   // Hub content (placeholders — hubs are new)
   { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"Loan Products & Guidelines", status:"Active" },
   { title:"Ascent — Leading at Scale", access:["VIP"], hubOnly:true, type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"Leadership & Team", status:"Active" },
+  // Drafts + one scheduled item (placeholders) — not live yet; publish, schedule, or delete several at once (admin-bulk.js)
+  { title:"Mortgage Mornings | July 1st, 2026", type:"Podcast", dur:"Mortgage Mornings", pub:"Jul 1, 2026", collection:"—", topic:"Loan Products & Guidelines", access:["All Members"], status:"Scheduled", publishAt:{ date:"2026-07-01", time:"08:00" } },
+  { title:"Mortgage Mornings | July 8th, 2026", type:"Podcast", dur:"Mortgage Mornings", pub:"—", collection:"—", topic:"Loan Products & Guidelines", access:["All Members"], status:"Draft" },
+  { title:"Broker Power-Up: Q3 Rate Outlook", type:"Webinar", dur:"Broker Power-Up", pub:"—", collection:"—", topic:"Loan Products & Guidelines", access:["Elite","VIP"], status:"Draft" },
+  { title:"Fuse 2026 — How to Plan Your Three Days", type:"Video", dur:"Fuse", pub:"—", collection:"—", topic:"AIME Community", access:["All Members"], status:"Draft" },
 ];
 // `hub` assigns an event to a hub (— = appears only on the main Events page/calendar). regs = sample counts.
 const SAMPLE_REGS = { "AIME Accelerate - Identity Reset":842, "AIME Accelerate - Win the Day, Win the Week":770, "AIME Accelerate - Run Toward It":615,
@@ -53,6 +58,8 @@ const events = [
   { title:"WMN Monthly Meetup", date:"Jul 9, 2026", type:"Virtual", hub:"WMN", regs:138, status:"Active" },
   { title:"Regional Mixer — Dallas", date:"Aug 12, 2026", type:"In person", hub:"—", regs:86, status:"Active" },
   { title:"AIME Ascent 2027", date:"Feb 8, 2027", type:"In person", hub:"Ascent", regs:0, status:"Active" },
+  { title:"Regional Mixer — Phoenix", date:"Sep 9, 2026", type:"In person", hub:"—", regs:0, status:"Draft" },
+  { title:"Fuse 2026 — First-Timer Orientation", date:"Sep 3, 2026", type:"Virtual", hub:"—", regs:0, status:"Draft" },
 ];
 
 /* ---------- Resource hubs + documents (member-side Hubs & Documents) ---------- */
@@ -85,6 +92,8 @@ const documents = [
   { title:"90-Day Growth Plan Template",     source:"Ascent",            access:["VIP"],         added:"Jun 8, 2026",  status:"Active" },
   { title:"VIP Benefits Guide",              source:"VIP",               access:["VIP"],         added:"Jun 1, 2026",  status:"Active" },
   { title:"Speaking & Feature Opportunities",source:"VIP",               access:["VIP"],         added:"Jun 1, 2026",  status:"Active" },
+  { title:"Fuse 2026 Attendee Guide",        source:"General", access:["All Members"], added:"Jun 24, 2026", status:"Draft" },
+  { title:"Q3 Lender Spotlight Schedule",    source:"General", access:["All Members"], added:"Jun 24, 2026", status:"Draft" },
 ];
 const hubNames = () => hubs.map(h=>h.name);
 
