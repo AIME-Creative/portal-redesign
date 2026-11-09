@@ -39,16 +39,16 @@ const vendors = AMP_CONTENT.vendors.map(v => ({ name:v.name, bio:v.desc, tags:v.
   access:v.access.slice(), status:"Active" }));
 // `collection` assigns a resource to a hub (— = none); `topic` is the Vault topic.
 const resources = [
-  ...AMP_CONTENT.resources.map(r => ({ title:r.title, type:r.type, dur:r.sub || r.series, pub:shortDate(r.pub), collection:"—", topic:r.topic,
+  ...AMP_CONTENT.resources.map(r => ({ title:r.title, type:r.type, category:r.series || "", sub:r.sub || "", show:r.show || "", goal:r.goal || "", pub:shortDate(r.pub), collection:"—", topic:r.topic,
     access:r.access.slice(), graphic:r.img, status:"Active" })),
   // Hub content (placeholders — hubs are new)
-  { title:"Brokers Edge — Core Certification", type:"Certification", dur:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"Loan Products & Guidelines", status:"Active" },
-  { title:"Ascent — Leading at Scale", access:["VIP"], hubOnly:true, type:"Training", dur:"52 min", pub:"Jun 8, 2026", collection:"Ascent", topic:"Leadership & Team", status:"Active" },
+  { title:"Brokers Edge — Core Certification", type:"Certification", category:"Education", sub:"6 modules", pub:"Jun 10, 2026", collection:"—", topic:"Loan Products & Guidelines", status:"Active" },
+  { title:"Ascent — Leading at Scale", access:["VIP"], hubOnly:true, type:"Training", category:"Education", sub:"", pub:"Jun 8, 2026", collection:"Ascent", topic:"Leadership & Team", status:"Active" },
   // Drafts + one scheduled item (placeholders) — not live yet; publish, schedule, or delete several at once (admin-bulk.js)
-  { title:"Mortgage Mornings | July 1st, 2026", type:"Podcast", dur:"Mortgage Mornings", pub:"Jul 1, 2026", collection:"—", topic:"Loan Products & Guidelines", access:["All Members"], status:"Scheduled", publishAt:{ date:"2026-07-01", time:"08:00" } },
-  { title:"Mortgage Mornings | July 8th, 2026", type:"Podcast", dur:"Mortgage Mornings", pub:"—", collection:"—", topic:"Loan Products & Guidelines", access:["All Members"], status:"Draft" },
-  { title:"Broker Power-Up: Q3 Rate Outlook", type:"Webinar", dur:"Broker Power-Up", pub:"—", collection:"—", topic:"Loan Products & Guidelines", access:["Elite","VIP"], status:"Draft" },
-  { title:"Fuse 2026 — How to Plan Your Three Days", type:"Video", dur:"Fuse", pub:"—", collection:"—", topic:"AIME Community", access:["All Members"], status:"Draft" },
+  { title:"Mortgage Mornings | July 1st, 2026", type:"Podcast", category:"Mortgage Mornings", sub:"", show:"Mortgage Mornings", pub:"Jul 1, 2026", collection:"—", topic:"Loan Products & Guidelines", access:["All Members"], status:"Scheduled", publishAt:{ date:"2026-07-01", time:"08:00" } },
+  { title:"Mortgage Mornings | July 8th, 2026", type:"Podcast", category:"Mortgage Mornings", sub:"", show:"Mortgage Mornings", pub:"—", collection:"—", topic:"Loan Products & Guidelines", access:["All Members"], status:"Draft" },
+  { title:"Broker Power-Up: Q3 Rate Outlook", type:"Webinar", category:"Broker Power-Up", sub:"", show:"Broker Power-Up", pub:"—", collection:"—", topic:"Loan Products & Guidelines", access:["Elite","VIP"], status:"Draft" },
+  { title:"Fuse 2026 — How to Plan Your Three Days", type:"Video", category:"Fuse", sub:"", pub:"—", collection:"—", topic:"AIME Community", access:["All Members"], status:"Draft" },
 ];
 // `hub` assigns an event to a hub (— = appears only on the main Events page/calendar). regs = sample counts.
 const SAMPLE_REGS = { "AIME Accelerate - Identity Reset":842, "AIME Accelerate - Win the Day, Win the Week":770, "AIME Accelerate - Run Toward It":615,
@@ -435,7 +435,7 @@ function renderResources(){
     <td><span class="badge badge-cyan">${r.type}</span></td>
     <td>${collTag(r.collection)}${r.hubOnly?'<div class="t-sub">Hub only — not in The Vault</div>':''}</td>
     <td>${accessTags(accessOf(r))}</td>
-    <td>${r.dur}</td>
+    <td>${r.category ? `<span class="badge badge-navy">${r.category}</span>` : '<span class="t-sub" style="display:inline;color:var(--muted)">—</span>'}</td>
     <td>${r.pub}</td>
     <td><span class="dot-status dot-${r.status.toLowerCase()}">${r.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('resource:'+i)}${delBtn('Removed resource.')}</div></td>
@@ -1158,11 +1158,12 @@ function openEdit(ref){
       <div class="form-section-label">Who connection requests go to</div>
       ${window.AmpContactsEditor ? AmpContactsEditor.html(co || v.name, 'vendor', isNew) : ''}`; })()}`;
   } else if(type==='resource'){
-    const r = isNew ? {title:'',type:taxonomies.resourceTypes[0],dur:'',collection:'—',topic:'—',status:'Draft'} : resources[idx];
+    const r = isNew ? {title:'',type:taxonomies.resourceTypes[0],sub:'',collection:'—',topic:'—',status:'Draft'} : resources[idx];
     title = isNew ? 'Add resource' : 'Edit resource'; sub = isNew?'Add a webinar, podcast, training, recording, or certification.':r.title;
     body = `
       ${field('Title', r.title)}
-      <div class="field-row">${selectField('Type', taxonomies.resourceTypes, r.type)}${field('Duration', r.dur)}</div>
+      <div class="field-row">${selectField('Type', taxonomies.resourceTypes, r.type)}${selectField('Category', ['—', ...new Set(resources.map(x=>x.category).filter(Boolean).sort())], r.category || '—')}</div>
+      ${field('Subtitle', r.sub, 'placeholder="e.g. feat. guest names"')}
       <div class="field-row">${selectField('Goal', ['—', ...taxonomies.learningGoals], r.goal || '—')}${selectField('Topic', ['—', ...taxonomies.resourceTopics], r.topic)}</div>
       <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}<div class="field"><label>Hub / collection</label><select class="select" id="ed-hub">${['—', ...hubNames()].map(o=>`<option ${o===r.collection?'selected':''}>${o}</option>`).join('')}</select></div></div>
       <label class="ed-check${r.collection==='—'?' dim':''}" id="ed-hubonly-row"><input type="checkbox" id="ed-hubonly" ${r.hubOnly&&r.collection!=='—'?'checked':''} ${r.collection==='—'?'disabled':''}>
