@@ -227,6 +227,8 @@ let featuredItems = [
   { kind:"Resource", item:"The 'Daily Six' Challenge (Part 3)", note:"New from AIME Accelerate" },
   { kind:"Market",   item:"Advantage Partners Solutions Waived Inspection Fee", note:"Member deal" },
   { kind:"Event",    item:"Fuse 2026",                       note:"Tickets on sale now" },
+  { kind:"Resource", item:"Mortgage Mornings | June 24th, 2026", note:"This week's Mortgage Mornings" },
+  { kind:"Lender",   item:"United Wholesale Mortgage",       note:"Featured Title/Platinum lender" },
 ];
 const kindBadge = { Lender:"badge-navy", Resource:"badge-pink", Market:"badge-cyan", Event:"badge-amber" };
 
@@ -431,12 +433,12 @@ function renderVendors(){
 const collTag = (v) => (!v || v==='—') ? '<span class="t-sub" style="display:inline;color:var(--muted)">—</span>' : `<span class="badge badge-navy">${v}</span>`;
 function renderResources(){
   $('resources-tbody').innerHTML = resources.map((r,i)=>`<tr>
-    <td class="t-strong">${r.graphic?`<img class="t-thumb" src="${r.graphic}" alt="">`:''}${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</td>
+    <td class="t-strong t-titlecell"><div class="t-title-row">${r.graphic?`<img class="t-thumb" src="${r.graphic}" alt="">`:''}<div>${r.title}${(r.topic&&r.topic!=='—')?` <span class="badge badge-cyan" style="font-weight:600">${r.topic}</span>`:''}</div></div></td>
     <td><span class="badge badge-cyan">${r.type}</span></td>
     <td>${collTag(r.collection)}${r.hubOnly?'<div class="t-sub">Hub only — not in The Vault</div>':''}</td>
     <td>${accessTags(accessOf(r))}</td>
     <td>${r.category ? `<span class="badge badge-navy">${r.category}</span>` : '<span class="t-sub" style="display:inline;color:var(--muted)">—</span>'}</td>
-    <td>${r.pub}</td>
+    <td class="t-nowrap">${r.pub}</td>
     <td><span class="dot-status dot-${r.status.toLowerCase()}">${r.status}</span></td>
     <td class="t-right"><div class="row-actions">${editBtn('resource:'+i)}${delBtn('Removed resource.')}</div></td>
   </tr>`).join('');
@@ -453,8 +455,8 @@ function renderEvents(){
   };
   const regCount = (e) => R && (R.active(e.title) || R.regsFor(e.title).length) ? R.regsFor(e.title).length : e.regs;
   $('events-tbody').innerHTML = events.map((e,i)=>`<tr>
-    <td class="t-strong">${e.graphic?`<img class="t-thumb" src="${e.graphic}" alt="">`:''}${e.title}${e.signup?'<div class="t-sub">Sign-up link set</div>':''}</td>
-    <td>${e.date}</td>
+    <td class="t-strong t-titlecell"><div class="t-title-row">${e.graphic?`<img class="t-thumb" src="${e.graphic}" alt="">`:''}<div>${e.title}${e.signup?'<div class="t-sub">Sign-up link set</div>':''}</div></div></td>
+    <td class="t-nowrap">${e.date}</td>
     <td><span class="badge badge-amber">${e.type}</span></td>
     <td>${collTag(e.hub)}</td>
     <td>${accessTags(accessOf(e))}</td>

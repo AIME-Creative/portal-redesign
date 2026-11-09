@@ -65,7 +65,7 @@
         <td><span class="badge ${a.status === 'Published' ? 'badge-green' : 'badge-amber'}">${a.status}</span></td>
         <td>${a.views.toLocaleString()}</td>
         <td>${pct(a.helpful[0], a.helpful[1])}</td>
-        <td>${a.updated}</td>
+        <td class="t-nowrap">${a.updated}</td>
         <td class="t-right"><div class="row-actions">
           ${a.status === 'Published' ? `<a class="link-act" href="index.html#article=${a.slug}" target="_blank" rel="noopener">Preview</a>` : ''}
           <button class="icon-act" data-kb-edit="${a.slug}" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>

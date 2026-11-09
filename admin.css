@@ -39,9 +39,9 @@
 table.adm { width:100%; border-collapse:collapse; min-width:680px; }
 table.adm th {
   text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;
-  color:var(--muted); font-weight:700; padding:13px 18px; border-bottom:1px solid var(--line); background:var(--surface-alt); white-space:nowrap;
+  color:var(--muted); font-weight:700; padding:13px 14px; border-bottom:1px solid var(--line); background:var(--surface-alt); white-space:nowrap;
 }
-table.adm td { padding:13px 18px; border-bottom:1px solid var(--line-soft); font-size:14px; vertical-align:middle; color:var(--ink); }
+table.adm td { padding:13px 14px; border-bottom:1px solid var(--line-soft); font-size:14px; vertical-align:middle; color:var(--ink); }
 table.adm tr:last-child td { border-bottom:none; }
 table.adm tbody tr { transition:.1s; }
 table.adm tbody tr:hover td { background:#fafbfe; }
@@ -510,3 +510,9 @@ table.adm tr.bk-selected td { background:rgba(221,25,105,.05); }
 .bk-spacer { flex:1; }
 .bk-list { margin:0; padding-left:18px; max-height:260px; overflow:auto; font-size:14px; line-height:1.6; }
 @media (max-width:640px) { .bk-bar.on { position:static; } .bk-bar.on .bk-spacer { flex-basis:100%; height:0; } }
+
+/* Admin tables: keep pills, tags, dates, and statuses on one line; thumbnail beside the title */
+/* pills / tags / statuses / dates on one line when there's room: requests.css + table-fit.js */
+table.adm .t-titlecell { min-width:200px; }
+.t-title-row { display:flex; align-items:center; gap:10px; }
+.t-title-row .t-thumb { flex:0 0 auto; margin-right:0; }

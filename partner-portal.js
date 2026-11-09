@@ -140,9 +140,9 @@
       const m = memberOf(r);
       const cells = {
         Type: `<span class="pp-type t-${r.type}">${TYPES[r.type].label}</span>`,
-        Member: `<strong>${esc(r.member)}</strong><div class="pp-dim">${esc(r.email)} · ${esc(m.phone)}</div>`,
+        Member: `<strong>${esc(r.member)}</strong><div class="pp-dim t-nowrap">${esc(r.email)}</div><div class="pp-dim t-nowrap">${esc(m.phone)}</div>`,
         Product: esc(product(r)),
-        Submitted: fmt.date(r.createdAt),
+        Submitted: `<span class="t-nowrap">${fmt.date(r.createdAt)}</span>`,
         'Sent to': `<span class="pp-dim">${esc(sentList(r).map((x) => x.name || x.email).join(', '))}</span>`,
         Status: statusBadge(r.status) + (r.followUp && r.followUp.status === 'open' ? ' <span class="rq-flag amber">Follow-up</span>' : ''),
       };
@@ -216,7 +216,7 @@
           ${multi ? `<td>${r.type === 'support' ? '<span class="pp-dim">—</span>' : `<span class="pp-product">${esc(product(r))}</span>`}</td>` : ''}
           <td>${r.type === 'support' ? '—' : `<strong>${esc(r.member)}</strong><div class="pp-dim">${esc(r.email)}</div>`}</td>
           <td>${r.type === 'support' ? '<span class="pp-dim">AIME support</span>' : sentToCell(r)}</td>
-          <td>${fmt.date(r.createdAt)}</td><td>${statusBadge(r.status)}</td></tr>`).join('')}
+          <td class="t-nowrap">${fmt.date(r.createdAt)}</td><td>${statusBadge(r.status)}</td></tr>`).join('')}
         </tbody></table></div>` : '<div class="empty"><h4>No requests yet</h4><p>Requests members send to your company will appear here.</p></div>'}</div>`;
     const badge = $('pr-nav-count'); if (badge) badge.textContent = reqs.filter(needsYou).length || '';
   }

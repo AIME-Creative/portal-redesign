@@ -17,3 +17,9 @@
 .res-thumb.has-logo, .detail-banner.has-logo { border-bottom: 1px solid var(--line, #e3e8f2); }
 .res-thumb.has-logo .badge, .detail-banner.has-logo .badge { box-shadow: 0 0 0 1px var(--line, #e3e8f2); }
 .detail-banner.has-logo { background-size: auto 62% !important; }
+
+/* Home → Featured: 6 items, always in even rows — 3 across when there's room, 2 across, 1 on narrow phones */
+.featured-wrap { container-type: inline-size; }
+#featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@container (min-width: 720px) { #featured-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@container (max-width: 400px) { #featured-grid { grid-template-columns: 1fr; } }

@@ -98,9 +98,9 @@
       tr.classList.toggle('bk-selected', sel[L.kind].has(i));
       // Scheduled: show when it goes live under the status
       const dot = x && x.status === 'Scheduled' && tr.querySelector('.dot-status');
-      const tagCell = x && TAGS[L.kind] && TAGS[L.kind].field === 'tags' && (L.kind === 'resource' || L.kind === 'event') && tr.children[1];
+      const tagCell = x && TAGS[L.kind] && TAGS[L.kind].field === 'tags' && (L.kind === 'resource' || L.kind === 'event') && (tr.querySelector('.t-title-row > div') || tr.children[1]);
       if (tagCell && (x.tags || []).length && !tagCell.querySelector('.bk-tags')) tagCell.insertAdjacentHTML('beforeend', `<div class="bk-tags">${x.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>`);
-      if (dot && x.publishAt && !dot.parentElement.querySelector('.bk-when-note')) dot.insertAdjacentHTML('afterend', `<div class="t-sub bk-when-note">Goes live ${esc(when(x.publishAt))}</div>`);
+      if (dot && x.publishAt && !dot.parentElement.querySelector('.bk-when-note')) dot.insertAdjacentHTML('afterend', `<div class="t-sub bk-when-note">Goes live ${esc(fmtDate(x.publishAt.date))}<br>${esc(fmtTime(x.publishAt.time))} ET</div>`);
     });
     // Drafts first, then scheduled, then live — stable within each group
     rows.map((tr, n) => { const x = L.arr()[rowIndex(tr, L)]; return { tr, n, o: x && x.status in order ? order[x.status] : 2 }; })

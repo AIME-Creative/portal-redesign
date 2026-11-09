@@ -146,11 +146,20 @@ const featured = [
   { kind:"Resource", title:"The 'Daily Six' Challenge (Part 3)",                sub:"New from AIME Accelerate",   cta:"Listen now",  nav:"resources", img:pick(resources,'title',"The 'Daily Six' Challenge (Part 3)").img },
   { kind:"Market",   title:"Advantage Partners Solutions Waived Inspection Fee", sub:"Member deal",                cta:"View deal",   nav:"market",    img:pick(vendors,'name','Advantage Partners Solutions Waived Inspection Fee').logo, logo:true },
   { kind:"Event",    title:"Fuse 2026",                                         sub:"Tickets on sale now",        cta:"Get tickets", nav:"events",    img:pick(events,'title','Fuse 2026').img },
+  { kind:"Resource", title:"Mortgage Mornings | June 24th, 2026",               sub:"This week's Mortgage Mornings", cta:"Listen now", nav:"resources", img:pick(resources,'title','Mortgage Mornings | June 24th, 2026').img },
+  { kind:"Lender",   title:"United Wholesale Mortgage",                         sub:"Featured Title/Platinum lender", cta:"View lender", nav:"lenders", img:pick(lenders,'name','United Wholesale Mortgage').logo, logo:true },
 ].map(f => f.logo ? { ...f, g:["#021649","#20adce"], logo:f.img, img:null } : { ...f, g:["#021649","#20adce"] });
 const kindBadge = { Lender:"badge-navy", Resource:"badge-pink", Market:"badge-cyan", Event:"badge-amber" };
+// Each Featured card opens that exact item (its own page), not the list it belongs to.
+const featuredOpen = (f) => {
+  const [attr, list, key] = { Lender:['data-open-lender', lenders, 'name'], Market:['data-open-market', vendors, 'name'],
+    Resource:['data-open-resource', resources, 'title'], Event:['data-open-event', events, 'title'] }[f.kind];
+  const i = list.findIndex(x => x[key] === f.title);
+  return i < 0 ? `data-nav="${f.nav}"` : `${attr}="${i}"`;
+};
 document.getElementById('featured-grid').innerHTML = featured.map(f=>`
   <div class="res-card">
-    <button class="card-open" data-nav="${f.nav}">
+    <button class="card-open" ${featuredOpen(f)}>
       <div class="res-thumb" style="${cardBg(f,true)};height:120px;font-size:17px">
         <span class="res-type"><span class="badge ${kindBadge[f.kind]}" style="background:rgba(255,255,255,.92)">${f.kind}</span></span>
         ${f.img||f.logo?'':firstWord(f.title)}
@@ -160,7 +169,7 @@ document.getElementById('featured-grid').innerHTML = featured.map(f=>`
         <div class="res-meta" style="margin-top:5px">${f.sub}</div>
       </div>
     </button>
-    <div style="padding:0 17px 17px"><button class="btn btn-outline btn-sm btn-block" data-nav="${f.nav}">${f.cta}</button></div>
+    <div style="padding:0 17px 17px"><button class="btn btn-outline btn-sm btn-block" ${featuredOpen(f)}>${f.cta}</button></div>
   </div>`).join('');
 
 // Upcoming events on dashboard: the next 3 by date, from today on (clickable to event detail).
