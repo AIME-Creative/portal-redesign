@@ -611,7 +611,7 @@ function openVendor(i){
   document.getElementById('market-detail-body').innerHTML = `
     <a class="back-link" data-nav="market">${backArrow} Back to market</a>
     <div class="card" style="overflow:hidden">
-      <div class="detail-banner${v.logo?' has-logo':''}" style="${cardBg(v,true)}">
+      <div class="detail-banner${v.logo && !v.art ? ' has-logo' : ''}" style="${cardBg(v,true)}">
         <span style="position:absolute;left:18px;top:18px"><span class="badge" style="background:rgba(255,255,255,.92);color:#0b1f5b">${v.cat}</span></span>
         ${v.logo?'':`<div style="font-size:30px;font-weight:800">${firstWord(v.name)}</div>`}
       </div>

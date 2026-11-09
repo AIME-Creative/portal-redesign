@@ -333,7 +333,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/advantage-partners-solutions.png"
+"logo":"assets/content/vendors/advantage-partners-solutions.jpg",
+"art":true
 },
 {
 "name":"Advantage Partners Solutions Ask Mindy",
@@ -359,7 +360,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/advantage-partners-solutions-ask-mindy.png"
+"logo":"assets/content/vendors/advantage-partners-solutions-ask-mindy.jpg",
+"art":true
 },
 {
 "name":"Advantage Partners Solutions Discounted Credit Reports",
@@ -386,7 +388,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/advantage-partners-solutions-discounted-credit-reports.png"
+"logo":"assets/content/vendors/advantage-partners-solutions-discounted-credit-reports.jpg",
+"art":true
 },
 {
 "name":"Advantage Partners Solutions Waived Inspection Fee",
@@ -412,7 +415,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/advantage-partners-solutions-waived-inspection-fee.png"
+"logo":"assets/content/vendors/advantage-partners-solutions-waived-inspection-fee.jpg",
+"art":true
 },
 {
 "name":"ARIVE",
@@ -437,7 +441,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/arive.png"
+"logo":"assets/content/vendors/arive.jpg",
+"art":true
 },
 {
 "name":"Cotality",
@@ -465,7 +470,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/cotality.png"
+"logo":"assets/content/vendors/cotality.jpg",
+"art":true
 },
 {
 "name":"My Credit Info",
@@ -549,7 +555,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/1password.png"
+"logo":"assets/content/vendors/1password.jpg",
+"art":true
 },
 {
 "name":"20/20 Vision for Success",
@@ -574,7 +581,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/20-20-vision-for-success.png"
+"logo":"assets/content/vendors/20-20-vision-for-success.jpg",
+"art":true
 },
 {
 "name":"Aila",
@@ -637,7 +645,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/aime-academy.png"
+"logo":"assets/content/vendors/aime-academy.jpg",
+"art":true
 },
 {
 "name":"Amarlo",
@@ -663,7 +672,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/amarlo.png",
+"logo":"assets/content/vendors/amarlo.jpg",
+"art":true,
 "variant":[
 "VIP"
 ]
@@ -692,7 +702,8 @@ window.AMP_CONTENT = {
 "Elite"
 ],
 "connect":true,
-"logo":"assets/content/vendors/amarlo.png",
+"logo":"assets/content/vendors/amarlo.jpg",
+"art":true,
 "variant":[
 "Elite"
 ]
@@ -721,7 +732,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":true,
-"logo":"assets/content/vendors/amarlo.png",
+"logo":"assets/content/vendors/amarlo.jpg",
+"art":true,
 "variant":[
 "Premium"
 ]
@@ -782,7 +794,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/berman-media-pd-elite-vip.png"
+"logo":"assets/content/vendors/berman-media-pd-elite-vip.jpg",
+"art":true
 },
 {
 "name":"Berman Media PD (for Premium)",
@@ -814,7 +827,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":true,
-"logo":"assets/content/vendors/berman-media-pd-for-premium.png"
+"logo":"assets/content/vendors/berman-media-pd-for-premium.jpg",
+"art":true
 },
 {
 "name":"BrokerVA",
@@ -842,7 +856,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/brokerva.png"
+"logo":"assets/content/vendors/brokerva.jpg",
+"art":true
 },
 {
 "name":"Co/LAB",
@@ -874,7 +889,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/co-lab.png"
+"logo":"assets/content/vendors/co-lab.jpg",
+"art":true
 },
 {
 "name":"Corporate Shopping",
@@ -901,7 +917,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/corporate-shopping.png"
+"logo":"assets/content/vendors/corporate-shopping.jpg",
+"art":true
 },
 {
 "name":"Direct Authority AI",
@@ -1018,7 +1035,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/gusto.png"
+"logo":"assets/content/vendors/gusto.jpg",
+"art":true
 },
 {
 "name":"KeySteps, Powered by FinLocker",
@@ -1050,7 +1068,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/keysteps-powered-by-finlocker.png"
+"logo":"assets/content/vendors/keysteps-powered-by-finlocker.jpg",
+"art":true
 },
 {
 "name":"Lead Hackers",
@@ -1082,7 +1101,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/lead-hackers.png"
+"logo":"assets/content/vendors/lead-hackers.jpg",
+"art":true
 },
 {
 "name":"Leaf360",
@@ -1142,7 +1162,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/loan-team-training.png"
+"logo":"assets/content/vendors/loan-team-training.jpg",
+"art":true
 },
 {
 "name":"LoanSites",
@@ -1169,7 +1190,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/loansites.png"
+"logo":"assets/content/vendors/loansites.jpg",
+"art":true
 },
 {
 "name":"Madison Chase Academy",
@@ -1197,7 +1219,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/madison-chase-academy.png"
+"logo":"assets/content/vendors/madison-chase-academy.jpg",
+"art":true
 },
 {
 "name":"Million Dollar Minute",
@@ -1229,7 +1252,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":false,
-"logo":"assets/content/vendors/million-dollar-minute.png",
+"logo":"assets/content/vendors/million-dollar-minute.jpg",
+"art":true,
 "variant":[
 "VIP"
 ]
@@ -1264,7 +1288,8 @@ window.AMP_CONTENT = {
 "Elite"
 ],
 "connect":false,
-"logo":"assets/content/vendors/million-dollar-minute.png",
+"logo":"assets/content/vendors/million-dollar-minute.jpg",
+"art":true,
 "variant":[
 "Elite"
 ]
@@ -1299,7 +1324,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":false,
-"logo":"assets/content/vendors/million-dollar-minute.png",
+"logo":"assets/content/vendors/million-dollar-minute.jpg",
+"art":true,
 "variant":[
 "Premium"
 ]
@@ -1330,7 +1356,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/mlo-force.png"
+"logo":"assets/content/vendors/mlo-force.jpg",
+"art":true
 },
 {
 "name":"MMIOne",
@@ -1393,7 +1420,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/monday-com.png"
+"logo":"assets/content/vendors/monday-com.jpg",
+"art":true
 },
 {
 "name":"MortgageCon",
@@ -1449,7 +1477,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/my-credit-guy.png"
+"logo":"assets/content/vendors/my-credit-guy.jpg",
+"art":true
 },
 {
 "name":"myhomeIQ",
@@ -1481,7 +1510,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/myhomeiq.png"
+"logo":"assets/content/vendors/myhomeiq.jpg",
+"art":true
 },
 {
 "name":"NordVPN",
@@ -1513,7 +1543,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/nordvpn.png"
+"logo":"assets/content/vendors/nordvpn.jpg",
+"art":true
 },
 {
 "name":"One Rose Consulting",
@@ -1542,7 +1573,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":true,
-"logo":"assets/content/vendors/one-rose-consulting.png",
+"logo":"assets/content/vendors/one-rose-consulting.jpg",
+"art":true,
 "variant":[
 "Premium"
 ]
@@ -1574,7 +1606,8 @@ window.AMP_CONTENT = {
 "Elite"
 ],
 "connect":true,
-"logo":"assets/content/vendors/one-rose-consulting.png",
+"logo":"assets/content/vendors/one-rose-consulting.jpg",
+"art":true,
 "variant":[
 "Elite"
 ]
@@ -1606,7 +1639,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/one-rose-consulting-vip.png"
+"logo":"assets/content/vendors/one-rose-consulting-vip.jpg",
+"art":true
 },
 {
 "name":"PropertyRadar",
@@ -1667,7 +1701,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/quickbooks.png"
+"logo":"assets/content/vendors/quickbooks.jpg",
+"art":true
 },
 {
 "name":"Rad CRM",
@@ -1692,7 +1727,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/rad-crm.png"
+"logo":"assets/content/vendors/rad-crm.jpg",
+"art":true
 },
 {
 "name":"Rapidio",
@@ -1719,7 +1755,8 @@ window.AMP_CONTENT = {
 "Elite"
 ],
 "connect":true,
-"logo":"assets/content/vendors/rapidio.png",
+"logo":"assets/content/vendors/rapidio.jpg",
+"art":true,
 "variant":[
 "Elite"
 ]
@@ -1749,7 +1786,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":true,
-"logo":"assets/content/vendors/rapidio.png",
+"logo":"assets/content/vendors/rapidio.jpg",
+"art":true,
 "variant":[
 "Premium"
 ]
@@ -1779,7 +1817,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/rapidio.png",
+"logo":"assets/content/vendors/rapidio.jpg",
+"art":true,
 "variant":[
 "VIP"
 ]
@@ -1807,7 +1846,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/retr.png"
+"logo":"assets/content/vendors/retr.jpg",
+"art":true
 },
 {
 "name":"Roam",
@@ -1839,7 +1879,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/roam.png"
+"logo":"assets/content/vendors/roam.jpg",
+"art":true
 },
 {
 "name":"Sequifi",
@@ -1894,7 +1935,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":true,
-"logo":"assets/content/vendors/stikkum.png",
+"logo":"assets/content/vendors/stikkum.jpg",
+"art":true,
 "variant":[
 "Premium"
 ]
@@ -1923,7 +1965,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/stikkum.png",
+"logo":"assets/content/vendors/stikkum.jpg",
+"art":true,
 "variant":[
 "VIP"
 ]
@@ -1952,7 +1995,8 @@ window.AMP_CONTENT = {
 "Elite"
 ],
 "connect":true,
-"logo":"assets/content/vendors/stikkum.png",
+"logo":"assets/content/vendors/stikkum.jpg",
+"art":true,
 "variant":[
 "Elite"
 ]
@@ -1983,7 +2027,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/strategic-compliance-partners.png"
+"logo":"assets/content/vendors/strategic-compliance-partners.jpg",
+"art":true
 },
 {
 "name":"Surety Bonds",
@@ -2015,7 +2060,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":false,
-"logo":"assets/content/vendors/surety-bonds.png"
+"logo":"assets/content/vendors/surety-bonds.jpg",
+"art":true
 },
 {
 "name":"The Defining Difference",
@@ -2047,7 +2093,8 @@ window.AMP_CONTENT = {
 "VIP"
 ],
 "connect":true,
-"logo":"assets/content/vendors/the-defining-difference.png",
+"logo":"assets/content/vendors/the-defining-difference.jpg",
+"art":true,
 "variant":[
 "VIP"
 ]
@@ -2082,7 +2129,8 @@ window.AMP_CONTENT = {
 "Elite"
 ],
 "connect":true,
-"logo":"assets/content/vendors/the-defining-difference.png",
+"logo":"assets/content/vendors/the-defining-difference.jpg",
+"art":true,
 "variant":[
 "Elite"
 ]
@@ -2117,7 +2165,8 @@ window.AMP_CONTENT = {
 "Premium"
 ],
 "connect":true,
-"logo":"assets/content/vendors/the-defining-difference.png",
+"logo":"assets/content/vendors/the-defining-difference.jpg",
+"art":true,
 "variant":[
 "Premium"
 ]
@@ -2145,7 +2194,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/vertisure.png"
+"logo":"assets/content/vendors/vertisure.jpg",
+"art":true
 },
 {
 "name":"Vetted VA",
@@ -2171,7 +2221,8 @@ window.AMP_CONTENT = {
 "All Members"
 ],
 "connect":true,
-"logo":"assets/content/vendors/vetted-va.png"
+"logo":"assets/content/vendors/vetted-va.jpg",
+"art":true
 }
 ],
 "resources":[

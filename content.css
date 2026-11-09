@@ -23,3 +23,16 @@
 #featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @container (min-width: 720px) { #featured-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @container (max-width: 400px) { #featured-grid { grid-template-columns: 1fr; } }
+
+/* Detail-page hero (Vault resources, events, hub content, Market products with a graphic):
+   one uploaded image, shown whole — never cropped. The image sits centered at full height,
+   and a blurred, darkened copy of the same image fills the sides. On phones the hero takes
+   the image's 16:9 shape so it fills edge to edge. Logos (.has-logo) keep their own look. */
+.detail-banner[style*="url("]:not(.has-logo) { height:320px; isolation:isolate; overflow:hidden; }
+.detail-banner[style*="url("]:not(.has-logo)::before,
+.detail-banner[style*="url("]:not(.has-logo)::after { content:''; position:absolute; z-index:-1; background:inherit; background-repeat:no-repeat; background-position:center; }
+.detail-banner[style*="url("]:not(.has-logo)::before { inset:-40px; background-size:cover; filter:blur(24px) brightness(.62) saturate(1.15); }
+.detail-banner[style*="url("]:not(.has-logo)::after { inset:0; background-color:transparent; background-size:contain; }
+@media (max-width: 720px) {
+  .detail-banner[style*="url("]:not(.has-logo) { height:auto; aspect-ratio:16 / 9; }
+}

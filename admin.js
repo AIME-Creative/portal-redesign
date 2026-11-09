@@ -1146,7 +1146,7 @@ function openEdit(ref){
     title = isNew ? 'Add product' : 'Edit product'; sub = isNew?'Add a product to the Market.':v.name;
     body = `
       <div class="field-row">${field('Product name', v.name)}${field('Logo abbreviation', v.short)}</div>
-      ${imageUpload('Logo or graphic', v, 'PNG, SVG, or JPG, up to 2 MB. Shown on the Market card and the product page. Square logos or wide graphics (1200 × 630) both work. Without one, the abbreviation is shown.')}
+      ${imageUpload('Logo or graphic', v, 'PNG, SVG, or JPG, up to 2 MB. A logo with a transparent background, or a wide 16:9 graphic (at least 1280 × 720). Shown on the Market card and the product page — a graphic is shown whole at the top of the page, a logo on white. Without one, the abbreviation is shown.')}
       ${bioField(v.bio, 'Shown on the product\'s page and card in the Market.')}
       <div class="field-row"><div class="field"><label>Category</label><select class="select" id="ed-cat">${taxonomies.vendorCategories.map(o=>`<option ${o===v.cat?'selected':''}>${o}</option>`).join('')}</select><div class="hint">Which Market group it's listed under.</div></div>${selectField('Status', ['Active','Draft'], v.status)}</div>
       ${tagPicker('Product types', taxonomies.vendorProducts, v.tags, 'ed-tags')}
@@ -1170,7 +1170,7 @@ function openEdit(ref){
       <div class="field-row">${selectField('Show', ['— (not part of a show)', ...taxonomies.learningShows], r.show || '— (not part of a show)')}<div class="field"><label>Hub / collection</label><select class="select" id="ed-hub">${['—', ...hubNames()].map(o=>`<option ${o===r.collection?'selected':''}>${o}</option>`).join('')}</select></div></div>
       <label class="ed-check${r.collection==='—'?' dim':''}" id="ed-hubonly-row"><input type="checkbox" id="ed-hubonly" ${r.hubOnly&&r.collection!=='—'?'checked':''} ${r.collection==='—'?'disabled':''}>
         <span><strong>Only in this hub</strong> — keep it out of The Vault. Members find it only on the hub's page (and in search, under the hub).</span></label>
-      ${imageUpload('Graphic', r, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the card and the page in The Vault. Without one, the default artwork for its type is used.', true)}
+      ${imageUpload('Graphic', r, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the card and, whole, at the top of its page in The Vault. Without one, the default artwork for its type is used.', true)}
       ${field('Content link', '', 'placeholder="Video / audio URL"')}
       ${docsPicker('resource', r.title)}
       ${accessPicker(accessOf(r))}
@@ -1183,7 +1183,7 @@ function openEdit(ref){
       ${field('Event title', e.title)}
       <div class="field-row">${field('Date', e.date)}${selectField('Type', taxonomies.eventTypes, e.type)}</div>
       ${selectField('Hub / collection', ['—', ...hubNames()], e.hub)}
-      ${imageUpload('Graphic', e, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the event card, the calendar pop-up, and the event page. Without one, the default artwork for its type is used.', true)}
+      ${imageUpload('Graphic', e, 'PNG or JPG, up to 2 MB. Wide 16:9 works best (at least 1280 × 720). Shown on the event card, the calendar pop-up, and, whole, at the top of the event page. Without one, the default artwork for its type is used.', true)}
       <div class="field"><label>Sign-up link</label><input class="input" id="ed-signup" type="url" value="${e.signup||''}" placeholder="https://… — where members sign up for this event"><div class="hint">For events members sign up for somewhere else (e.g. a partner's or venue's page). If <strong>Registration</strong> is turned on for this event, members register in the portal and this link isn't shown.</div></div>
       ${docsPicker('event', e.title)}
       ${accessPicker(accessOf(e), '<strong>All Members</strong> includes everyone. Pick tiers to limit it — other members still see the event, with an upgrade prompt instead of registration.')}
