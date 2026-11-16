@@ -29,7 +29,7 @@
     { sec: 1, page: 'dashboard', target: '#view-dashboard .stat-row.admin5', title: 'The dashboard',
       body: 'Your day-to-day view: paying members, pending requests, partners, and registrations. Click any tile to jump there. Membership numbers and trends live on the Scorecard.' },
     { sec: 1, page: 'dashboard', target: () => [$('dash-quick').closest('.dash-ql'), $('dash-members').closest('.card')], mTarget: () => $('dash-quick').closest('.dash-ql'), title: 'New members and quick links',
-      body: 'Click a new member to open their record. <strong>Quick links</strong> let you add a resource, event, lender, or vendor in one click — or jump to its list to edit one.' },
+      body: 'Click a new member to open their record. <strong>Quick links</strong> start a new resource, event, lender, or vendor in one click — the link under each opens the full list.' },
     { sec: 1, page: 'scorecard', target: () => document.querySelector('#view-scorecard .sc-nums'), title: 'The membership scorecard',
       body: 'Membership health in one place — paying members, dues, retention, sign-ups and where they come from, who\'s renewing or at risk, FUSE, and engagement. It updates each time you open it.' },
 

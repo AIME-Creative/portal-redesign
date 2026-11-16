@@ -211,14 +211,26 @@
         <div class="dash-ql">
           <div class="section-title"><h2>Quick links</h2></div>
           <div class="qa-grid" id="dash-quick">
-          <div class="qa ql-card"><div class="qa-ico pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg></div>
-            <div><div class="qa-t">Resource</div><div class="ql-links"><button type="button" data-edit="resource:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="resources">Edit</button></div></div></div>
-          <div class="qa ql-card"><div class="qa-ico cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
-            <div><div class="qa-t">Event</div><div class="ql-links"><button type="button" data-edit="event:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="events">Edit</button></div></div></div>
-          <div class="qa ql-card"><div class="qa-ico navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></div>
-            <div><div class="qa-t">Lender</div><div class="ql-links"><button type="button" data-edit="lender:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="lenders">Edit</button></div></div></div>
-          <div class="qa ql-card"><div class="qa-ico teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg></div>
-            <div><div class="qa-t">Vendor</div><div class="ql-links"><button type="button" data-edit="vendor:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="market">Edit</button></div></div></div>
+            <div class="ql-item">
+              <button class="qa" data-edit="resource:new"><div class="qa-ico pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg></div>
+                <div><div class="qa-t">Add a resource</div><div class="qa-s">New item in The Vault</div></div></button>
+              <a href="#" class="ql-all" data-nav="resources">View all resources <span>→</span></a>
+            </div>
+            <div class="ql-item">
+              <button class="qa" data-edit="event:new"><div class="qa-ico cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
+                <div><div class="qa-t">Add an event</div><div class="qa-s">New event on the calendar</div></div></button>
+              <a href="#" class="ql-all" data-nav="events">View all events <span>→</span></a>
+            </div>
+            <div class="ql-item">
+              <button class="qa" data-edit="lender:new"><div class="qa-ico navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></div>
+                <div><div class="qa-t">Add a lender</div><div class="qa-s">New lender partner</div></div></button>
+              <a href="#" class="ql-all" data-nav="lenders">View all lenders <span>→</span></a>
+            </div>
+            <div class="ql-item">
+              <button class="qa" data-edit="vendor:new"><div class="qa-ico teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg></div>
+                <div><div class="qa-t">Add a vendor</div><div class="qa-s">New Market product</div></div></button>
+              <a href="#" class="ql-all" data-nav="market">View all vendors <span>→</span></a>
+            </div>
           </div>
         </div>
 

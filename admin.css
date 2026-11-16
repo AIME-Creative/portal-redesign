@@ -538,13 +538,15 @@ table.adm .t-titlecell { min-width:200px; }
 .dash-member:last-child { border-bottom:0; }
 .dash-member:hover .lt { color:var(--cyan-600); }
 .dash-member-go { width:16px; height:16px; color:var(--muted); flex:none; }
-/* Quick links: same cards as the member home Quick actions, four across above the Scorecard link */
+/* Quick links: same cards as the member home Quick actions, four across above the Scorecard link.
+   The card creates a new item; the link under it opens that list. */
 .dash-ql { margin:4px 0 20px; }
 #dash-quick { grid-template-columns:repeat(4, minmax(0, 1fr)); }
-.ql-card:hover { transform:none; }
+.ql-item { display:flex; flex-direction:column; gap:8px; min-width:0; }
+.ql-item .qa { width:100%; font:inherit; color:inherit; cursor:pointer; }
 .qa-ico.teal { background:#0b6b82; }
-.ql-links { display:flex; align-items:center; gap:8px; margin-top:4px; font-size:13px; color:var(--muted); }
-.ql-links button { font:inherit; font-weight:700; color:var(--cyan-600); padding:2px 0; cursor:pointer; }
-.ql-links button:hover { color:var(--navy); text-decoration:underline; text-underline-offset:3px; }
+.ql-all { font-size:13px; font-weight:700; color:var(--cyan-600); padding-left:4px; align-self:flex-start; }
+.ql-all span { transition:.15s; display:inline-block; }
+.ql-all:hover { color:var(--navy); } .ql-all:hover span { transform:translateX(2px); }
 @media (max-width:1100px) { #dash-quick { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
-@media (max-width:560px) { #dash-quick { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; } .ql-card { flex-direction:column; align-items:flex-start; gap:10px; padding:14px; } .ql-card .qa-ico { width:40px; height:40px; flex-basis:40px; } }
+@media (max-width:560px) { #dash-quick { gap:12px 10px; } .ql-item .qa { flex-direction:column; align-items:flex-start; gap:10px; padding:14px; } .ql-item .qa .qa-ico { width:40px; height:40px; flex-basis:40px; } .ql-item .qa-s { display:none; } }
