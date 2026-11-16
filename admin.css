@@ -366,6 +366,11 @@ table.adm tbody tr:hover td { background:#fafbfe; }
 .pr-tile { display:flex; align-items:center; gap:14px; text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:var(--radius); padding:16px; transition:.15s; }
 .pr-tile[data-pr-tile] { cursor:pointer; }
 .pr-tile[data-pr-tile]:hover { border-color:#c9cfdd; }
+.pr-tile[data-pr-go] { cursor:pointer; }
+.pr-tile[data-pr-go]:hover { border-color:#c9cfdd; }
+/* Partner Reports → Overview */
+.pr-tabs { margin:6px 0 18px; }
+table.pr-ov tfoot .pr-total td { font-weight:800; background:var(--surface-alt, #f7f9fc); border-top:1.5px solid var(--line); border-bottom:none; }
 .pr-tile:disabled { cursor:default; color:inherit; opacity:1; }
 .pr-tile.active { border-color:var(--navy); box-shadow:0 0 0 3px rgba(2,22,73,.08); }
 .pr-tile-ico { width:42px; height:42px; border-radius:12px; display:grid; place-items:center; flex:none; }

@@ -13,14 +13,24 @@
       lender emails notify brokermembership@aimegroup.com, failed
       vendor connection emails notify bennett@aimegroup.com.
       The Reports page keeps Subscriptions.
-   2. Analytics → Lender page views (new tab) and Vendor
-      page views: click a views number to see which members
-      viewed that page — totals (total / unique views, escalations,
+      Each page has two tabs:
+      - Overview (default): one row per lender / Market product —
+        Page views, Unique page views, Connections, and (lenders)
+        Escalations and Change AE, with totals across the top and an
+        "All lenders / All products" totals row. Page views opens who
+        viewed the page; a request count opens All requests filtered
+        to that partner and type.
+      - All requests: the request list (filters, email status, CSV).
+      Both tabs share the date range. Page views used to live under
+      Analytics (Lender / Vendor page views) — moved here so partner
+      numbers are in one place; old links redirect.
+   2. Who viewed a page: totals (total / unique views, escalations,
       Change AE, connections, sign-ups), one row per member, Export CSV.
       Vendors: upload the sign-up list a vendor sends (CSV) — matched
       to members by email (NMLS # as a fallback when present) and
       shown as "Signed up?". Sign-ups who never viewed the page are
       still listed; ones that don't match a member are listed apart.
+   3. Analytics → Content performance covers The Vault and events.
    Prototype: sample records relative to TODAY (Jun 25, 2026); sign-up
    uploads in localStorage amp-vendor-signups-v1.
    Uses admin.js globals: TODAY, ranges, setupRange, inWindow, fmtDate,
@@ -59,7 +69,7 @@
 
   /* ---------- report records: the existing samples plus a year of history ---------- */
   const lenderNames = lenders.map((l) => l.name);
-  const vendorNames = vendors.map((v) => v.name);
+  const vendorNames = [...new Set(vendors.map((v) => v.name))];
   const AE = ['Dana Price', 'Brett Hollis', 'Grant Ellis', 'Mia Torres', 'Ray Quinn', 'Owen Pike', 'Lena Moss'];
   const REASONS = ['Unresponsive', 'Poor communication', 'Relocated / no longer my market', 'Other'];
   const email = (fail) => (fail ? 'Failed' : 'Delivered');
@@ -74,7 +84,9 @@
     else if (t < 0.7) lenderRows.push({ type: 'Change AE', member: p.name, partner: pick(lenderNames), detail: `${pick(AE)} · ${pick(REASONS)}`, date: ago(d), status: 'Delivered', email: email(rnd() < 0.04) });
     else lenderRows.push({ type: 'Connection', member: p.name, partner: pick(lenderNames), detail: '—', date: ago(d), status: 'Delivered', email: email(rnd() < 0.04) });
   }
-  for (let i = 0; i < 64; i++) vendorRows.push({ type: 'Connection', member: pick(people).name, partner: pick(vendorNames), date: ago(3 + Math.floor(rnd() * 390)), status: 'Delivered', email: email(rnd() < 0.05) });
+  // Busier products (vendorClicks in admin.js) get more of the sample connections, so they line up with page views.
+  const busy = vendorClicks.flatMap((v) => Array(Math.max(1, Math.round(v.connections / 12))).fill(v.name));
+  for (let i = 0; i < 110; i++) vendorRows.push({ type: 'Connection', member: pick(people).name, partner: rnd() < 0.7 ? pick(busy) : pick(vendorNames), date: ago(3 + Math.floor(rnd() * 390)), status: 'Delivered', email: email(rnd() < 0.05) });
   // A couple of recent failures so the notification note has something to point at.
   lenderRows.push({ type: 'Escalation', member: 'Janet Park', partner: 'KIND Lending', detail: 'Loan #100409881', date: ago(2), status: 'Received', email: 'Failed' });
   vendorRows.push({ type: 'Connection', member: 'Tom Becker', partner: 'Lead Hackers', date: ago(1), status: 'Delivered', email: 'Failed' });
@@ -95,29 +107,51 @@
   const reportsView = $('view-reports');
   reportsView.insertAdjacentHTML('afterend', `
     <section class="view" id="view-lender-reports">
-      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Lender reports</h1><p>Escalations, Change AE requests, and lender connections — to share with a lender or review. Defaults to all time.</p></div>${rangeMarkup('lenderrep')}</div>
-      <div class="pr-tiles" id="lr-tiles"></div>
-      <div class="pr-note">${svg(ICO.info)}<p>Emails to lenders include the member's first name. If an escalation, Change AE, or connection email to a lender fails, <strong>brokermembership@aimegroup.com</strong> is notified.</p></div>
-      <div class="toolbar">
-        <select class="select filter-select" id="lr-partner" style="min-width:220px"><option value="all">All lenders</option>${lenderNames.map((n) => `<option>${esc(n)}</option>`).join('')}</select>
-        <select class="select filter-select" id="lr-type"><option value="all">All request types</option><option>Escalation</option><option>Change AE</option><option>Connection</option></select>
-        <select class="select filter-select" id="lr-email"><option value="all">Any email status</option><option>Delivered</option><option>Failed</option></select>
-        <span class="spacer"></span><span class="count-note" id="lr-count"></span>
-        <button class="btn btn-primary" data-pr-export="lender">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button>
+      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Lender reports</h1><p>Page views and every request members sent each lender — escalations, Change AE, and connections. To share with a lender or review. Defaults to all time.</p></div>${rangeMarkup('lenderrep')}</div>
+      <div class="filters pr-tabs" id="lr-tabs" role="tablist"><button class="chip active" data-pr-tab="lender:overview" role="tab">Overview</button><button class="chip" data-pr-tab="lender:requests" role="tab">All requests</button></div>
+      <div id="lr-pane-overview">
+        <div class="pr-tiles" id="lo-tiles"></div>
+        <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="lo-q" placeholder="Search lenders…"></div>
+          <span class="spacer"></span><span class="count-note" id="lo-count"></span>
+          <button class="btn btn-primary" data-pr-export="lender-overview">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Lender</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th><th class="t-right">Escalations</th><th class="t-right">Change AE</th><th class="t-right">Actions</th></tr></thead><tbody id="lo-tbody"></tbody><tfoot id="lo-tfoot"></tfoot></table></div></div>
+        <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong>, <strong>Escalations</strong>, <strong>Change AE</strong> = requests members sent that lender. Click a number to see the list behind it. "Email lender" sends that lender their own numbers.</p>
       </div>
-      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Type</th><th>Member</th><th>Lender</th><th>Details</th><th>Date</th><th>Status</th><th>Email</th></tr></thead><tbody id="lr-tbody"></tbody></table></div></div>
+      <div id="lr-pane-requests" hidden>
+        <div class="pr-tiles" id="lr-tiles"></div>
+        <div class="pr-note">${svg(ICO.info)}<p>Emails to lenders include the member's first name. If an escalation, Change AE, or connection email to a lender fails, <strong>brokermembership@aimegroup.com</strong> is notified.</p></div>
+        <div class="toolbar">
+          <select class="select filter-select" id="lr-partner" style="min-width:220px"><option value="all">All lenders</option>${lenderNames.map((n) => `<option>${esc(n)}</option>`).join('')}</select>
+          <select class="select filter-select" id="lr-type"><option value="all">All request types</option><option>Escalation</option><option>Change AE</option><option>Connection</option></select>
+          <select class="select filter-select" id="lr-email"><option value="all">Any email status</option><option>Delivered</option><option>Failed</option></select>
+          <span class="spacer"></span><span class="count-note" id="lr-count"></span>
+          <button class="btn btn-primary" data-pr-export="lender">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Type</th><th>Member</th><th>Lender</th><th>Details</th><th>Date</th><th>Status</th><th>Email</th></tr></thead><tbody id="lr-tbody"></tbody></table></div></div>
+      </div>
     </section>
     <section class="view" id="view-vendor-reports">
-      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Vendor reports</h1><p>Connection requests members sent to Market vendors. Defaults to all time.</p></div>${rangeMarkup('vendorrep')}</div>
-      <div class="pr-tiles" id="vr-tiles"></div>
-      <div class="pr-note">${svg(ICO.info)}<p>Connection emails to vendors include the member's first name, and "Have questions?" points to <strong>vendors@aimegroup.com</strong>. If a vendor connection email fails, <strong>bennett@aimegroup.com</strong> is notified.</p></div>
-      <div class="toolbar">
-        <select class="select filter-select" id="vr-partner" style="min-width:220px"><option value="all">All vendors</option>${vendorNames.map((n) => `<option>${esc(n)}</option>`).join('')}</select>
-        <select class="select filter-select" id="vr-email"><option value="all">Any email status</option><option>Delivered</option><option>Failed</option></select>
-        <span class="spacer"></span><span class="count-note" id="vr-count"></span>
-        <button class="btn btn-primary" data-pr-export="vendor">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button>
+      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Vendor reports</h1><p>Page views and connection requests for each Market product. To share with a vendor or review. Defaults to all time.</p></div>${rangeMarkup('vendorrep')}</div>
+      <div class="filters pr-tabs" id="vr-tabs" role="tablist"><button class="chip active" data-pr-tab="vendor:overview" role="tab">Overview</button><button class="chip" data-pr-tab="vendor:requests" role="tab">All connections</button></div>
+      <div id="vr-pane-overview">
+        <div class="pr-tiles" id="vo-tiles"></div>
+        <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="vo-q" placeholder="Search products or companies…"></div>
+          <span class="spacer"></span><span class="count-note" id="vo-count"></span>
+          <button class="btn btn-primary" data-pr-export="vendor-overview">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Product</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th><th class="t-right">Actions</th></tr></thead><tbody id="vo-tbody"></tbody><tfoot id="vo-tfoot"></tfoot></table></div></div>
+        <p class="flow-caption"><strong>Page views</strong> = times the product's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong> = members who requested an intro. Click a number to see the list behind it. "Email vendor" sends that partner their own numbers.</p>
       </div>
-      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Member</th><th>Vendor</th><th>Date</th><th>Status</th><th>Email</th></tr></thead><tbody id="vr-tbody"></tbody></table></div></div>
+      <div id="vr-pane-requests" hidden>
+        <div class="pr-tiles" id="vr-tiles"></div>
+        <div class="pr-note">${svg(ICO.info)}<p>Connection emails to vendors include the member's first name, and "Have questions?" points to <strong>vendors@aimegroup.com</strong>. If a vendor connection email fails, <strong>bennett@aimegroup.com</strong> is notified.</p></div>
+        <div class="toolbar">
+          <select class="select filter-select" id="vr-partner" style="min-width:220px"><option value="all">All products</option>${vendorNames.map((n) => `<option>${esc(n)}</option>`).join('')}</select>
+          <select class="select filter-select" id="vr-email"><option value="all">Any email status</option><option>Delivered</option><option>Failed</option></select>
+          <span class="spacer"></span><span class="count-note" id="vr-count"></span>
+          <button class="btn btn-primary" data-pr-export="vendor">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Member</th><th>Product</th><th>Date</th><th>Status</th><th>Email</th></tr></thead><tbody id="vr-tbody"></tbody></table></div></div>
+      </div>
     </section>`);
   ranges.lenderrep = { days: 36500, label: 'All time', from: null, to: null };
   ranges.vendorrep = { days: 36500, label: 'All time', from: null, to: null };
@@ -155,8 +189,8 @@
       || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">Nothing matches these filters.</td></tr>';
     $('vr-count').textContent = `${rows.length} connection${rows.length === 1 ? '' : 's'} · ${ranges.vendorrep.label}`;
   }
-  setupRange('lenderrep', renderLender, { allDays: 36500 });
-  setupRange('vendorrep', renderVendor, { allDays: 36500 });
+  setupRange('lenderrep', () => { renderLender(); renderLenderOverview(); }, { allDays: 36500 });
+  setupRange('vendorrep', () => { renderVendor(); renderVendorOverview(); }, { allDays: 36500 });
   ['lr-partner', 'lr-type', 'lr-email'].forEach((id) => $(id).addEventListener('change', renderLender));
   ['vr-partner', 'vr-email'].forEach((id) => $(id).addEventListener('change', renderVendor));
 
@@ -169,27 +203,15 @@
   if (rp) rp.textContent = 'Subscription upgrades, downgrades, and cancellations, with why members cancelled. Lender and vendor reports are under Partner Reports. Defaults to all time.';
 
   /* ============================================================
-     Analytics — who viewed a lender or vendor page
+     Overview tabs — page views + requests per lender / product
      ============================================================ */
-  const TABS = (active) => `<div class="filters an-tabs" role="tablist">${[['engagement', 'Engagement'], ['content', 'Content performance'], ['journeys', 'Member journeys'], ['lenderviews', 'Lender page views'], ['vendorclicks', 'Vendor page views']]
+  const TABS = (active) => `<div class="filters an-tabs" role="tablist">${[['engagement', 'Engagement'], ['content', 'Content performance'], ['journeys', 'Member journeys']]
     .map(([v, l]) => `<button class="chip ${v === active ? 'active' : ''}" data-nav="${v}" role="tab">${l}</button>`).join('')}</div>`;
-  // Add the new tab to the existing Analytics tab rows.
   document.querySelectorAll('.an-tabs').forEach((row) => {
-    const vc = row.querySelector('[data-nav="vendorclicks"]');
-    if (vc && !row.querySelector('[data-nav="lenderviews"]')) vc.insertAdjacentHTML('beforebegin', '<button class="chip" data-nav="lenderviews" role="tab">Lender page views</button>');
     const eg = row.querySelector('[data-nav="engagement"]');
     if (eg && !row.querySelector('[data-nav="content"]')) eg.insertAdjacentHTML('afterend', '<button class="chip" data-nav="content" role="tab">Content performance</button>');
   });
-  $('view-vendorclicks').insertAdjacentHTML('afterend', `
-    <section class="view" id="view-lenderviews">${TABS('lenderviews')}
-      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Lender page views — how many members view each lender's page, and what they sent that lender. Numbers your team can share with lenders. Click a views number to see who viewed it.</p></div>
-        <div class="date-range" id="lenderviews-range"><select class="select filter-select daterange-preset"><option value="7d">Last 7 days</option><option value="30d" selected>Last 30 days</option><option value="90d">Last 90 days</option><option value="ytd">Year to date</option><option value="all">All time</option><option value="custom">Custom range…</option></select>
-        <div class="daterange-custom" hidden><input type="date" class="input daterange-from"><span class="dr-sep">to</span><input type="date" class="input daterange-to"><button class="btn btn-outline btn-sm daterange-apply">Apply</button></div></div></div>
-      <div class="stat-row admin5" id="lv-tiles" style="margin:18px 0 20px"></div>
-      <div class="toolbar" style="justify-content:space-between"><span class="count-note" id="lv-count">—</span><button class="btn btn-outline btn-sm" data-toast="Exported lender page views report to CSV.">Export CSV</button></div>
-      <div class="table-wrap"><div class="table-scroll"><table class="adm"><thead><tr><th>Lender</th><th>Tier</th><th>Page views</th><th>Unique page views</th><th>Premium</th><th>Elite</th><th>VIP</th><th>Escalations</th><th>Change AE</th><th>Connections</th><th class="t-right">Actions</th></tr></thead><tbody id="lv-tbody"></tbody></table></div></div>
-      <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it (<strong>Premium</strong> · <strong>Elite</strong> · <strong>VIP</strong> split those by membership tier) · <strong>Escalations</strong>, <strong>Change AE</strong>, <strong>Connections</strong> = requests members sent that lender. "Email lender" sends that lender their own numbers.</p>
-    </section>
+  $('view-page-viewers') || reportsView.insertAdjacentHTML('afterend', `
     <section class="view" id="view-page-viewers">
       <div id="pv-tabs"></div>
       <a href="#" class="back-link" id="pv-back">${svg(ICO.back).replace('<svg', '<svg style="width:16px;height:16px"')} <span>Back</span></a>
@@ -204,46 +226,107 @@
       <div style="text-align:center;margin-top:16px"><button type="button" class="btn btn-outline btn-sm" id="pv-more" hidden>Show more</button></div>
       <div id="pv-unmatched"></div>
     </section>`);
-  ranges.lenderviews = { days: 30, label: 'Last 30 days', from: null, to: null };
 
-  // Per-lender views: deterministic sample, scaled to the range.
+  // Sample page views: deterministic, scaled to the range. "All time" counts ~13 months of history.
   const hash = (s) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 9973, 17);
+  const span = (scope) => Math.min(ranges[scope].days, 400) / 30;
+  const reqCount = (rows, name, type, scope) => rows.filter((r) => r.partner === name && (!type || r.type === type) && inWindow(scope, r.date)).length;
   function lenderStats(name, scope) {
-    scope = scope || 'lenderviews';
-    const f = ranges[scope].days / 30, h = hash(name);
+    scope = scope || 'lenderrep';
+    const f = span(scope), h = hash(name);
     const views = Math.round((120 + (h % 900)) * f), unique = Math.round(views * (0.55 + (h % 20) / 100));
-    const inRange = lenderRows.filter((r) => r.partner === name && inWindow(scope, r.date));
-    const c = (t) => inRange.filter((r) => r.type === t).length;
-    // Unique page views split by the viewer's membership tier (adds up to unique), like Vendor page views.
-    const uE = Math.round(unique * (0.24 + (h % 9) / 100)), uV = Math.round(unique * (0.08 + (h % 7) / 100)), uP = unique - uE - uV;
-    return { views, unique, uP, uE, uV, esc: c('Escalation'), ae: c('Change AE'), conn: c('Connection') };
+    return { views, unique, esc: reqCount(lenderRows, name, 'Escalation', scope), ae: reqCount(lenderRows, name, 'Change AE', scope), conn: reqCount(lenderRows, name, 'Connection', scope) };
   }
-  function renderLenderViews() {
-    const rows = lenders.map((l) => Object.assign({ name: l.name, tier: l.tier, l }, lenderStats(l.name))).sort((a, b) => b.views - a.views);
-    const tierCls = { Gold: 'badge-gold', Silver: 'badge-silver', Bronze: 'badge-bronze' };
-    $('lv-tbody').innerHTML = rows.map((r) => `<tr>
-        <td><div class="t-id">${typeof logoTile === 'function' ? logoTile(r.l) : ''}<div class="t-strong">${esc(r.name)}</div></div></td>
-        <td><span class="badge ${tierCls[r.tier] || 'badge-navy'}">${esc(r.tier || '')}</span></td>
-        <td class="t-strong"><button class="pv-link" data-pv="lender::${esc(r.name)}" title="See who viewed this page">${r.views.toLocaleString()}</button></td>
-        <td>${r.unique.toLocaleString()}</td><td>${r.uP.toLocaleString()}</td><td>${r.uE.toLocaleString()}</td><td>${r.uV.toLocaleString()}</td><td>${r.esc}</td><td>${r.ae}</td><td>${r.conn}</td>
-        <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.name)} their page views report.">Email lender</button></div></td></tr>`).join('');
-    $('lv-count').textContent = `${rows.length} lenders · ${ranges.lenderviews.label}`;
-    // Totals across the top, like Vendor page views.
-    const sum = (k) => rows.reduce((a, x) => a + x[k], 0).toLocaleString();
-    const box = (cls, ico, val, lbl) => `<div class="stat"><div class="s-ico ${cls}">${svg(ico)}</div><div class="s-val">${val}</div><div class="s-lbl">${lbl}</div></div>`;
-    $('lv-tiles').innerHTML = box('i-navy', ICO.eye, sum('views'), 'Page views') + box('i-pink', ICO.people, sum('unique'), 'Unique page views')
-      + box('i-cyan', ICO.esc, sum('esc'), 'Escalations') + box('i-navy', ICO.ae, sum('ae'), 'Change AE requests') + box('i-green', ICO.conn, sum('conn'), 'Connection requests');
+  function vendorStats(name, scope) {
+    scope = scope || 'vendorrep';
+    const f = span(scope), v = vendorClicks.find((x) => x.name === name), h = hash(name);
+    const t = v ? [v.tiers.premium, v.tiers.elite, v.tiers.vip] : [20 + (h % 160), 12 + (h % 110), 4 + (h % 40)];
+    const tf = t.map((n) => Math.round(n * f));
+    return { views: tf[0] + tf[1] + tf[2], unique: tf.reduce((a, n) => a + vendorUnique(n), 0), conn: reqCount(vendorRows, name, null, scope) };
   }
-  setupRange('lenderviews', renderLenderViews);
+  const num = (n) => n.toLocaleString();
+  const link = (attr, n, title) => n ? `<button class="pv-link" ${attr} title="${title}">${num(n)}</button>` : '<span class="t-sub" style="display:inline">0</span>';
+  const ovTile = (ico, cls, label, val, go) => `<button type="button" class="pr-tile" ${go ? `data-pr-go="${go}"` : 'disabled'}>
+      <span class="pr-tile-ico ${cls}">${svg(ico)}</span><span><span class="pr-tile-val">${num(val)}</span><span class="pr-tile-lbl">${label}</span></span></button>`;
+  const sumOf = (rows, k) => rows.reduce((a, x) => a + x[k], 0);
+
+  function lenderOverviewRows() {
+    const q = $('lo-q').value.trim().toLowerCase();
+    return lenders.filter((l) => !q || l.name.toLowerCase().includes(q)).map((l) => Object.assign({ name: l.name, tier: l.tier, l }, lenderStats(l.name))).sort((a, b) => b.views - a.views || a.name.localeCompare(b.name));
+  }
+  function renderLenderOverview() {
+    const rows = lenderOverviewRows();
+    $('lo-tiles').innerHTML = ovTile(ICO.eye, 'i-navy', 'Page views', sumOf(rows, 'views')) + ovTile(ICO.people, 'i-cyan', 'Unique page views', sumOf(rows, 'unique')) +
+      ovTile(ICO.conn, 'i-cyan', 'Connections', sumOf(rows, 'conn'), 'lender::Connection') + ovTile(ICO.esc, 'i-pink', 'Escalations', sumOf(rows, 'esc'), 'lender::Escalation') +
+      ovTile(ICO.ae, 'i-navy', 'Change AE requests', sumOf(rows, 'ae'), 'lender::Change AE');
+    const go = (r, t) => `data-pr-go="lender:${esc(r.name)}:${t}"`;
+    $('lo-tbody').innerHTML = rows.map((r) => `<tr>
+        <td><div class="t-id">${typeof logoTile === 'function' ? logoTile(r.l) : ''}<div><div class="t-strong">${esc(r.name)}</div><div class="t-sub">${esc(r.tier || '')} lender</div></div></div></td>
+        <td class="t-right t-strong">${link(`data-pv="lender::${esc(r.name)}" data-pv-from="lender-reports"`, r.views, 'See who viewed this page')}</td>
+        <td class="t-right">${num(r.unique)}</td>
+        <td class="t-right">${link(go(r, 'Connection'), r.conn, 'See these connection requests')}</td>
+        <td class="t-right">${link(go(r, 'Escalation'), r.esc, 'See these escalations')}</td>
+        <td class="t-right">${link(go(r, 'Change AE'), r.ae, 'See these Change AE requests')}</td>
+        <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.name)} their report (${esc(ranges.lenderrep.label.toLowerCase())}).">Email lender</button></div></td></tr>`).join('')
+      || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No lenders match that search.</td></tr>';
+    $('lo-tfoot').innerHTML = rows.length ? `<tr class="pr-total"><td>All lenders</td><td class="t-right">${num(sumOf(rows, 'views'))}</td><td class="t-right">${num(sumOf(rows, 'unique'))}</td>
+        <td class="t-right">${num(sumOf(rows, 'conn'))}</td><td class="t-right">${num(sumOf(rows, 'esc'))}</td><td class="t-right">${num(sumOf(rows, 'ae'))}</td><td></td></tr>` : '';
+    $('lo-count').textContent = `${rows.length} lender${rows.length === 1 ? '' : 's'} · ${ranges.lenderrep.label}`;
+  }
+  const companyOf = (n) => (window.AmpPartners ? AmpPartners.companyOf(n) : n);
+  function vendorOverviewRows() {
+    const q = $('vo-q').value.trim().toLowerCase();
+    return vendorNames.map((n) => ({ name: n, company: companyOf(n), v: vendors.find((x) => x.name === n) }))
+      .filter((r) => !q || `${r.name} ${r.company}`.toLowerCase().includes(q))
+      .map((r) => Object.assign(r, vendorStats(r.name))).sort((a, b) => b.views - a.views || a.name.localeCompare(b.name));
+  }
+  function renderVendorOverview() {
+    const rows = vendorOverviewRows();
+    $('vo-tiles').innerHTML = ovTile(ICO.eye, 'i-navy', 'Page views', sumOf(rows, 'views')) + ovTile(ICO.people, 'i-cyan', 'Unique page views', sumOf(rows, 'unique')) +
+      ovTile(ICO.conn, 'i-cyan', 'Connections', sumOf(rows, 'conn'), 'vendor::Connection');
+    $('vo-tbody').innerHTML = rows.map((r) => `<tr>
+        <td><div class="t-id">${typeof logoTile === 'function' && r.v ? logoTile(r.v) : ''}<div><div class="t-strong">${esc(r.name)}</div>${r.company !== r.name ? `<div class="t-sub">${esc(r.company)}</div>` : ''}</div></div></td>
+        <td class="t-right t-strong">${link(`data-pv="vendor::${esc(r.name)}" data-pv-from="vendor-reports"`, r.views, 'See who viewed this listing')}</td>
+        <td class="t-right">${num(r.unique)}</td>
+        <td class="t-right">${link(`data-pr-go="vendor:${esc(r.name)}:Connection"`, r.conn, 'See these connection requests')}</td>
+        <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.company)} their report for ${esc(r.name)} (${esc(ranges.vendorrep.label.toLowerCase())}).">Email vendor</button></div></td></tr>`).join('')
+      || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No products match that search.</td></tr>';
+    $('vo-tfoot').innerHTML = rows.length ? `<tr class="pr-total"><td>All products</td><td class="t-right">${num(sumOf(rows, 'views'))}</td><td class="t-right">${num(sumOf(rows, 'unique'))}</td><td class="t-right">${num(sumOf(rows, 'conn'))}</td><td></td></tr>` : '';
+    $('vo-count').textContent = `${rows.length} product${rows.length === 1 ? '' : 's'} · ${ranges.vendorrep.label}`;
+  }
+  // Switch a report page between Overview and its request list.
+  function showPane(kind, pane) {
+    const p = kind === 'lender' ? 'lr' : 'vr';
+    document.querySelectorAll(`#${p}-tabs .chip`).forEach((c) => c.classList.toggle('active', c.dataset.prTab === `${kind}:${pane}`));
+    $(`${p}-pane-overview`).hidden = pane !== 'overview';
+    $(`${p}-pane-requests`).hidden = pane !== 'requests';
+  }
+  // A request number / tile → the request list, filtered to that partner and type.
+  function goToRequests(kind, partner, type) {
+    if (kind === 'lender') { $('lr-partner').value = partner || 'all'; $('lr-type').value = type || 'all'; $('lr-email').value = 'all'; renderLender(); }
+    else { $('vr-partner').value = partner || 'all'; $('vr-email').value = 'all'; renderVendor(); }
+    showPane(kind, 'requests');
+    $(`view-${kind}-reports`).scrollIntoView({ block: 'start' });
+  }
+  $('lo-q').addEventListener('input', renderLenderOverview);
+  $('vo-q').addEventListener('input', renderVendorOverview);
+  document.addEventListener('click', (e) => {
+    let m;
+    if ((m = e.target.closest('[data-pr-tab]'))) { e.preventDefault(); const [kind, pane] = m.dataset.prTab.split(':'); showPane(kind, pane); return; }
+    if ((m = e.target.closest('[data-pr-go]'))) {
+      e.preventDefault(); const v = m.dataset.prGo, kind = v.slice(0, v.indexOf(':')), type = v.slice(v.lastIndexOf(':') + 1), partner = v.slice(kind.length + 1, v.lastIndexOf(':'));
+      goToRequests(kind, partner, type); return;
+    }
+  });
 
   /* ---------- Content performance: page views for every kind of content ---------- */
   ranges.content = { days: 30, label: 'Last 30 days', from: null, to: null };
   $('view-engagement').insertAdjacentHTML('afterend', `
     <section class="view" id="view-content">${TABS('content')}
-      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Content performance — page views and unique page views for everything members can open. Click a Page views number to see who viewed it.</p></div>
+      <div class="adm-section-head"><div class="page-head" style="margin:0"><h1>Analytics</h1><p>Content performance — page views and unique page views for The Vault and events. Click a Page views number to see who viewed it. Lender and Market page views are in Partner Reports.</p></div>
         <div class="date-range" id="content-range"><select class="select filter-select daterange-preset"><option value="7d">Last 7 days</option><option value="30d" selected>Last 30 days</option><option value="90d">Last 90 days</option><option value="ytd">Year to date</option><option value="all">All time</option><option value="custom">Custom range…</option></select>
         <div class="daterange-custom" hidden><input type="date" class="input daterange-from"><span class="dr-sep">to</span><input type="date" class="input daterange-to"><button class="btn btn-outline btn-sm daterange-apply">Apply</button></div></div></div>
-      <div class="filters" id="cp-types">${[['resource', 'The Vault'], ['vendor', 'Market products'], ['lender', 'Lenders'], ['event', 'Events']].map(([k, l], i) => `<button class="chip ${i ? '' : 'active'}" data-cp-type="${k}">${l}</button>`).join('')}</div>
+      <div class="filters" id="cp-types">${[['resource', 'The Vault'], ['event', 'Events']].map(([k, l], i) => `<button class="chip ${i ? '' : 'active'}" data-cp-type="${k}">${l}</button>`).join('')}</div>
       <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="cp-q" placeholder="Search by title…"></div>
         <span class="spacer"></span><span class="count-note" id="cp-count">—</span>
         <label class="cp-show">Show <select class="select filter-select" id="cp-show" style="min-width:0"><option>10</option><option selected>25</option><option>50</option><option>100</option></select></label>
@@ -252,14 +335,12 @@
         <th><button class="cp-sort" data-cp-sort="title">Title <span></span></button></th>
         <th class="t-right"><button class="cp-sort" data-cp-sort="views">Page views <span></span></button></th>
         <th class="t-right"><button class="cp-sort" data-cp-sort="unique">Unique page views <span></span></button></th></tr></thead><tbody id="cp-tbody"></tbody></table></div></div>
-      <p class="flow-caption"><strong>Page views</strong> = times the page was opened · <strong>Unique page views</strong> = different members who opened it. Lender and Market numbers match the Lender page views and Vendor page views tabs for the same dates.</p>
+      <p class="flow-caption"><strong>Page views</strong> = times the page was opened · <strong>Unique page views</strong> = different members who opened it. For lenders and Market products, see Partner Reports → Lender reports / Vendor reports (Overview).</p>
     </section>`);
   let cpType = 'resource', cpSort = { key: 'views', dir: -1 };
   function cpRows() {
     const list = cpType === 'resource' ? resources.map((x) => ({ title: x.title, sub: `${x.type}${x.collection && x.collection !== '—' ? ' · ' + x.collection : ''}${x.hubOnly ? ' (hub only)' : ''}` }))
-      : cpType === 'event' ? events.map((x) => ({ title: x.title, sub: `${x.date} · ${x.type}` }))
-      : cpType === 'lender' ? lenders.map((x) => ({ title: x.name, sub: `${x.tier} lender` }))
-      : vendorClicks.map((x) => ({ title: x.name, sub: x.cat }));
+      : events.map((x) => ({ title: x.title, sub: `${x.date} · ${x.type}` }));
     const q = $('cp-q').value.trim().toLowerCase();
     return list.filter((x) => !q || x.title.toLowerCase().includes(q)).map((x) => Object.assign(x, statsFor(cpType, x.title, 'content')))
       .sort((a, b) => cpSort.key === 'title' ? a.title.localeCompare(b.title) * cpSort.dir : (a[cpSort.key] - b[cpSort.key]) * cpSort.dir || a.title.localeCompare(b.title));
@@ -284,15 +365,6 @@
   });
   renderContent();
 
-  // Vendor page views: the Page views number opens who viewed it (same as Lender page views).
-  const vcBody = $('vendorclicks-tbody');
-  const decorateVC = () => vcBody.querySelectorAll('tr').forEach((tr) => {
-    const cell = tr.children[2], name = tr.querySelector('.t-strong'); if (!cell || !name || cell.querySelector('.pv-link')) return;
-    cell.innerHTML = `<button class="pv-link" data-pv="vendor::${esc(name.textContent)}" title="See who viewed this listing">${cell.textContent}</button>`;
-  });
-  new MutationObserver(decorateVC).observe(vcBody, { childList: true });
-  decorateVC();
-
   /* ---------- the viewers page ---------- */
   const SIGN_KEY = 'amp-vendor-signups-v1';
   const signups = () => { try { return JSON.parse(localStorage.getItem(SIGN_KEY)) || {}; } catch (e) { return {}; } };
@@ -300,17 +372,12 @@
   let pv = null;   // { kind, name, from }
   // The totals shown in the table the admin clicked (so this page adds up to the same numbers).
   function statsFor(kind, name, scope) {
-    if (kind === 'lender') return lenderStats(name, scope || 'lenderviews');
-    if (kind === 'resource' || kind === 'event') {
-      // The Vault and events: deterministic sample page views, scaled to the range.
-      const f = ranges[scope || 'content'].days / 30, h = hash(kind + name);
-      const views = Math.round((kind === 'event' ? 30 + (h % 260) : 20 + (h % 420)) * f);
-      return { views, unique: views ? Math.max(1, Math.round(views * (0.5 + (h % 35) / 100))) : 0, conn: 0 };
-    }
-    const f = ranges[scope || 'vendorclicks'].days / 30, v = vendorClicks.find((x) => x.name === name);
-    if (!v) return { views: 0, unique: 0, conn: 0 };
-    const t = [v.tiers.premium, v.tiers.elite, v.tiers.vip].map((n) => Math.round(n * f));
-    return { views: t[0] + t[1] + t[2], unique: t.reduce((a, n) => a + vendorUnique(n), 0), conn: Math.round(v.connections * f) };
+    if (kind === 'lender') return lenderStats(name, scope || 'lenderrep');
+    if (kind === 'vendor') return vendorStats(name, scope || 'vendorrep');
+    // The Vault and events: deterministic sample page views, scaled to the range.
+    const f = ranges[scope || 'content'].days / 30, h = hash(kind + name);
+    const views = Math.round((kind === 'event' ? 30 + (h % 260) : 20 + (h % 420)) * f);
+    return { views, unique: views ? Math.max(1, Math.round(views * (0.5 + (h % 35) / 100))) : 0, conn: 0 };
   }
   // Sample viewers: real sample members first, then generated ones, until the unique count is reached.
   const FIRST = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Jamie', 'Avery', 'Quinn', 'Drew', 'Reese', 'Cameron', 'Logan', 'Skyler', 'Parker', 'Rowan', 'Elena', 'Marcus', 'Nadia', 'Omar', 'Grace', 'Victor', 'Leah', 'Andre'];
@@ -318,7 +385,7 @@
   const PLANS = ['Premium', 'Premium', 'Premium', 'Elite', 'Elite', 'VIP'];
   function viewers(kind, name, scope) {
     seed = hash(name) + 11;
-    scope = scope || (kind === 'lender' ? 'lenderviews' : kind === 'vendor' ? 'vendorclicks' : 'content');
+    scope = scope || (kind === 'lender' ? 'lenderrep' : kind === 'vendor' ? 'vendorrep' : 'content');
     const st = statsFor(kind, name, scope);
     const pool = people.slice().sort(() => rnd() - 0.5);
     for (let i = 0; pool.length < st.unique; i++) {
@@ -352,11 +419,13 @@
     return rows.sort((a, b) => b.views - a.views);
   }
   let shown = 25;
-  const FROM_LABEL = { lenderviews: 'Lender page views', vendorclicks: 'Vendor page views', content: 'Content performance' };
+  const FROM_LABEL = { 'lender-reports': 'Lender reports', 'vendor-reports': 'Vendor reports', content: 'Content performance' };
+  const SCOPE = { 'lender-reports': 'lenderrep', 'vendor-reports': 'vendorrep', content: 'content' };
   function openViewers(kind, name, from) {
-    from = from || (kind === 'lender' ? 'lenderviews' : kind === 'vendor' ? 'vendorclicks' : 'content');
-    pv = { kind, name, from };
-    $('pv-tabs').innerHTML = TABS(pv.from);
+    from = from || (kind === 'lender' ? 'lender-reports' : kind === 'vendor' ? 'vendor-reports' : 'content');
+    pv = { kind, name, from, scope: SCOPE[from] };
+    $('pv-tabs').innerHTML = from === 'content' ? TABS('content') : '';
+    window.AmpPvNav = from === 'content' ? 'analytics' : from;   // sidebar highlight (admin.js navigate)
     $('pv-back').dataset.nav = pv.from;
     $('pv-back').querySelector('span').textContent = `Back to ${FROM_LABEL[from]}`;
     $('pv-title').textContent = `Who viewed ${name}`;
@@ -371,12 +440,12 @@
   }
   function viewerRows() {
     const q = $('pv-q').value.trim().toLowerCase(), f = $('pv-filter').value;
-    return viewers(pv.kind, pv.name, pv.from).filter((r) => (!q || `${r.name} ${r.email}`.toLowerCase().includes(q)) &&
+    return viewers(pv.kind, pv.name, pv.scope).filter((r) => (!q || `${r.name} ${r.email}`.toLowerCase().includes(q)) &&
       (f === 'all' || (f === 'esc' && r.esc) || (f === 'ae' && r.ae) || (f === 'conn' && r.conn) || (f === 'signed' && r.signed) || (f === 'notsigned' && !r.signed)));
   }
   function renderViewers() {
-    const all = viewers(pv.kind, pv.name, pv.from), rows = viewerRows(), lender = pv.kind === 'lender';
-    const scope = pv.from, plain = pv.kind === 'resource' || pv.kind === 'event';
+    const all = viewers(pv.kind, pv.name, pv.scope), rows = viewerRows(), lender = pv.kind === 'lender';
+    const scope = pv.scope, plain = pv.kind === 'resource' || pv.kind === 'event';
     $('pv-sub').textContent = `${lender ? 'Members who viewed this lender\'s page' : pv.kind === 'vendor' ? 'Members who opened this Market listing' : pv.kind === 'event' ? 'Members who viewed this event' : 'Members who viewed this in The Vault'} · ${ranges[scope].label}`;
     const total = all.reduce((s, r) => s + r.views, 0), unique = all.filter((r) => r.views).length;
     if (plain) {
@@ -482,6 +551,6 @@
     reader.readAsText(f);
   });
 
-  renderLender(); renderVendor(); renderLenderViews();
-  window.AmpPartnerReports = { renderLender, renderVendor, renderLenderViews, openViewers };
+  renderLender(); renderVendor(); renderLenderOverview(); renderVendorOverview();
+  window.AmpPartnerReports = { renderLender, renderVendor, renderLenderOverview, renderVendorOverview, openViewers, showPane };
 })();

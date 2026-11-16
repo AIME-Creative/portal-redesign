@@ -548,7 +548,7 @@
 
       <!-- ============ ENGAGEMENT ============ -->
       <section class="view" id="view-engagement">
-        <div class="filters an-tabs" role="tablist"><button class="chip active" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button><button class="chip" data-nav="vendorclicks" role="tab">Vendor page views</button></div>
+        <div class="filters an-tabs" role="tablist"><button class="chip active" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button></div>
         <div class="adm-section-head">
           <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Engagement — what members are engaging with across the portal — <span id="eng-range-note">last 30 days</span>.</p></div>
           <div class="date-range" id="engagement-range">
@@ -584,7 +584,7 @@
 
       <!-- ============ MEMBER JOURNEYS (Mixpanel) ============ -->
       <section class="view" id="view-journeys">
-        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip active" data-nav="journeys" role="tab">Member journeys</button><button class="chip" data-nav="vendorclicks" role="tab">Vendor page views</button></div>
+        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip active" data-nav="journeys" role="tab">Member journeys</button></div>
         <div class="adm-section-head">
           <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Member journeys — how members move from signup to active — funnels, retention, and feature adoption for <span id="jr-range-note">the last 30 days</span>.</p></div>
           <div class="date-range" id="journeys-range">
@@ -664,43 +664,6 @@
       </section>
 
       <!-- ============ VENDOR PAGE VIEWS ============ -->
-      <section class="view" id="view-vendorclicks">
-        <div class="filters an-tabs" role="tablist"><button class="chip" data-nav="engagement" role="tab">Engagement</button><button class="chip" data-nav="journeys" role="tab">Member journeys</button><button class="chip active" data-nav="vendorclicks" role="tab">Vendor page views</button></div>
-        <div class="adm-section-head">
-          <div class="page-head" style="margin:0"><h1>Analytics</h1><p>Vendor page views — how many members view each Market product's page, and what they sent that vendor. Numbers your vendor team can share with partners. Click a views number to see who viewed it.</p></div>
-          <div class="date-range" id="vendorclicks-range">
-            <select class="select filter-select daterange-preset">
-              <option value="7d">Last 7 days</option>
-              <option value="30d" selected>Last 30 days</option>
-              <option value="90d">Last 90 days</option>
-              <option value="ytd">Year to date</option>
-              <option value="all">All time</option>
-              <option value="custom">Custom range…</option>
-            </select>
-            <div class="daterange-custom" hidden>
-              <input type="date" class="input daterange-from">
-              <span class="dr-sep">to</span>
-              <input type="date" class="input daterange-to">
-              <button class="btn btn-outline btn-sm daterange-apply">Apply</button>
-            </div>
-          </div>
-        </div>
-        <div class="stat-row admin3" style="margin:18px 0 20px">
-          <div class="stat"><div class="s-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="s-val" id="vc-views">0</div><div class="s-lbl">Page views</div></div>
-          <div class="stat"><div class="s-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="s-val" id="vc-unique">0</div><div class="s-lbl">Unique page views</div></div>
-          <div class="stat"><div class="s-ico i-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg></div><div class="s-val" id="vc-conn">0</div><div class="s-lbl">Connection requests</div></div>
-        </div>
-        <div class="toolbar" style="justify-content:space-between">
-          <span class="count-note" id="vendorclicks-count">—</span>
-          <button class="btn btn-outline btn-sm" data-toast="Exported vendor page views report to CSV.">Export CSV</button>
-        </div>
-        <div class="table-wrap"><div class="table-scroll"><table class="adm">
-          <thead><tr><th>Product</th><th>Category</th><th>Page views</th><th>Unique page views</th><th>Premium</th><th>Elite</th><th>VIP</th><th>Connections</th><th class="t-right">Actions</th></tr></thead>
-          <tbody id="vendorclicks-tbody"></tbody>
-        </table></div></div>
-        <p class="flow-caption"><strong>Page views</strong> = times the product's page was opened · <strong>Unique page views</strong> = different members who opened it (<strong>Premium</strong> · <strong>Elite</strong> · <strong>VIP</strong> split those by membership tier) · <strong>Connections</strong> = members who requested an intro. "Email vendor" sends that partner their own numbers.</p>
-      </section>
-
       <!-- ============ FEATURED ============ -->
       <section class="view" id="view-featured">
         <div class="adm-section-head">

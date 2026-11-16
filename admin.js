@@ -765,31 +765,7 @@ const vendorClicks = [
 const contentVendor = (name) => AMP_CONTENT.vendors.find(x => x.name === name);
 vendorClicks.forEach(v => { const c = contentVendor(v.name); if(c) Object.assign(v, { cat:c.cat, short:c.short, logo:c.logo }); });
 const vendorUnique = (n) => Math.max(n ? 1 : 0, Math.round(n * 0.62));
-function renderVendorClicks(){
-  const f = ranges.vendorclicks.days/30;
-  const scaled = vendorClicks.map(v=>{
-    const premium = Math.round(v.tiers.premium*f), elite = Math.round(v.tiers.elite*f), vip = Math.round(v.tiers.vip*f);
-    const uP = vendorUnique(premium), uE = vendorUnique(elite), uV = vendorUnique(vip);
-    return { ...v, connections:Math.round(v.connections*f), views: premium+elite+vip, unique: uP+uE+uV, uP, uE, uV };
-  });
-  const tot = (k) => scaled.reduce((a,v)=>a+v[k],0);
-  const set = (id,val) => { if($(id)) $(id).textContent = val; };
-  set('vc-views', tot('views').toLocaleString());
-  set('vc-unique', tot('unique').toLocaleString());
-  set('vc-conn', tot('connections').toLocaleString());
-  $('vendorclicks-tbody').innerHTML = scaled.map(v=>`<tr>
-      <td><div class="t-id"><div class="t-logo">${v.short}</div><div class="t-strong">${v.name}</div></div></td>
-      <td><span class="badge badge-navy">${v.cat}</span></td>
-      <td class="t-strong">${v.views.toLocaleString()}</td>
-      <td>${v.unique.toLocaleString()}</td>
-      <td>${v.uP.toLocaleString()}</td>
-      <td>${v.uE.toLocaleString()}</td>
-      <td>${v.uV.toLocaleString()}</td>
-      <td>${v.connections.toLocaleString()}</td>
-      <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${v.name} their page views report.">Email vendor</button></div></td>
-    </tr>`).join('');
-  $('vendorclicks-count').textContent = `${scaled.length} products · ${ranges.vendorclicks.label}`;
-}
+// Vendor page views moved to Partner Reports → Vendor reports → Overview (admin-partner-reports.js).
 
 /* ============================================================
    Date range (Analytics & Engagement) — default last 30 days
@@ -1393,9 +1369,11 @@ function toggleAccess(opt){
 function navigate(view){
   if(view==='subscriptions') view = 'members';   // billing now lives on the Members list
   if(view==='analytics') view = 'engagement';    // Analytics opens on Engagement (Overview moved to the Scorecard)
+  if(view==='lenderviews') view = 'lender-reports';   // page views moved to Partner Reports (Overview tab)
+  if(view==='vendorclicks') view = 'vendor-reports';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   $('view-'+view)?.classList.add('active');
-  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : ['engagement','content','journeys','vendorclicks','lenderviews','page-viewers'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
+  const navView = view==='request-detail' ? 'requests' : ['event-reg','registrations'].includes(view) ? 'events' : view==='page-viewers' ? (window.AmpPvNav || 'analytics') : ['engagement','content','journeys'].includes(view) ? 'analytics' : view==='group-detail' ? 'groups' : view==='enterprise-detail' ? 'enterprise' : view==='referral-history' ? 'referrals' : view;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===navView));
   $('sidebar')?.classList.remove('open');
@@ -1412,14 +1390,13 @@ function showToast(msg){ const t=$('toast'); $('toast-msg').textContent=msg; t.c
 fillMemberFilters();
 renderDashboard(); renderMembers(); renderLenders(); renderVendors();
 renderResources(); renderEvents();
-renderHubs(); renderDocuments(); renderJourneys(); renderVendorClicks();
+renderHubs(); renderDocuments(); renderJourneys();
 renderReportPartners(); renderReports(); renderTaxonomy();
 renderFeatured(); renderTeam(); renderEngagement();
 renderAbandoned(); renderCoupons();
 renderSentNotifications(); updateAudience();
 setupRange('engagement', renderEngagement);
 setupRange('journeys', renderJourneys);
-setupRange('vendorclicks', renderVendorClicks);
 setupRange('reports', renderReports, { allDays:36500 });
 
 /* ---------- Events ---------- */
