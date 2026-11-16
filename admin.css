@@ -532,3 +532,20 @@ table.adm .t-titlecell { min-width:200px; }
 /* Partner Reports Overview: partner name → All requests filtered to that partner */
 .pr-name { font:inherit; font-weight:700; color:var(--ink); text-align:left; padding:0; cursor:pointer; text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
 .pr-name:hover { color:var(--cyan-600); text-decoration-color:currentColor; }
+
+/* Dashboard: newest members open their record; quick links to add / edit content */
+.dash-member { width:100%; background:none; border:0; border-bottom:1px solid var(--line-soft); text-align:left; font:inherit; color:inherit; cursor:pointer; border-radius:0; }
+.dash-member:last-child { border-bottom:0; }
+.dash-member:hover .lt { color:var(--cyan-600); }
+.dash-member-go { width:16px; height:16px; color:var(--muted); flex:none; }
+.ql-list { display:flex; flex-direction:column; }
+.ql-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line-soft); }
+.ql-row:last-child { border-bottom:0; padding-bottom:0; }
+.ql-ico { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; flex:none; }
+.ql-ico svg { width:18px; height:18px; }
+.ql-ico.i-pink { background:#fde4ee; color:var(--pink); } .ql-ico.i-navy { background:rgba(2,22,73,.08); color:var(--navy); }
+.ql-ico.i-cyan { background:#e2f4f9; color:var(--cyan-600); } .ql-ico.i-amber { background:var(--amber-bg, #fdf3dc); color:#b07c08; }
+.ql-main { flex:1; min-width:0; display:flex; flex-direction:column; }
+.ql-t { font-weight:700; font-size:14.5px; } .ql-s { font-size:12.5px; color:var(--muted); }
+.ql-acts { display:flex; gap:6px; flex:none; }
+.ql-acts .btn { height:34px; padding:0 12px; }

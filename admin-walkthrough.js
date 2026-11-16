@@ -28,6 +28,8 @@
       mBody: 'Tap the menu for every admin section — Overview, Members, Billing, Communications, Content, Access, and Events.' },
     { sec: 1, page: 'dashboard', target: '#view-dashboard .stat-row.admin5', title: 'The dashboard',
       body: 'Your day-to-day view: paying members, pending requests, partners, and registrations. Click any tile to jump there. Membership numbers and trends live on the Scorecard.' },
+    { sec: 1, page: 'dashboard', target: () => [$('dash-members').closest('.card'), $('dash-quick')], mTarget: () => $('dash-quick'), title: 'New members and quick links',
+      body: 'Click a new member to open their record. <strong>Quick links</strong> let you add a resource, event, lender, or vendor in one click — or jump to its list to edit one.' },
     { sec: 1, page: 'scorecard', target: () => document.querySelector('#view-scorecard .sc-nums'), title: 'The membership scorecard',
       body: 'Membership health in one place — paying members, dues, retention, sign-ups and where they come from, who\'s renewing or at risk, FUSE, and engagement. It updates each time you open it.' },
 

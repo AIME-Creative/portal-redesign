@@ -911,11 +911,13 @@ function renderDashboard(){
   $('dash-lenders').textContent = lenders.length;
   $('dash-vendors').textContent = vendors.length;
   // newest members
-  $('dash-members').innerHTML = members.slice(0,5).map(m=>`
-    <div class="list-row"><div class="t-avatar">${initials(m.name)}</div>
+  // Each member opens their record (same as Manage on the Members list).
+  $('dash-members').innerHTML = members.slice(0,5).map((m,i)=>`
+    <button type="button" class="list-row dash-member" data-edit="member:${i}" title="Open ${m.name}"><div class="t-avatar">${initials(m.name)}</div>
       <div class="list-main"><div class="lt">${m.name}</div><div class="ls">${m.plan} · joined ${m.joined}</div></div>
       <span class="badge ${m.plan==='VIP'?'badge-navy':m.plan==='Elite'?'badge-pink':'badge-cyan'}">${m.plan}</span>
-    </div>`).join('');
+      <svg class="dash-member-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>`).join('');
 }
 
 /* ============================================================
