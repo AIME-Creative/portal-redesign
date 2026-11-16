@@ -115,7 +115,7 @@
           <span class="spacer"></span><span class="count-note" id="lo-count"></span>
           <button class="btn btn-primary" data-pr-export="lender-overview">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Lender</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th><th class="t-right">Escalations</th><th class="t-right">Change AE</th></tr></thead><tbody id="lo-tbody"></tbody><tfoot id="lo-tfoot"></tfoot></table></div></div>
-        <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong>, <strong>Escalations</strong>, <strong>Change AE</strong> = requests members sent that lender. Click a number to see the list behind it. Export CSV to send a partner their numbers.</p>
+        <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong>, <strong>Escalations</strong>, <strong>Change AE</strong> = requests members sent that lender. Click a name to see all of that partner's requests, or a number to see the list behind it. Export CSV to send a partner their numbers.</p>
       </div>
       <div id="lr-pane-requests" hidden>
         <div class="pr-tiles" id="lr-tiles"></div>
@@ -139,7 +139,7 @@
           <span class="spacer"></span><span class="count-note" id="vo-count"></span>
           <button class="btn btn-primary" data-pr-export="vendor-overview">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button></div>
         <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Product</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th></tr></thead><tbody id="vo-tbody"></tbody><tfoot id="vo-tfoot"></tfoot></table></div></div>
-        <p class="flow-caption"><strong>Page views</strong> = times the product's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong> = members who requested an intro. Click a number to see the list behind it. Export CSV to send a partner their numbers.</p>
+        <p class="flow-caption"><strong>Page views</strong> = times the product's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong> = members who requested an intro. Click a name to see all of that partner's requests, or a number to see the list behind it. Export CSV to send a partner their numbers.</p>
       </div>
       <div id="vr-pane-requests" hidden>
         <div class="pr-tiles" id="vr-tiles"></div>
@@ -261,7 +261,7 @@
       ovTile(ICO.ae, 'i-navy', 'Change AE requests', sumOf(rows, 'ae'), 'lender::Change AE');
     const go = (r, t) => `data-pr-go="lender:${esc(r.name)}:${t}"`;
     $('lo-tbody').innerHTML = rows.map((r) => `<tr>
-        <td><div class="t-id">${typeof logoTile === 'function' ? logoTile(r.l) : ''}<div><div class="t-strong">${esc(r.name)}</div><div class="t-sub">${esc(r.tier || '')} lender</div></div></div></td>
+        <td><div class="t-id">${typeof logoTile === 'function' ? logoTile(r.l) : ''}<div><button type="button" class="pr-name" data-pr-all="lender::${esc(r.name)}" title="See all requests for ${esc(r.name)}">${esc(r.name)}</button><div class="t-sub">${esc(r.tier || '')} lender</div></div></div></td>
         <td class="t-right t-strong">${link(`data-pv="lender::${esc(r.name)}" data-pv-from="lender-reports"`, r.views, 'See who viewed this page')}</td>
         <td class="t-right">${num(r.unique)}</td>
         <td class="t-right">${link(go(r, 'Connection'), r.conn, 'See these connection requests')}</td>
@@ -284,7 +284,7 @@
     $('vo-tiles').innerHTML = ovTile(ICO.eye, 'i-navy', 'Page views', sumOf(rows, 'views')) + ovTile(ICO.people, 'i-cyan', 'Unique page views', sumOf(rows, 'unique')) +
       ovTile(ICO.conn, 'i-cyan', 'Connections', sumOf(rows, 'conn'), 'vendor::Connection');
     $('vo-tbody').innerHTML = rows.map((r) => `<tr>
-        <td><div class="t-id">${typeof logoTile === 'function' && r.v ? logoTile(r.v) : ''}<div><div class="t-strong">${esc(r.name)}</div>${r.company !== r.name ? `<div class="t-sub">${esc(r.company)}</div>` : ''}</div></div></td>
+        <td><div class="t-id">${typeof logoTile === 'function' && r.v ? logoTile(r.v) : ''}<div><button type="button" class="pr-name" data-pr-all="vendor::${esc(r.name)}" title="See all connections for ${esc(r.name)}">${esc(r.name)}</button>${r.company !== r.name ? `<div class="t-sub">${esc(r.company)}</div>` : ''}</div></div></td>
         <td class="t-right t-strong">${link(`data-pv="vendor::${esc(r.name)}" data-pv-from="vendor-reports"`, r.views, 'See who viewed this listing')}</td>
         <td class="t-right">${num(r.unique)}</td>
         <td class="t-right">${link(`data-pr-go="vendor:${esc(r.name)}:Connection"`, r.conn, 'See these connection requests')}</td></tr>`).join('')
@@ -336,6 +336,7 @@
       e.preventDefault(); const v = m.dataset.prGo, kind = v.slice(0, v.indexOf(':')), type = v.slice(v.lastIndexOf(':') + 1), partner = v.slice(kind.length + 1, v.lastIndexOf(':'));
       openRequestList(kind, partner, type); return;
     }
+    if ((m = e.target.closest('[data-pr-all]'))) { e.preventDefault(); const [kind, ...rest] = m.dataset.prAll.split('::'); goToRequests(kind, rest.join('::'), null); return; }
     if ((m = e.target.closest('#rl-all'))) { e.preventDefault(); closeModals(); if (rl) goToRequests(rl.kind, rl.partner, rl.type); return; }
     if (e.target.closest('#rl-export')) { e.preventDefault(); if (rl) showToast(`Exported ${rl.rows.length} ${rl.label.toLowerCase()} for ${rl.partner || (rl.kind === 'lender' ? 'all lenders' : 'all products')} (${ranges[rl.scope].label.toLowerCase()}) to CSV.`); return;
     }

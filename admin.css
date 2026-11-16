@@ -529,3 +529,6 @@ table.adm .t-titlecell { min-width:200px; }
   #modal-reqlist #rl-all { flex-basis:100%; text-align:center; margin:0 0 6px !important; }
   #modal-reqlist .modal-foot .btn { flex:1; }
 }
+/* Partner Reports Overview: partner name → All requests filtered to that partner */
+.pr-name { font:inherit; font-weight:700; color:var(--ink); text-align:left; padding:0; cursor:pointer; text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+.pr-name:hover { color:var(--cyan-600); text-decoration-color:currentColor; }
