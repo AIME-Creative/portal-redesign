@@ -114,8 +114,8 @@
         <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="lo-q" placeholder="Search lenders…"></div>
           <span class="spacer"></span><span class="count-note" id="lo-count"></span>
           <button class="btn btn-primary" data-pr-export="lender-overview">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button></div>
-        <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Lender</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th><th class="t-right">Escalations</th><th class="t-right">Change AE</th><th class="t-right">Actions</th></tr></thead><tbody id="lo-tbody"></tbody><tfoot id="lo-tfoot"></tfoot></table></div></div>
-        <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong>, <strong>Escalations</strong>, <strong>Change AE</strong> = requests members sent that lender. Click a number to see the list behind it. "Email lender" sends that lender their own numbers.</p>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Lender</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th><th class="t-right">Escalations</th><th class="t-right">Change AE</th></tr></thead><tbody id="lo-tbody"></tbody><tfoot id="lo-tfoot"></tfoot></table></div></div>
+        <p class="flow-caption"><strong>Page views</strong> = times the lender's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong>, <strong>Escalations</strong>, <strong>Change AE</strong> = requests members sent that lender. Click a number to see the list behind it. Export CSV to send a partner their numbers.</p>
       </div>
       <div id="lr-pane-requests" hidden>
         <div class="pr-tiles" id="lr-tiles"></div>
@@ -138,8 +138,8 @@
         <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input type="text" id="vo-q" placeholder="Search products or companies…"></div>
           <span class="spacer"></span><span class="count-note" id="vo-count"></span>
           <button class="btn btn-primary" data-pr-export="vendor-overview">${svg(ICO.dl).replace('<svg', '<svg style="width:16px;height:16px"')} Export CSV</button></div>
-        <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Product</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th><th class="t-right">Actions</th></tr></thead><tbody id="vo-tbody"></tbody><tfoot id="vo-tfoot"></tfoot></table></div></div>
-        <p class="flow-caption"><strong>Page views</strong> = times the product's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong> = members who requested an intro. Click a number to see the list behind it. "Email vendor" sends that partner their own numbers.</p>
+        <div class="table-wrap"><div class="table-scroll"><table class="adm pr-ov"><thead><tr><th>Product</th><th class="t-right">Page views</th><th class="t-right">Unique page views</th><th class="t-right">Connections</th></tr></thead><tbody id="vo-tbody"></tbody><tfoot id="vo-tfoot"></tfoot></table></div></div>
+        <p class="flow-caption"><strong>Page views</strong> = times the product's page was opened · <strong>Unique page views</strong> = different members who opened it · <strong>Connections</strong> = members who requested an intro. Click a number to see the list behind it. Export CSV to send a partner their numbers.</p>
       </div>
       <div id="vr-pane-requests" hidden>
         <div class="pr-tiles" id="vr-tiles"></div>
@@ -266,11 +266,10 @@
         <td class="t-right">${num(r.unique)}</td>
         <td class="t-right">${link(go(r, 'Connection'), r.conn, 'See these connection requests')}</td>
         <td class="t-right">${link(go(r, 'Escalation'), r.esc, 'See these escalations')}</td>
-        <td class="t-right">${link(go(r, 'Change AE'), r.ae, 'See these Change AE requests')}</td>
-        <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.name)} their report (${esc(ranges.lenderrep.label.toLowerCase())}).">Email lender</button></div></td></tr>`).join('')
-      || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px">No lenders match that search.</td></tr>';
+        <td class="t-right">${link(go(r, 'Change AE'), r.ae, 'See these Change AE requests')}</td></tr>`).join('')
+      || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No lenders match that search.</td></tr>';
     $('lo-tfoot').innerHTML = rows.length ? `<tr class="pr-total"><td>All lenders</td><td class="t-right">${num(sumOf(rows, 'views'))}</td><td class="t-right">${num(sumOf(rows, 'unique'))}</td>
-        <td class="t-right">${num(sumOf(rows, 'conn'))}</td><td class="t-right">${num(sumOf(rows, 'esc'))}</td><td class="t-right">${num(sumOf(rows, 'ae'))}</td><td></td></tr>` : '';
+        <td class="t-right">${num(sumOf(rows, 'conn'))}</td><td class="t-right">${num(sumOf(rows, 'esc'))}</td><td class="t-right">${num(sumOf(rows, 'ae'))}</td></tr>` : '';
     $('lo-count').textContent = `${rows.length} lender${rows.length === 1 ? '' : 's'} · ${ranges.lenderrep.label}`;
   }
   const companyOf = (n) => (window.AmpPartners ? AmpPartners.companyOf(n) : n);
@@ -288,10 +287,9 @@
         <td><div class="t-id">${typeof logoTile === 'function' && r.v ? logoTile(r.v) : ''}<div><div class="t-strong">${esc(r.name)}</div>${r.company !== r.name ? `<div class="t-sub">${esc(r.company)}</div>` : ''}</div></div></td>
         <td class="t-right t-strong">${link(`data-pv="vendor::${esc(r.name)}" data-pv-from="vendor-reports"`, r.views, 'See who viewed this listing')}</td>
         <td class="t-right">${num(r.unique)}</td>
-        <td class="t-right">${link(`data-pr-go="vendor:${esc(r.name)}:Connection"`, r.conn, 'See these connection requests')}</td>
-        <td class="t-right"><div class="row-actions"><button class="link-act" data-toast="Emailed ${esc(r.company)} their report for ${esc(r.name)} (${esc(ranges.vendorrep.label.toLowerCase())}).">Email vendor</button></div></td></tr>`).join('')
-      || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">No products match that search.</td></tr>';
-    $('vo-tfoot').innerHTML = rows.length ? `<tr class="pr-total"><td>All products</td><td class="t-right">${num(sumOf(rows, 'views'))}</td><td class="t-right">${num(sumOf(rows, 'unique'))}</td><td class="t-right">${num(sumOf(rows, 'conn'))}</td><td></td></tr>` : '';
+        <td class="t-right">${link(`data-pr-go="vendor:${esc(r.name)}:Connection"`, r.conn, 'See these connection requests')}</td></tr>`).join('')
+      || '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:28px">No products match that search.</td></tr>';
+    $('vo-tfoot').innerHTML = rows.length ? `<tr class="pr-total"><td>All products</td><td class="t-right">${num(sumOf(rows, 'views'))}</td><td class="t-right">${num(sumOf(rows, 'unique'))}</td><td class="t-right">${num(sumOf(rows, 'conn'))}</td></tr>` : '';
     $('vo-count').textContent = `${rows.length} product${rows.length === 1 ? '' : 's'} · ${ranges.vendorrep.label}`;
   }
   // Switch a report page between Overview and its request list.
