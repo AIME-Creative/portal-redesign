@@ -301,7 +301,28 @@
     $(`${p}-pane-overview`).hidden = pane !== 'overview';
     $(`${p}-pane-requests`).hidden = pane !== 'requests';
   }
-  // A request number / tile → the request list, filtered to that partner and type.
+  // A request number / tile → a lightbox listing those requests (the page stays put).
+  // "Open in All requests" switches to the full list with the same filters.
+  document.body.insertAdjacentHTML('beforeend', `<div class="modal-overlay" id="modal-reqlist"><div class="modal" style="max-width:860px">
+      <div class="modal-head"><div><h2 id="rl-title">Requests</h2><p id="rl-sub"></p></div><button class="modal-close" data-close aria-label="Close">${svg('<path d="M18 6L6 18M6 6l12 12"/>').replace('<svg', '<svg style="width:18px;height:18px"')}</button></div>
+      <div class="modal-body" style="padding:0"><div class="table-scroll rl-scroll"><table class="adm"><thead id="rl-thead"></thead><tbody id="rl-tbody"></tbody></table></div></div>
+      <div class="modal-foot"><button type="button" class="link-pink" id="rl-all" style="margin-right:auto">Open in All requests</button><button class="btn btn-outline" id="rl-export">Export CSV</button><button class="btn btn-primary" data-close>Close</button></div></div></div>`);
+  let rl = null;   // { kind, partner, type, scope, rows, label }
+  const TYPE_LABEL = { Escalation: 'Escalations', 'Change AE': 'Change AE requests', Connection: 'Connections' };
+  function openRequestList(kind, partner, type) {
+    const lender = kind === 'lender', scope = lender ? 'lenderrep' : 'vendorrep';
+    const rows = (lender ? lenderRows : vendorRows).filter((r) => (!partner || r.partner === partner) && (!type || !lender || r.type === type) && inWindow(scope, r.date));
+    rl = { kind, partner, type, scope, rows, label: TYPE_LABEL[type] || 'Requests' };
+    $('rl-title').textContent = `${rl.label} — ${partner || (lender ? 'All lenders' : 'All products')}`;
+    $('rl-sub').textContent = `${rows.length} request${rows.length === 1 ? '' : 's'} · ${ranges[scope].label}`;
+    const showPartner = !partner, showDetail = lender && type !== 'Connection';
+    $('rl-thead').innerHTML = `<tr><th>Member</th>${showPartner ? `<th>${lender ? 'Lender' : 'Product'}</th>` : ''}${showDetail ? '<th>Details</th>' : ''}<th>Date</th><th>Status</th><th>Email</th></tr>`;
+    $('rl-tbody').innerHTML = rows.map((r) => `<tr><td>${memberCell(r.member)}</td>${showPartner ? `<td>${esc(r.partner)}</td>` : ''}${showDetail ? `<td class="t-sub">${esc(r.detail)}</td>` : ''}
+        <td class="t-nowrap">${r.date}</td><td>${statusPill(r.status)}</td><td>${emailPill(r.email)}</td></tr>`).join('')
+      || `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No requests in this date range.</td></tr>`;
+    openModal('reqlist');
+  }
+  // The full request list on the All requests tab, filtered to that partner and type.
   function goToRequests(kind, partner, type) {
     if (kind === 'lender') { $('lr-partner').value = partner || 'all'; $('lr-type').value = type || 'all'; $('lr-email').value = 'all'; renderLender(); }
     else { $('vr-partner').value = partner || 'all'; $('vr-email').value = 'all'; renderVendor(); }
@@ -315,7 +336,10 @@
     if ((m = e.target.closest('[data-pr-tab]'))) { e.preventDefault(); const [kind, pane] = m.dataset.prTab.split(':'); showPane(kind, pane); return; }
     if ((m = e.target.closest('[data-pr-go]'))) {
       e.preventDefault(); const v = m.dataset.prGo, kind = v.slice(0, v.indexOf(':')), type = v.slice(v.lastIndexOf(':') + 1), partner = v.slice(kind.length + 1, v.lastIndexOf(':'));
-      goToRequests(kind, partner, type); return;
+      openRequestList(kind, partner, type); return;
+    }
+    if ((m = e.target.closest('#rl-all'))) { e.preventDefault(); closeModals(); if (rl) goToRequests(rl.kind, rl.partner, rl.type); return; }
+    if (e.target.closest('#rl-export')) { e.preventDefault(); if (rl) showToast(`Exported ${rl.rows.length} ${rl.label.toLowerCase()} (${ranges[rl.scope].label}) to CSV.`); return;
     }
   });
 

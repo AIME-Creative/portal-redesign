@@ -521,3 +521,11 @@ table.adm tr.bk-selected td { background:rgba(221,25,105,.05); }
 table.adm .t-titlecell { min-width:200px; }
 .t-title-row { display:flex; align-items:center; gap:10px; }
 .t-title-row .t-thumb { flex:0 0 auto; margin-right:0; }
+.rl-scroll { max-height:min(60vh, 520px); overflow:auto; }
+.rl-scroll table.adm { min-width:0; }
+.rl-scroll thead th { position:sticky; top:0; z-index:1; }
+@media (max-width:560px) {
+  #modal-reqlist .modal-foot { flex-wrap:wrap; }
+  #modal-reqlist #rl-all { flex-basis:100%; text-align:center; margin:0 0 6px !important; }
+  #modal-reqlist .modal-foot .btn { flex:1; }
+}
