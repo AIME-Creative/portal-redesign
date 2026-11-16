@@ -208,6 +208,20 @@
           </button>
         </div>
 
+        <div class="dash-ql">
+          <div class="section-title"><h2>Quick links</h2></div>
+          <div class="qa-grid" id="dash-quick">
+          <div class="qa ql-card"><div class="qa-ico pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg></div>
+            <div><div class="qa-t">Resource</div><div class="ql-links"><button type="button" data-edit="resource:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="resources">Edit</button></div></div></div>
+          <div class="qa ql-card"><div class="qa-ico cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
+            <div><div class="qa-t">Event</div><div class="ql-links"><button type="button" data-edit="event:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="events">Edit</button></div></div></div>
+          <div class="qa ql-card"><div class="qa-ico navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></div>
+            <div><div class="qa-t">Lender</div><div class="ql-links"><button type="button" data-edit="lender:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="lenders">Edit</button></div></div></div>
+          <div class="qa ql-card"><div class="qa-ico teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg></div>
+            <div><div class="qa-t">Vendor</div><div class="ql-links"><button type="button" data-edit="vendor:new">+ Add</button><span aria-hidden="true">·</span><button type="button" data-nav="market">Edit</button></div></div></div>
+          </div>
+        </div>
+
         <button class="card card-pad dash-sc-link" data-nav="scorecard">
           <span class="dash-sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></span>
           <span class="dash-sc-main"><span class="dash-sc-t">Membership scorecard</span><span class="dash-sc-s">Growth, retention, dues, tiers, renewals, FUSE.</span></span>
@@ -223,23 +237,6 @@
             <div class="card card-pad">
               <div class="section-title"><h2>Newest members</h2><a href="#" data-nav="members">All members <span>→</span></a></div>
               <div id="dash-members"></div>
-            </div>
-            <div class="card card-pad" id="dash-quick" style="margin-top:20px">
-              <div class="section-title"><h2>Quick links</h2></div>
-              <div class="ql-list">
-                <div class="ql-row"><span class="ql-ico i-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h12v18H6a2 2 0 01-2-2zM4 19a2 2 0 012-2h12"/></svg></span>
-                  <span class="ql-main"><span class="ql-t">Resource</span><span class="ql-s">The Vault</span></span>
-                  <span class="ql-acts"><button class="btn btn-primary btn-sm" data-edit="resource:new">+ Add</button><button class="btn btn-outline btn-sm" data-nav="resources">Edit</button></span></div>
-                <div class="ql-row"><span class="ql-ico i-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span>
-                  <span class="ql-main"><span class="ql-t">Event</span><span class="ql-s">Events calendar</span></span>
-                  <span class="ql-acts"><button class="btn btn-primary btn-sm" data-edit="event:new">+ Add</button><button class="btn btn-outline btn-sm" data-nav="events">Edit</button></span></div>
-                <div class="ql-row"><span class="ql-ico i-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg></span>
-                  <span class="ql-main"><span class="ql-t">Lender</span><span class="ql-s">Lender partners</span></span>
-                  <span class="ql-acts"><button class="btn btn-primary btn-sm" data-edit="lender:new">+ Add</button><button class="btn btn-outline btn-sm" data-nav="lenders">Edit</button></span></div>
-                <div class="ql-row"><span class="ql-ico i-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16M9 13h6"/></svg></span>
-                  <span class="ql-main"><span class="ql-t">Vendor</span><span class="ql-s">Market product</span></span>
-                  <span class="ql-acts"><button class="btn btn-primary btn-sm" data-edit="vendor:new">+ Add</button><button class="btn btn-outline btn-sm" data-nav="market">Edit</button></span></div>
-              </div>
             </div>
           </div>
         </div>

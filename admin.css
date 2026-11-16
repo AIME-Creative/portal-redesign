@@ -538,14 +538,13 @@ table.adm .t-titlecell { min-width:200px; }
 .dash-member:last-child { border-bottom:0; }
 .dash-member:hover .lt { color:var(--cyan-600); }
 .dash-member-go { width:16px; height:16px; color:var(--muted); flex:none; }
-.ql-list { display:flex; flex-direction:column; }
-.ql-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line-soft); }
-.ql-row:last-child { border-bottom:0; padding-bottom:0; }
-.ql-ico { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; flex:none; }
-.ql-ico svg { width:18px; height:18px; }
-.ql-ico.i-pink { background:#fde4ee; color:var(--pink); } .ql-ico.i-navy { background:rgba(2,22,73,.08); color:var(--navy); }
-.ql-ico.i-cyan { background:#e2f4f9; color:var(--cyan-600); } .ql-ico.i-amber { background:var(--amber-bg, #fdf3dc); color:#b07c08; }
-.ql-main { flex:1; min-width:0; display:flex; flex-direction:column; }
-.ql-t { font-weight:700; font-size:14.5px; } .ql-s { font-size:12.5px; color:var(--muted); }
-.ql-acts { display:flex; gap:6px; flex:none; }
-.ql-acts .btn { height:34px; padding:0 12px; }
+/* Quick links: same cards as the member home Quick actions, four across above the Scorecard link */
+.dash-ql { margin:4px 0 20px; }
+#dash-quick { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+.ql-card:hover { transform:none; }
+.qa-ico.teal { background:#0b6b82; }
+.ql-links { display:flex; align-items:center; gap:8px; margin-top:4px; font-size:13px; color:var(--muted); }
+.ql-links button { font:inherit; font-weight:700; color:var(--cyan-600); padding:2px 0; cursor:pointer; }
+.ql-links button:hover { color:var(--navy); text-decoration:underline; text-underline-offset:3px; }
+@media (max-width:1100px) { #dash-quick { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+@media (max-width:560px) { #dash-quick { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; } .ql-card { flex-direction:column; align-items:flex-start; gap:10px; padding:14px; } .ql-card .qa-ico { width:40px; height:40px; flex-basis:40px; } }
