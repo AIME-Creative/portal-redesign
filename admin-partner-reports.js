@@ -339,7 +339,7 @@
       openRequestList(kind, partner, type); return;
     }
     if ((m = e.target.closest('#rl-all'))) { e.preventDefault(); closeModals(); if (rl) goToRequests(rl.kind, rl.partner, rl.type); return; }
-    if (e.target.closest('#rl-export')) { e.preventDefault(); if (rl) showToast(`Exported ${rl.rows.length} ${rl.label.toLowerCase()} (${ranges[rl.scope].label}) to CSV.`); return;
+    if (e.target.closest('#rl-export')) { e.preventDefault(); if (rl) showToast(`Exported ${rl.rows.length} ${rl.label.toLowerCase()} for ${rl.partner || (rl.kind === 'lender' ? 'all lenders' : 'all products')} (${ranges[rl.scope].label.toLowerCase()}) to CSV.`); return;
     }
   });
 
